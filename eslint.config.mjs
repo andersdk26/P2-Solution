@@ -1,18 +1,18 @@
 import globals from 'globals';
-import pluginJs from '@eslint/js';
+import eslint from '@eslint/js';
+import pluginPrettier from 'eslint-plugin-prettier';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     {
         languageOptions: {
-            ecmaVersion: 2022,
+            ecmaVersion: 'latest',
             sourceType: 'module',
             globals: { ...globals.browser, ...globals.node },
+            impliedStrict: true,
         },
         plugins: {
-            prettier: {
-                recommended: true, // Enables Prettier rules
-            },
+            prettier: pluginPrettier,
         },
         rules: {
             'no-console': 'off', // Allows the use of console.log()
@@ -29,10 +29,10 @@ export default [
             'prefer-template': 'error', // Prefers template literals over string concatenation
             'object-shorthand': 'error', // Requires shorthand syntax in object literals
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
-            // 'prettier/prettier': 'warn', // Enables Prettier integration
+            'prettier/prettier': 'warn', // Enables Prettier integration
         },
     },
-    pluginJs.configs.recommended,
+    eslint.configs.recommended,
 ];
 
 // npx eslint .
