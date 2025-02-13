@@ -14,13 +14,14 @@ export default tseslint.config(
             parserOptions: {
                 project: false,
                 ecmaVersion: 'latest',
-                sourceType: 'module'
+                sourceType: 'module',
+                impliedStrict: true,
             },
-            globals: { ...globals.browser, ...globals.node }
+            globals: { ...globals.browser, ...globals.node },
         },
         plugins: {
             prettier: pluginPrettier,
-            '@typescript-eslint': tsPlugin // Tilføjer TypeScript-specifikke regler
+            '@typescript-eslint': tsPlugin, // Tilføjer TypeScript-specifikke regler
         },
         rules: {
             'no-console': 'off', // Allows the use of console.log()
@@ -39,12 +40,12 @@ export default tseslint.config(
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
             '@typescript-eslint/explicit-function-return-type': 'warn', // Kræver returtyper i TypeScript
             '@typescript-eslint/no-unused-vars': 'error', // Forhindrer ubrugte variabler i TypeScript
-            'prettier/prettier': 'warn' // Enables Prettier integration
-        }
+            'prettier/prettier': ['warn', { endOfLine: 'crlf' }], // Enables Prettier integration
+        },
     },
     eslint.configs.recommended,
     tseslint.configs.strict,
     tseslint.configs.stylistic
 );
 
-// npx eslint .
+// Error check: npx eslint .
