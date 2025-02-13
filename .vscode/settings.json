@@ -8,7 +8,7 @@
         "typescriptreact"
     ],
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": "explicit"
     },
     "files.autoSave": "onFocusChange",
     "[css]": {
@@ -17,5 +17,6 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.formatOnPaste": true
+    "editor.formatOnPaste": true,
+    "eslint.enable": true
 }

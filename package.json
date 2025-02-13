@@ -1,20 +1,24 @@
 {
-  "name": "p2-solution",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@eslint/js": "^9.20.0",
-    "eslint": "^9.20.1",
-    "globals": "^15.15.0"
-  }
+    "name": "p2-solution",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "start": "cd back-end/ && nodemon server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@eslint/js": "^9.20.0",
+        "eslint": "^9.20.1",
+        "eslint-plugin-prettier": "^5.2.3",
+        "globals": "^15.15.0",
+        "nodemon": "^3.1.9",
+        "prettier": "^3.5.1"
+    }
 }
