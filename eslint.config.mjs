@@ -29,10 +29,10 @@ export default [
             'prefer-template': 'error', // Prefers template literals over string concatenation
             'object-shorthand': 'error', // Requires shorthand syntax in object literals
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
-            'prettier/prettier': 'warn', // Enables Prettier integration
+            'prettier/prettier': ['warn', { endOfLine: 'crlf' }], // Enables Prettier integration
         },
     },
     eslint.configs.recommended,
 ];
 
-// npx eslint .
+// Error check: npx eslint .
