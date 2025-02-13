@@ -34,3 +34,5 @@ export default [
     },
     pluginJs.configs.recommended,
 ];
+
+// npx eslint .
