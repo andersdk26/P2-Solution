@@ -4,6 +4,13 @@ body {
   font-family: Tahoma, sans-serif;
 }
 
+.verticalLine {
+  border-left: 5px white;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+}
+
 .split {
   width: 50%;
   height: 100%;
@@ -28,4 +35,56 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+}
+
+.buttonFull {
+  width: 100%;
+  background-color: #0e35b3;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.buttonFull:hover {
+  background-color: #426bf0;
+}
+
+.buttonHollow {
+  width: 100%;
+  background-color: #426bf000;
+  border: 2px;
+  border-style: solid;
+  border-color: #0e35b3;
+  border-radius: 6px;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.buttonHollow:hover {
+  background-color: #426bf0ff;
+  border-color: #426bf0;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 10px;
+  margin: none;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }

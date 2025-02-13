@@ -7,8 +7,24 @@
   <body>
     <div class="split left">
       <div class="centered">
-        <h1>This is a header.</h1>
-        <p>This is a paragraph.</p>
+        <h2>Please sign in to your account</h2>
+        <form action="/user_sign_in.php">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Username"
+          /><br /><br />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+          /><br /><br />
+
+          <input class="buttonFull" type="submit" value="Sign in" /><br /><br />
+          <button class="buttonHollow">Create account</button>
+        </form>
       </div>
     </div>
     <div class="split right">
@@ -17,5 +33,6 @@
         <p>This is a paragraph.</p>
       </div>
     </div>
+    <div class="verticalLine"></div>
   </body>
 </html>
