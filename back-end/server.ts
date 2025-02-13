@@ -23,7 +23,6 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     });
 });
 
-// Starter en simpel HTTP-server lokalt på port 3000
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });

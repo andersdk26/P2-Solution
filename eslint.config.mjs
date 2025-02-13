@@ -1,20 +1,26 @@
 import globals from 'globals';
-import pluginJs from '@eslint/js';
+import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import pluginPrettier from 'eslint-plugin-prettier';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [
+export default tseslint.config(
     { files: ['**/*.{js,mjs,cjs,ts}'] },
     {
         languageOptions: {
-            ecmaVersion: 2022,
-            sourceType: 'module',
+            parser: tsParser,
+            parserOptions: {
+                project: false,
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+            },
             globals: { ...globals.browser, ...globals.node },
         },
         plugins: {
-            prettier: {
-                recommended: true, // Enables Prettier rules
-            },
+            prettier: pluginPrettier,
+            '@typescript-eslint': tsPlugin, // Tilføjer TypeScript-specifikke regler
         },
         rules: {
             'no-console': 'off', // Allows the use of console.log()
@@ -31,11 +37,14 @@ export default [
             'prefer-template': 'error', // Prefers template literals over string concatenation
             'object-shorthand': 'error', // Requires shorthand syntax in object literals
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
-            // 'prettier/prettier': 'warn', // Enables Prettier integration
+            '@typescript-eslint/explicit-function-return-type': 'warn', // Kræver returtyper i TypeScript
+            '@typescript-eslint/no-unused-vars': 'error', // Forhindrer ubrugte variabler i TypeScript
+            'prettier/prettier': 'warn', // Enables Prettier integration
         },
     },
-    pluginJs.configs.recommended,
-    ...tseslint.configs.recommended,
-];
+    eslint.configs.recommended,
+    tseslint.configs.strict,
+    tseslint.configs.stylistic
+);
 
 // npx eslint .
