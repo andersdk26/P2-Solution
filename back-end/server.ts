@@ -10,7 +10,7 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     if (query.pathname === '/' || query.pathname === '') {
         query.pathname = '/index.html';
     }
-    fs.readFile(`../test${query.pathname}`, (err, data) => {
+    fs.readFile(`../front-end${query.pathname}`, (err, data) => {
         if (err) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.write('404 Not Found');
