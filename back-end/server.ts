@@ -20,12 +20,18 @@ const mimeTypes: Record<string, string> = {
 const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     // Get the requested file path
     const query = urlPass(req.url || '', true);
-    const filePath: string = path.join(
+    let filePath: string = path.join(
         rootDir,
         query.pathname === '/' || query.pathname === null
             ? 'index.html'
             : query.pathname
     );
+    filePath = path.resolve(filePath);
+    if (!filePath.startsWith(path.resolve(rootDir))) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+    }
 
     // Get the file extension
     const extname: string = path.extname(filePath);
