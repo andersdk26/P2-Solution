@@ -4,7 +4,7 @@ import { parse as urlPass } from 'node:url';
 import * as path from 'path';
 
 const port = 3000;
-const rootDir = './docs/'; // Change this to your project's root if needed
+const rootDir = '../front-end/'; // Change this to your project's root if needed
 const mimeTypes: Record<string, string> = {
     '.html': 'text/html',
     '.css': 'text/css',
