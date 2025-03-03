@@ -1,13 +1,20 @@
-import globals from 'globals';
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
 import pluginPrettier from 'eslint-plugin-prettier';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default tseslint.config(
-    { files: ['**/*.{js,mjs,cjs,ts}'] },
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
     {
         languageOptions: {
             parser: tsParser,
@@ -39,13 +46,10 @@ export default tseslint.config(
             'object-shorthand': 'error', // Requires shorthand syntax in object literals
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
             '@typescript-eslint/explicit-function-return-type': 'warn', // Kræver returtyper i TypeScript
-            '@typescript-eslint/no-unused-vars': 'error', // Forhindrer ubrugte variabler i TypeScript
+            '@typescript-eslint/no-unused-vars': 'warn', // Forhindrer ubrugte variabler i TypeScript
             'prettier/prettier': ['warn', { endOfLine: 'crlf' }], // Enables Prettier integration
         },
     },
-    eslint.configs.recommended,
-    tseslint.configs.strict,
-    tseslint.configs.stylistic
-);
+];
 
-// Error check: npx eslint .
+export default eslintConfig;
