@@ -1,30 +1,27 @@
 {
-    "name": "p2-solution",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "devDependencies": {
-        "@eslint/js": "^9.20.0",
-        "@types/node": "^22.13.3",
-        "@typescript-eslint/eslint-plugin": "^8.24.0",
-        "@typescript-eslint/parser": "^8.24.0",
-        "eslint": "^9.20.1",
-        "eslint-config-prettier": "^10.0.1",
-        "eslint-plugin-prettier": "^5.2.3",
-        "globals": "^15.15.0",
-        "prettier": "^3.5.1",
-        "tsx": "^4.19.2",
-        "typescript": "^5.7.3",
-        "typescript-eslint": "^8.24.0"
-    },
-    "scripts": {
-        "start": "cd back-end/ && tsx watch server.ts",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "directories": {
-        "test": "test"
-    }
+  "name": "jamfest",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "next": "15.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.0",
+    "@eslint/eslintrc": "^3"
+  }
 }
