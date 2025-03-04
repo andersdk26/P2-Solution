@@ -18,3 +18,8 @@ export default function Title({
         <h1 className={`font-medium ${colorClasses[textColor]}`}>{children}</h1>
     );
 }
+
+
+
+
+
