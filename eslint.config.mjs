@@ -28,7 +28,7 @@ const eslintConfig = [
         },
         plugins: {
             prettier: pluginPrettier,
-            '@typescript-eslint': tsPlugin, // Tilføjer TypeScript-specifikke regler
+            '@typescript-eslint': tsPlugin, // Adds TypeScript specific rules
         },
         rules: {
             'no-console': 'off', // Allows the use of console.log()
@@ -45,8 +45,8 @@ const eslintConfig = [
             'prefer-template': 'error', // Prefers template literals over string concatenation
             'object-shorthand': 'error', // Requires shorthand syntax in object literals
             'prefer-arrow-callback': 'warn', // Encourages arrow functions for callbacks
-            '@typescript-eslint/explicit-function-return-type': 'warn', // Kræver returtyper i TypeScript
-            '@typescript-eslint/no-unused-vars': 'warn', // Forhindrer ubrugte variabler i TypeScript
+            '@typescript-eslint/explicit-function-return-type': 'warn', // Requires return type in TypeScript
+            '@typescript-eslint/no-unused-vars': 'warn', // Warns about unused variables in TypeScript
             'prettier/prettier': ['warn', { endOfLine: 'crlf' }], // Enables Prettier integration
         },
     },
