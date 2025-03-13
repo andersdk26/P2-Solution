@@ -6,15 +6,15 @@ import { useState } from 'react';
 
 export default function MovieGrid(): JSX.Element {
     // Create a state array for the movies displayed in the grid.
-    const [checkedMovies, setCheckedMovies] = useState<boolean[]>(
+    const [checkedMovies, set_checked_movies] = useState<boolean[]>(
         // Set all indicies to false.
         Array(15).fill(false)
     );
 
     // Function for selecting and unselecting movies.
-    const toggleCheck = (index: number): void => {
+    const toggle_check = (index: number): void => {
         // Setter function from React's 'useState' hook.
-        setCheckedMovies((previousState) => {
+        set_checked_movies((previousState) => {
             // Create a copy of the state array.
             const newCheckedMovies = [...previousState];
 
@@ -54,7 +54,7 @@ export default function MovieGrid(): JSX.Element {
                                 // Hide the default checkbox.
                                 className="hidden"
                                 // Call function to update state array when a checkbox is clicked.
-                                onChange={() => toggleCheck(index)}
+                                onChange={() => toggle_check(index)}
                             />
                             <Image
                                 // Display an image of the movie in place of the default checkbox.
