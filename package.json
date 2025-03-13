@@ -14,6 +14,7 @@
         "drizzle-orm": "^0.40.0",
         "eslint-plugin-prettier": "^5.2.3",
         "next": "15.2.0",
+        "nextjs": "^0.0.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "typescript-eslint": "^8.25.0"
