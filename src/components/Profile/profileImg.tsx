@@ -1,16 +1,17 @@
-// components/Profile/profile.tsx
 'use client';
 import React, { JSX } from 'react';
 import Image from 'next/image';
 
-const Profile = (): JSX.Element => (
-    <Image
-        src="/popcornImage.jpeg"
-        alt="Profile Icon"
-        width={60}
-        height={60}
-        style={{ borderRadius: '50%' }}
-    />
+const ProfileImage = (): JSX.Element => (
+    <div className="absolute top-2 right-2">
+        <Image
+            src="/popcornImage.jpeg"
+            alt="Profile Icon"
+            width={60}
+            height={60}
+            className="rounded-full"
+        />
+    </div>
 );
 
-export default Profile;
+export default ProfileImage;
