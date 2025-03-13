@@ -11,6 +11,10 @@ export default function MovieGrid(): JSX.Element {
         Array(15).fill(false)
     );
 
+    const numberOfMoviesSelected = checkedMovies.filter(
+        (checked) => checked
+    ).length;
+
     // Description of function.
     const toggleCheck = (index: number) => {
         setCheckedMovies((previousState) => {
@@ -21,25 +25,32 @@ export default function MovieGrid(): JSX.Element {
     };
 
     return (
-        /// Create a div to center nested elements.
-        <div className="flex items-center justify-center">
-            <div className="grid grid-cols-5 grid-rows-3 gap-4 p-4">
-                {Array.from({ length: 15 }).map((_, index) => (
-                    <label key={index} className="flex items-center gap-2">
-                        <input
-                            type="checkbox"
-                            className="hidden"
-                            onChange={() => toggleCheck(index)}
-                        />
-                        <Image
-                            width={192}
-                            height={288}
-                            src={`/moviePosters/${index}.png`}
-                            alt="Movie poster."
-                            className={`border-4 ${checkedMovies[index] ? 'border-white' : 'border-transparent'} rounded-lg transition-all cursor-pointer`}
-                        />
-                    </label>
-                ))}
+        <div>
+            <p className="text-center py-8 text-2xl">
+                Please select at least three movies you have seen and liked.
+            </p>
+            <p className="text-center text-base">
+                Movies selected: {numberOfMoviesSelected}
+            </p>
+            <div className="flex items-center justify-center">
+                <div className="grid grid-cols-5 grid-rows-3 gap-4 p-4">
+                    {Array.from({ length: 15 }).map((_, index) => (
+                        <label key={index} className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                className="hidden"
+                                onChange={() => toggleCheck(index)}
+                            />
+                            <Image
+                                width={192}
+                                height={288}
+                                src={`/moviePosters/${index}.png`}
+                                alt="Movie poster."
+                                className={`border-1 ${checkedMovies[index] ? 'border-blue-500 border-8' : 'border-transparent border-1'} rounded-2xl transition-all shadow-lg cursor-pointer`}
+                            />
+                        </label>
+                    ))}
+                </div>
             </div>
         </div>
     );
