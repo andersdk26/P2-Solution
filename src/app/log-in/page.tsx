@@ -26,21 +26,33 @@ export function Title(): JSX.Element {
 }
 
 //username block
-//function usernameBlock() {}
+function usernameBlock() {}
 
 //password block
-//function passwordBlock() {}
+function passwordBlock() {}
 
 //login button
-function loginButton() {
-    return (
-        //trying to redirect button to main-page
-        <a href="">
-            <input type="button" value="Login" />
-        </a>
-        //<a href="create-student" class="btn btn-default">Login</a>
-    );
-}
+function loginButton() {}
 
 //button that will redirect to sign-in page
-//function sig_inBlock() {}
+function sign_upBlock() {}
+
+//href is link, _blank opens the tab in a new window
+//two buttons: login (should redirect to mainpage), signup (should redirect to signuppage)
+export default function log_inPage() {
+    return (
+        <main>
+            <div className="login">
+                <title>Login Page</title>
+
+                <a href="mainPage" className="login-btn" target="_blank">
+                    i'm a login button tøhø
+                </a>
+
+                <a href="signUpPage" className="signup-btn" target="_blank">
+                    sign-up?
+                </a>
+            </div>
+        </main>
+    );
+}
