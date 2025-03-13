@@ -11,23 +11,33 @@ export default function MovieGrid(): JSX.Element {
         Array(15).fill(false)
     );
 
-    const numberOfMoviesSelected = checkedMovies.filter(
-        (checked) => checked
-    ).length;
-
-    // Description of function.
+    // Function for selecting and unselecting movies.
     const toggleCheck = (index: number) => {
+        // Setter function from React's 'useState' hook.
         setCheckedMovies((previousState) => {
+            // Create a copy of the state array.
             const newCheckedMovies = [...previousState];
+
+            // Modify copy by toggling the boolean value at the specified index.
             newCheckedMovies[index] = !newCheckedMovies[index];
+
+            // Return modified copy.
             return newCheckedMovies;
         });
     };
 
+    // Get number of movies selected.
+    const numberOfMoviesSelected = checkedMovies.filter(
+        (checked) => checked
+    ).length;
+
+    // Define/update length of progress bar.
+    const progress = Math.min((numberOfMoviesSelected / 5) * 100, 100);
+
     return (
         <div>
             <p className="text-center py-8 text-2xl">
-                Please select at least three movies you have seen and liked.
+                Please select at least five movies you have seen and liked.
             </p>
             <p className="text-center text-base">
                 Movies selected: {numberOfMoviesSelected}
@@ -52,10 +62,15 @@ export default function MovieGrid(): JSX.Element {
                     ))}
                 </div>
             </div>
+
+            <div className="w-full flex justify-center mt-4">
+                <div className="w-1/3 bg-gray-300 rounded-full mt-4 h-4 ">
+                    <div
+                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+            </div>
         </div>
     );
 }
-
-// Grid med diverse genre/film.
-// Vælg (mindst) 3 film man kan lide.
-// Eventuelt vælg genre/film man ikke kan lide.
