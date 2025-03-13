@@ -37,10 +37,11 @@ export default function MovieGrid(): JSX.Element {
     return (
         <div>
             <p className="text-center py-8 text-2xl">
-                Please select at least five movies you have seen and liked.
+                Please select and rate at least five movies you have seen and
+                liked.
             </p>
             <p className="text-center text-base">
-                Movies selected: {numberOfMoviesSelected}
+                You can always change your movie ratings under profile settings.
             </p>
             {/* Create div for containing the grid. */}
             <div className="flex items-center justify-center">
