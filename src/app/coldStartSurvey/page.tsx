@@ -12,7 +12,7 @@ export default function MovieGrid(): JSX.Element {
     );
 
     // Function for selecting and unselecting movies.
-    const toggleCheck = (index: number) => {
+    const toggleCheck = (index: number): void => {
         // Setter function from React's 'useState' hook.
         setCheckedMovies((previousState) => {
             // Create a copy of the state array.
