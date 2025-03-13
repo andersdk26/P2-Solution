@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { JSX } from 'react';
 
 export default function MovieGrid(): JSX.Element {
@@ -8,7 +9,14 @@ export default function MovieGrid(): JSX.Element {
                     <label key={index} className="flex items-center gap-2">
                         <input
                             type="checkbox"
-                            className="appearance-none cursor-pointer border-2 border-white w-32 h-48 checked:bg-blue-500"
+                            className="hidden"
+                            // className="appearance-none cursor-pointer border-2 border-white w-32 h-48 checked:bg-blue-500"
+                        />
+                        <Image
+                            width={128}
+                            height={192}
+                            src="/img/oppenheimer.png"
+                            alt="Oppenheimer movie poster"
                         />
                     </label>
                 ))}
