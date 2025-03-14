@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="styles/mainPage.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Jamfest</h1>
+        </div>
+        <div class="posterRow">
+            <button
+                class="moviePoster"
+                onclick="openSidebar('Poster/TestPoster.jpg')"
+            >
+                Test
+            </button>
+            <button class="moviePoster">movie 2</button>
+            <button class="moviePoster">movie 3</button>
+            <button class="moviePoster">movie 4</button>
+        </div>
+
+        <!--Sidebar-->
+        <div id="sideBar" class="sideBar">
+            <span class="close-btn" onclick="closeSidebar()">x</span>"
+            <img id="sideBarImage" src="TestPoster.jpg" alt="Movie Poster" />
+        </div>
+
+        <script>
+            function openSidebar(imageSrc) {
+                document.getElementById('sideBar').style.width = '300px';
+                document.getElementById('sideBarImage').src = imageSrc;
+
+                if (sideBar && sideBarImage) {
+                    sideBar.style.right = '0'; //slide in from right
+                    sideBarImage.src = imageSrc; // set movie poster
+                }
+            }
+
+            function closeSidebar() {
+                document.getElementById('sideBar').style.width = '0';
+            }
+        </script>
+    </body>
+</html>

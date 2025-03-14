@@ -1,0 +1,53 @@
+.posterRow {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    left: 1;
+}
+.moviePoster {
+    width: 150px;
+    height: 200px;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    padding: 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    text-shadow: 1px 1px 2px black;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.sideBar {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Start hidden off-screen */
+    width: 300px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: right 0.3s ease-in-out; /* Smooth slide-in effect */
+}
+
+.sideBar img {
+    width: 90%;
+    max-width: 250px;
+    border-radius: 30px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
