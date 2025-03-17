@@ -13,11 +13,11 @@ export default function Page(): JSX.Element {
             password: (formData.get('password') as string) || '',
         });
 
-        if ((await response).status === 200) {
-            loginResponse = 'Login successful';
-        } else {
-            loginResponse = (await response).message || 'An error occurred';
-        }
+        // if ((await response).status === 200) {
+        //     loginResponse = 'Login successful';
+        // } else {
+        //     loginResponse = (await response).message || 'An error occurred';
+        // }
     };
 
     const handleSignup = async (formData: FormData): Promise<void> => {
@@ -29,11 +29,11 @@ export default function Page(): JSX.Element {
             password: (formData.get('password') as string) || '',
         });
 
-        if ((await response).status === 200) {
-            signupResponse = 'Signup successful';
-        } else {
-            signupResponse = (await response).message || 'An error occurred';
-        }
+        // if ((await response).status === 200) {
+        //     signupResponse = 'Signup successful';
+        // } else {
+        //     signupResponse = (await response).message || 'An error occurred';
+        // }
     };
 
     return (
