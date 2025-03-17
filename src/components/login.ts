@@ -1,9 +1,8 @@
 import { db } from 'db';
 import { usersTable } from 'db/schema';
-import { eq, SQL } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import argon2 from 'argon2';
-import { randomBytes } from 'crypto';
-import { SqliteError } from 'sqlite';
+import defaultResponse from './defaultResponse';
 
 interface loginCheckProps {
     username: string;
@@ -13,25 +12,27 @@ interface loginCheckProps {
 export async function login_check({
     username,
     password,
-}: loginCheckProps): Promise<void> {
-    db.select({ username: usersTable.username, password: usersTable.password })
+}: loginCheckProps): Promise<defaultResponse> {
+    const result = await db
+        .select({
+            username: usersTable.username,
+            password: usersTable.password,
+        })
         .from(usersTable)
-        .where(eq(usersTable.username, username))
-        .then(async (result) => {
-            console.log(await argon2.hash(password));
+        .where(eq(usersTable.username, username));
 
-            if (result.length === 0) {
-                console.log('User not found');
-                return;
-            }
+    if (result.length === 0) {
+        console.log('User not found');
+        return { status: 404, message: 'User not found' };
+    }
 
-            if (await !argon2.verify(result[0].password, password)) {
-                console.log('Incorrect password');
-                return;
-            }
+    if (!argon2.verify(result[0].password, password)) {
+        console.log('Incorrect password');
+        return { status: 401, message: 'Incorrect password' };
+    }
 
-            console.log('Login successful');
-        });
+    console.log('Login successful');
+    return { status: 200, message: 'Login successful' };
 }
 
 interface registerUserProps {
@@ -44,7 +45,7 @@ export async function register_user({
     username,
     email,
     password,
-}: registerUserProps): Promise<boolean> {
+}: registerUserProps): Promise<defaultResponse> {
     let passwordHash: string;
     let userId: number;
 
@@ -53,7 +54,7 @@ export async function register_user({
         passwordHash = await argon2.hash(password);
     } catch (error) {
         console.error('Error hashing password:', error);
-        throw new Error('Error hashing password');
+        return { status: 500, message: 'Internal server error' };
     }
 
     // Check if the user exists
@@ -64,12 +65,13 @@ export async function register_user({
             .where(
                 eq(usersTable.username, username) || eq(usersTable.email, email)
             );
+
         if (userExists.length > 0) {
-            return false;
+            throw new Error('Duplicate user');
         }
     } catch (error) {
-        console.error('Error hashing password:', error);
-        throw new Error('Error hashing password');
+        console.error('User already exists:', error);
+        return { status: 409, message: 'User already exists' };
     }
 
     // Generate a unique user ID
@@ -89,28 +91,33 @@ export async function register_user({
 
             i++;
             if (i > 10) {
-                throw new Error('Error generating user ID');
+                throw new Error('Could not generate unique user ID');
             }
         }
     } catch (error) {
         console.error('Error generating user ID:', error);
-        throw new Error('Error generating user ID');
+        return { status: 500, message: 'Internal server error' };
     }
 
     // Insert the user into the database
     try {
-        const result = await db.insert(usersTable).values({
-            username,
-            email,
-            password: passwordHash,
-        });
-    } catch (error) {
-        if (error instanceof SqliteError) {
-            // Handle SQLite errors
+        const result = await db
+            .insert(usersTable)
+            .values({
+                id: userId,
+                username,
+                email,
+                password: passwordHash,
+            })
+            .returning();
+
+        if (result.length === 0) {
+            throw new Error('No user inserted');
         }
+    } catch (error) {
         console.error('Error inserting user:', error);
-        throw new Error('Error inserting user');
+        return { status: 500, message: 'Internal server error' };
     }
 
-    return true; // result handling + error handling(video)
+    return { status: 201, message: 'User created' };
 }
