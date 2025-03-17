@@ -5,7 +5,7 @@ export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),
     username: text('username').notNull(),
     email: text('email').unique().notNull(),
-    password: integer('password').notNull(),
+    password: text('password').notNull(),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
@@ -33,3 +33,5 @@ export type SelectUser = typeof usersTable.$inferSelect;
 
 // export type InsertPost = typeof postsTable.$inferInsert;
 // export type SelectPost = typeof postsTable.$inferSelect;
+
+// to update the schema, run `npx drizzle-kit push`
