@@ -36,13 +36,25 @@ export default function MovieGrid(): JSX.Element {
 
     return (
         <div>
-            <p className="text-center py-8 text-2xl">
-                Please select and rate at least five movies you have seen and
-                liked.
+            <p className="text-center pt-8 text-2xl">
+                Please select and rate at least five movies you&apos;ve watched
+                and enjoyed.
             </p>
-            <p className="text-center text-base">
+            <p className="text-center text-base py-4">
                 You can always change your movie ratings under profile settings.
             </p>
+
+            <form className="max-w-1/3 mx-auto">
+                <input
+                    type="search"
+                    id="coldStartMovieSearch"
+                    className="block w-full p-4 rounded-full bg-gray-100"
+                    placeholder="Search for movies..."
+                />
+            </form>
+
+            {/* Pin selected movies to some sort of list. */}
+
             {/* Create div for containing the grid. */}
             <div className="flex items-center justify-center">
                 {/* Define a 5x3 grid layout for the movies. */}
@@ -61,8 +73,8 @@ export default function MovieGrid(): JSX.Element {
                                 // Display an image of the movie in place of the default checkbox.
                                 src={`/moviePosters/${index}.png`}
                                 alt="Movie poster."
-                                width={192}
-                                height={288}
+                                width={160}
+                                height={240}
                                 // Toggle a blue border around the image when the movie is selected.
                                 className={`border-1 ${checkedMovies[index] ? 'border-blue-500 border-8' : 'border-transparent border-1'} rounded-2xl transition-all shadow-lg cursor-pointer`}
                             />
