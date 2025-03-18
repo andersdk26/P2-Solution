@@ -40,11 +40,11 @@ export default function MovieGrid(): JSX.Element {
                 Please select and rate at least five movies you&apos;ve watched
                 and enjoyed.
             </p>
-            <p className="text-center text-base py-4">
+            <p className="text-center text-base pt-4">
                 You can always change your movie ratings under profile settings.
             </p>
 
-            <form className="max-w-1/3 mx-auto">
+            <form className="max-w-1/3 mx-auto p-4">
                 <input
                     type="search"
                     id="coldStartMovieSearch"
@@ -56,9 +56,10 @@ export default function MovieGrid(): JSX.Element {
             {/* Pin selected movies to some sort of list. */}
 
             {/* Create div for containing the grid. */}
-            <div className="flex items-center justify-center">
+            <div className="flex-col items-center justify-center space-y-4">
+                <div className="w-1/2 mx-auto grid grid-cols-5 grid-rows-3 gap-4 p-8 bg-gray-100 rounded-3xl"></div>
                 {/* Define a 5x3 grid layout for the movies. */}
-                <div className="grid grid-cols-5 grid-rows-3 gap-4 p-4">
+                <div className="w-1/2 mx-auto grid grid-cols-5 grid-rows-3 gap-4 p-8 bg-gray-100 rounded-3xl">
                     {/* Map an array to 15 checkboxes. */}
                     {Array.from({ length: 15 }).map((_, index) => (
                         <label key={index} className="flex items-center gap-2">
