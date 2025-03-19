@@ -64,7 +64,7 @@ export default function MovieGrid(): JSX.Element {
                     style={{
                         // Filter out false (unselected) movies, calculate number of rows (based on number of selected movies), multiply number of rows by movie poster height.
                         minHeight: `${(Math.ceil(checkedMovies.filter((c) => c).length / 5) * 240, 240)}px`,
-                        maxHeight: '720px',
+                        maxHeight: '560px',
                         overflowY: 'auto', // Show scrollbar when necessary when enough movies are shown.
                     }}
                 >
