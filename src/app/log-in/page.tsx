@@ -1,45 +1,21 @@
-import { login_check, register_user } from '@/components/login';
-import { JSX } from 'react';
+'use client';
+
+import { JSX, useState } from 'react';
+import { handleLogin, handleSignup } from 'app/actions/log-in/userLogin';
 
 export default function Page(): JSX.Element {
-    let loginResponse = '';
-    let signupResponse = '';
-
-    const handleLogin = async (formData: FormData): Promise<void> => {
-        'use server';
-
-        const response = login_check({
-            username: (formData.get('username') as string) || '',
-            password: (formData.get('password') as string) || '',
-        });
-
-        // if ((await response).status === 200) {
-        //     loginResponse = 'Login successful';
-        // } else {
-        //     loginResponse = (await response).message || 'An error occurred';
-        // }
-    };
-
-    const handleSignup = async (formData: FormData): Promise<void> => {
-        'use server';
-
-        const response = register_user({
-            username: (formData.get('username') as string) || '',
-            email: (formData.get('email') as string) || '',
-            password: (formData.get('password') as string) || '',
-        });
-
-        // if ((await response).status === 200) {
-        //     signupResponse = 'Signup successful';
-        // } else {
-        //     signupResponse = (await response).message || 'An error occurred';
-        // }
-    };
+    const [loginResponse, setLoginResponse] = useState('');
+    const [signupResponse, setSignupResponse] = useState('');
 
     return (
         <div>
             <h1>Login</h1>
-            <form action={handleLogin}>
+            <form
+                action={async (formData) => {
+                    const responseMessage = await handleLogin(formData);
+                    setLoginResponse(responseMessage);
+                }}
+            >
                 <label htmlFor="username">Username</label>
                 <input type="text" id="username" name="username" />
                 <label htmlFor="password">Password</label>
@@ -49,7 +25,12 @@ export default function Page(): JSX.Element {
             <p>{loginResponse}</p>
             <br />
             <h1>Signup</h1>
-            <form action={handleSignup}>
+            <form
+                action={async (formData) => {
+                    const responseMessage = await handleSignup(formData);
+                    setSignupResponse(responseMessage);
+                }}
+            >
                 <label htmlFor="email">Email</label>
                 <input type="email" id="email" name="email" />
                 <label htmlFor="username">Username</label>
