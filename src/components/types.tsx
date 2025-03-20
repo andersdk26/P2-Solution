@@ -1,19 +1,31 @@
-type Movie = {
+export type Movie = {
     InternalRating: number;
-    InernalGenre: string;
+    InternalGenre: string;
     StreamingService: string;
     Title: string;
     Releaseyear: number;
 };
-type User = { UserInfo: UserInfo; WatchList: WatchList; GroupList: GroupList };
-type Group = { GroupInfo: GroupInfo; Watchlist: WatchList; Members: Members };
-type UserInfo = {
+export type User = {
+    UserInfo: UserInfo;
+    WatchList: WatchList;
+    GroupList: GroupList;
+};
+export type Group = {
+    GroupInfo: GroupInfo;
+    Watchlist: WatchList;
+    Members: Members;
+};
+export type UserInfo = {
     Age: number;
     UserId: string;
     Password: string;
     Email: string;
 };
-type GroupInfo = { GroupID: string; GroupAdmin: User };
-type WatchList = { Movies: Movie[] }; // array of objects
-type GroupList = { Groups: Group[] }; // array of objects
-type Members = { Users: User[] }; // array of objects
+export type GroupInfo = { GroupID: string; GroupAdmin: User };
+export type WatchList = {
+    Movies: Movie[];
+    GenreBoost: GenreBoost[];
+};
+export type GroupList = { Groups: Group[] };
+export type Members = { Users: User[] };
+export type GenreBoost = { Genre: string; Boost: number };
