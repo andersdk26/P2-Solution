@@ -24,17 +24,15 @@
 .sideBar {
     position: fixed;
     top: 0;
-    right: -300px; /* Start hidden off-screen */
+    right: 0;
     width: 300px;
-    height: 100%;
-    background-color: #333;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
     color: white;
-    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5);
-    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: right 0.3s ease-in-out; /* Smooth slide-in effect */
+    justify-content: center;
 }
 
 .sideBar img {
