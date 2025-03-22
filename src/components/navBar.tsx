@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function NavBar(): JSX.Element {
     return (
-        <nav className="fixed w-full h-24 shadow-x1 bg-pink">
+        <nav className="fixed w-full h-24 shadow-x1">
             <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16">
                 {/* left side div for logo*/}
                 <div>
