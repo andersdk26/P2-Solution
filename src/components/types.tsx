@@ -4,6 +4,7 @@ export type Movie = {
     StreamingService: string;
     Title: string;
     Releaseyear: number;
+    PersonalRating?: number; // optional used for collaborative and not relevant for content-based
 };
 export type User = {
     UserInfo: UserInfo;
@@ -17,7 +18,7 @@ export type Group = {
 };
 export type UserInfo = {
     Age: number;
-    UserId: string;
+    UserID: string;
     Password: string;
     Email: string;
 };
