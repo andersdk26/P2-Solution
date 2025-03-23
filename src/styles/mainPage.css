@@ -49,3 +49,21 @@
     color: white;
     cursor: pointer;
 }
+
+.ratingRow {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ratingRow label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.ratingRow input {
+    margin-right: 5px;
+}
