@@ -17,7 +17,7 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
         email: '', // the email
         password: '', // passworrrrrrrs
         confirmPassword: '', // ect
-        age: '', // ect
+        dob: '', // age
     });
 
     const [passwordError, setPasswordError] = useState(false); // Tracks if the passwords matche
@@ -32,11 +32,6 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
         if (e.target.name === 'confirmPassword') {
             setPasswordError(e.target.value !== formData.password); // hvis passwords ikke matcher, show error
         }
-    };
-
-    // håndtere age selection (sikkere at kun en checkboks er selected)
-    const handleAgeSelection = (ageGroup: string) => {
-        setFormData({ ...formData, age: ageGroup }); // opdatere the selected age group
     };
 
     // handles form submission
@@ -87,45 +82,21 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
                 />
             </div>
 
-            {/* alder tjek selcetion thing ficture (kun 1 boks) */}
+            {/* selecter age */}
             <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                    Select Your Age
+                    Date of Birth
                 </label>
-                <div className="mt-2 space-y-1">
-                    {/* 12 or under" */}
-                    <label className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            checked={formData.age === '12 or under'} // Checkbox checked if selected
-                            onChange={() => handleAgeSelection('12 or under')} // Updates age selection
-                            className="w-4 h-4"
-                        />
-                        <span>12 or under</span>
-                    </label>
-
-                    {/* checkboks for "13-17" */}
-                    <label className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            checked={formData.age === '13-17'} // Checkbox checked if selected
-                            onChange={() => handleAgeSelection('13-17')} // Updates age selection
-                            className="w-4 h-4"
-                        />
-                        <span>13-17</span>
-                    </label>
-
-                    {/* cheackboks for "18+" */}
-                    <label className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            checked={formData.age === '18+'} // Checkbox checked if selected
-                            onChange={() => handleAgeSelection('18+')} // Updates age selection
-                            className="w-4 h-4"
-                        />
-                        <span>18+</span>
-                    </label>
-                </div>
+                <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob || ''}
+                    onChange={(e) =>
+                        setFormData({ ...formData, dob: e.target.value })
+                    }
+                    className="mt-1 p-2 w-full border rounded-md"
+                    required
+                />
             </div>
 
             {/* Password Input */}
