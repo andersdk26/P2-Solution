@@ -42,9 +42,8 @@ function sign_upBlock() {}
 export default function log_inPage() {
     return (
         <main>
+            <header>Login Page</header>
             <div className="login">
-                <title>Login Page</title>
-
                 <a href="mainPage" className="login-btn" target="_blank">
                     i'm a login button tøhø
                 </a>
