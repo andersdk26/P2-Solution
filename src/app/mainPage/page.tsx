@@ -1,14 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+interface Movie {
+    title: string;
+    image: string;
+}
+
+import { useState, useEffect } from 'react';
 import react, { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 
 export default function Home() {
+    const [movies, setMovies] = useState<Movie[]>([]);
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
-    const [selectedRating, setSelectedRating] = useState<number | null>(null); // State for radio button selection
+    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+
+    useEffect(() => {
+        // Fetch the JSON file when the page loads
+        fetch('Movie.json')
+            .then((response) => response.json())
+            .then((data) => setMovies(data))
+            .catch((error) => console.error('Error loading movies:', error));
+    }, []);
 
     const handleImageClick = (image: string, altText: string) => {
         setSidebarImage(image);
@@ -17,62 +31,54 @@ export default function Home() {
     };
 
     const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // To change rating
         setSelectedRating(Number(event.target.value));
+    };
+
+    // Prototype needs full change
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const content = JSON.parse(e.target?.result as string);
+                    if (Array.isArray(content)) {
+                        setMovies(content);
+                    } else {
+                        alert(
+                            'Invalid file format. Expected an array of movies.'
+                        );
+                    }
+                } catch (error) {
+                    alert('Error parsing file. Ensure it is valid JSON.');
+                }
+            };
+            reader.readAsText(file);
+        }
     };
 
     return (
         <div className="container">
             <h1>Jamfest</h1>
+
+            {/* File Input */}
+
+            {/* Movie Posters */}
             <div className="posterRow">
-                <Image
-                    className="moviePoster"
-                    onClick={() =>
-                        handleImageClick('/Poster/TestPoster.jpg', 'Deadpool 1')
-                    }
-                    src="/Poster/TestPoster.jpg"
-                    alt="Deadpool 1"
-                    width={150}
-                    height={200}
-                />
-                <Image
-                    className="moviePoster"
-                    onClick={() =>
-                        handleImageClick(
-                            '/Poster/TestPoster.jpg',
-                            'TestPoster2'
-                        )
-                    }
-                    src="/Poster/TestPoster.jpg"
-                    alt="TestPoster2"
-                    width={150}
-                    height={200}
-                />
-                <Image
-                    className="moviePoster"
-                    onClick={() =>
-                        handleImageClick(
-                            '/Poster/TestPoster.jpg',
-                            'TestPoster3'
-                        )
-                    }
-                    src="/Poster/TestPoster.jpg"
-                    alt="TestPoster3"
-                    width={150}
-                    height={200}
-                />
-                <Image
-                    className="moviePoster"
-                    onClick={() =>
-                        handleImageClick(
-                            '/Poster/TestPoster.jpg',
-                            'TestPoster4'
-                        )
-                    }
-                    src="/Poster/TestPoster.jpg"
-                    alt="TestPoster4"
-                    width={150}
-                    height={200}
-                />
+                {movies.map((movie, index) => (
+                    <Image
+                        key={index}
+                        className="moviePoster"
+                        onClick={() =>
+                            handleImageClick(movie.image, movie.title)
+                        }
+                        src={movie.image}
+                        alt={movie.title}
+                        width={150}
+                        height={200}
+                    />
+                ))}
             </div>
 
             {/* Sidebar should only appear if an image is selected */}
