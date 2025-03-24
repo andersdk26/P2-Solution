@@ -1,6 +1,5 @@
 'use server';
 
-import { promises } from 'dns';
 import jwt from 'jsonwebtoken';
 
 interface generateTokenProps {
