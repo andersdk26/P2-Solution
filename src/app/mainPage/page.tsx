@@ -15,6 +15,7 @@ export default function Home() {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
+    const [currentPage, setCurrentPage] = useState(0); // Track the current page
 
     useEffect(() => {
         // Fetch the JSON file when the page loads
@@ -35,7 +36,6 @@ export default function Home() {
         setSelectedRating(Number(event.target.value));
     };
 
-    // Prototype needs full change
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -58,6 +58,25 @@ export default function Home() {
         }
     };
 
+    const moviesPerPage = 10;
+    const startIndex = currentPage * moviesPerPage;
+    const moviesToDisplay = movies.slice(
+        startIndex,
+        startIndex + moviesPerPage
+    );
+
+    const handleNextPage = () => {
+        if ((currentPage + 1) * moviesPerPage < movies.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="container">
             <h1>Jamfest</h1>
@@ -66,7 +85,7 @@ export default function Home() {
 
             {/* Movie Posters */}
             <div className="posterRow">
-                {movies.map((movie, index) => (
+                {moviesToDisplay.map((movie, index) => (
                     <Image
                         key={index}
                         className="moviePoster"
@@ -152,6 +171,24 @@ export default function Home() {
                     </div>
                 </>
             )}
+
+            {/* Pagination Controls */}
+            <div className="pagination">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={handleNextPage}
+                    disabled={
+                        (currentPage + 1) * moviesPerPage >= movies.length
+                    }
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 }

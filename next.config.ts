@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 
 module.exports = {
     images: {
-        domains: ['www.themoviedb.org'], //So there is no need to download every single poster.
+        domains: ['www.amazon.org', 'm.media-amazon.com'], // Add m.media-amazon.com here
     },
 };
 
