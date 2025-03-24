@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { JSX } from 'react';
 import { useState } from 'react';
+import { movie } from '@/components/Movie';
 
 export default function MovieGrid(): JSX.Element {
     // Create a state array for the movies displayed in the grid.
