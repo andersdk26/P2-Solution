@@ -3,8 +3,6 @@
 import { login_check, register_user } from '@/components/db/userAuth';
 
 export async function handleLogin(formData: FormData): Promise<string> {
-    'use server';
-
     let loginResponse = '';
 
     const response = login_check({
@@ -22,8 +20,6 @@ export async function handleLogin(formData: FormData): Promise<string> {
 }
 
 export async function handleSignup(formData: FormData): Promise<string> {
-    'use server';
-
     let signupResponse = '';
 
     const response = register_user({
@@ -40,3 +36,12 @@ export async function handleSignup(formData: FormData): Promise<string> {
 
     return signupResponse;
 }
+
+/* 
+Set cookie:
+security attribute: Secure, HttpOnly, SameSite=Strict
+scope attributes: not Domain, Path
+expiration attributes: Expires, Max-Age
+use JWT for session management
+
+*/
