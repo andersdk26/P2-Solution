@@ -72,7 +72,7 @@ export default function MovieGrid(): JSX.Element {
                 {searchResult.map((s) => (
                     <p
                         key={s}
-                        className="py-2 px-4 hover:bg-gray-200 rounded-3xl"
+                        className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl"
                     >
                         {s}
                     </p>
@@ -82,7 +82,7 @@ export default function MovieGrid(): JSX.Element {
             {/* Create div for containing grids. */}
             <div className="flex-col items-center justify-center space-y-4">
                 {/* Define a grid layout for selected movies. */}
-                <p className="text-center text-xl">Selected movies</p>
+                <p className="text-center pt-4 text-xl">Selected movies</p>
                 <div
                     className={`w-1/2 mx-auto grid grid-cols-5 gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300`}
                     // Dynamically adjust height of selected movie box.

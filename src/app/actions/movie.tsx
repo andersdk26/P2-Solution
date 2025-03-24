@@ -9,8 +9,6 @@ export type movie = {
     movieGenres: string[];
 };
 
-// export let listOfMovies: Array<movie>;
-
 export async function searchForMovie(searchQuery: string): Promise<string[]> {
     // Only search if at least 3 letters are typed.
     if (searchQuery.length < 3) {
@@ -20,12 +18,11 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     // Split search query into words.
     const terms = searchQuery.split(' ');
 
+    // Array for movies matching the search terms.
     const matchingResults = [];
 
     // Get movies from database
     const movies = await db.select().from(moviesTable);
-
-    console.log(`> Results for query: "${searchQuery}" <`);
 
     // For every movie fetched.
     for (let i = 0; i < movies.length; i++) {
@@ -42,11 +39,12 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
                 break;
             }
         }
+
+        // If a movie title contains all search terms, then add it to the array 'matchingResults'.
         if (containsTerms) {
-            console.log(movies[i].title);
             matchingResults.push(movies[i].title);
         }
     }
-    console.log('--------------------');
+
     return matchingResults;
 }
