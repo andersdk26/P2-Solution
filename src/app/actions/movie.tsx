@@ -2,7 +2,6 @@
 
 import { db } from 'db';
 import { moviesTable } from 'db/schema';
-import { boolean } from 'drizzle-orm/gel-core';
 
 export type movie = {
     movieId: number;
@@ -36,6 +35,7 @@ export async function loadMovies(searchQuery: string): Promise<void> {
                     .toLowerCase()
                     .includes(terms[j].toLocaleLowerCase())
             ) {
+                // If a term is not found in the movie title, set boolean to false and break out of the for loop.
                 containsTerms = false;
                 break;
             }
