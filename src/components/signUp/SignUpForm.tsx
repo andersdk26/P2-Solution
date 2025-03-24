@@ -47,6 +47,8 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
         onSignUp(formData); // Call the parent function to process the form data
     };
 
+    const today = new Date().toISOString().split('T')[0]; // tager datoen som vi har ida altså dd-mm-åååå således at man ikke kan overskride den
+
     return (
         <form
             onSubmit={handleSubmit}
@@ -96,6 +98,8 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
                     }
                     className="mt-1 p-2 w-full border rounded-md"
                     required
+                    min="1900-01-01"
+                    max={today}
                 />
             </div>
 
