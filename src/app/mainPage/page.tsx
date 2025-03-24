@@ -58,7 +58,7 @@ export default function Home() {
         }
     };
 
-    const moviesPerPage = 10;
+    const moviesPerPage = 5;
     const startIndex = currentPage * moviesPerPage;
     const moviesToDisplay = movies.slice(
         startIndex,
