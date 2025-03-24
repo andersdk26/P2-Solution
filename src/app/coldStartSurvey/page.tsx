@@ -40,8 +40,10 @@ export default function MovieGrid(): JSX.Element {
                 Please select and rate at least five movies you&apos;ve watched
                 and enjoyed.
             </p>
-            <p className="text-center text-l pt-4">
-                You can always change your movie ratings under profile settings.
+            <p className="max-w-1/3 mx-auto text-center text-l pt-4">
+                The more movies you rate, the more accurate your recommendations
+                will be. You can always change your movie ratings under profile
+                settings.
             </p>
 
             {/* Search bar for finding movies */}
