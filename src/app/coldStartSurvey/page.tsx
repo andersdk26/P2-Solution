@@ -45,14 +45,14 @@ export default function MovieGrid(): JSX.Element {
                 Please select and rate at least five movies you&apos;ve watched
                 and enjoyed.
             </p>
-            <p className="max-w-1/3 mx-auto text-center text-l pt-4">
+            <p className="max-w-1/2 mx-auto text-center text-l pt-4">
                 The more movies you rate, the more accurate your recommendations
                 will be. You can always change your movie ratings under profile
                 settings.
             </p>
 
             {/* Search bar for finding movies */}
-            <form className="max-w-1/2 mx-auto p-4">
+            <form className="max-w-1/2 mx-auto py-4">
                 <input
                     type="search"
                     id="coldStartMovieSearch"
@@ -67,10 +67,12 @@ export default function MovieGrid(): JSX.Element {
 
             <div
                 id="searchResults"
-                className="max-w-1/2 mx-auto px-8 bg-gray-100 rounded-3xl"
+                className="max-w-1/2 mx-auto px-4 bg-gray-100 rounded-3xl"
             >
                 {searchResult.map((s) => (
-                    <p key={s}>{s}</p>
+                    <p key={s} className="py-2">
+                        {s}
+                    </p>
                 ))}
             </div>
 
