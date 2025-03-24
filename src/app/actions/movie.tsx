@@ -11,14 +11,16 @@ export type movie = {
 
 // export let listOfMovies: Array<movie>;
 
-export async function loadMovies(searchQuery: string): Promise<void> {
+export async function searchForMovie(searchQuery: string): Promise<string[]> {
     // Only search if at least 3 letters are typed.
     if (searchQuery.length < 3) {
-        return;
+        return [];
     }
 
     // Split search query into words.
     const terms = searchQuery.split(' ');
+
+    const matchingResults = [];
 
     // Get movies from database
     const movies = await db.select().from(moviesTable);
@@ -42,7 +44,9 @@ export async function loadMovies(searchQuery: string): Promise<void> {
         }
         if (containsTerms) {
             console.log(movies[i].title);
+            matchingResults.push(movies[i].title);
         }
     }
     console.log('--------------------');
+    return matchingResults;
 }

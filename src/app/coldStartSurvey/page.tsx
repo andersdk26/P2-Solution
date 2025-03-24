@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { JSX } from 'react';
 import { useState } from 'react';
 //import { movie } from '@/components/movie';
-import { loadMovies } from 'app/actions/movie';
+import { searchForMovie } from 'app/actions/movie';
 
 export default function MovieGrid(): JSX.Element {
     // Create a state array for the movies displayed in the grid.
@@ -12,6 +12,9 @@ export default function MovieGrid(): JSX.Element {
         // Set all indicies to false.
         Array(15).fill(false)
     );
+
+    // Create useState array for storing search results.
+    const [searchResult, setSearchResult] = useState(['']);
 
     // Function for selecting and unselecting movies.
     const toggle_check = (index: number): void => {
@@ -64,9 +67,17 @@ export default function MovieGrid(): JSX.Element {
                     className="block w-full p-4 rounded-full bg-gray-100"
                     placeholder="Search for movies..."
                     // When the user types something, call function to fetch movies with matching search query.
-                    onChange={(e) => loadMovies(e.target.value)}
+                    onChange={async (e) =>
+                        setSearchResult(await searchForMovie(e.target.value))
+                    }
                 />
             </form>
+
+            <div id="searchResults">
+                {searchResult.map((s) => (
+                    <p key={s}>{s}</p>
+                ))}
+            </div>
 
             {/* Create div for containing grids. */}
             <div className="flex-col items-center justify-center space-y-4">
