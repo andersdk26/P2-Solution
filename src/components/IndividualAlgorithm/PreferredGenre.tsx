@@ -17,14 +17,14 @@ function calculatePreferredGenres(user: User): User {
     // create a new user object for immutability.
     const UserWithGenrePreference = {
         ...user,
-        WatchList: { ...user.WatchList },
+        WatchList: { ...user.SeenList },
     };
     // create object with genre and number for times the genre appears in the watchlist
     // record<key, value> = {}; (We have a blank notebook to start with)
     const genreCount: Record<string, number> = {};
 
     // Occurence of each genre:
-    user.WatchList.Movies.forEach((movie) => {
+    user.SeenList.Movies.forEach((movie) => {
         genreCount[movie.InternalGenre] =
             (genreCount[movie.InternalGenre] || 0) + 1;
     });

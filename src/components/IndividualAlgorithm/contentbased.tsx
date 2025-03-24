@@ -14,8 +14,8 @@ function scoreIndContent(movie: Movie, user: User): number {
             : movie.InternalRating;
 
     // Compare Movie's Genre with movies from User object
-    if (user.WatchList.GenreBoost) {
-        for (const boostedGenre of user.WatchList.GenreBoost) {
+    if (user.SeenList.GenreBoost) {
+        for (const boostedGenre of user.SeenList.GenreBoost) {
             if (movie.InternalGenre === boostedGenre.Genre) {
                 scoreIndContent += boostedGenre.Boost;
             }

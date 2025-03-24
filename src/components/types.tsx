@@ -8,12 +8,12 @@ export type Movie = {
 };
 export type User = {
     UserInfo: UserInfo;
-    WatchList: WatchList;
+    SeenList: SeenList;
     GroupList: GroupList;
 };
 export type Group = {
     GroupInfo: GroupInfo;
-    Watchlist: WatchList;
+    SeenList: SeenList;
     Members: Members;
 };
 export type UserInfo = {
@@ -23,7 +23,7 @@ export type UserInfo = {
     Email: string;
 };
 export type GroupInfo = { GroupID: string; GroupAdmin: User };
-export type WatchList = {
+export type SeenList = {
     Movies: Movie[];
     GenreBoost: GenreBoost[];
 };

@@ -1,5 +1,5 @@
 /* 
-Description: Function to return af score for a movie based on ratings from similar users.
+Description: Function to return af score for a movie based on collaborative filtering
 */
 /* Documentation:
 https://www.w3schools.com/js/js_array_sort.asp 
@@ -10,24 +10,24 @@ import React, { JSX } from 'react';
 import { User, Movie } from '../../components/types';
 import calculatePreferredGenres from './PreferredGenre';
 
-//
+// Loops thorugh all top 10 similar user in respect to User.
 function scoreIndCollab(movie: Movie, user: User, allUsers: User[]): number {
-    let score = 0;
-    let totalWeight = 0;
+    let score = 0; // similarity between user and otherusers multiplied by the movies rating. EX: (0.8 * 5) + (0.7 * 5)
+    let totalWeight = 0; // sum of Boost values EX (0.8+0.7)
 
     const similarUsers = allUsers
         .filter(
-            (otherUser) => otherUser.UserInfo.UserID !== user.UserInfo.UserID
+            (otherUser) => otherUser.UserInfo.UserID !== user.UserInfo.UserID // Validate we are not comparing the user to themselves
         )
         .map((otherUser) => ({
             user: otherUser,
-            similarity: calculateUserSimilarity(user, otherUser),
+            similarity: calculateUserSimilarity(user, otherUser), // Calculate similarity between User and similar user
         }))
-        .sort((a, b) => b.similarity - a.similarity) // Sort in descending
-        .slice(0, 10);
+        .sort((a, b) => b.similarity - a.similarity) // Sort in descending order
+        .slice(0, 5);
 
     similarUsers.forEach(({ user: similarUser, similarity }) => {
-        const ratedMovie = similarUser.WatchList.Movies.find(
+        const ratedMovie = similarUser.SeenList.Movies.find(
             (m) => m.Title === movie.Title
         );
         if (ratedMovie && ratedMovie.PersonalRating !== undefined) {
@@ -38,10 +38,10 @@ function scoreIndCollab(movie: Movie, user: User, allUsers: User[]): number {
 
     return totalWeight > 0 ? score / totalWeight : movie.InternalRating;
 }
-
+// Loops through all top 5 similar users in scoreIndCollab, and return a totalWeight of those similarityscores.
 function calculateUserSimilarity(user1: User, user2: User): number {
-    const user1Genres = calculatePreferredGenres(user1).WatchList.GenreBoost;
-    const user2Genres = calculatePreferredGenres(user2).WatchList.GenreBoost;
+    const user1Genres = calculatePreferredGenres(user1).SeenList.GenreBoost;
+    const user2Genres = calculatePreferredGenres(user2).SeenList.GenreBoost;
     let similarityScore = 0;
     let totalWeight = 0;
 
