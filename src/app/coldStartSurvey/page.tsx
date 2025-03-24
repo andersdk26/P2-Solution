@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import { JSX } from 'react';
 import { useState } from 'react';
-import { movie } from '@/components/Movie';
+//import { movie } from '@/components/movie';
+import { loadMovies } from 'app/actions/movie';
 
 export default function MovieGrid(): JSX.Element {
     // Create a state array for the movies displayed in the grid.
@@ -47,6 +48,14 @@ export default function MovieGrid(): JSX.Element {
                 settings.
             </p>
 
+            <button
+                //onClick={loadMovies}
+                type="button"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+                Load Movies
+            </button>
+
             {/* Search bar for finding movies */}
             <form className="max-w-1/3 mx-auto p-4">
                 <input
@@ -54,6 +63,8 @@ export default function MovieGrid(): JSX.Element {
                     id="coldStartMovieSearch"
                     className="block w-full p-4 rounded-full bg-gray-100"
                     placeholder="Search for movies..."
+                    // When the user types something, call function to fetch movies with matching search query.
+                    onChange={(e) => loadMovies(e.target.value)}
                 />
             </form>
 
