@@ -16,13 +16,13 @@ export const usersTable = sqliteTable('users', {
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 
-export const movieTable = sqliteTable('movies', {
+export const moviesTable = sqliteTable('movies', {
     id: integer('id').primaryKey(),
     title: text('title').notNull(),
-    content: text('genres').notNull(),
+    genres: text('genres').notNull(),
 });
 
-export type InsertPost = typeof movieTable.$inferInsert;
-export type SelectPost = typeof movieTable.$inferSelect;
+export type InsertMovie = typeof moviesTable.$inferInsert;
+export type SelectMovie = typeof moviesTable.$inferSelect;
 
 // to update the schema, run `npx drizzle-kit push`
