@@ -51,16 +51,8 @@ export default function MovieGrid(): JSX.Element {
                 settings.
             </p>
 
-            <button
-                //onClick={loadMovies}
-                type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-                Load Movies
-            </button>
-
             {/* Search bar for finding movies */}
-            <form className="max-w-1/3 mx-auto p-4">
+            <form className="max-w-1/2 mx-auto p-4">
                 <input
                     type="search"
                     id="coldStartMovieSearch"
@@ -73,7 +65,10 @@ export default function MovieGrid(): JSX.Element {
                 />
             </form>
 
-            <div id="searchResults">
+            <div
+                id="searchResults"
+                className="max-w-1/2 mx-auto px-8 bg-gray-100 rounded-3xl"
+            >
                 {searchResult.map((s) => (
                     <p key={s}>{s}</p>
                 ))}
