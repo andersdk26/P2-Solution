@@ -67,10 +67,13 @@ export default function MovieGrid(): JSX.Element {
 
             <div
                 id="searchResults"
-                className="max-w-1/2 mx-auto px-4 bg-gray-100 rounded-3xl"
+                className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
             >
                 {searchResult.map((s) => (
-                    <p key={s} className="py-2">
+                    <p
+                        key={s}
+                        className="py-2 px-4 hover:bg-gray-200 rounded-3xl"
+                    >
                         {s}
                     </p>
                 ))}
