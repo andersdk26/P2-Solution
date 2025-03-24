@@ -23,10 +23,12 @@
         "paths": {
             "@/*": ["./src/*"],
             "@/styles/*": ["styles/*"],
-            "@/components/*": ["components/*"]
+            "@/components/*": ["components/*"],
+            "@/db/*": ["db/*"],
+            "@/actions/*": ["app/actions/*"],
+            "@/api/*": ["app/api/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }
-
