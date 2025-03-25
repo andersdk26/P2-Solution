@@ -1,102 +1,83 @@
 'use client';
-
 import { JSX, useState } from 'react';
-import { handleLogin, handleSignup } from 'app/actions/log-in/userLogin';
-
-export default function Page(): JSX.Element {
-    const [loginResponse, setLoginResponse] = useState('');
-    const [signupResponse, setSignupResponse] = useState('');
-
-    return (
-        <div>
-            <h1>Login</h1>
-            <form
-                action={async (formData) => {
-                    const responseMessage = await handleLogin(formData);
-                    setLoginResponse(responseMessage);
-                }}
-            >
-                <label htmlFor="username">Username</label>
-                <input type="text" id="username" name="username" />
-                <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" />
-                <button type="submit">Login</button>
-            </form>
-            <p>{loginResponse}</p>
-            <br />
-            <h1>Signup</h1>
-            <form
-                action={async (formData) => {
-                    const responseMessage = await handleSignup(formData);
-                    setSignupResponse(responseMessage);
-                }}
-            >
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" name="email" />
-                <label htmlFor="username">Username</label>
-                <input type="text" id="username" name="username" />
-                <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" />
-                <button type="submit">Login</button>
-            </form>
-            <p>{signupResponse}</p>
-        </div>
-    );
-}
-//log-in page
-
-/* consists of:
- *  log-in title
- *  email or username
- *      should be transparent text --> will dissapear once someone writes in it
- *  password
- *      =||=
- *  log-in button
- *      will redirect to main-page
- *  sign up-button
- *      will redirect to sign-up page
- *
- *  everything should be in the middle
- * */
-
-import { JSX } from 'react';
-
-//login title
-export function Title(): JSX.Element {
-    return (
-        <>
-            <Title textColor="blue">Log-in</Title>
-        </>
-    );
-}
-
-//username block
-function usernameBlock() {}
-
-//password block
-function passwordBlock() {}
-
-//login button
-function loginButton() {}
-
-//button that will redirect to sign-in page
-function sign_upBlock() {}
+import { handleLogin, handleSignup } from '@/actions/log-in/userLogin';
 
 //href is link, _blank opens the tab in a new window
 //two buttons: login (should redirect to mainpage), signup (should redirect to signuppage)
 export default function log_inPage() {
-    return (
-        <main>
-            <header>Login Page</header>
-            <div className="login">
-                <a href="mainPage" className="login-btn" target="_blank">
-                    i'm a login button tøhø
-                </a>
+    const [loginResponse, setLoginResponse] = useState('');
 
-                <a href="signUpPage" className="signup-btn" target="_blank">
-                    sign-up?
-                </a>
+    const validateInput = (formData: FormData) => {
+        console.log(formData.get('username'));
+        setLoginResponse('Nej');
+        return true;
+    };
+
+    return (
+        <form
+            action={async (formData) => {
+                // Validate input
+                if (!validateInput(formData)) {
+                    return;
+                }
+
+                const responseMessage = await handleLogin(formData);
+                setLoginResponse(responseMessage);
+            }}
+        >
+            <h1 className="text-center text-2xl mt-10">Login Page</h1>
+            <p>{loginResponse}</p>
+            <div
+                //boks
+                className="bg-blue-100 w-2/5 h-200px m-auto text-center mt-10"
+            >
+                <div
+                    //loginboks
+                    className="m-auto text-center content-center"
+                >
+                    <label id="usernameBoks" className="mt-10">
+                        <a id="textClassName">username</a>
+                        <br />
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            required
+                        />
+                    </label>
+                    <br />
+                    <label id="passwordBoks">
+                        <a id="textClassName">
+                            password <br />
+                        </a>
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            required
+                        />
+                    </label>
+                </div>
+                {/* with input nd type "submit" you submit what you have written in the boxes */}
+                <input
+                    id="loginBtn"
+                    value="Login"
+                    type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                />
+                <button
+                    id="signupBtn"
+                    value="signupValue"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                >
+                    <a
+                        href="https://github.com/andersdk26/P2-Solution/tree/feature/signUpPage"
+                        target="_blank"
+                    >
+                        Sign-up
+                    </a>
+                </button>
             </div>
-        </main>
+        </form>
     );
 }
