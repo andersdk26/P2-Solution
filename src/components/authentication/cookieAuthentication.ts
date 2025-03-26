@@ -2,18 +2,12 @@
 
 import jwt from 'jsonwebtoken';
 
-interface generateTokenProps {
-    userId: string;
-}
-
-export async function generateToken({
-    userId,
-}: generateTokenProps): Promise<string> {
+export async function generateToken(userId: string): Promise<string> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
-    // JWT token with HS512 algorithm
+    // Create JWT token with HS512 algorithm
     return new Promise((resolve, reject) => {
         jwt.sign(
             { userId },
@@ -37,11 +31,7 @@ export async function generateToken({
     });
 }
 
-interface verifyTokenProps {
-    token: string;
-}
-
-export function verifyToken({ token }: verifyTokenProps): Promise<object> {
+export async function verifyToken(token: string): Promise<object> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
@@ -64,6 +54,7 @@ export function verifyToken({ token }: verifyTokenProps): Promise<object> {
                     return reject(new Error('JWT token is not defined'));
                 }
 
+                // Return the decoded token
                 resolve(decoded as object);
             }
         );

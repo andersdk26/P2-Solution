@@ -1,11 +1,23 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { handleLogin, handleSignup } from 'app/actions/log-in/userLogin';
+import verifyUser from '@/actions/log-in/authenticateUser';
+import userLogout from '@/actions/log-in/userLogout';
 
 export default function Page(): JSX.Element {
     const [loginResponse, setLoginResponse] = useState('');
     const [signupResponse, setSignupResponse] = useState('');
+    const [userId, setUserId] = useState(0);
+
+    // Check if the user is logged in
+    useEffect(() => {
+        const checkAuthStatus = async (): Promise<void> => {
+            const response = await verifyUser();
+            setUserId(response);
+        };
+        checkAuthStatus();
+    }, [loginResponse, signupResponse]); // trigger when login or signup response changes
 
     return (
         <div>
@@ -40,6 +52,21 @@ export default function Page(): JSX.Element {
                 <button type="submit">Login</button>
             </form>
             <p>{signupResponse}</p>
+            {userId !== 0 && (
+                <>
+                    <br />
+                    <h1 className="text-xl">Logged in as user {userId}</h1>
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={async () => {
+                            await userLogout();
+                            setUserId(0);
+                        }}
+                    >
+                        Log out
+                    </button>
+                </>
+            )}
         </div>
     );
 }

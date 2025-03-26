@@ -13,26 +13,30 @@ export async function login_check({
     username,
     password,
 }: loginCheckProps): Promise<defaultResponse> {
+    // Select matching user from the database
     const result = await db
         .select({
+            id: usersTable.id,
             username: usersTable.username,
             password: usersTable.password,
         })
         .from(usersTable)
         .where(eq(usersTable.username, username));
 
+    // Check if the user exists
     if (result.length === 0) {
         console.log('User not found');
         return { status: 404, message: 'User not found' };
     }
 
+    // Verify the password
     if (!argon2.verify(result[0].password, password)) {
         console.log('Incorrect password');
         return { status: 401, message: 'Incorrect password' };
     }
 
     console.log('Login successful');
-    return { status: 200, message: 'Login successful' };
+    return { status: 200, object: { id: result[0].id } };
 }
 
 interface registerUserProps {
@@ -119,5 +123,5 @@ export async function register_user({
         return { status: 500, message: 'Internal server error' };
     }
 
-    return { status: 201, message: 'User created' };
+    return { status: 201, object: { id: userId } };
 }
