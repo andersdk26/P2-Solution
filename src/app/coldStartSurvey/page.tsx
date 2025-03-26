@@ -25,6 +25,7 @@ export default function SelectMovies(): JSX.Element {
             );
 
             let newSelection;
+
             if (isAlreadySelected) {
                 // Remove movie if already selected.
                 newSelection = prevSelectedMovies.filter(
@@ -76,16 +77,23 @@ export default function SelectMovies(): JSX.Element {
 
     return (
         <main>
-            <p className="text-center pt-8 text-2xl">
-                Please select and rate at least five movies you&apos;ve watched
-                and enjoyed.
+            {/* Page header. */}
+            <p className="text-center pt-8 text-4xl font-bold">
+                Welcome, USERNAME!
             </p>
-            <p className="max-w-1/2 mx-auto text-center text-l pt-4">
-                The more movies you rate, the more accurate your recommendations
-                will be. You can always change your movie ratings under profile
-                settings. If your movie doesn&apos;t show up, try adding the
-                year of release to your search!
+
+            {/* Description of selection process. */}
+            <p className="max-w-1/3 mx-auto text-justify text-xl pt-4 text-gray-600">
+                Before we can start recommending movies that match your taste,
+                we need to know a bit about the type of movies you like. Please
+                select at least five movies that you have watched and have an
+                opinion about. The more movies you rate, the more accurate your
+                recommendations will be. You can always edit your list of movie
+                ratings under account settings. If the movie you are looking for
+                does not appear in the search results, try adding the year of
+                release to your search.
             </p>
+
             {/* Search bar for finding movies */}
             <form className="max-w-1/2 mx-auto py-4">
                 <input
@@ -99,6 +107,7 @@ export default function SelectMovies(): JSX.Element {
                     }}
                 />
             </form>
+
             <section
                 id="searchResults"
                 className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
