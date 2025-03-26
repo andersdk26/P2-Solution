@@ -154,17 +154,6 @@ export default function SelectMovies(): JSX.Element {
                     ))}
                 </section>
             </section>
-
-            {/* Create a container for the progress bar and center it horizontally. POSSIBLY DEPRECATED*/}
-            <div className="w-full flex justify-center mt-4">
-                {/* Define the width and style of the progress bar. */}
-                <div className="w-1/3 bg-gray-300 rounded-full mt-4 h-4 ">
-                    <div
-                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
-                        style={{ width: `${progress}%` }}
-                    />
-                </div>
-            </div>
         </main>
     );
 }
