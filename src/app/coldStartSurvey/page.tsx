@@ -48,7 +48,8 @@ export default function MovieGrid(): JSX.Element {
             <p className="max-w-1/2 mx-auto text-center text-l pt-4">
                 The more movies you rate, the more accurate your recommendations
                 will be. You can always change your movie ratings under profile
-                settings.
+                settings. If your movie doesn&apos;t show up, try adding the
+                year of release to your search!
             </p>
 
             {/* Search bar for finding movies */}
