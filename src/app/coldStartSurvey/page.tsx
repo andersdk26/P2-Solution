@@ -19,13 +19,30 @@ export default function SelectMovies(): JSX.Element {
 
     // Function for handling selection of movies.
     const handleSelectMovie = (movie: movie): void => {
-        setSelectedMovies((prev) =>
-            prev.some((m) => m.movieId === movie.movieId)
-                ? prev.filter((m) => m.movieId !== movie.movieId)
-                : [...prev, movie]
-        );
+        setSelectedMovies((prevSelectedMovies) => {
+            const isAlreadySelected = prevSelectedMovies.some(
+                (m) => m.movieId === movie.movieId
+            );
 
-        localStorage.setItem('selectedMovies', JSON.stringify(selectedMovies));
+            let newSelection;
+            if (isAlreadySelected) {
+                // Remove movie if already selected.
+                newSelection = prevSelectedMovies.filter(
+                    (m) => m.movieId !== movie.movieId
+                );
+            } else {
+                // Add movie if not selected.
+                newSelection = [...prevSelectedMovies, movie];
+            }
+
+            // Save updated selection to localStorage
+            localStorage.setItem(
+                'selectedMovies',
+                JSON.stringify(newSelection)
+            );
+
+            return newSelection;
+        });
     };
 
     // Create useState array for storing search results.
