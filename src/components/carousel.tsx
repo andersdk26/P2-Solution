@@ -14,14 +14,14 @@ type CarouselProps = {
 export default function Carousel({ imageUrls }: CarouselProps): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
 
-    function showNextImage() {
+    function showNextImage(): void {
         setImageIndex((index) => {
             if (index === imageUrls.length - 1) return 0;
             return index + 1;
         });
     }
 
-    function showPrevImage() {
+    function showPrevImage(): void {
         setImageIndex((index) => {
             if (index === 0) return imageUrls.length - 1;
             return index - 1;
