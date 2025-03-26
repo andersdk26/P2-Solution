@@ -1,7 +1,6 @@
 'use server';
 
 import { db } from 'db';
-//import { moviesTable } from 'db/schema';
 
 export type movie = {
     movieId: number;
@@ -29,6 +28,8 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
 
     // Return string array of movie titles.
     return result.map((row) => row.title);
+
+    // TODO: Return an array of movie objects instead of just titles, so that the corresponding movie id can be added to selected movies in page.tsx.
 }
 
 function splitQuery(searchQuery: string): string {
