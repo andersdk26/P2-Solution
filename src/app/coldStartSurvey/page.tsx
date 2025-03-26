@@ -3,18 +3,20 @@
 import Image from 'next/image';
 import { JSX } from 'react';
 import { useState } from 'react';
-//import { movie } from '@/components/movie';
-import { searchForMovie } from 'app/actions/movie';
+import { movie, searchForMovie } from 'app/actions/movie';
 
 export default function SelectMovies(): JSX.Element {
+    // Array of selected movies.
+    let selectedMovies: movie[] = [];
+
+    // Create useState array for storing search results.
+    const [searchResult, setSearchResult] = useState<movie[]>([]);
+
     // Create a state array for the movies displayed in the grid.
     const [checkedMovies, set_checked_movies] = useState<boolean[]>(
         // Set all indicies to false.
         Array(15).fill(false)
     );
-
-    // Create useState array for storing search results.
-    const [searchResult, setSearchResult] = useState(['']);
 
     // Function for selecting and unselecting movies.
     const toggle_check = (index: number): void => {
@@ -59,24 +61,31 @@ export default function SelectMovies(): JSX.Element {
                     className="block w-full p-4 rounded-full bg-gray-100"
                     placeholder="Search for movies..."
                     // When the user types something, call function to fetch movies with matching search query.
-                    onChange={async (e) =>
-                        setSearchResult(await searchForMovie(e.target.value))
-                    }
+                    onChange={async (e) => {
+                        setSearchResult(await searchForMovie(e.target.value));
+
+                        // searchResultMovies = await searchForMovie(
+                        //     e.target.value
+                        // );
+                    }}
                 />
             </form>
             <section
                 id="searchResults"
                 className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
             >
-                {searchResult.map((s) => (
-                    <p
-                        key={s}
-                        className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
-                    >
-                        {s}
-                    </p>
+                {searchResult.map((movie) => (
+                    <>
+                        <p
+                            key={movie.movieTitle}
+                            className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
+                        >
+                            {movie.movieTitle}
+                        </p>
+                    </>
                 ))}
             </section>
+
             {/* Create div for containing grids. */}
             <section className="flex-col items-center justify-center space-y-4">
                 {/* Define a grid layout for selected movies. */}
