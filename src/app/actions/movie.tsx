@@ -16,6 +16,11 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     // Sanitise search query.
     searchQuery = searchQuery.replace(/[^a-zA-Z0-9 ]/g, '');
 
+    // Only search if query is at least 1 letter long.
+    if (searchQuery.length < 1) {
+        return [];
+    }
+
     // Define sql query using Full-Text Search. Limited to 10 results.
     const sql = `SELECT title FROM movies_fts WHERE title MATCH "${searchQuery}*" LIMIT 10`;
 
