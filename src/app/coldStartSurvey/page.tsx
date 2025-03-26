@@ -2,12 +2,20 @@
 
 import Image from 'next/image';
 import { JSX } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
 
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // Retrieve data from local storage.
+    useEffect(() => {
+        const savedMovies = JSON.parse(
+            localStorage.getItem('selectedMovies') || '[]'
+        );
+        setSelectedMovies(savedMovies);
+    }, []);
 
     // Function for handling selection of movies.
     const handleSelectMovie = (movie: movie): void => {
@@ -16,6 +24,8 @@ export default function SelectMovies(): JSX.Element {
                 ? prev.filter((m) => m.movieId !== movie.movieId)
                 : [...prev, movie]
         );
+
+        localStorage.setItem('selectedMovies', JSON.stringify(selectedMovies));
     };
 
     // Create useState array for storing search results.
@@ -80,7 +90,7 @@ export default function SelectMovies(): JSX.Element {
                     <p
                         key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
                         onClick={() => handleSelectMovie(movie)} // Call function to toggle movie selection when clicked on.
-                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500' : 'bg-gray-100'} hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
+                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500 font-bold' : 'bg-gray-100 font-normal'} hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                     >
                         <span className="text-left">{movie.movieTitle}</span>
                         <span className="text-right">ID: {movie.movieId}</span>

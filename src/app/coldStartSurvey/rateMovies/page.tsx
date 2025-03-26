@@ -1,17 +1,19 @@
+'use client';
+
 import { JSX } from 'react';
+import { useState, useEffect } from 'react';
+import { movie } from 'app/actions/movie';
 
 export default function Home(): JSX.Element {
-    return <p>Hello World!</p>;
-
-    // I får et array af movie objekter struktureret på følgende måde:
+    // I har et array (selectedMovies) af movie objekter struktureret på følgende måde:
 
     /*
-    export type movie = {
-        movieId: number;
-        movieTitle: string;
-        movieGenres: string[];
-    };
-    */
+        export type movie = {
+           movieId: number;
+           movieTitle: string;
+           movieGenres: string[];
+        };
+        */
 
     // Dette array indeholder alle de film brugeren har valgt i første step af cold-start surveyen.
 
@@ -20,4 +22,29 @@ export default function Home(): JSX.Element {
     // Popcorn rating knapper til den viste film.
     // "Har ikke set" knap.
     // Finish/submit knap (skal tage en til vores main/homepage samt sende ratings til databasen).
+
+    // Declare array of selected movies.
+    const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // Retrieve data from local storage.
+    useEffect(() => {
+        const savedMovies = JSON.parse(
+            localStorage.getItem('selectedMovies') || '[]'
+        );
+        setSelectedMovies(savedMovies);
+    }, []);
+
+    return (
+        <main>
+            <p>Hello World!</p>
+
+            <section>
+                {selectedMovies.map((movie) => (
+                    <div key={movie.movieId}>
+                        <p>{movie.movieTitle}</p>
+                    </div>
+                ))}
+            </section>
+        </main>
+    );
 }
