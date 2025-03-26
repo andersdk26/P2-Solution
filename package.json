@@ -17,6 +17,7 @@
         "next": "15.2.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "sqlite3": "^5.1.7",
         "typescript-eslint": "^8.25.0"
     },
     "devDependencies": {
