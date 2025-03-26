@@ -46,10 +46,10 @@ function calculateUserSimilarity(user1: User, user2: User): number {
     let totalWeight = 0;
 
     user1Genres.forEach(({ Genre, Boost }) => {
-        const match = user2Genres.find((g) => g.Genre === Genre);
+        const match = user2Genres.find((g) => g.Genre === Genre); // Do User and OtherUsers have same common PreferredGenres
         if (match) {
-            similarityScore += Boost * match.Boost;
-            totalWeight += Boost + match.Boost;
+            similarityScore += Boost * match.Boost; // User Boost multiplied by Otheruser[i] boost.
+            totalWeight += Boost + match.Boost; // Weight of Genre.
         }
     });
 
