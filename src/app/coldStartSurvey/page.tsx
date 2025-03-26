@@ -71,9 +71,9 @@ export default function SelectMovies(): JSX.Element {
     };
 
     // Get number of movies selected.
-    // const numberOfMoviesSelected = checkedMovies.filter(
-    //     (checked) => checked
-    // ).length;
+    const numberOfMoviesSelected = checkedMovies.filter(
+        (checked) => checked
+    ).length;
 
     return (
         <main>
@@ -83,7 +83,7 @@ export default function SelectMovies(): JSX.Element {
             </p>
 
             {/* Description of selection process. */}
-            <p className="max-w-1/3 mx-auto text-justify text-xl pt-4 text-gray-600">
+            <p className="max-w-1/3 mx-auto text-justify text-xl pt-4 text-neutral-600">
                 Before we can start recommending movies that match your taste,
                 we need to know a bit about the type of movies you like. Please
                 select at least five movies that you have watched and have an
@@ -196,6 +196,20 @@ export default function SelectMovies(): JSX.Element {
                         </label>
                     ))}
                 </section>
+            </section>
+
+            <section className="flex justify-center items-center py-4 pb-[50vh]">
+                <button
+                    onClick={() => {
+                        if (numberOfMoviesSelected >= 5) {
+                            window.location.href =
+                                '/coldStartSurvey/rateMovies';
+                        }
+                    }}
+                    className={`${numberOfMoviesSelected >= 5 ? 'bg-blue-500 hover:bg-blue-700 cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-white font-bold py-4 px-8 rounded-full`}
+                >
+                    Next step
+                </button>
             </section>
         </main>
     );
