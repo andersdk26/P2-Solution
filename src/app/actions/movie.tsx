@@ -5,10 +5,10 @@ import { db } from 'db';
 export type movie = {
     movieId: number;
     movieTitle: string;
-    movieGenres: string[];
+    movieGenres: string;
 };
 
-export async function searchForMovie(searchQuery: string): Promise<string[]> {
+export async function searchForMovie(searchQuery: string): Promise<movie[]> {
     // Trim search query.
     searchQuery = searchQuery.trim();
 
@@ -21,15 +21,19 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    const sql = `SELECT title FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT 10`;
+    const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT 10`;
 
     // Fetch results.
-    const result = await db.all<{ title: string }>(sql);
+    const result = await db.all<{ id: number; title: string; genres: string }>(
+        sql
+    );
 
     // Return string array of movie titles.
-    return result.map((row) => row.title);
-
-    // TODO: Return an array of movie objects instead of just titles, so that the corresponding movie id can be added to selected movies in page.tsx.
+    return result.map((row) => ({
+        movieId: row.id,
+        movieTitle: row.title,
+        movieGenres: row.genres,
+    }));
 }
 
 function splitQuery(searchQuery: string): string {
