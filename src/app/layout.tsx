@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { JSX } from 'react';
+import Profile from '@/components/Profile/profile';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -25,10 +26,12 @@ export default function RootLayout({
 }>): JSX.Element {
     return (
         <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                {children}
+            <body className="antialiased">
+                <div className="relative">
+                    {' '}
+                    <Profile /> {/* ProfileImage handles its own positioning */}
+                    <main>{children}</main>
+                </div>
             </body>
         </html>
     );
