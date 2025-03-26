@@ -40,7 +40,7 @@ export default function SelectMovies(): JSX.Element {
     const progress = Math.min((numberOfMoviesSelected / 5) * 100, 100);
 
     return (
-        <div>
+        <main>
             <p className="text-center pt-8 text-2xl">
                 Please select and rate at least five movies you&apos;ve watched
                 and enjoyed.
@@ -51,7 +51,6 @@ export default function SelectMovies(): JSX.Element {
                 settings. If your movie doesn&apos;t show up, try adding the
                 year of release to your search!
             </p>
-
             {/* Search bar for finding movies */}
             <form className="max-w-1/2 mx-auto py-4">
                 <input
@@ -65,26 +64,25 @@ export default function SelectMovies(): JSX.Element {
                     }
                 />
             </form>
-
-            <div
+            <section
                 id="searchResults"
                 className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
             >
                 {searchResult.map((s) => (
                     <p
                         key={s}
-                        className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl"
+                        className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
                     >
                         {s}
                     </p>
                 ))}
-            </div>
-
+            </section>
             {/* Create div for containing grids. */}
-            <div className="flex-col items-center justify-center space-y-4">
+            <section className="flex-col items-center justify-center space-y-4">
                 {/* Define a grid layout for selected movies. */}
                 <p className="text-center pt-4 text-xl">Selected movies</p>
-                <div
+                <section
+                    id="selectedMovies"
                     className={`w-1/2 mx-auto grid grid-cols-5 gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300`}
                     // Dynamically adjust height of selected movie box.
                     style={{
@@ -108,10 +106,14 @@ export default function SelectMovies(): JSX.Element {
                         ) : // If a movie is not selected, do nothing.
                         null
                     )}
-                </div>
+                </section>
+
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                <div className="w-1/2 mx-auto grid grid-cols-5 grid-rows-3 gap-4 p-8 bg-gray-100 rounded-3xl">
+                <section
+                    id="popularMovies"
+                    className="w-1/2 mx-auto grid grid-cols-5 grid-rows-3 gap-4 p-8 bg-gray-100 rounded-3xl"
+                >
                     {/* Map an array to 15 checkboxes. */}
                     {Array.from({ length: 15 }).map((_, index) => (
                         <label
@@ -146,10 +148,10 @@ export default function SelectMovies(): JSX.Element {
                             )}
                         </label>
                     ))}
-                </div>
-            </div>
+                </section>
+            </section>
 
-            {/* Create a container for the progress bar and center it horizontally. */}
+            {/* Create a container for the progress bar and center it horizontally. POSSIBLY DEPRECATED*/}
             <div className="w-full flex justify-center mt-4">
                 {/* Define the width and style of the progress bar. */}
                 <div className="w-1/3 bg-gray-300 rounded-full mt-4 h-4 ">
@@ -159,6 +161,6 @@ export default function SelectMovies(): JSX.Element {
                     />
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
