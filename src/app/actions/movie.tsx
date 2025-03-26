@@ -13,6 +13,9 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     // Trim search query.
     searchQuery = searchQuery.trim();
 
+    // Sanitise search query.
+    searchQuery = searchQuery.replace(/[^a-zA-Z0-9 ]/g, '');
+
     // Only search if query is at least 3 letters long.
     if (searchQuery.length < 3) {
         return [];
