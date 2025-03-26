@@ -10,7 +10,7 @@ import React, { JSX } from 'react';
 import { User, Movie } from '../../components/types';
 import calculatePreferredGenres from './PreferredGenre';
 
-// Loops thorugh all top 10 similar user in respect to User.
+// Loops thorugh all top 5 similar user in respect to User.
 function scoreIndCollab(movie: Movie, user: User, allUsers: User[]): number {
     let score = 0; // similarity between user and otherusers multiplied by the movies rating. EX: (0.8 * 5) + (0.7 * 5)
     let totalWeight = 0; // sum of Boost values EX (0.8+0.7)
