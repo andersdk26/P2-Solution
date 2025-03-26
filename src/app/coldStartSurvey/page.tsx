@@ -7,7 +7,7 @@ import { movie, searchForMovie } from 'app/actions/movie';
 
 export default function SelectMovies(): JSX.Element {
     // Array of selected movies.
-    let selectedMovies: movie[] = [];
+    // let selectedMovies: movie[] = [];
 
     // Create useState array for storing search results.
     const [searchResult, setSearchResult] = useState<movie[]>([]);
@@ -63,10 +63,6 @@ export default function SelectMovies(): JSX.Element {
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
                         setSearchResult(await searchForMovie(e.target.value));
-
-                        // searchResultMovies = await searchForMovie(
-                        //     e.target.value
-                        // );
                     }}
                 />
             </form>
@@ -75,14 +71,13 @@ export default function SelectMovies(): JSX.Element {
                 className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
             >
                 {searchResult.map((movie) => (
-                    <>
-                        <p
-                            key={movie.movieTitle}
-                            className="py-2 px-4 hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
-                        >
-                            {movie.movieTitle}
-                        </p>
-                    </>
+                    <p
+                        key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
+                        className="py-2 px-4 flex justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
+                    >
+                        <span className="text-left">{movie.movieTitle}</span>
+                        <span className="text-right">ID: {movie.movieId}</span>
+                    </p>
                 ))}
             </section>
 
