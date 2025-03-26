@@ -26,44 +26,4 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
 
     // Return string array of movie titles.
     return result.map((row) => row.title);
-
-    /*
-    // Only search if at least 3 letters are typed.
-    if (searchQuery.length < 3) {
-        return [];
-    }
-
-    // Split search query into words.
-    const terms = searchQuery.split(' ');
-
-    // Array for movies matching the search terms.
-    const matchingResults = [];
-
-    // Get movies from database
-    const movies = await db.select().from(moviesTable);
-
-    // For every movie fetched.
-    for (let i = 0; i < movies.length; i++) {
-        let containsTerms = true;
-        // Check if the movie titles contains every search term.
-        for (let j = 0; j < terms.length; j++) {
-            if (
-                !movies[i].title
-                    .toLowerCase()
-                    .includes(terms[j].toLocaleLowerCase())
-            ) {
-                // If a term is not found in the movie title, set boolean to false and break out of the for loop.
-                containsTerms = false;
-                break;
-            }
-        }
-
-        // If a movie title contains all search terms, then add it to the array 'matchingResults'.
-        if (containsTerms) {
-            matchingResults.push(movies[i].title);
-        }
-    }
-
-    return matchingResults;
-    */
 }
