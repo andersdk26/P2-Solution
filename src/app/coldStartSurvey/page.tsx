@@ -6,8 +6,17 @@ import { useState } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
 
 export default function SelectMovies(): JSX.Element {
-    // Array of selected movies.
-    // let selectedMovies: movie[] = [];
+    // useState array for selected movies.
+    const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // Function for handling selection of movies.
+    const handleSelectMovie = (movie: movie): void => {
+        setSelectedMovies((prev) =>
+            prev.some((m) => m.movieId === movie.movieId)
+                ? prev.filter((m) => m.movieId !== movie.movieId)
+                : [...prev, movie]
+        );
+    };
 
     // Create useState array for storing search results.
     const [searchResult, setSearchResult] = useState<movie[]>([]);
@@ -34,12 +43,9 @@ export default function SelectMovies(): JSX.Element {
     };
 
     // Get number of movies selected.
-    const numberOfMoviesSelected = checkedMovies.filter(
-        (checked) => checked
-    ).length;
-
-    // Define/update length of progress bar.
-    const progress = Math.min((numberOfMoviesSelected / 5) * 100, 100);
+    // const numberOfMoviesSelected = checkedMovies.filter(
+    //     (checked) => checked
+    // ).length;
 
     return (
         <main>
@@ -73,7 +79,8 @@ export default function SelectMovies(): JSX.Element {
                 {searchResult.map((movie) => (
                     <p
                         key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
-                        className="py-2 px-4 flex justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer"
+                        onClick={() => handleSelectMovie(movie)} // Call function to toggle movie selection when clicked on.
+                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500' : 'bg-gray-100'} hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                     >
                         <span className="text-left">{movie.movieTitle}</span>
                         <span className="text-right">ID: {movie.movieId}</span>
