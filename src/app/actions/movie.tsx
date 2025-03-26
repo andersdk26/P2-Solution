@@ -13,7 +13,7 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     searchQuery = searchQuery.trim();
 
     // Sanitise search query.
-    searchQuery = searchQuery.replace(/[^a-zA-Z0-9 ]/g, '');
+    searchQuery = searchQuery.replace(/[^a-zA-Z0-9 ]/g, ' ');
 
     // Only search if query is at least 1 letter long.
     if (searchQuery.length < 1) {
@@ -41,7 +41,9 @@ function splitQuery(searchQuery: string): string {
 
     // Add each term to a string, followed by an asterisk to label it as a prefix.
     for (const term of terms) {
-        result = `${result} ${term}*`;
+        if (term.length > 0) {
+            result = `${result} ${term}*`;
+        }
     }
 
     // Return the trimmed string as new search query.
