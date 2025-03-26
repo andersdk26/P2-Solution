@@ -6,7 +6,7 @@ import { useState } from 'react';
 //import { movie } from '@/components/movie';
 import { searchForMovie } from 'app/actions/movie';
 
-export default function MovieGrid(): JSX.Element {
+export default function SelectMovies(): JSX.Element {
     // Create a state array for the movies displayed in the grid.
     const [checkedMovies, set_checked_movies] = useState<boolean[]>(
         // Set all indicies to false.
