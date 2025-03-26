@@ -22,11 +22,22 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    const sql = `SELECT title FROM movies_fts WHERE title MATCH "${searchQuery}*" LIMIT 10`;
+    const sql = `SELECT title FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT 10`;
 
     // Fetch results.
     const result = await db.all<{ title: string }>(sql);
 
     // Return string array of movie titles.
     return result.map((row) => row.title);
+}
+
+function splitQuery(searchQuery: string): string {
+    let result = '';
+    const terms = searchQuery.split(' ');
+
+    for (const term of terms) {
+        result = `${result} ${term}*`;
+    }
+
+    return result.trim();
 }
