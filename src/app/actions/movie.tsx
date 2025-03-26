@@ -32,12 +32,17 @@ export async function searchForMovie(searchQuery: string): Promise<string[]> {
 }
 
 function splitQuery(searchQuery: string): string {
+    // Initialise return string.
     let result = '';
+
+    // Split search query into terms.
     const terms = searchQuery.split(' ');
 
+    // Add each term to a string, followed by an asterisk to label it as a prefix.
     for (const term of terms) {
         result = `${result} ${term}*`;
     }
 
+    // Return the trimmed string as new search query.
     return result.trim();
 }
