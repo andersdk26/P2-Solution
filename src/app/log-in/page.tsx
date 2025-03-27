@@ -5,28 +5,28 @@ import { handleLogin, handleSignup } from '@/actions/log-in/userLogin';
 //href is link, _blank opens the tab in a new window
 //two buttons: login (should redirect to mainpage), signup (should redirect to signuppage)
 export default function log_inPage() {
-    const [loginResponse, setLoginResponse] = useState('');
+    // const [loginResponse, setLoginResponse] = useState('');
 
-    const validateInput = (formData: FormData) => {
-        console.log(formData.get('username'));
-        setLoginResponse('Nej');
-        return true;
-    };
+    // const validateInput = (formData: FormData) => {
+    //     console.log(formData.get('username'));
+    //     setLoginResponse('Missing username');
+    //     return true;
+    // };
 
     return (
         <form
-            action={async (formData) => {
-                // Validate input
-                if (!validateInput(formData)) {
-                    return;
-                }
+        // action={async (formData) => {
+        //     // Validate input
+        //     if (!validateInput(formData)) {
+        //         return;
+        //     }
 
-                const responseMessage = await handleLogin(formData);
-                setLoginResponse(responseMessage);
-            }}
+        //     const responseMessage = await handleLogin(formData);
+        //     setLoginResponse(responseMessage);
+        // }}
         >
             <h1 className="text-center text-2xl mt-10">Login Page</h1>
-            <p>{loginResponse}</p>
+            {/* <p>{loginResponse}</p> */}
             <div
                 //boks
                 className="bg-blue-100 w-2/5 h-200px m-auto text-center mt-10"
