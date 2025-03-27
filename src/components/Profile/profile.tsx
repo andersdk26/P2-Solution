@@ -20,7 +20,7 @@ const Profile = (): JSX.Element => {
     };
 
     return (
-        <main>
+        <>
             <button onClick={toggleDropdown} className="centerMyDivPlease">
                 <ProfileImage /> {/* Separation of concerns */}
             </button>
@@ -52,7 +52,7 @@ const Profile = (): JSX.Element => {
                     </button>
                 </div>
             )}
-        </main>
+        </>
     );
 };
 
