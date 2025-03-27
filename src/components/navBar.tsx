@@ -2,29 +2,39 @@
 
 import { JSX } from 'react';
 import Link from 'next/link';
+import Profile from '@/components/Profile/profile';
 
 export default function NavBar(): JSX.Element {
     return (
         <nav className="fixed w-full h-24 shadow-x1">
-            <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16">
-                {/* left side div for logo*/}
-                <div>
+            <div className="flex justify-between items-center h-full w-full bg-white">
+                {/* right side div for bar thingies*/}
+                <div className="w-24 h-24 text-center">
                     <Link href="/">Home</Link>
                 </div>
-                {/* right side div for bar thingies*/}
-                <div>
-                    <ul className="hidden sm:flex">
-                        <Link href="/test">
-                            <li className="ml-10 uppercase hover:border-b text-xl">
-                                test
-                            </li>
-                        </Link>
-                        <Link href="/">
-                            <li className="ml-10 uppercase hover:border-b text-xl">
-                                link2
-                            </li>
-                        </Link>
+
+                <div className="flex justify-between items-center h-full">
+                    <ul className="sm:flex">
+                        <li className="ml-10 px-10 uppercase text-xl centerMyDivPlease">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm">
+                                Groups
+                            </button>
+                        </li>
+                        <li className="ml-10 px-10 uppercase text-xl centerMyDivPlease">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm">
+                                About
+                            </button>
+                        </li>
+
+                        <li className="ml-10 px-10 uppercase text-xl centerMyDivPlease">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm">
+                                Button
+                            </button>
+                        </li>
                     </ul>
+                    <div className="px-10">
+                        <Profile />
+                    </div>
                 </div>
                 {/* Video showed how to add div for mobile phone */}
             </div>
