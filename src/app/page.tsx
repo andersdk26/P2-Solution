@@ -42,10 +42,15 @@ export default function Home(): JSX.Element {
     const handleRatingChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        // To change rating
-        setSelectedRating(Number(event.target.value));
+        const newRating = Number(event.target.value);
+        if (newRating === selectedRating) {
+            //undo rating
+            setSelectedRating(0);
+        } else {
+            // To change rating
+            setSelectedRating(Number(event.target.value));
+        }
     };
-    // document.getElementById()
 
     // const handleFileChange = (
     //     event: React.ChangeEvent<HTMLInputElement>
@@ -92,10 +97,13 @@ export default function Home(): JSX.Element {
 
     return (
         <main>
-            <img
+            <div
                 className="background"
-                onClick={() => setSidebarImage(null)}
-            ></img>
+                onClick={() => {
+                    setSidebarImage(null);
+                }}
+            ></div>
+            {/* <section className="background"></section> */}
 
             <div className="container">
                 <h1>Movies</h1>

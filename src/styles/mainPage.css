@@ -105,11 +105,14 @@ label img {
     /* background-image: url('/Test.png'); */
     width: 100%;
     height: 100%;
+    opacity: 10%;
+    background-color: black;
     background-size: cover;
     background-position: center;
     z-index: -1;
     position: fixed;
     pointer-events: auto;
+    /* display: none; */
 }
 
 .popcorn1 {
