@@ -10,6 +10,7 @@ import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
+import GetMovieImage from '@/components/GetMovieImage';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -17,13 +18,6 @@ export default function Home(): JSX.Element {
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
-
-    const images = [
-        '/../../public/img/img1.jpg',
-        '/../../public/img/img2.jpg',
-        '/../../public/img/img3.jpg',
-        '/../../public/img/img4.jpg',
-    ];
 
     useEffect(() => {
         // Fetch the JSON file when the page loads
@@ -46,30 +40,6 @@ export default function Home(): JSX.Element {
         setSelectedRating(Number(event.target.value));
     };
 
-    // const handleFileChange = (
-    //     event: React.ChangeEvent<HTMLInputElement>
-    // ): void => {
-    //     const file = event.target.files?.[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = (e): void => {
-    //             try {
-    //                 const content = JSON.parse(e.target?.result as string);
-    //                 if (Array.isArray(content)) {
-    //                     setMovies(content);
-    //                 } else {
-    //                     alert(
-    //                         'Invalid file format. Expected an array of movies.'
-    //                     );
-    //                 }
-    //             } catch (error) {
-    //                 alert('Error parsing file. Ensure it is valid JSON.');
-    //             }
-    //         };
-    //         reader.readAsText(file);
-    //     }
-    // };
-
     const moviesPerPage = 5;
     const startIndex = currentPage * moviesPerPage;
     const moviesToDisplay = movies.slice(
@@ -91,25 +61,16 @@ export default function Home(): JSX.Element {
 
     return (
         <div className="container">
-            <h1>Jamfest</h1>
-
-            {/* File Input */}
-
-            {/* Movie Posters */}
-            <div className="posterRow">
-                {moviesToDisplay.map((movie, index) => (
-                    <Image
-                        key={index}
-                        className="moviePoster"
-                        onClick={() =>
-                            handleImageClick(movie.image, movie.title)
-                        }
-                        src={movie.image}
-                        alt={movie.title}
-                        width={150}
-                        height={200}
-                    />
-                ))}
+            <div
+                className="block top-20 items-center justify-center z-2"
+                onClick={() =>
+                    handleImageClick(
+                        'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
+                        'movie'
+                    )
+                }
+            >
+                <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
             </div>
 
             {/* Sidebar should only appear if an image is selected */}
@@ -119,7 +80,7 @@ export default function Home(): JSX.Element {
                         <button onClick={() => setSidebarImage(null)}>
                             Close
                         </button>
-                        <Image
+                        <img
                             src={sidebarImage}
                             alt={sidebarAlt}
                             width={500}
@@ -183,27 +144,6 @@ export default function Home(): JSX.Element {
                     </div>
                 </>
             )}
-
-            {/* Pagination Controls */}
-            <div className="pagination">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div>
-            <div className="block top-20 items-center justify-center">
-                <Carousel imageUrls={images}></Carousel>
-            </div>
         </div>
     );
 }
