@@ -28,11 +28,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased">
-                <div className="relative">
-                    <NavBar></NavBar>
-                    <main>{children}</main>
-                    <Footer></Footer>
-                </div>
+                <NavBar></NavBar>
+                <main className="mt-24">{children}</main>
+                <Footer></Footer>
             </body>
         </html>
     );

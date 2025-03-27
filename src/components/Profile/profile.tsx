@@ -25,28 +25,28 @@ const Profile = (): JSX.Element => {
                 <ProfileImage /> {/* Separation of concerns */}
             </button>
             {isDropdownOpen && (
-                <div className="absolute top-16 right-0 bg-gray-900 text-gray-300 p-4 rounded-md w-48 my-3">
+                <div className="absolute top-16 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-48 my-3">
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
-                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-800 text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
                         Profile Settings
                     </button>
                     <button
                         onClick={() => redirrectProfile('/Watchlist')}
-                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-800 text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
                         Watchlist
                     </button>
                     <button
-                        onClick={() => redirrectProfile('/Groups')}
-                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-800 text-left my-1"
+                        onClick={() => redirrectProfile('/Help')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
-                        Groups
+                        Help
                     </button>
                     <button
                         onClick={() => redirrectProfile('/Logout')}
-                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-800 text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
                         Logout
                     </button>
