@@ -18,8 +18,7 @@ export default function Home(): JSX.Element {
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
 
-    const backgroundDiv = document.getElementById('backgroundDiv');
-
+    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     const images = [
         '/../../public/img/img1.jpg',
         '/../../public/img/img2.jpg',
