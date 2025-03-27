@@ -20,11 +20,8 @@ const Profile = (): JSX.Element => {
     };
 
     return (
-        <div className="relative">
-            <button
-                onClick={toggleDropdown}
-                className="border-none bg-none p-0"
-            >
+        <main>
+            <button onClick={toggleDropdown} className="centerMyDivPlease">
                 <ProfileImage /> {/* Separation of concerns */}
             </button>
             {isDropdownOpen && (
@@ -55,7 +52,7 @@ const Profile = (): JSX.Element => {
                     </button>
                 </div>
             )}
-        </div>
+        </main>
     );
 };
 
