@@ -67,3 +67,69 @@
 .ratingRow input {
     margin-right: 5px;
 }
+
+input[type='checkbox'][id^='rating'] {
+    display: none;
+}
+
+input[type='checkbox'][id^='rating']:checked {
+    display: block;
+    width: 0;
+    height: 0;
+    box-shadow: -1 10px 20px #fec756;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline-block;
+}
+
+label img {
+    transition-duration: 0.2s;
+    transform-origin: 50% 50%;
+    filter: grayscale(100%);
+    margin: 1px;
+}
+
+:checked + label img {
+    filter: grayscale(0);
+    transform: scale(0.9);
+    /* box-shadow: -1 10px 20px #fec756; */
+    z-index: -1;
+}
+
+.background {
+    /* background-image: url('/Test.png'); */
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    position: fixed;
+    pointer-events: auto;
+}
+
+.popcorn1 {
+    width: 30px;
+    height: 30px;
+}
+
+.popcorn2 {
+    width: 35px;
+    height: 35px;
+}
+.popcorn3 {
+    width: 40px;
+    height: 40px;
+}
+.popcorn4 {
+    width: 45px;
+    height: 45px;
+}
+.popcorn5 {
+    width: 50px;
+    height: 50px;
+}
