@@ -18,6 +18,8 @@ export default function Home(): JSX.Element {
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
 
+    const backgroundDiv = document.getElementById('backgroundDiv');
+
     const images = [
         '/../../public/img/img1.jpg',
         '/../../public/img/img2.jpg',
@@ -37,6 +39,7 @@ export default function Home(): JSX.Element {
         setSidebarImage(image);
         setSidebarAlt(altText); // Set the alt text (title) when the image is clicked
         setSelectedRating(null); // Reset rating when a new image is selected
+        backgroundDiv.style.display = 'block';
     };
 
     const handleRatingChange = (
@@ -99,8 +102,10 @@ export default function Home(): JSX.Element {
         <main>
             <div
                 className="background"
+                id="backgroundDiv"
                 onClick={() => {
                     setSidebarImage(null);
+                    backgroundDiv.style.display = 'none';
                 }}
             ></div>
             {/* <section className="background"></section> */}
@@ -130,7 +135,12 @@ export default function Home(): JSX.Element {
                 {sidebarImage && (
                     <>
                         <div className="sideBar">
-                            <button onClick={() => setSidebarImage(null)}>
+                            <button
+                                onClick={() => {
+                                    setSidebarImage(null);
+                                    backgroundDiv.style.display = 'none';
+                                }}
+                            >
                                 Close
                             </button>
                             <Image
