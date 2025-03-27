@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { JSX } from 'react';
-import Profile from '@/components/Profile/profile';
 import NavBar from '@/components/navBar';
 import Footer from '@/components/footer';
 
@@ -31,7 +30,6 @@ export default function RootLayout({
             <body className="antialiased">
                 <div className="relative">
                     <NavBar></NavBar>
-                    <Profile /> {/* ProfileImage handles its own positioning */}
                     <main>{children}</main>
                     <Footer></Footer>
                 </div>
