@@ -5,7 +5,7 @@ interface Movie {
     image: string;
 }
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
@@ -32,7 +32,9 @@ export default function Home(): JSX.Element {
         setSidebarImage(image);
         setSidebarAlt(altText); // Set the alt text (title) when the image is clicked
         setSelectedRating(null); // Reset rating when a new image is selected
-        backgroundDiv.style.display = 'block';
+        if (backgroundDivRef.current) {
+            backgroundDivRef.current.style.display = 'block';
+        }
     };
 
     const handleRatingChange = (
@@ -68,13 +70,15 @@ export default function Home(): JSX.Element {
     };
 
     return (
-        <main>
+        <>
             <div
                 className="background"
                 id="backgroundDiv"
                 onClick={() => {
                     setSidebarImage(null);
-                    backgroundDiv.style.display = 'none';
+                    if (backgroundDivRef.current) {
+                        backgroundDivRef.current.style.display = 'none';
+                    }
                 }}
             ></div>
             {/* <section className="background"></section> */}
@@ -95,8 +99,12 @@ export default function Home(): JSX.Element {
                             src={movie.image}
                             alt={movie.title}
                             width={150}
-                            height={200}/>
-                    </div>
+                            height={200}
+                        />
+                    ))}
+                </div>
+            </div>
+            {/* Movie Carousel */}
             <div
                 className="block top-20 items-center justify-center z-2"
                 onClick={() =>
@@ -108,186 +116,182 @@ export default function Home(): JSX.Element {
             >
                 <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
             </div>
+
+            {/* Sidebar should only appear if an image is selected */}
+            {sidebarImage && (
+                <>
+                    <div className="sideBar">
+                        <button
+                            onClick={() => {
+                                setSidebarImage(null);
+                                backgroundDivRef.style.display = 'none';
+                            }}
+                        >
+                            Close
+                        </button>
+                        <Image
+                            src={sidebarImage}
+                            alt={sidebarAlt}
+                            width={500}
+                            height={500}
                         />
-                    ))}
-                </div>
+                        <h2>{sidebarAlt}</h2>
 
-                {/* Sidebar should only appear if an image is selected */}
-                {sidebarImage && (
-                    <>
-                        <div className="sideBar">
-                            <button
-                                onClick={() => {
-                                    setSidebarImage(null);
-                                    backgroundDiv.style.display = 'none';
-                                }}
-                            >
-                                Close
-                            </button>
-                            <Image
-                                src={sidebarImage}
-                                alt={sidebarAlt}
-                                width={500}
-                                height={500}
-                            />
-                            <h2>{sidebarAlt}</h2>
-
-                            {/* Radio Button Row */}
-                            <div className="ratingRow">
-                                <ul>
-                                    <li>
-                                        <input
-                                            type="checkbox"
-                                            name="rating"
-                                            value="1"
-                                            checked={
-                                                selectedRating === 1 ||
-                                                selectedRating === 2 ||
-                                                selectedRating === 3 ||
-                                                selectedRating === 4 ||
-                                                selectedRating === 5
+                        {/* Radio Button Row */}
+                        <div className="ratingRow">
+                            <ul>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="1"
+                                        checked={
+                                            selectedRating === 1 ||
+                                            selectedRating === 2 ||
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating1"
+                                    />
+                                    <label htmlFor="rating1">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn1.png'
                                             }
-                                            onChange={handleRatingChange}
-                                            id="rating1"
-                                        />
-                                        <label htmlFor="rating1">
-                                            <Image
-                                                src={
-                                                    '/img/popcornRating/popcorn1.png'
-                                                }
-                                                alt={'Popcorn Rating 1'}
-                                                width={40}
-                                                height={40}
-                                                className="popcorn1"
-                                                id="popcorn_img1"
-                                            ></Image>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        {' '}
-                                        <input
-                                            type="checkbox"
-                                            name="rating"
-                                            value="2"
-                                            checked={
-                                                selectedRating === 2 ||
-                                                selectedRating === 3 ||
-                                                selectedRating === 4 ||
-                                                selectedRating === 5
+                                            alt={'Popcorn Rating 1'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn1"
+                                            id="popcorn_img1"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    {' '}
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="2"
+                                        checked={
+                                            selectedRating === 2 ||
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating2"
+                                    />
+                                    <label htmlFor="rating2">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn2.png'
                                             }
-                                            onChange={handleRatingChange}
-                                            id="rating2"
-                                        />
-                                        <label htmlFor="rating2">
-                                            <Image
-                                                src={
-                                                    '/img/popcornRating/popcorn2.png'
-                                                }
-                                                alt={'Popcorn Rating 2'}
-                                                width={40}
-                                                height={40}
-                                                className="popcorn2"
-                                                id="popcorn_img2"
-                                            ></Image>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="checkbox"
-                                            name="rating"
-                                            value="3"
-                                            checked={
-                                                selectedRating === 3 ||
-                                                selectedRating === 4 ||
-                                                selectedRating === 5
+                                            alt={'Popcorn Rating 2'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn2"
+                                            id="popcorn_img2"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="3"
+                                        checked={
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating3"
+                                    />
+                                    <label htmlFor="rating3">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn3.png'
                                             }
-                                            onChange={handleRatingChange}
-                                            id="rating3"
-                                        />
-                                        <label htmlFor="rating3">
-                                            <Image
-                                                src={
-                                                    '/img/popcornRating/popcorn3.png'
-                                                }
-                                                alt={'Popcorn Rating 3'}
-                                                width={40}
-                                                height={40}
-                                                className="popcorn3"
-                                                id="popcorn_img3"
-                                            ></Image>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="checkbox"
-                                            name="rating"
-                                            value="4"
-                                            checked={
-                                                selectedRating === 4 ||
-                                                selectedRating === 5
+                                            alt={'Popcorn Rating 3'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn3"
+                                            id="popcorn_img3"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="4"
+                                        checked={
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating4"
+                                    />
+                                    <label htmlFor="rating4">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn4.png'
                                             }
-                                            onChange={handleRatingChange}
-                                            id="rating4"
-                                        />
-                                        <label htmlFor="rating4">
-                                            <Image
-                                                src={
-                                                    '/img/popcornRating/popcorn4.png'
-                                                }
-                                                alt={'Popcorn Rating 4'}
-                                                width={40}
-                                                height={40}
-                                                className="popcorn4"
-                                                id="popcorn_img4"
-                                            ></Image>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input
-                                            type="checkbox"
-                                            name="rating"
-                                            value="5"
-                                            checked={selectedRating === 5}
-                                            onChange={handleRatingChange}
-                                            id="rating5"
-                                        />
-                                        <label htmlFor="rating5">
-                                            <Image
-                                                src={
-                                                    '/img/popcornRating/popcorn5.png'
-                                                }
-                                                alt={'Popcorn Rating 5'}
-                                                width={40}
-                                                height={40}
-                                                className="popcorn5"
-                                                id="popcorn_img5"
-                                            ></Image>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
+                                            alt={'Popcorn Rating 4'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn4"
+                                            id="popcorn_img4"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="5"
+                                        checked={selectedRating === 5}
+                                        onChange={handleRatingChange}
+                                        id="rating5"
+                                    />
+                                    <label htmlFor="rating5">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn5.png'
+                                            }
+                                            alt={'Popcorn Rating 5'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn5"
+                                            id="popcorn_img5"
+                                        ></Image>
+                                    </label>
+                                </li>
+                            </ul>
                         </div>
-                    </>
-                )}
+                    </div>
+                </>
+            )}
 
-                {/* Pagination Controls */}
-                <div className="pagination">
-                    <button
-                        onClick={handlePreviousPage}
-                        disabled={currentPage === 0}
-                    >
-                        Previous
-                    </button>
-                    <button
-                        onClick={handleNextPage}
-                        disabled={
-                            (currentPage + 1) * moviesPerPage >= movies.length
-                        }
-                    >
-                        Next
-                    </button>
-                </div>
+            {/* Pagination Controls */}
+            <div className="pagination">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={handleNextPage}
+                    disabled={
+                        (currentPage + 1) * moviesPerPage >= movies.length
+                    }
+                >
+                    Next
+                </button>
             </div>
-        </main>
+        </>
     );
 }
