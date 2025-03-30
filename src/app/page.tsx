@@ -124,7 +124,10 @@ export default function Home(): JSX.Element {
                         <button
                             onClick={() => {
                                 setSidebarImage(null);
-                                backgroundDivRef.style.display = 'none';
+                                if (backgroundDivRef.current) {
+                                    backgroundDivRef.current.style.display =
+                                        'none';
+                                }
                             }}
                         >
                             Close
