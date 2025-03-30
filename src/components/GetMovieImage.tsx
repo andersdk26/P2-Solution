@@ -2,7 +2,7 @@
 import { db } from 'db';
 import { JSX } from 'react';
 import Image from 'next/image';
-import { movieLinkIdTable, usersTable } from 'db/schema';
+import { movieLinkIdTable } from 'db/schema';
 import { eq } from 'drizzle-orm';
 
 export type movie = {
@@ -35,7 +35,14 @@ export default function GetMovieImage({
 function getTMDBImage(movieId: number): string {
     // movie id: 1 ==> TMDB id: 862 from Db
 
-    func(movieId);
+    // const func = async () => {
+    //     const result = await db
+    //         .select({ tmdbId: movieLinkIdTable.tmdbId })
+    //         .from(movieLinkIdTable)
+    //         .where(eq(movieLinkIdTable.id, movieId));
+
+    //     console.log(result);
+    // };
 
     if (movieId === 1) {
         return 'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg';
@@ -51,19 +58,3 @@ function getTMDBImage(movieId: number): string {
     return 'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/hvFqDa1ggUIy5RqYEsTOSxQBP0L.jpg';
 }
 
-export async function func(movieId: number): Promise<void> {
-    // const result = await db
-    //     .select({ tmdbId: movieLinkIdTable.tmdbId })
-    //     .from(movieLinkIdTable)
-    //     .where(eq(movieLinkIdTable.id, movieId));
-    // console.log(result);
-    const result = await db
-        .select({
-            id: usersTable.id,
-            username: usersTable.username,
-            password: usersTable.password,
-        })
-        .from(usersTable)
-        .where(eq(usersTable.username, 'User'));
-    console.log(result);
-}
