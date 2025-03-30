@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
 
 export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),
@@ -37,8 +37,8 @@ export type SelectMovie = typeof moviesTable.$inferSelect;
 // export type SelectMoviesFts = typeof moviesFtsTable.$inferSelect;
 
 // export const moviesFtsConfigTable = sqliteTable('movies_fts_config', {
-//     key: integer('k').primaryKey(),
-//     value: integer('v'),
+//     key: text('k').notNull(),
+//     value: text('v').notNull(),
 // });
 
 // export type InsertMoviesFtsConfigTable =
@@ -46,41 +46,40 @@ export type SelectMovie = typeof moviesTable.$inferSelect;
 // export type SelectMoviesFtsConfigTable =
 //     typeof moviesFtsConfigTable.$inferSelect;
 
-// export const moviesTable = sqliteTable('movies', {
+// export const moviesFtsContentTable = sqliteTable('movies_fts_content', {
 //     id: integer('id').primaryKey(),
-//     title: text('title').notNull(),
-//     genres: text('genres').notNull(),
+//     c0: integer('c0').notNull(),
+//     c1: text('c1').notNull(),
+//     c2: text('c2').notNull(),
 // });
 
-// export type InsertMovie = typeof moviesTable.$inferInsert;
-// export type SelectMovie = typeof moviesTable.$inferSelect;
+// export type InsertMovieFtsContent = typeof moviesFtsContentTable.$inferInsert;
+// export type SelectMovieFtsContent = typeof moviesFtsContentTable.$inferSelect;
 
-// export const moviesTable = sqliteTable('movies', {
+// export const moviesFtsDataTable = sqliteTable('movies_fts_data', {
 //     id: integer('id').primaryKey(),
-//     title: text('title').notNull(),
-//     genres: text('genres').notNull(),
+//     block: blob('block').notNull(),
 // });
 
-// export type InsertMovie = typeof moviesTable.$inferInsert;
-// export type SelectMovie = typeof moviesTable.$inferSelect;
+// export type InsertMovieFtsData = typeof moviesFtsDataTable.$inferInsert;
+// export type SelectMovieFtsData = typeof moviesFtsDataTable.$inferSelect;
 
-// export const moviesTable = sqliteTable('movies', {
+// export const moviesFtsDocsizeTable = sqliteTable('movies_fts_docsize', {
 //     id: integer('id').primaryKey(),
-//     title: text('title').notNull(),
-//     genres: text('genres').notNull(),
+//     size: blob('sz').notNull(),
 // });
 
-// export type InsertMovie = typeof moviesTable.$inferInsert;
-// export type SelectMovie = typeof moviesTable.$inferSelect;
+// export type InsertMovieFtsDocsize = typeof moviesFtsDocsizeTable.$inferInsert;
+// export type SelectMovieFtsDocsize = typeof moviesFtsDocsizeTable.$inferSelect;
 
-// export const moviesTable = sqliteTable('movies', {
-//     id: integer('id').primaryKey(),
-//     title: text('title').notNull(),
-//     genres: text('genres').notNull(),
+// export const moviesFtsIdxTable = sqliteTable('movies_fts_idx', {
+//     segmentId: text('segid').notNull(),
+//     term: text('term'),
+//     pageNumber: text('pgno').notNull(),
 // });
 
-// export type InsertMovie = typeof moviesTable.$inferInsert;
-// export type SelectMovie = typeof moviesTable.$inferSelect;
+// export type InsertFtsIdxMovie = typeof moviesFtsIdxTable.$inferInsert;
+// export type SelectFtsIdxMovie = typeof moviesFtsIdxTable.$inferSelect;
 
 export const movieLinkIdTable = sqliteTable('movie_link_id', {
     id: integer('id').primaryKey(),
