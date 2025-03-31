@@ -107,12 +107,12 @@ export default function Home(): JSX.Element {
             {/* Movie Carousel */}
             <div
                 className="block top-20 items-center justify-center z-2"
-                onClick={() =>
-                    handleImageClick(
-                        'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
-                        'movie'
-                    )
-                }
+                // onClick={() =>
+                //     handleImageClick(
+                //         'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
+                //         'movie'
+                //     )
+                // }
             >
                 <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
             </div>
