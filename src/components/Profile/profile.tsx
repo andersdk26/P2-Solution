@@ -47,9 +47,11 @@ const Profile = (): JSX.Element => {
                     </button>
                     <button
                         onClick={async () => {
-                            if (await !userLogout()) {
-                                alert('Error login out');
+                            if ((await userLogout()) === false) {
+                                alert('Error login out! Please try again.');
+                                return;
                             }
+
                             redirect('/logIn');
                         }}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
