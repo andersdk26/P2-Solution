@@ -13,7 +13,7 @@ interface SignUpFormProps {
 export default function SignUpForm({ onSignUp }: SignUpFormProps) {
     // State to manage form inputs
     const [formData, setFormData] = useState({
-        name: '', // Stores the name input
+        username: '', // Stores the name input
         email: '', // the email
         password: '', // passworrrrrrrs
         confirmPassword: '', // ect
@@ -57,12 +57,12 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
             {/* Name Input */}
             <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                    Name
+                    Username
                 </label>
                 <input
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    name="username"
+                    value={formData.username}
                     onChange={handleChange} // Updates the name state when the user types
                     className="mt-1 p-2 w-full border rounded-md"
                     required

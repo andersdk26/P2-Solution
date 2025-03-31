@@ -9,7 +9,7 @@ export default function SignUpPage() {
 
     // Function to handle form submission
     const handleSignUp = (formData: {
-        name: string;
+        username: string;
         email: string;
         password: string;
     }) => {
