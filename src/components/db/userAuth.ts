@@ -3,6 +3,7 @@ import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import argon2 from 'argon2';
 import defaultResponse from '@/components/defaultResponse';
+import { randomInt } from 'crypto';
 
 interface loginCheckProps {
     username: string;
@@ -82,7 +83,7 @@ export async function register_user({
     try {
         let i = 0;
         while (true) {
-            userId = Math.floor(Math.random() * 9000000000) + 1000000000;
+            userId = randomInt(1000000000, 10000000000);
 
             const userExists = await db
                 .select({ id: usersTable.id })
