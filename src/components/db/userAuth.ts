@@ -30,7 +30,7 @@ export async function login_check({
     }
 
     // Verify the password
-    if (!argon2.verify(result[0].password, password)) {
+    if (!(await argon2.verify(result[0].password, password))) {
         console.log('Incorrect password');
         return { status: 401, message: 'Incorrect password' };
     }
