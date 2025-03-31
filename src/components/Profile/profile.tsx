@@ -22,10 +22,12 @@ const Profile = (): JSX.Element => {
     return (
         <>
             <button onClick={toggleDropdown} className="centerMyDivPlease">
-                <ProfileImage /> {/* Separation of concerns */}
+                <ProfileImage />{' '}
+                {/* Separation of concerns (design, img is in a different tsx file) */}
             </button>
             {isDropdownOpen && (
-                <div className="absolute top-16 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-48 my-3">
+                <div className="absolute top-21 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-42 my-3 z-100">
+                    <p className="text-white">Username</p> {/*placeholder*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
@@ -48,7 +50,7 @@ const Profile = (): JSX.Element => {
                         onClick={() => redirrectProfile('/Logout')}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
-                        Logout
+                        Log out
                     </button>
                 </div>
             )}

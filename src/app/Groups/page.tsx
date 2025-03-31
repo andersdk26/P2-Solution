@@ -4,7 +4,7 @@ import React, { JSX } from 'react';
 
 const GroupSettings = (): JSX.Element => (
     <div>
-        <h1>Group</h1>
+        <h1>Groups</h1>
     </div>
 );
 export default GroupSettings;
