@@ -1,12 +1,23 @@
 'use client'; // enables client-side rendering in Next.js
 
+import verifyUser from '@/actions/logIn/authenticateUser';
 import { handleSignup as serverHandleSignup } from '@/actions/logIn/userLogin';
 import SignUpForm from 'components/signUp/SignUpForm'; // Importing the signup form component
-import { JSX, useState } from 'react'; // Importing React state hook
+import { redirect } from 'next/navigation';
+import { JSX, useEffect, useState } from 'react'; // Importing React state hook
 
 export default function SignUpPage(): JSX.Element {
     const [message, setMessage] = useState(''); // State to store feedback messages hvilket er error beskeder til users
     const [isError, setIsError] = useState(false); // State to track hvis message har en error
+
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) > 1) {
+                redirect('/coldStartSurvey');
+            }
+        };
+        checkLoginStatus();
+    }, []);
 
     // Function to handle form submission
     const handleSignUp = async (formData: {
@@ -30,7 +41,14 @@ export default function SignUpPage(): JSX.Element {
 
         // if validation passes
         setMessage(responseMessage); // Display success message
-        setIsError(responseMessage !== 'Signup successful');
+
+        if (responseMessage !== 'Signup successful') {
+            setIsError(true);
+            return;
+        }
+
+        // Redirect
+        redirect('/coldStartSurvey');
     };
 
     return (

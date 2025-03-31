@@ -2,7 +2,8 @@
 'use client';
 import React, { useState, JSX } from 'react'; // useState has isDropdown functions
 import ProfileImage from './profileImg';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { redirect, useRouter } from 'next/navigation'; // Import useRouter
+import userLogout from '@/actions/logIn/userLogout';
 
 const Profile = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -45,7 +46,10 @@ const Profile = (): JSX.Element => {
                         Help
                     </button>
                     <button
-                        onClick={() => redirrectProfile('/Logout')}
+                        onClick={async () => {
+                            await userLogout();
+                            redirect('/logIn');
+                        }}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
                         Logout
