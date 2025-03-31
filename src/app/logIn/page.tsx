@@ -1,9 +1,9 @@
 'use client';
 
 import { JSX, useEffect, useState } from 'react';
-import { handleLogin, handleSignup } from 'app/actions/log-in/userLogin';
-import verifyUser from '@/actions/log-in/authenticateUser';
-import userLogout from '@/actions/log-in/userLogout';
+import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import userLogout from '@/actions/logIn/userLogout';
 
 export default function Page(): JSX.Element {
     const [loginResponse, setLoginResponse] = useState('');
@@ -35,7 +35,7 @@ export default function Page(): JSX.Element {
                 <button type="submit">Login</button>
             </form>
             <p>{loginResponse}</p>
-            <br />
+            {/* <br />
             <h1>Signup</h1>
             <form
                 action={async (formData) => {
@@ -51,7 +51,7 @@ export default function Page(): JSX.Element {
                 <input type="password" id="password" name="password" />
                 <button type="submit">Login</button>
             </form>
-            <p>{signupResponse}</p>
+            <p>{signupResponse}</p> */}
             {userId !== 0 && (
                 <>
                     <br />

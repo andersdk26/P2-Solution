@@ -42,16 +42,18 @@ export async function handleLogin(formData: FormData): Promise<string> {
     return 'Login successful';
 }
 
-export async function handleSignup(formData: FormData): Promise<string> {
+export async function handleSignup(formData: {
+    username: string;
+    email: string;
+    password: string;
+}): Promise<string> {
     // Register the user
-    const response: Promise<LoginResponse> = register_user({
-        username: (formData.get('username') as string) || '',
-        email: (formData.get('email') as string) || '',
-        password: (formData.get('password') as string) || '',
-    });
+    const response: Promise<LoginResponse> = register_user(formData);
+
+    console.log(await response);
 
     // Check if the user was registered
-    if ((await response).status !== 200) {
+    if ((await response).status !== 201) {
         return (await response).message || 'An error occurred';
     }
 
