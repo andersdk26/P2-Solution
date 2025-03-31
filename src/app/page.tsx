@@ -70,18 +70,38 @@ export default function Home(): JSX.Element {
     };
 
     return (
-        <>
-            <div
-                className="background"
-                id="backgroundDiv"
-                onClick={() => {
-                    setSidebarImage(null);
-                    if (backgroundDivRef.current) {
-                        backgroundDivRef.current.style.display = 'none';
+        <main>
+            {/* Pagination Controls */}
+            <div className="pagination z-2">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={handleNextPage}
+                    disabled={
+                        (currentPage + 1) * moviesPerPage >= movies.length
                     }
-                }}
-            ></div>
-            {/* <section className="background"></section> */}
+                >
+                    Next
+                </button>
+            </div>
+
+            {/* Div for deselecting sidebar */}
+            {sidebarImage && (
+                <div
+                    className="absolute w-full h-full z-3"
+                    id="backgroundDiv"
+                    onClick={() => {
+                        setSidebarImage(null);
+                        if (backgroundDivRef.current) {
+                            backgroundDivRef.current.style.display = 'none';
+                        }
+                    }}
+                ></div>
+            )}
 
             <div className="container">
                 <h1>Movies</h1>
@@ -119,7 +139,7 @@ export default function Home(): JSX.Element {
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
-                <>
+                <section className="z-3">
                     <div className="sideBar">
                         <button
                             onClick={() => {
@@ -275,26 +295,8 @@ export default function Home(): JSX.Element {
                             </ul>
                         </div>
                     </div>
-                </>
+                </section>
             )}
-
-            {/* Pagination Controls */}
-            <div className="pagination">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div>
-        </>
+        </main>
     );
 }
