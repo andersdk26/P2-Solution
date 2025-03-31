@@ -71,9 +71,6 @@ export default function NavBar(): JSX.Element {
                                     <span className="text-left text-black prevent-select">
                                         {movie.movieTitle}
                                     </span>
-                                    <span className="text-right text-black prevent-select">
-                                        ID: {movie.movieId}
-                                    </span>
                                 </p>
                             ))}
                         </section>
