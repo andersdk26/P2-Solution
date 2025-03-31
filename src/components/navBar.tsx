@@ -42,7 +42,7 @@ export default function NavBar(): JSX.Element {
                         </li>
                     </ul>
 
-                    <section className="flex-col items-center justify-center z-index: auto">
+                    <section className="flex-col items-center justify-center z-auto">
                         <form className="w-120 justify-stretch mx-auto py-4 text-black">
                             <input
                                 type="search"
