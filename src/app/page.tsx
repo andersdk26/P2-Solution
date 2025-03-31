@@ -1,104 +1,300 @@
-import Image from 'next/image';
-import { JSX } from 'react';
+'use client';
 
-export default function Home(): JSX.Element {
-    return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                <Image
-                    className="dark:invert"
-                    src="/next.svg"
-                    alt="Next.js logo"
-                    width={180}
-                    height={38}
-                    priority
-                />
-                <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-                    <li className="mb-2">
-                        Get started by editing{' '}
-                        <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-                            src/app/page.tsx
-                        </code>
-                        .
-                    </li>
-                    <li>Save and see your changes instantly.</li>
-                </ol>
-
-                <div className="flex gap-4 items-center flex-col sm:flex-row">
-                    <a
-                        className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Image
-                            className="dark:invert"
-                            src="/vercel.svg"
-                            alt="Vercel logomark"
-                            width={20}
-                            height={20}
-                        />
-                        Deploy now
-                    </a>
-                    <a
-                        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-                        href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Read our docs
-                    </a>
-                </div>
-            </main>
-            <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/file.svg"
-                        alt="File icon"
-                        width={16}
-                        height={16}
-                    />
-                    Learn
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/window.svg"
-                        alt="Window icon"
-                        width={16}
-                        height={16}
-                    />
-                    Examples
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/globe.svg"
-                        alt="Globe icon"
-                        width={16}
-                        height={16}
-                    />
-                    Go to nextjs.org →
-                </a>
-            </footer>
-        </div>
-    );
+interface Movie {
+    title: string;
+    image: string;
 }
 
-// Error check: npx eslint .
+import { useState, useEffect, useRef } from 'react';
+import { JSX } from 'react';
+import Image from 'next/image';
+import '@/styles/mainPage.css'; // Import my CSS file
+import Carousel from '@/components/carousel';
+import GetMovieImage from '@/components/GetMovieImage';
+
+export default function Home(): JSX.Element {
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
+    const [sidebarAlt, setSidebarAlt] = useState('');
+    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+    const [currentPage, setCurrentPage] = useState(0); // Track the current page
+
+    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        // Fetch the JSON file when the page loads
+        fetch('Movie.json')
+            .then((response) => response.json())
+            .then((data) => setMovies(data))
+            .catch((error) => console.error('Error loading movies:', error));
+    }, []);
+
+    const handleImageClick = (image: string, altText: string): void => {
+        setSidebarImage(image);
+        setSidebarAlt(altText); // Set the alt text (title) when the image is clicked
+        setSelectedRating(null); // Reset rating when a new image is selected
+        if (backgroundDivRef.current) {
+            backgroundDivRef.current.style.display = 'block';
+        }
+    };
+
+    const handleRatingChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        const newRating = Number(event.target.value);
+        if (newRating === selectedRating) {
+            //undo rating
+            setSelectedRating(0);
+        } else {
+            // To change rating
+            setSelectedRating(Number(event.target.value));
+        }
+    };
+
+    const moviesPerPage = 5;
+    const startIndex = currentPage * moviesPerPage;
+    const moviesToDisplay = movies.slice(
+        startIndex,
+        startIndex + moviesPerPage
+    );
+
+    const handleNextPage = (): void => {
+        if ((currentPage + 1) * moviesPerPage < movies.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = (): void => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    return (
+        <>
+            <div
+                className="background"
+                id="backgroundDiv"
+                onClick={() => {
+                    setSidebarImage(null);
+                    if (backgroundDivRef.current) {
+                        backgroundDivRef.current.style.display = 'none';
+                    }
+                }}
+            ></div>
+            {/* <section className="background"></section> */}
+
+            <div className="container">
+                <h1>Movies</h1>
+                {/* File Input */}
+
+                {/* Movie Posters */}
+                <div className="posterRow">
+                    {moviesToDisplay.map((movie, index) => (
+                        <Image
+                            key={index}
+                            className="moviePoster"
+                            onClick={() =>
+                                handleImageClick(movie.image, movie.title)
+                            }
+                            src={movie.image}
+                            alt={movie.title}
+                            width={150}
+                            height={200}
+                        />
+                    ))}
+                </div>
+            </div>
+            {/* Movie Carousel */}
+            <div
+                className="block top-20 items-center justify-center z-2"
+                // onClick={() =>
+                //     handleImageClick(
+                //         'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
+                //         'movie'
+                //     )
+                // }
+            >
+                <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
+            </div>
+
+            {/* Sidebar should only appear if an image is selected */}
+            {sidebarImage && (
+                <>
+                    <div className="sideBar">
+                        <button
+                            onClick={() => {
+                                setSidebarImage(null);
+                                if (backgroundDivRef.current) {
+                                    backgroundDivRef.current.style.display =
+                                        'none';
+                                }
+                            }}
+                        >
+                            Close
+                        </button>
+                        <Image
+                            src={sidebarImage}
+                            alt={sidebarAlt}
+                            width={500}
+                            height={500}
+                        />
+                        <h2>{sidebarAlt}</h2>
+
+                        {/* Radio Button Row */}
+                        <div className="ratingRow">
+                            <ul>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="1"
+                                        checked={
+                                            selectedRating === 1 ||
+                                            selectedRating === 2 ||
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating1"
+                                    />
+                                    <label htmlFor="rating1">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn1.png'
+                                            }
+                                            alt={'Popcorn Rating 1'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn1"
+                                            id="popcorn_img1"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    {' '}
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="2"
+                                        checked={
+                                            selectedRating === 2 ||
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating2"
+                                    />
+                                    <label htmlFor="rating2">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn2.png'
+                                            }
+                                            alt={'Popcorn Rating 2'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn2"
+                                            id="popcorn_img2"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="3"
+                                        checked={
+                                            selectedRating === 3 ||
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating3"
+                                    />
+                                    <label htmlFor="rating3">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn3.png'
+                                            }
+                                            alt={'Popcorn Rating 3'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn3"
+                                            id="popcorn_img3"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="4"
+                                        checked={
+                                            selectedRating === 4 ||
+                                            selectedRating === 5
+                                        }
+                                        onChange={handleRatingChange}
+                                        id="rating4"
+                                    />
+                                    <label htmlFor="rating4">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn4.png'
+                                            }
+                                            alt={'Popcorn Rating 4'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn4"
+                                            id="popcorn_img4"
+                                        ></Image>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input
+                                        type="checkbox"
+                                        name="rating"
+                                        value="5"
+                                        checked={selectedRating === 5}
+                                        onChange={handleRatingChange}
+                                        id="rating5"
+                                    />
+                                    <label htmlFor="rating5">
+                                        <Image
+                                            src={
+                                                '/img/popcornRating/popcorn5.png'
+                                            }
+                                            alt={'Popcorn Rating 5'}
+                                            width={40}
+                                            height={40}
+                                            className="popcorn5"
+                                            id="popcorn_img5"
+                                        ></Image>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Pagination Controls */}
+            <div className="pagination">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={handleNextPage}
+                    disabled={
+                        (currentPage + 1) * moviesPerPage >= movies.length
+                    }
+                >
+                    Next
+                </button>
+            </div>
+        </>
+    );
+}
