@@ -5,8 +5,22 @@
     --foreground: #171717;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #babdde;
+        --foreground: #ededed;
+    }
+}
+
 body {
     color: var(--foreground);
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.centerMyDivPlease {
+    margin: 0 auto;
+    overflow: auto;
+    align-items: center;
+    display: flex;
 }

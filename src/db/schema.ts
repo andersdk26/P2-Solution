@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
 
 export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),
@@ -24,5 +24,14 @@ export const moviesTable = sqliteTable('movies', {
 
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
+
+export const movieLinkIdTable = sqliteTable('movie_link_id', {
+    id: integer('id').primaryKey(),
+    imdbId: integer('imdbId').notNull(),
+    tmdbId: integer('tmdbId').notNull(),
+});
+
+export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
+export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
 // to update the schema, run `npx drizzle-kit push`
