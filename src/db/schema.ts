@@ -25,62 +25,6 @@ export const moviesTable = sqliteTable('movies', {
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
-// export const moviesFtsTable = sqliteTable('movies_fts', {
-//     id: integer('id').primaryKey(),
-//     title: text('title').notNull(),
-//     genres: text('genres').notNull(),
-//     moviesFts: integer('movies_fts').notNull(),
-//     rank: integer('rank'),
-// });
-
-// export type InsertMoviesFts = typeof moviesFtsTable.$inferInsert;
-// export type SelectMoviesFts = typeof moviesFtsTable.$inferSelect;
-
-// export const moviesFtsConfigTable = sqliteTable('movies_fts_config', {
-//     key: text('k').notNull(),
-//     value: text('v').notNull(),
-// });
-
-// export type InsertMoviesFtsConfigTable =
-//     typeof moviesFtsConfigTable.$inferInsert;
-// export type SelectMoviesFtsConfigTable =
-//     typeof moviesFtsConfigTable.$inferSelect;
-
-// export const moviesFtsContentTable = sqliteTable('movies_fts_content', {
-//     id: integer('id').primaryKey(),
-//     c0: integer('c0').notNull(),
-//     c1: text('c1').notNull(),
-//     c2: text('c2').notNull(),
-// });
-
-// export type InsertMovieFtsContent = typeof moviesFtsContentTable.$inferInsert;
-// export type SelectMovieFtsContent = typeof moviesFtsContentTable.$inferSelect;
-
-// export const moviesFtsDataTable = sqliteTable('movies_fts_data', {
-//     id: integer('id').primaryKey(),
-//     block: blob('block').notNull(),
-// });
-
-// export type InsertMovieFtsData = typeof moviesFtsDataTable.$inferInsert;
-// export type SelectMovieFtsData = typeof moviesFtsDataTable.$inferSelect;
-
-// export const moviesFtsDocsizeTable = sqliteTable('movies_fts_docsize', {
-//     id: integer('id').primaryKey(),
-//     size: blob('sz').notNull(),
-// });
-
-// export type InsertMovieFtsDocsize = typeof moviesFtsDocsizeTable.$inferInsert;
-// export type SelectMovieFtsDocsize = typeof moviesFtsDocsizeTable.$inferSelect;
-
-// export const moviesFtsIdxTable = sqliteTable('movies_fts_idx', {
-//     segmentId: text('segid').notNull(),
-//     term: text('term'),
-//     pageNumber: text('pgno').notNull(),
-// });
-
-// export type InsertFtsIdxMovie = typeof moviesFtsIdxTable.$inferInsert;
-// export type SelectFtsIdxMovie = typeof moviesFtsIdxTable.$inferSelect;
-
 export const movieLinkIdTable = sqliteTable('movie_link_id', {
     id: integer('id').primaryKey(),
     imdbId: integer('imdbId').notNull(),
