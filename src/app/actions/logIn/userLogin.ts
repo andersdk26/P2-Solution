@@ -50,8 +50,6 @@ export async function handleSignup(formData: {
     // Register the user
     const response: Promise<LoginResponse> = register_user(formData);
 
-    console.log(await response);
-
     // Check if the user was registered
     if ((await response).status !== 201) {
         return (await response).message || 'An error occurred';

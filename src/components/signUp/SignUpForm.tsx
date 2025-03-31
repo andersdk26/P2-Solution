@@ -1,16 +1,16 @@
-import { useState } from 'react'; // Import Reacts useState for handling form data
+import { JSX, useState } from 'react'; // Import Reacts useState for handling form data
 
 //define si props for sii componentsss
 interface SignUpFormProps {
     onSignUp: (formData: {
-        name: string;
+        username: string;
         email: string;
         password: string;
     }) => void;
 }
 
 // this is the SignUpForm componentssss
-export default function SignUpForm({ onSignUp }: SignUpFormProps) {
+export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
     // State to manage form inputs
     const [formData, setFormData] = useState({
         username: '', // Stores the name input
@@ -23,7 +23,7 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
     const [passwordError, setPasswordError] = useState(false); // Tracks if the passwords matche
 
     // this handles text input changes (like name, email, password, confirmPassword)
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
 
         // this checks for tje password field
@@ -35,7 +35,7 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
     };
 
     // handles form submission
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault(); // Prevents page refresh on form submission
 
         // check if passwords matches before being able to signup/register/submit/mmmmmmm yea
@@ -56,12 +56,16 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
         >
             {/* Name Input */}
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-gray-700"
+                >
                     Username
                 </label>
                 <input
                     type="text"
                     name="username"
+                    id="username"
                     value={formData.username}
                     onChange={handleChange} // Updates the name state when the user types
                     className="mt-1 p-2 w-full border rounded-md"
@@ -71,12 +75,16 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
 
             {/* Email Input */}
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                >
                     Email
                 </label>
                 <input
                     type="email"
                     name="email"
+                    id="email"
                     value={formData.email}
                     onChange={handleChange} // opdater email state when the user types
                     className="mt-1 p-2 w-full border rounded-md"
@@ -86,12 +94,16 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
 
             {/* selecter age */}
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label
+                    htmlFor="dob"
+                    className="block text-sm font-medium text-gray-700"
+                >
                     Date of Birth
                 </label>
                 <input
                     type="date"
                     name="dob"
+                    id="dob"
                     value={formData.dob || ''}
                     onChange={(e) =>
                         setFormData({ ...formData, dob: e.target.value })
@@ -105,12 +117,16 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
 
             {/* Password Input */}
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                >
                     Password
                 </label>
                 <input
                     type="password"
                     name="password"
+                    id="password"
                     value={formData.password}
                     onChange={handleChange} // det her opdatere password state nor user inputs nye ting
                     className="mt-1 p-2 w-full border rounded-md"
@@ -120,12 +136,16 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps) {
 
             {/* onfirm password input */}
             <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium text-gray-700"
+                >
                     Confirm Password
                 </label>
                 <input
                     type="password"
                     name="confirmPassword"
+                    id="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange} // opdatere confirmPassword når user types
                     className={`mt-1 p-2 w-full border rounded-md ${

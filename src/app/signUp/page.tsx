@@ -1,18 +1,19 @@
 'use client'; // enables client-side rendering in Next.js
 
+import { handleSignup as serverHandleSignup } from '@/actions/logIn/userLogin';
 import SignUpForm from 'components/signUp/SignUpForm'; // Importing the signup form component
-import { useState } from 'react'; // Importing React state hook
+import { JSX, useState } from 'react'; // Importing React state hook
 
-export default function SignUpPage() {
+export default function SignUpPage(): JSX.Element {
     const [message, setMessage] = useState(''); // State to store feedback messages hvilket er error beskeder til users
     const [isError, setIsError] = useState(false); // State to track hvis message har en error
 
     // Function to handle form submission
-    const handleSignUp = (formData: {
+    const handleSignUp = async (formData: {
         username: string;
         email: string;
         password: string;
-    }) => {
+    }): Promise<void> => {
         // validation: sikkere at email contains "@" and password er 6 characters long
         if (!formData.email.includes('@')) {
             setMessage('Invalid email format!'); // Display error message
@@ -25,9 +26,11 @@ export default function SignUpPage() {
             return;
         }
 
+        const responseMessage = await serverHandleSignup(formData);
+
         // if validation passes
-        setMessage('Signup successful!'); // Display success message
-        setIsError(false);
+        setMessage(responseMessage); // Display success message
+        setIsError(responseMessage !== 'Signup successful');
     };
 
     return (
