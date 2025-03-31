@@ -8,7 +8,10 @@ export type movie = {
     movieGenres: string;
 };
 
-export async function searchForMovie(searchQuery: string): Promise<movie[]> {
+export async function searchForMovie(
+    searchQuery: string,
+    amount: number
+): Promise<movie[]> {
     // Trim search query.
     searchQuery = searchQuery.trim();
 
@@ -21,7 +24,7 @@ export async function searchForMovie(searchQuery: string): Promise<movie[]> {
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT 10`;
+    const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
 
     // Fetch results.
     const result = await db.all<{ id: number; title: string; genres: string }>(
