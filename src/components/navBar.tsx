@@ -24,18 +24,18 @@ export default function NavBar(): JSX.Element {
 
                 <div className="flex justify-between items-center h-full">
                     <ul className="sm:flex">
-                        <li className="ml-10 px-10 text-xl centerMyDivPlease">
+                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
                             <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
                                 Groups
                             </button>
                         </li>
-                        <li className="ml-10 px-10 text-xl centerMyDivPlease">
+                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
                             <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
                                 About
                             </button>
                         </li>
 
-                        <li className="ml-10 px-10 text-xl centerMyDivPlease">
+                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
                             <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
                                 Button
                             </button>
@@ -43,7 +43,7 @@ export default function NavBar(): JSX.Element {
                     </ul>
 
                     <section className="flex-col items-center justify-center z-index: auto">
-                        <form className="w-100 px-10 justify-stretch mx-auto py-4 text-black">
+                        <form className="w-120 justify-stretch mx-auto py-4 text-black">
                             <input
                                 type="search"
                                 id="coldStartMovieSearch"
@@ -60,7 +60,7 @@ export default function NavBar(): JSX.Element {
 
                         <section
                             id="searchResults"
-                            className="absolute w-100 mx-auto bg-gray-100 rounded-3xl"
+                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl"
                         >
                             {searchResult.map((movie) => (
                                 <p
