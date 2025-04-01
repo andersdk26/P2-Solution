@@ -17,9 +17,9 @@ function calculatePreferredGenres(user: User): User {
     // create a new user object for immutability.
     const UserWithGenrePreference = {
         ...user,
-        WatchList: { ...user.SeenList },
+        SeenList: { ...user.SeenList },
     };
-    // create object with genre and number for times the genre appears in the watchlist
+    // create object with genre and number for times the genre appears in the seenlist
     // record<key, value> = {}; (We have a blank notebook to start with)
     const genreCount: Record<string, number> = {};
 
@@ -37,7 +37,7 @@ function calculatePreferredGenres(user: User): User {
     const boostValues = [1.5, 1.4, 1.3, 1.2, 1.1];
 
     // Map genres to their boost values
-    UserWithGenrePreference.WatchList.GenreBoost = topGenres.map(
+    UserWithGenrePreference.SeenListList.GenreBoost = topGenres.map(
         ([genre], index) => ({
             Genre: genre,
             Boost: boostValues[index],
