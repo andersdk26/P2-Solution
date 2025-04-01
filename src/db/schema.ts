@@ -34,4 +34,4 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
-// to update the schema, run `npx drizzle-kit push`
+
