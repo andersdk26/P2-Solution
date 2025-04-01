@@ -186,7 +186,7 @@ export default function SelectMovies(): JSX.Element {
                             {/* Show checkmark icon if movie is selected. */}
                             {checkedMovies[index] && (
                                 <Image
-                                    src="/icons/checkmark-white.svg"
+                                    src="./icons/checkmark-white.svg"
                                     alt="Checkmark"
                                     width={48}
                                     height={48}
