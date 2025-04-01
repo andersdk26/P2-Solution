@@ -71,7 +71,7 @@ export default function SelectMovies(): JSX.Element {
     };
 
     // Get number of movies selected.
-    const numberOfMoviesSelected = checkedMovies.filter(
+    const numberOfMoviesSelected = selectedMovies.filter(
         (checked) => checked
     ).length;
 
@@ -83,7 +83,7 @@ export default function SelectMovies(): JSX.Element {
             </p>
 
             {/* Description of selection process. */}
-            <p className="max-w-1/3 mx-auto text-justify text-xl pt-4 text-neutral-600">
+            <p className="max-w-1/3 mx-auto text-justify text-xl py-4 text-neutral-600">
                 Before we can start recommending movies that match your taste,
                 we need to know a bit about the type of movies you like. Please
                 select at least five movies that you have watched and have an
@@ -116,7 +116,7 @@ export default function SelectMovies(): JSX.Element {
                     <p
                         key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
                         onClick={() => handleSelectMovie(movie)} // Call function to toggle movie selection when clicked on.
-                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500 font-bold' : 'bg-gray-100 font-normal'} hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
+                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500 font-bold' : 'bg-gray-100 font-normal'} hover:bg-blue-500 text-black hover:text-white rounded-3xl cursor-pointer`}
                     >
                         <span className="text-left">{movie.movieTitle}</span>
                         <span className="text-right">ID: {movie.movieId}</span>
