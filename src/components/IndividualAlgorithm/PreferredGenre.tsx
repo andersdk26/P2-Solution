@@ -1,7 +1,6 @@
 /*
 Description: A function to calculate and implement weights to create a User object with a users top 5 genre's.
 This is crucial for the content-based filtering function, since we use these favorite genre and their weight for a score. 
-MISSIN = WRITING ABOUT immutability and mutability (Something with react)
 */
 /* Documentation:
 https://www.w3schools.com/js/js_array_sort.asp 
@@ -9,6 +8,7 @@ https://www.w3schools.com/jsref/jsref_slice_array.asp
 https://graphite.dev/guides/typescript-record-utility-type 
 https://www.w3schools.com/howto/howto_js_spread_operator.asp
 */
+
 'use client';
 import React, { JSX } from 'react';
 import { User } from '../../components/types';
@@ -37,7 +37,7 @@ function calculatePreferredGenres(user: User): User {
     const boostValues = [1.5, 1.4, 1.3, 1.2, 1.1];
 
     // Map genres to their boost values
-    UserWithGenrePreference.SeenListList.GenreBoost = topGenres.map(
+    UserWithGenrePreference.SeenList.GenreBoost = topGenres.map(
         ([genre], index) => ({
             Genre: genre,
             Boost: boostValues[index],
