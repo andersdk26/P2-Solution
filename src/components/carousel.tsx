@@ -23,7 +23,7 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
             {/* Carousel layer */}
             <div className="relative w-full h-full">
                 {/* Previous image (left, behind) */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-[150%] scale-90 opacity-70 z-10 transition-all duration-500">
+                <div className="absolute top-0 left-1/2 transform -translate-x-[130%] scale-90 opacity-70 z-10 transition-all duration-500">
                     <GetMovieImage movieId={movieIds[prevIndex]} />
                 </div>
 
@@ -33,7 +33,7 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
                 </div>
 
                 {/* Next image (right, behind) */}
-                <div className="absolute top-0 left-1/2 transform translate-x-[50%] scale-90 opacity-70 z-10 transition-all duration-500">
+                <div className="absolute top-0 left-1/2 transform translate-x-[30%] scale-90 opacity-70 z-10 transition-all duration-500">
                     <GetMovieImage movieId={movieIds[nextIndex]} />
                 </div>
             </div>
@@ -45,7 +45,7 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
                         index === 0 ? movieIds.length - 1 : index - 1
                     )
                 }
-                className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-2 py-50 rounded-fule shadow"
             >
                 &lt;
             </button>
@@ -56,7 +56,7 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
                         index === movieIds.length - 1 ? 0 : index + 1
                     )
                 }
-                className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-2 py-50 rounded-full shadow"
             >
                 &gt;
             </button>
