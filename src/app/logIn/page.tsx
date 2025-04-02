@@ -14,6 +14,7 @@ export default function Page(): JSX.Element {
     const router = useRouter(); // Use the useRouter hook
 
     useEffect(() => {
+        // Check if the user is logged in. If they are already logged in, redirect them to the main page
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) > 1) {
                 redirect('/');
