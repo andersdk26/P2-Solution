@@ -5,12 +5,22 @@ import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import userLogout from '@/actions/logIn/userLogout';
 import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default function Page(): JSX.Element {
     const [loginResponse, setLoginResponse] = useState('');
     const [signupResponse, setSignupResponse] = useState('');
     const [userId, setUserId] = useState(0);
     const router = useRouter(); // Use the useRouter hook
+
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) > 1) {
+                redirect('/');
+            }
+        };
+        checkLoginStatus();
+    }, []);
 
     // Check if the user is logged in
     useEffect(() => {
