@@ -7,6 +7,9 @@ import { JSX } from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import GetMovieImage from './GetMovieImage';
+import { useEffect } from 'react'; // Importing React state hook
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { redirect } from 'next/navigation';
 
 type CarouselProps = {
     movieIds: number[];
@@ -17,6 +20,15 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
 
     const prevIndex = (imageIndex - 1 + movieIds.length) % movieIds.length;
     const nextIndex = (imageIndex + 1) % movieIds.length;
+
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) < 1) {
+                redirect('/logIn');
+            }
+        };
+        checkLoginStatus();
+    }, []);
 
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
