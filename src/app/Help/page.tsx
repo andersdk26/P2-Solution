@@ -3,7 +3,7 @@ import React, { JSX } from 'react';
 
 const Help = (): JSX.Element => (
     <div>
-        <h1>Here is some help with some nice pickuplines my friend ;)</h1>
+        <h1>Here is some help with some nice pickuplines my friend</h1>
         <li>If they made you in C, you would have a pointer to my heart!</li>
         <li>let me be your CSS to your HTML</li>
         <li>Are you a keyboard? Because you are just my type</li>
