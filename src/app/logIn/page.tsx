@@ -4,11 +4,13 @@ import { JSX, useEffect, useState } from 'react';
 import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import userLogout from '@/actions/logIn/userLogout';
+import { useRouter } from 'next/navigation';
 
 export default function Page(): JSX.Element {
     const [loginResponse, setLoginResponse] = useState('');
     const [signupResponse, setSignupResponse] = useState('');
     const [userId, setUserId] = useState(0);
+    const router = useRouter(); // Use the useRouter hook
 
     // Check if the user is logged in
     useEffect(() => {
@@ -29,6 +31,10 @@ export default function Page(): JSX.Element {
                     action={async (formData) => {
                         const responseMessage = await handleLogin(formData);
                         setLoginResponse(responseMessage);
+
+                        if (responseMessage === 'Login successful') {
+                            router.push('/'); // Redirect to the main page only if login is successful
+                        }
                     }}
                     className="flex flex-col gap-4"
                 >
