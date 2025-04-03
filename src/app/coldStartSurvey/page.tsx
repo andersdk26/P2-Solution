@@ -106,7 +106,7 @@ export default function SelectMovies(): JSX.Element {
             </section>
 
             {/* Create div for containing grids. */}
-            <section className="flex-col items-center justify-center space-y-4">
+            <section className="flex-col items-center justify-center space-y-4 pb-[50vh]">
                 {/* Diplay movie posters of movies currently selected */}
                 <p className="text-center pt-4 text-xl">Selected movies</p>
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
@@ -115,7 +115,7 @@ export default function SelectMovies(): JSX.Element {
                 {DisplayPopularMovies(handleSelectMovie)};
             </section>
 
-            <section className="flex justify-center items-center py-4 pb-[50vh]">
+            <section className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-1 -translate-y-4">
                 <button
                     onClick={() => {
                         if (selectedMovies.length >= 5) {
@@ -123,7 +123,7 @@ export default function SelectMovies(): JSX.Element {
                                 '/coldStartSurvey/rateMovies';
                         }
                     }}
-                    className={`${selectedMovies.length >= 5 ? 'bg-blue-500 hover:bg-blue-700 cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-white font-bold py-4 px-8 rounded-full`}
+                    className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}
                 >
                     Next step
                 </button>
