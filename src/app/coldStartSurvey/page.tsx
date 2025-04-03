@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
@@ -52,27 +51,6 @@ export default function SelectMovies(): JSX.Element {
 
     // Create useState array for storing search results.
     const [searchResult, setSearchResult] = useState<movie[]>([]);
-
-    // Create a state array for the movies displayed in the grid.
-    const [checkedMovies, set_checked_movies] = useState<boolean[]>(
-        // Set all indicies to false.
-        Array(15).fill(false)
-    );
-
-    // Function for selecting and unselecting movies.
-    const toggle_check = (index: number): void => {
-        // Setter function from React's 'useState' hook.
-        set_checked_movies((previousState) => {
-            // Create a copy of the state array.
-            const newCheckedMovies = [...previousState];
-
-            // Modify copy by toggling the boolean value at the specified index.
-            newCheckedMovies[index] = !newCheckedMovies[index];
-
-            // Return modified copy.
-            return newCheckedMovies;
-        });
-    };
 
     return (
         <main>
