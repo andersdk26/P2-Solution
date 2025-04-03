@@ -11,6 +11,8 @@ import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
 import GetMovieImage from '@/components/GetMovieImage';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { redirect } from 'next/navigation';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -86,26 +88,17 @@ export default function Home(): JSX.Element {
         }
     };
 
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) < 1) {
+                redirect('/logIn');
+            }
+        };
+        checkLoginStatus();
+    }, []);
+
     return (
         <>
-            {/* Pagination Controls */}
-            <div className="pagination z-2">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div>
-
             {/* Div for deselecting sidebar */}
             {sidebarImage && (
                 <div
