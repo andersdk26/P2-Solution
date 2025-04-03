@@ -54,8 +54,6 @@ export function DisplayPopularMovies(
         fetchMovies();
     }, []);
 
-    console.log(popularMovies);
-
     return (
         <section
             id="selectedMovies"
