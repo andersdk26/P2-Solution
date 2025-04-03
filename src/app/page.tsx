@@ -144,7 +144,7 @@ export default function Home(): JSX.Element {
                         <button
                             onClick={handlePreviousPage}
                             disabled={currentPage === 0}
-                            className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                            className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
                         >
                             &lt;
                         </button>
@@ -155,7 +155,7 @@ export default function Home(): JSX.Element {
                                 (currentPage + 1) * moviesPerPage >=
                                 movies.length
                             }
-                            className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                            className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
                         >
                             &gt;
                         </button>
