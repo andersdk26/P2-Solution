@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useState, useEffect } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
 import {
-    displaySelectedMovies,
+    DisplaySelectedMovies,
     DisplayPopularMovies,
 } from '@/components/coldStarSurvey/selectedMovies';
 
@@ -109,7 +109,7 @@ export default function SelectMovies(): JSX.Element {
             <section className="flex-col items-center justify-center space-y-4">
                 {/* Diplay movie posters of movies currently selected */}
                 <p className="text-center pt-4 text-xl">Selected movies</p>
-                {displaySelectedMovies(selectedMovies, handleSelectMovie)}
+                {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
                 {DisplayPopularMovies(handleSelectMovie)};

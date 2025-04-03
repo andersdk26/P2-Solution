@@ -1,11 +1,11 @@
 'use client';
 
 import { JSX } from 'react';
-import { movie, getMovieById } from 'app/actions/movie';
+import { movie, getMoviesByIds } from 'app/actions/movie';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-export function displaySelectedMovies(
+export function DisplaySelectedMovies(
     selectedMovies: movie[],
     handleSelectMovie: (movie: movie) => void
 ): JSX.Element {
@@ -36,6 +36,7 @@ export function DisplayPopularMovies(
     const [popularMovies, setPopularMovies] = useState<movie[]>([]);
 
     useEffect(() => {
+        // Array of ids of popular movies.
         const popularMovieIds = [
             109487, 318, 858, 296, 130219, 2116, 3578, 79132, 202439, 106782,
             47, 2959, 527, 541, 364, 4262, 480, 356, 2288, 1240, 1258, 4896,
@@ -43,20 +44,17 @@ export function DisplayPopularMovies(
         ];
 
         const fetchMovies = async () => {
-            const moviePromises = popularMovieIds.map((id) => getMovieById(id));
-
-            // Wait for all promises to resolve.
-            const movies = await Promise.all(moviePromises);
-
-            // Filter out any null values.
-            const validMovies = movies.filter((movie) => movie !== null);
+            // Call the bulk fetching function.
+            const movies = await getMoviesByIds(popularMovieIds);
 
             // Set the state with the fetched movies.
-            setPopularMovies(validMovies);
+            setPopularMovies(movies);
         };
 
         fetchMovies();
-    });
+    }, []);
+
+    console.log(popularMovies);
 
     return (
         <section
