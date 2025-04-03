@@ -25,6 +25,11 @@ body {
     display: flex;
 }
 
+.selectedMovieGrid {
+    display: grid;
+    gap: 4px;
+}
+
 h1 {
     color: #282f72;
     font-weight: bolder;
