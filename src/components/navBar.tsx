@@ -6,9 +6,11 @@ import { JSX } from 'react';
 import Profile from '@/components/Profile/profile';
 import { useState } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
+import { useRouter } from 'next/navigation';
 
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const router = useRouter(); // Use the useRouter hook
 
     return (
         <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24">
@@ -16,7 +18,12 @@ export default function NavBar(): JSX.Element {
                 {/* right side div for bar thingies*/}
                 <div className="w-48 h-24 flex justify-between items-center h-full">
                     <div className="ml-10 text-xl centerMyDivPlease">
-                        <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
+                        <button
+                            onClick={async () => {
+                                router.push('/');
+                            }}
+                            className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
+                        >
                             Home
                         </button>
                     </div>
