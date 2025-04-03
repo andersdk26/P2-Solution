@@ -1,24 +1,141 @@
-.posterRow {
-    display: flex;
-    gap: 20px;
-    justify-content: flex-start;
-    left: 1;
+/*carousel animations*/
+@keyframes slide-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
 }
-.moviePoster {
-    width: 150px;
-    height: 200px;
-    background-color: grey;
+
+@keyframes slide-right {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+/*carousel animations*/
+
+.carouselWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 500px; /* Match Carousel height */
+    margin: 0 auto;
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: rgb(0, 0, 0);
-    font-size: 15px;
-    padding: 0;
-    box-sizing: border-box;
-    border: 2px solid rgb(0, 0, 0);
+    align-items: center;
+    overflow: visible;
+    gap: 0px;
+    white-space: nowrap;
+}
+
+.posterRow {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 500px; /* Match Carousel height */
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 0px;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
+}
+
+.posterRow .buttonContainer {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%); /* Center the buttons vertically */
+}
+
+.posterItem {
+    position: relative;
+    transform: scale(0.9); /* Slightly smaller like Carousel */
+    transition:
+        transform 0.5s ease-in-out,
+        opacity 0.5s ease-in-out;
+    opacity: 0.7;
+}
+
+.posterRow.slide-left {
+    animation: slide-left 1s forwards;
+}
+
+.posterRow.slide-right {
+    animation: slide-right 1s forwards;
+}
+
+.posterRow.slide-in-left {
+    animation: slide-in-left 1s forwards;
+}
+
+.posterRow.slide-in-right {
+    animation: slide-in-right 1s forwards;
+}
+
+.posterItem:hover {
+    transform: scale(1); /* Scale to full size on hover */
+    opacity: 1;
+}
+
+.buttonWrapper {
+    position: absolute;
+    top: 15%;
+    width: 102%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.buttonWrapper button {
+    background-color: rgba(46, 61, 69, 0.4);
+    color: black;
+    padding: 0px;
+    border-radius: Spx;
+    font-size: 10px;
+    width: 20px;
+    height: 350px;
+    cursor: pointer;
+}
+
+.buttonWrapper button:hover {
+    box-shadow: 0px 0px 8px 8px rgba(255, 0, 0, 0.4);
+    background-color: rgb(216, 0, 0);
+}
+
+.moviePoster {
+    width: 350px;
+    height: 400px;
+    object-fit: cover;
     border-radius: 10px;
-    text-shadow: 1px 1px 2px black;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
 }
 
 .sideBar {
@@ -33,9 +150,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10;
 
-    animation: slideIn 0.5s ease-in;
+    animation: slideIn 0.25s ease-in;
 }
 
 .sideBar img {

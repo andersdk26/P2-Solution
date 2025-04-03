@@ -80,7 +80,9 @@ export default function SelectMovies(): JSX.Element {
                     placeholder="Search for movies..."
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
-                        setSearchResult(await searchForMovie(e.target.value));
+                        setSearchResult(
+                            await searchForMovie(e.target.value, 10)
+                        );
                     }}
                 />
             </form>

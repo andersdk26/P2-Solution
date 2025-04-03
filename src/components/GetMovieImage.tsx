@@ -57,4 +57,3 @@ function getTMDBImage(movieId: number): string {
     }
     return 'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/hvFqDa1ggUIy5RqYEsTOSxQBP0L.jpg';
 }
-

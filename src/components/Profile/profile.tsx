@@ -2,7 +2,8 @@
 'use client';
 import React, { useState, JSX } from 'react'; // useState has isDropdown functions
 import ProfileImage from './profileImg';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { redirect, useRouter } from 'next/navigation'; // Import useRouter
+import userLogout from '@/actions/logIn/userLogout';
 
 const Profile = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,10 +23,12 @@ const Profile = (): JSX.Element => {
     return (
         <>
             <button onClick={toggleDropdown} className="centerMyDivPlease">
-                <ProfileImage /> {/* Separation of concerns */}
+                <ProfileImage />{' '}
+                {/* Separation of concerns (design, img is in a different tsx file) */}
             </button>
             {isDropdownOpen && (
-                <div className="absolute top-16 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-48 my-3">
+                <div className="absolute top-21 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-42 my-3 z-100">
+                    <p className="text-white">Username</p> {/*placeholder*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
@@ -45,10 +48,17 @@ const Profile = (): JSX.Element => {
                         Help
                     </button>
                     <button
-                        onClick={() => redirrectProfile('/Logout')}
+                        onClick={async () => {
+                            if ((await userLogout()) === true) {
+                                alert('Error login out! Please try again.');
+                                return;
+                            }
+
+                            router.push('/logIn');
+                        }}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
                     >
-                        Logout
+                        Log out
                     </button>
                 </div>
             )}
