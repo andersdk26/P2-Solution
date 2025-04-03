@@ -16,7 +16,6 @@ export default function NavBar(): JSX.Element {
             router.push(path);
         }
     };
-
     return (
         <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24">
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
@@ -68,15 +67,40 @@ export default function NavBar(): JSX.Element {
                             </button>
                         </li>
                     </ul>
-                    <form className="w-100 px-10 justify-stretch mx-auto text-black">
-                        <input
-                            type="search"
-                            id="coldStartMovieSearch"
-                            className="block w-full p-4 rounded-full bg-[#dcdeef]"
-                            placeholder="Search for movies or users..."
-                            // When the user types something, call function to fetch movies with matching search query.
-                        />
-                    </form>
+
+                    <section className="flex-col items-center justify-center z-auto">
+                        <form className="w-120 justify-stretch mx-auto py-4 text-black">
+                            <input
+                                type="search"
+                                id="coldStartMovieSearch"
+                                className="block w-full p-4 rounded-full bg-gray-100"
+                                placeholder="Search for movies..."
+                                // When the user types something, call function to fetch movies with matching search query.
+                                onChange={async (e) => {
+                                    setSearchResult(
+                                        await searchForMovie(e.target.value, 5)
+                                    );
+                                }}
+                            />
+                        </form>
+
+                        <section
+                            id="searchResults"
+                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl"
+                        >
+                            {searchResult.map((movie) => (
+                                <p
+                                    key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
+                                    // onClick={/* Gør noget når man trykker på filmen */}
+                                    className={`py-2 px-4 flex justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
+                                >
+                                    <span className="text-left text-black prevent-select">
+                                        {movie.movieTitle}
+                                    </span>
+                                </p>
+                            ))}
+                        </section>
+                    </section>
                     <div className="px-10">
                         <Profile />
                     </div>

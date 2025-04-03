@@ -18,6 +18,7 @@ export default function Home(): JSX.Element {
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
+    const [animation, setAnimation] = useState(''); // To store animation class
 
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
@@ -50,7 +51,7 @@ export default function Home(): JSX.Element {
         }
     };
 
-    const moviesPerPage = 5;
+    const moviesPerPage = 3;
     const startIndex = currentPage * moviesPerPage;
     const moviesToDisplay = movies.slice(
         startIndex,
@@ -59,13 +60,29 @@ export default function Home(): JSX.Element {
 
     const handleNextPage = (): void => {
         if ((currentPage + 1) * moviesPerPage < movies.length) {
-            setCurrentPage(currentPage + 1);
+            // Apply both animations simultaneously (outgoing row and incoming row)
+            setAnimation('slide-left'); // Slide the current row to the left
+            setTimeout(() => {
+                // Update the page after a short delay (so both animations occur together)
+                setCurrentPage((prev) => prev + 1);
+                // After the page is updated, apply the sliding-in effect for the new set of movies
+                setAnimation('slide-in-right');
+            }, 1000); // Short delay to ensure the first animation starts immediately
         }
     };
 
     const handlePreviousPage = (): void => {
         if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+            // Start the slide-out animation
+            setAnimation('slide-right');
+
+            // Wait for the slide-out animation to complete before updating the page
+            setTimeout(() => {
+                // Now update the page
+                setCurrentPage((prev) => prev - 1);
+                // Start the slide-in animation after the slide-out
+                setAnimation('slide-in-left');
+            }, 1000); // Duration of the slide-out animation
         }
     };
 
@@ -108,23 +125,51 @@ export default function Home(): JSX.Element {
                 {/* File Input */}
 
                 {/* Movie Posters */}
-                <div className="posterRow">
-                    {moviesToDisplay.map((movie, index) => (
-                        <Image
-                            key={index}
-                            className="moviePoster"
-                            onClick={() =>
-                                handleImageClick(movie.image, movie.title)
+                <div className="carouselWrapper">
+                    <div key={currentPage} className={`posterRow ${animation}`}>
+                        {moviesToDisplay.map((movie, index) => (
+                            <div key={index} className="posterItem">
+                                <Image
+                                    className="moviePoster"
+                                    onClick={() =>
+                                        handleImageClick(
+                                            movie.image,
+                                            movie.title
+                                        )
+                                    }
+                                    src={movie.image}
+                                    alt={movie.title}
+                                    width={150}
+                                    height={200}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Navigation buttons */}
+                    <div className="buttonWrapper">
+                        <button
+                            onClick={handlePreviousPage}
+                            disabled={currentPage === 0}
+                            className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                        >
+                            &lt;
+                        </button>
+
+                        <button
+                            onClick={handleNextPage}
+                            disabled={
+                                (currentPage + 1) * moviesPerPage >=
+                                movies.length
                             }
-                            src={movie.image}
-                            alt={movie.title}
-                            width={150}
-                            height={200}
-                        />
-                    ))}
+                            className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                        >
+                            &gt;
+                        </button>
+                    </div>
                 </div>
             </div>
-            {/* Movie Carousel */}
+            {/* Movie Carousel
             <div
                 className="block top-20 items-center justify-center z-2"
                 // onClick={() =>
@@ -135,7 +180,7 @@ export default function Home(): JSX.Element {
                 // }
             >
                 <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
-            </div>
+            </div> */}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
@@ -297,6 +342,23 @@ export default function Home(): JSX.Element {
                     </div>
                 </section>
             )}
-        </main>
+            {/* Pagination Controls
+            <div className="pagination">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={handleNextPage}
+                    disabled={
+                        (currentPage + 1) * moviesPerPage >= movies.length
+                    }
+                >
+                    Next
+                </button>
+            </div> */}
+        </>
     );
 }
