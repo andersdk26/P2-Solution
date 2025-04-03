@@ -10,7 +10,7 @@ import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
-import GetMovieImage from '@/components/GetMovieImage';
+import MovieImage from '@/components/movie/MovieImage';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -359,6 +359,7 @@ export default function Home(): JSX.Element {
                     Next
                 </button>
             </div> */}
+            <MovieImage movieId={1} />
         </>
     );
 }
