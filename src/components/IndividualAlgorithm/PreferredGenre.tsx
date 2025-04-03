@@ -31,7 +31,7 @@ async function calculatePreferredGenres(userId: string): Promise<{
                     .where(
                         'seen_list_id',
                         '=',
-                        db // inner query to get the seen_list_id
+                        db // inner query to get the seen_list id
                             .select({ id: 'id' })
                             .from('seen_list')
                             .where('user_id', '=', userId)

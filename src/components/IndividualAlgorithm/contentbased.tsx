@@ -1,27 +1,67 @@
 /* 
 Description: A function to return a movie's score based on how compatible it is to a user, with the use of content-based filtering.
-Notes: We use PersonalRating becouse this is content-based an inner-rating is IMDB rating = collaborative outout. 
 */
 
 'use client';
 import React, { JSX } from 'react';
 import { db } from '../../db';
-import { User, Movie } from '../../components/types';
+import { genreBoostTable, moviesTable } from '../../db/schema';
 
-function scoreIndContent(movie: Movie, user: User): number {
-    let scoreIndContent = // The let statement ensures that we use Personalrating and if we dont have it we use InternalRating.
+async function scoreIndContent(
+    userId: string,
+    movieId: number
+): Promise<{ scoreIndContent: number }> {
+    // Fetch the movie properties
+    const movie = await db
+        .select({
+            PersonalRating: moviesTable.PersonalRating,
+            InternalRating: moviesTable.InternalRating,
+            InternalGenre: moviesTable.InternalGenre,
+        })
+        .from(moviesTable)
+        .where(moviesTable.id.eq(movieId)) // Fetch the movie with the given movieId
+        .first();
+
+    // Handle the case where the movie does not exist
+    if (!movie) {
+        throw new Error('Movie not found.');
+    }
+    let scoreIndContent =
         movie.PersonalRating !== undefined
             ? movie.PersonalRating
             : movie.InternalRating;
 
-    // Compare Movie's Genre with movies from User object
-    if (user.SeenList.GenreBoost) {
-        for (const boostedGenre of user.SeenList.GenreBoost) {
-            if (movie.InternalGenre === boostedGenre.Genre) {
-                scoreIndContent += boostedGenre.Boost;
-            }
+    // Fetch GenreBoosts for the user
+    const genreBoosts: { genre: string; boost: number }[] = await db
+        .select({
+            genre: genreBoostTable.genre,
+            boost: genreBoostTable.boost,
+        })
+        .from(genreBoostTable)
+        .where(
+            genreBoostTable.id.in(
+                db
+                    .select({ genreBoostId: 'genre_boost_id' })
+                    .from('seen_list_genre_boost')
+                    .where(
+                        'seen_list_id',
+                        '=',
+                        db
+                            .select({ id: 'id' })
+                            .from('seen_list')
+                            .where('user_id', '=', userId)
+                    )
+            )
+        );
+
+    // Apply GenreBoosts
+    genreBoosts.forEach((boostedGenre) => {
+        if (movie.InternalGenre === boostedGenre.genre) {
+            scoreIndContent += boostedGenre.boost; // Add the boost value to the score
         }
-    }
-    return scoreIndContent; // ScoreIndividualContent
+    });
+
+    return { scoreIndContent }; // Return calculated score for the movie
 }
+
 export default scoreIndContent;
