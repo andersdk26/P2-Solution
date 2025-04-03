@@ -95,7 +95,7 @@ export default function Page(): JSX.Element {
                     </p>
                 )}
                 <p className="mt-4 text-sm text-center text-gray-600">
-                    you have account?{' '}
+                    Do you not have an account?{' '}
                     <a href="/signUp" className="text-blue-600 hover:underline">
                         Sign Up
                     </a>
