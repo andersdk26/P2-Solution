@@ -4,7 +4,10 @@ import Image from 'next/image';
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
-import { displaySelectedMovies } from '@/components/coldStarSurvey/selectedMovies';
+import {
+    displaySelectedMovies,
+    DisplayPopularMovies,
+} from '@/components/coldStarSurvey/selectedMovies';
 
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
@@ -126,53 +129,12 @@ export default function SelectMovies(): JSX.Element {
 
             {/* Create div for containing grids. */}
             <section className="flex-col items-center justify-center space-y-4">
-                {/* Define a grid layout for selected movies. */}
-                <p className="text-center pt-4 text-xl">Selected movies</p>
-
                 {/* Diplay movie posters of movies currently selected */}
+                <p className="text-center pt-4 text-xl">Selected movies</p>
                 {displaySelectedMovies(selectedMovies, handleSelectMovie)}
-
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                <section
-                    id="popularMovies"
-                    className="w-1/2 mx-auto grid grid-cols-5 grid-rows-3 gap-4 p-8 bg-gray-100 rounded-3xl"
-                >
-                    {/* Map an array to 15 checkboxes. */}
-                    {Array.from({ length: 15 }).map((_, index) => (
-                        <label
-                            key={index}
-                            className="relative flex items-center gap-2"
-                        >
-                            <input
-                                type="checkbox"
-                                // Hide the default checkbox.
-                                className="hidden"
-                                // Call function to update state array when a checkbox is clicked.
-                                onChange={() => toggle_check(index)}
-                            />
-                            <Image
-                                // Display an image of the movie in place of the default checkbox.
-                                src={`/moviePosters/${index}.png`}
-                                alt="Movie poster"
-                                width={160}
-                                height={240}
-                                // Toggle movie poster brightness.
-                                className={`border-none ${checkedMovies[index] ? 'brightness-25' : 'brightness-100'} rounded-2xl transition-all shadow-lg cursor-pointer`}
-                            />
-                            {/* Show checkmark icon if movie is selected. */}
-                            {checkedMovies[index] && (
-                                <Image
-                                    src="./icons/checkmark-white.svg"
-                                    alt="Checkmark"
-                                    width={48}
-                                    height={48}
-                                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                />
-                            )}
-                        </label>
-                    ))}
-                </section>
+                {DisplayPopularMovies(handleSelectMovie)};
             </section>
 
             <section className="flex justify-center items-center py-4 pb-[50vh]">
