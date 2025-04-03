@@ -24,3 +24,8 @@ body {
     align-items: center;
     display: flex;
 }
+
+.selectedMovieGrid {
+    display: grid;
+    gap: 4px;
+}

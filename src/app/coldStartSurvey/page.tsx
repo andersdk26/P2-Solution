@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
 import { movie, searchForMovie } from 'app/actions/movie';
+import { displaySelectedMovies } from '@/components/coldStarSurvey/selectedMovies';
 
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
@@ -99,7 +100,7 @@ export default function SelectMovies(): JSX.Element {
                 <input
                     type="search"
                     id="coldStartMovieSearch"
-                    className="block w-full p-4 rounded-full bg-gray-100"
+                    className="block w-full p-4 rounded-full bg-gray-100 text-black"
                     placeholder="Search for movies..."
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
@@ -128,32 +129,13 @@ export default function SelectMovies(): JSX.Element {
             <section className="flex-col items-center justify-center space-y-4">
                 {/* Define a grid layout for selected movies. */}
                 <p className="text-center pt-4 text-xl">Selected movies</p>
-                <section
-                    id="selectedMovies"
-                    className={`w-1/2 mx-auto grid grid-cols-5 gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300`}
-                    // Dynamically adjust height of selected movie box.
-                    style={{
-                        // Filter out false (unselected) movies, calculate number of rows (based on number of selected movies), multiply number of rows by movie poster height.
-                        minHeight: `${(Math.ceil(checkedMovies.filter((c) => c).length / 5) * 240, 240)}px`,
-                        maxHeight: '560px',
-                        overflowY: 'auto', // Show scrollbar when necessary when enough movies are shown.
-                    }}
-                >
-                    {/* Diplay movie posters of movies currently selected (based on their true/false state from the checkedMovies state array) */}
-                    {checkedMovies.map((isChecked, index) =>
-                        isChecked ? ( // If a movie is selected, display the movie poster.
-                            <Image
-                                key={index}
-                                src={`/moviePosters/${index}.png`}
-                                alt="Selected movie poster"
-                                width={160}
-                                height={240}
-                                className="rounded-2xl transition-all shadow-lg"
-                            />
-                        ) : // If a movie is not selected, do nothing.
-                        null
-                    )}
-                </section>
+
+                {/* Diplay movie posters of movies currently selected */}
+                {selectedMovies.length === 0 ? (
+                    <p className="text-black">No movies selected</p>
+                ) : null}
+
+                {displaySelectedMovies(selectedMovies)}
 
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
