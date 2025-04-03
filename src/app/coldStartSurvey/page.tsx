@@ -107,7 +107,7 @@ export default function SelectMovies(): JSX.Element {
 
             {/* Create div for containing grids. */}
             <section className="flex-col items-center justify-center space-y-4 pb-[50vh]">
-                {/* Diplay movie posters of movies currently selected */}
+                {/* Display movie posters of movies currently selected */}
                 <p className="text-center pt-4 text-xl">Selected movies</p>
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
