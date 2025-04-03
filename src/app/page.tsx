@@ -87,7 +87,7 @@ export default function Home(): JSX.Element {
     };
 
     return (
-        <main>
+        <>
             {/* Pagination Controls */}
             <div className="pagination z-2">
                 <button
