@@ -119,8 +119,12 @@ export default function SelectMovies(): JSX.Element {
                         onClick={() => handleSelectMovie(movie)} // Call function to toggle movie selection when clicked on.
                         className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500 font-bold' : 'bg-gray-100 font-normal'} hover:bg-blue-500 text-black hover:text-white rounded-3xl cursor-pointer`}
                     >
-                        <span className="text-left">{movie.movieTitle}</span>
-                        <span className="text-right">ID: {movie.movieId}</span>
+                        <span className="text-left prevent-select">
+                            {movie.movieTitle}
+                        </span>
+                        <span className="text-right prevent-select">
+                            ID: {movie.movieId}
+                        </span>
                     </p>
                 ))}
             </section>
@@ -131,11 +135,7 @@ export default function SelectMovies(): JSX.Element {
                 <p className="text-center pt-4 text-xl">Selected movies</p>
 
                 {/* Diplay movie posters of movies currently selected */}
-                {selectedMovies.length === 0 ? (
-                    <p className="text-black">No movies selected</p>
-                ) : null}
-
-                {displaySelectedMovies(selectedMovies)}
+                {displaySelectedMovies(selectedMovies, handleSelectMovie)}
 
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>

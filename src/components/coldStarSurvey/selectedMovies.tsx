@@ -4,7 +4,10 @@ import { JSX } from 'react';
 import { movie } from 'app/actions/movie';
 import Image from 'next/image';
 
-export function displaySelectedMovies(selectedMovies: movie[]): JSX.Element {
+export function displaySelectedMovies(
+    selectedMovies: movie[],
+    handleSelectMovie: (movie: movie) => void
+): JSX.Element {
     return (
         <section
             id="selectedMovies"
@@ -17,7 +20,8 @@ export function displaySelectedMovies(selectedMovies: movie[]): JSX.Element {
                     alt={`${m.movieTitle} poster`}
                     width={160}
                     height={240}
-                    className="rounded-2xl transition-all shadow-lg"
+                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer"
+                    onClick={() => handleSelectMovie(m)}
                 />
             ))}
         </section>

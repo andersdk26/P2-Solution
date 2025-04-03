@@ -8,6 +8,33 @@ export type movie = {
     movieGenres: string;
 };
 
+/*
+export const handleSelectMovie(selectedMovies: movie[], setter: () => void) = (movie: movie): void => {
+    setSelectedMovies() => {
+        const isAlreadySelected = prevSelectedMovies.some(
+            (m) => m.movieId === movie.movieId
+        );
+
+        let newSelection;
+
+        if (isAlreadySelected) {
+            // Remove movie if already selected.
+            newSelection = prevSelectedMovies.filter(
+                (m) => m.movieId !== movie.movieId
+            );
+        } else {
+            // Add movie if not selected.
+            newSelection = [...prevSelectedMovies, movie];
+        }
+
+        // Save updated selection to localStorage
+        localStorage.setItem('selectedMovies', JSON.stringify(newSelection));
+
+        return newSelection;
+    });
+};
+*/
+
 export async function searchForMovie(searchQuery: string): Promise<movie[]> {
     // Trim search query.
     searchQuery = searchQuery.trim();

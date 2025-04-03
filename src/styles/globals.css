@@ -29,3 +29,9 @@ body {
     display: grid;
     gap: 4px;
 }
+
+.prevent-select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
