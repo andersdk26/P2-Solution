@@ -21,6 +21,7 @@ export function displaySelectedMovies(
                     width={160}
                     height={240}
                     className="rounded-2xl transition-all shadow-lg hover:cursor-pointer"
+                    title={`${m.movieTitle}`}
                     onClick={() => handleSelectMovie(m)}
                 />
             ))}

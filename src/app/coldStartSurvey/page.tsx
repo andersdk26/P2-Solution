@@ -71,11 +71,6 @@ export default function SelectMovies(): JSX.Element {
         });
     };
 
-    // Get number of movies selected.
-    const numberOfMoviesSelected = selectedMovies.filter(
-        (checked) => checked
-    ).length;
-
     return (
         <main>
             {/* Page header. */}
@@ -183,12 +178,12 @@ export default function SelectMovies(): JSX.Element {
             <section className="flex justify-center items-center py-4 pb-[50vh]">
                 <button
                     onClick={() => {
-                        if (numberOfMoviesSelected >= 5) {
+                        if (selectedMovies.length >= 5) {
                             window.location.href =
                                 '/coldStartSurvey/rateMovies';
                         }
                     }}
-                    className={`${numberOfMoviesSelected >= 5 ? 'bg-blue-500 hover:bg-blue-700 cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-white font-bold py-4 px-8 rounded-full`}
+                    className={`${selectedMovies.length >= 5 ? 'bg-blue-500 hover:bg-blue-700 cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-white font-bold py-4 px-8 rounded-full`}
                 >
                     Next step
                 </button>
