@@ -6,8 +6,6 @@ import { JSX } from 'react';
 import Profile from '@/components/Profile/profile';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
-import { title } from 'process';
-
 export default function NavBar(): JSX.Element {
     const router = useRouter(); // Use the useRouter hook
 
