@@ -5,6 +5,7 @@ Notes: We use PersonalRating becouse this is content-based an inner-rating is IM
 
 'use client';
 import React, { JSX } from 'react';
+import { db } from '../../db';
 import { User, Movie } from '../../components/types';
 
 function scoreIndContent(movie: Movie, user: User): number {
