@@ -1,56 +1,4 @@
-/*carousel animations*/
-@keyframes slide-left {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-100%);
-    }
-}
-
-@keyframes slide-right {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(100%);
-    }
-}
-
-@keyframes slide-in-left {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-@keyframes slide-in-right {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-/*carousel animations*/
-
 .carouselWrapper {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    height: 500px; /* Match Carousel height */
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: visible;
-    gap: 0px;
-    white-space: nowrap;
-}
-
-.posterRow {
     position: relative;
     width: 100%;
     max-width: 800px;
@@ -62,7 +10,32 @@
     overflow: hidden;
     gap: 0px;
     white-space: nowrap;
+    z-index: 0;
+}
+
+.posterRow {
+    position: relative;
+    width: 102%;
+    max-width: 800px;
+    height: 500px; /* Match Carousel height */
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: visible;
+    gap: 0px;
+    white-space: nowrap;
     transition: transform 0.3s ease-out;
+}
+
+.posterItem:hover {
+    transform: scale(1); /* Scale to full size on hover */
+    opacity: 1;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    flex-wrap: nowrap;
+    flex: 0 0 33.33%; /* Ensures exactly 3 are visible at a time */
 }
 
 .posterRow .buttonContainer {
@@ -75,33 +48,18 @@
 }
 
 .posterItem {
+    display: none;
     position: relative;
     transform: scale(0.9); /* Slightly smaller like Carousel */
     transition:
         transform 0.5s ease-in-out,
         opacity 0.5s ease-in-out;
     opacity: 0.7;
-}
-
-.posterRow.slide-left {
-    animation: slide-left 1s forwards;
-}
-
-.posterRow.slide-right {
-    animation: slide-right 1s forwards;
-}
-
-.posterRow.slide-in-left {
-    animation: slide-in-left 1s forwards;
-}
-
-.posterRow.slide-in-right {
-    animation: slide-in-right 1s forwards;
-}
-
-.posterItem:hover {
-    transform: scale(1); /* Scale to full size on hover */
-    opacity: 1;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    flex-wrap: nowrap;
+    flex: 0 0 33.33%; /* Ensures exactly 3 are visible at a time */
 }
 
 .buttonWrapper {
@@ -118,7 +76,7 @@
     background-color: rgba(46, 61, 69, 0.4);
     color: black;
     padding: 0px;
-    border-radius: Spx;
+    border-radius: 5px;
     font-size: 10px;
     width: 20px;
     height: 350px;
@@ -136,6 +94,7 @@
     object-fit: cover;
     border-radius: 10px;
     transition: transform 0.3s ease-in-out;
+    overflow: visible;
 }
 
 .sideBar {
@@ -150,9 +109,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 1000;
 
-    animation: slideIn 0.25s ease-in;
+    animation: slideIn 0.5s ease-in;
 }
 
 .sideBar img {

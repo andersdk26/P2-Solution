@@ -20,7 +20,6 @@ export default function Home(): JSX.Element {
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
-    const [animation, setAnimation] = useState(''); // To store animation class
 
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
@@ -54,37 +53,30 @@ export default function Home(): JSX.Element {
     };
 
     const moviesPerPage = 3;
-    const startIndex = currentPage * moviesPerPage;
-    const moviesToDisplay = movies.slice(
-        startIndex,
-        startIndex + moviesPerPage
-    );
+    const totalMovies = 30;
+    const displayedMovies = movies.slice(0, totalMovies);
 
     const handleNextPage = (): void => {
-        if ((currentPage + 1) * moviesPerPage < movies.length) {
-            // Apply both animations simultaneously (outgoing row and incoming row)
-            setAnimation('slide-left'); // Slide the current row to the left
-            setTimeout(() => {
-                // Update the page after a short delay (so both animations occur together)
-                setCurrentPage((prev) => prev + 1);
-                // After the page is updated, apply the sliding-in effect for the new set of movies
-                setAnimation('slide-in-right');
-            }, 1000); // Short delay to ensure the first animation starts immediately
-        }
+        // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
+        //     setCurrentPage((prev) => prev + 1);
+        // } else {
+        //     // Loop back to the first set of movies
+        //     setCurrentPage(0); // Start from the first set (page 0)
+        // }
+        setCurrentPage(
+            (prev) =>
+                (prev + 1) % Math.ceil(displayedMovies.length / moviesPerPage)
+        );
     };
 
     const handlePreviousPage = (): void => {
         if (currentPage > 0) {
-            // Start the slide-out animation
-            setAnimation('slide-right');
-
-            // Wait for the slide-out animation to complete before updating the page
-            setTimeout(() => {
-                // Now update the page
-                setCurrentPage((prev) => prev - 1);
-                // Start the slide-in animation after the slide-out
-                setAnimation('slide-in-left');
-            }, 1000); // Duration of the slide-out animation
+            setCurrentPage((prev) => prev - 1);
+        } else {
+            // Go to the last set of movies
+            setCurrentPage(
+                Math.floor((displayedMovies.length - 1) / moviesPerPage)
+            );
         }
     };
 
@@ -119,8 +111,14 @@ export default function Home(): JSX.Element {
 
                 {/* Movie Posters */}
                 <div className="carouselWrapper">
-                    <div key={currentPage} className={`posterRow ${animation}`}>
-                        {moviesToDisplay.map((movie, index) => (
+                    <div
+                        className="posterRow"
+                        style={{
+                            transform: `translateX(-${currentPage * 100}%)`,
+                            transition: 'transform 0.5s ease-in-out',
+                        }}
+                    >
+                        {displayedMovies.map((movie, index) => (
                             <div key={index} className="posterItem">
                                 <Image
                                     className="moviePoster"
@@ -143,7 +141,7 @@ export default function Home(): JSX.Element {
                     <div className="buttonWrapper">
                         <button
                             onClick={handlePreviousPage}
-                            disabled={currentPage === 0}
+                            //disabled={currentPage === 0}
                             className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
                         >
                             &lt;
@@ -151,10 +149,10 @@ export default function Home(): JSX.Element {
 
                         <button
                             onClick={handleNextPage}
-                            disabled={
-                                (currentPage + 1) * moviesPerPage >=
-                                movies.length
-                            }
+                            // disabled={
+                            //     (currentPage + 1) * moviesPerPage >=
+                            //     movies.length
+                            // }
                             className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
                         >
                             &gt;
