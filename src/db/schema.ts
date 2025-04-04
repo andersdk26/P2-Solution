@@ -43,7 +43,7 @@ export const moviesTable = sqliteTable('movies', {
     StreamingService: text('StreamingService').notNull(),
     Title: text('Title').notNull(),
     Releaseyear: integer('Releaseyear').notNull(),
-    PersonalRating: integer('PersonalRating'), // optional
+    PersonalRating: integer('PersonalRating'),
 });
 
 export const usersTable = sqliteTable('users', {
@@ -57,7 +57,7 @@ export const usersTable = sqliteTable('users', {
     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
     settings: text('settings').default(sql`'{}'`), // JSON stringified object
 });
-
+// Contains genre and their boost values
 export const genreBoostTable = sqliteTable('genre_boost', {
     id: integer('id').primaryKey(),
     genre: text('genre').notNull(),
@@ -65,20 +65,20 @@ export const genreBoostTable = sqliteTable('genre_boost', {
 });
 
 export const seenListTable = sqliteTable('seen_list', {
-    id: integer('id').primaryKey(),
-    userId: text('user_id').notNull().references(usersTable.userId), // foreign key to users table
+    id: integer('id').primaryKey(), // The id we use
+    userId: text('user_id').notNull().references(usersTable.userId), // Who owns the seen list
 });
 
 export const seenListMoviesTable = sqliteTable('seen_list_movies', {
-    seenListId: integer('seen_list_id').notNull().references(seenListTable.id), // foreign key to seen_list table
-    movieId: integer('movie_id').notNull().references(moviesTable.id), // foreign key to movies table
+    seenListId: integer('seen_list_id').notNull().references(seenListTable.id), // User
+    movieId: integer('movie_id').notNull().references(moviesTable.id), // Movies
 });
 
 export const seenListGenreBoostTable = sqliteTable('seen_list_genre_boost', {
-    seenListId: integer('seen_list_id').notNull().references(seenListTable.id), // foreign key to seen_list table
+    seenListId: integer('seen_list_id').notNull().references(seenListTable.id), // User property
     genreBoostId: integer('genre_boost_id')
         .notNull()
-        .references(genreBoostTable.id), // foreign key to genre_boost table
+        .references(genreBoostTable.id), // genre and boost property
 });
 
 export const groupInfoTable = sqliteTable('group_info', {

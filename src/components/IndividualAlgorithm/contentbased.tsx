@@ -26,11 +26,7 @@ async function scoreIndContent(
     if (!movie) {
         throw new Error('Movie not found.');
     }
-    let scoreIndContent =
-        movie.PersonalRating !== undefined
-            ? movie.PersonalRating
-            : movie.InternalRating;
-
+    let scoreIndContent = movie.PersonalRating;
     // Fetch GenreBoosts for the user
     const genreBoosts: { genre: string; boost: number }[] = await db
         .select({
