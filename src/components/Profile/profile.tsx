@@ -27,7 +27,7 @@ const Profile = (): JSX.Element => {
                 {/* Separation of concerns (design, img is in a different tsx file) */}
             </button>
             {isDropdownOpen && (
-                <div className="absolute top-21 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-42 my-3 z-100">
+                <div className="absolute top-21 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-42 my-3 z-200">
                     <p className="text-white">Username</p> {/*placeholder*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
