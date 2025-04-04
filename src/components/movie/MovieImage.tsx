@@ -9,6 +9,7 @@ interface MovieImageProps {
     height?: number;
     width?: number;
     alt?: string;
+    className?: string;
 }
 
 export default function MovieImage({
@@ -16,19 +17,32 @@ export default function MovieImage({
     height = 450,
     width = 300,
     alt = 'Movie image',
+    className = '',
 }: MovieImageProps): JSX.Element {
     const [imageURL, setImageURL] = useState('/placeholder.png');
+    const [loadingImage, setLadingImage] = useState(true);
 
     useEffect(() => {
         const getImage = async (): Promise<void> => {
             setImageURL(await getMovieImageURL(movieId));
+            setLadingImage(false);
+
+            if (imageURL === '') {
+                setImageURL('/placeholder.png');
+            }
         };
         getImage();
-    }, [movieId]);
+    }, [movieId, imageURL]);
 
     return (
         <>
-            <Image src={imageURL} alt={alt} height={height} width={width} />
+            <Image
+                src={imageURL}
+                alt={alt}
+                height={height}
+                width={width}
+                className={`${className} ${loadingImage && 'animate-pulse'}`}
+            />
         </>
     );
 }
