@@ -32,7 +32,7 @@ export default function Page(): JSX.Element {
         checkAuthStatus();
     }, [loginResponse, signupResponse]); // trigger when login or signup response changes
 
-    //andersssss help meeeeeeeeeeeee.
+    //reloads page efter login for at få brugermnavnet til at vise den rigtige bruger
     if (loginResponse === 'Login successful') {
         window.location.reload(); // Reload the page after successful login
     }
