@@ -1,16 +1,16 @@
-// /Users/frederikskipper-andersen/Documents/GitHub/P2-Solution/src/components/Profile/profile.tsx
 'use client';
-import React, { useState, JSX } from 'react'; // useState has isDropdown functions
+import React, { useState, useEffect, JSX } from 'react';
 import ProfileImage from './profileImg';
-import { redirect, useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
 import userLogout from '@/actions/logIn/userLogout';
 
 const Profile = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const router = useRouter(); // Use the useRouter hook
+    const [username, setUsername] = useState<string | null>(null); // State for username
+    const router = useRouter();
 
     const toggleDropdown = (): void => {
-        setIsDropdownOpen(!isDropdownOpen); // Toggle the dropdown on click
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
     const redirrectProfile = (path: string): void => {
@@ -20,15 +20,36 @@ const Profile = (): JSX.Element => {
         setIsDropdownOpen(false);
     };
 
+    // skaffer the logged-in user's username
+    useEffect(() => {
+        const fetchUsername = async () => {
+            try {
+                const response = await fetch('/api/user'); // Fetch den fra API
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsername(data.username); // Set the username
+                } else {
+                    console.error('Failed to fetch username');
+                }
+            } catch (error) {
+                console.error('Error fetching username:', error);
+            }
+        };
+
+        fetchUsername();
+    }, []);
+
     return (
         <>
             <button onClick={toggleDropdown} className="centerMyDivPlease">
-                <ProfileImage />{' '}
-                {/* Separation of concerns (design, img is in a different tsx file) */}
+                <ProfileImage />
             </button>
             {isDropdownOpen && (
-                <div className="absolute top-21 right-0 bg-[#101010c0] text-gray-300 p-4 rounded-md w-42 my-3 z-100">
-                    <p className="text-white">Username</p> {/*placeholder*/}
+                <div className="absolute top-21 right-0 bg-[#101010c0] text-purple-200 p-4 rounded-md w-42 my-3 z-100">
+                    <p className="text-white font-bold">
+                        {username || 'Loading...'}
+                    </p>{' '}
+                    {/* Viser username. Hvis den ikke kan skaffe username insætter den Loading... istedet*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
@@ -50,7 +71,7 @@ const Profile = (): JSX.Element => {
                     <button
                         onClick={async () => {
                             if ((await userLogout()) === true) {
-                                alert('Error login out! Please try again.');
+                                alert('Error logging out! Please try again.');
                                 return;
                             }
 

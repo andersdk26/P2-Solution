@@ -3,6 +3,7 @@
 import { generateToken } from '@/components/authentication/cookieAuthentication';
 import { login_check, register_user } from '@/components/db/userAuth';
 import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
 
 interface LoginResponse {
     status: number;
