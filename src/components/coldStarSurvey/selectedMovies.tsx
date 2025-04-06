@@ -16,16 +16,26 @@ export function DisplaySelectedMovies(
         >
             {/*  */}
             {selectedMovies.map((m) => (
-                <Image
-                    key={m.movieId}
-                    src="/placeholder.png"
-                    alt={`${m.movieTitle} poster`}
-                    width={160}
-                    height={240}
-                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:brightness-50"
-                    title={`${m.movieTitle}`}
-                    onClick={() => handleSelectMovie(m)}
-                />
+                <div key={m.movieId} className="relative group">
+                    <Image
+                        src="/placeholder.png"
+                        alt={`${m.movieTitle} poster`}
+                        width={160}
+                        height={240}
+                        className="rounded-2xl transition-all shadow-lg hover:brightness-50"
+                        title={`${m.movieTitle}`}
+                    />
+
+                    <Image
+                        src="/remove.png"
+                        alt={`${m.movieTitle} poster`}
+                        width={32}
+                        height={32}
+                        className="absolute opacity-0 left-[124px] bottom-[204px] group-hover:opacity-100 group-hover:cursor-pointer transition-all duration-300 z-3"
+                        title={`${m.movieTitle}`}
+                        onClick={() => handleSelectMovie(m)}
+                    />
+                </div>
             ))}
         </section>
     );
