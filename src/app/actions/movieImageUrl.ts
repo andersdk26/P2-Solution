@@ -41,7 +41,7 @@ export default async function getMovieImageURL(
     // IMDB
     try {
         // Add leading zeros to imdb ID
-        const imdbId = '0000000'
+        const imdbId = '' //'0000000'
             .substring(result[0].imdbId.toString().length)
             .concat(result[0].imdbId.toString());
 
@@ -70,6 +70,22 @@ export default async function getMovieImageURL(
 
     // TMDB
     try {
+        // Get link to IMDB movie poster
+        const tmdbFetch = await fetch(
+            `https://www.themoviedb.org/movie/${result[0].tmdbId}`
+        );
+
+        const tmdbFetchBody = await tmdbFetch?.text();
+
+        // Find all media-amazon image links
+        const tmdbImageLink = tmdbFetchBody.match(
+            /https:\/\/media\.themoviedb\.org\/t\/p\/w300_and_h450_bestv2\/+[a-zA-Z0-9]+\.jpg/g
+        );
+
+        // Return imdb image link
+        if (tmdbImageLink && !tmdbImageLink.length) {
+            return tmdbImageLink[0]; // return first image (0 is the prevous image)
+        }
     } catch (error) {
         console.error(
             `Error getting TMDB image for movieId: ${movieId}`,
