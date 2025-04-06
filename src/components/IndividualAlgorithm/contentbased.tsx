@@ -5,7 +5,13 @@ Description: A function to return a movie's score based on how compatible it is 
 'use client';
 import React, { JSX } from 'react';
 import { db } from '../../db';
-import { genreBoostTable, moviesTable } from '../../db/schema';
+import { eq, sql } from 'drizzle-orm';
+import {
+    genreBoostTable,
+    moviesTable,
+    seenListGenreBoostTable,
+    seenListTable,
+} from '../../db/schema';
 
 async function scoreIndContent(
     userId: string,
@@ -14,19 +20,19 @@ async function scoreIndContent(
     // Fetch the movie properties
     const movie = await db
         .select({
-            PersonalRating: moviesTable.PersonalRating,
             InternalRating: moviesTable.InternalRating,
             InternalGenre: moviesTable.InternalGenre,
         })
         .from(moviesTable)
-        .where(moviesTable.id.eq(movieId)) // Fetch the movie with the given movieId
-        .first();
+        .where(eq(moviesTable.id, movieId)) // Fetch the movie with the given movieId
+        .limit(1)
+        .get();
 
     // Handle the case where the movie does not exist
     if (!movie) {
         throw new Error('Movie not found.');
     }
-    let scoreIndContent = movie.PersonalRating;
+    let scoreIndContent = 0; // Initialize score with PersonalRating or 0 if not set
     // Fetch GenreBoosts for the user
     const genreBoosts: { genre: string; boost: number }[] = await db
         .select({
@@ -35,19 +41,13 @@ async function scoreIndContent(
         })
         .from(genreBoostTable)
         .where(
-            genreBoostTable.id.in(
-                db
-                    .select({ genreBoostId: 'genre_boost_id' })
-                    .from('seen_list_genre_boost')
-                    .where(
-                        'seen_list_id',
-                        '=',
-                        db
-                            .select({ id: 'id' })
-                            .from('seen_list')
-                            .where('user_id', '=', userId)
-                    )
-            )
+            sql`${genreBoostTable.id} IN (
+                SELECT seen_list_genre_boost.genre_boost_id
+                FROM seen_list_genre_boost
+                INNER JOIN seen_list ON seen_list.id = seen_list_genre_boost.seen_list_id
+                WHERE seen_list.user_id = ${userId}
+                )
+            )`
         );
 
     // Apply GenreBoosts
