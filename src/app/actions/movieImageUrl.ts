@@ -2,38 +2,80 @@
 import { db } from 'db';
 import { IMDBImageIdTable, movieLinkIdTable } from 'db/schema';
 import { eq } from 'drizzle-orm';
-import { JSDOM } from 'jsdom';
 
 export default async function getMovieImageURL(
     movieId: number
 ): Promise<string> {
-    const result = await db
-        .select({
-            tmdbId: movieLinkIdTable.tmdbId,
-            imdbId: movieLinkIdTable.imdbId,
-            imdbMovieId: IMDBImageIdTable.imageId,
-        })
-        .from(movieLinkIdTable)
-        .leftJoin(
-            IMDBImageIdTable,
-            eq(movieLinkIdTable.imdbId, IMDBImageIdTable.id)
-        )
-        .where(eq(movieLinkIdTable.id, movieId));
+    let result;
 
-    console.log(result);
+    // Database
+    try {
+        // Request IMDB and TMDB movie IDs
+        result = await db
+            .select({
+                tmdbId: movieLinkIdTable.tmdbId,
+                imdbId: movieLinkIdTable.imdbId,
+                imdbMovieId: IMDBImageIdTable.imageId,
+            })
+            .from(movieLinkIdTable)
+            .leftJoin(
+                IMDBImageIdTable,
+                eq(movieLinkIdTable.imdbId, IMDBImageIdTable.id)
+            )
+            .where(eq(movieLinkIdTable.id, movieId));
 
-    const imdbPageBody = await fetch(
-        `https://www.imdb.com/title/tt${result[0].imdbId}/mediaviewer/rm${result[0].imdbMovieId}/?ref_=tt_ov_i`
-    ).then((response) => response.text());
-    // .then(
-    //     (body) =>
-    //         body.split('<img src="https://m.media-amazon.com/images/M/')
-    //     // .split(
-    //     //     '" sizes="100vw" srcset="https://m.media-amazon.com/images/M/'
-    //     // )
-    // );
-    // .then((body) => new JSDOM(body));
-    console.log(imdbPageBody);
+        if (
+            !result ||
+            result.length === 0 ||
+            ((!result[0].imdbId || !result[0].imdbMovieId) && !result[0].tmdbId)
+        ) {
+        }
+    } catch (error) {
+        console.error(
+            `Error getting movie image for movieId: ${movieId}`,
+            error
+        );
+        return '';
+    }
 
-    return 'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/hvFqDa1ggUIy5RqYEsTOSxQBP0L.jpg';
+    // IMDB
+    try {
+        // Add leading zeros to imdb ID
+        const imdbId = '0000000'
+            .substring(result[0].imdbId.toString().length)
+            .concat(result[0].imdbId.toString());
+
+        // Get link to IMDB movie poster
+        const imdbFetch = await fetch(
+            `https://www.imdb.com/title/tt${imdbId}/mediaviewer/rm${result[0].imdbMovieId}/?ref_=tt_ov_i`
+        );
+
+        const imdbFetchBody = await imdbFetch?.text();
+
+        // Find all media-amazon image links
+        const imdbImageLink = imdbFetchBody.match(
+            /https:\/\/m\.media-amazon.com\/images\/M\/+[a-zA-Z0-9]+@\._V1_\.jpg/g
+        );
+
+        // Return imdb image link
+        if (imdbImageLink && imdbImageLink.length > 1) {
+            return imdbImageLink[1]; // return first image (0 is the prevous image)
+        }
+    } catch (error) {
+        console.error(
+            `Error getting IMDB image for movieId: ${movieId}`,
+            error
+        );
+    }
+
+    // TMDB
+    try {
+    } catch (error) {
+        console.error(
+            `Error getting TMDB image for movieId: ${movieId}`,
+            error
+        );
+    }
+
+    return '';
 }

@@ -20,13 +20,17 @@ export default function MovieImage({
     className = '',
 }: MovieImageProps): JSX.Element {
     const [imageURL, setImageURL] = useState('/placeholder.png');
-    const [loadingImage, setLadingImage] = useState(true);
+    const [loadingImage, setLoadingImage] = useState(true);
 
     useEffect(() => {
         const getImage = async (): Promise<void> => {
+            // Get external movie image URL
             setImageURL(await getMovieImageURL(movieId));
-            setLadingImage(false);
 
+            // Image done lading
+            setLoadingImage(false);
+
+            // If image URL does not exist; use placeholder image
             if (imageURL === '') {
                 setImageURL('/placeholder.png');
             }
