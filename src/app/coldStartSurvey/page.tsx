@@ -72,7 +72,7 @@ export default function SelectMovies(): JSX.Element {
             </p>
 
             {/* Search bar for finding movies */}
-            <form className="max-w-1/2 mx-auto py-4">
+            <form className="max-w-[928px] mx-auto py-4">
                 <input
                     type="search"
                     id="coldStartMovieSearch"
@@ -117,7 +117,7 @@ export default function SelectMovies(): JSX.Element {
                 {DisplayPopularMovies(handleSelectMovie)};
             </section>
 
-            <section className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-1 -translate-y-4">
+            <section className="fixed bottom-0 left-0 w-full bg-gray-100 p-4 text-center">
                 <button
                     onClick={() => {
                         if (selectedMovies.length >= 5) {
