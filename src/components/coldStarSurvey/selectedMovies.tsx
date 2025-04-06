@@ -22,7 +22,7 @@ export function DisplaySelectedMovies(
                         alt={`${m.movieTitle} poster`}
                         width={160}
                         height={240}
-                        className="rounded-2xl transition-all shadow-lg hover:brightness-50"
+                        className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
                         title={`${m.movieTitle}`}
                     />
 
@@ -77,7 +77,7 @@ export function DisplayPopularMovies(
                     alt={`${m.movieTitle} poster`}
                     width={160}
                     height={240}
-                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer"
+                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
                     title={`${m.movieTitle}`}
                     onClick={() => handleSelectMovie(m)}
                 />
