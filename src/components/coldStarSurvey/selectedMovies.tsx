@@ -12,8 +12,9 @@ export function DisplaySelectedMovies(
     return (
         <section
             id="selectedMovies"
-            className={`w-1/2 mx-auto grid grid-cols-5 gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select`}
+            className="w-[928px] min-h-[304px] max-h-[560px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select overflow-y-auto overflow-x-hidden"
         >
+            {/*  */}
             {selectedMovies.map((m) => (
                 <Image
                     key={m.movieId}
@@ -21,7 +22,7 @@ export function DisplaySelectedMovies(
                     alt={`${m.movieTitle} poster`}
                     width={160}
                     height={240}
-                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer"
+                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:brightness-50"
                     title={`${m.movieTitle}`}
                     onClick={() => handleSelectMovie(m)}
                 />
@@ -57,7 +58,7 @@ export function DisplayPopularMovies(
     return (
         <section
             id="selectedMovies"
-            className={`w-1/2 mx-auto grid grid-cols-5 gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select`}
+            className="w-[928px] min-h-[304px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select"
         >
             {popularMovies.map((m) => (
                 <Image
