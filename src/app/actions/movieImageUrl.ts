@@ -67,7 +67,7 @@ export default async function getMovieImageURL(
             );
 
             // Return imdb image link
-            if (imdbImageLink && imdbImageLink.length > 1) {
+            if (imdbImageLink && imdbImageLink.length) {
                 return imdbImageLink[0]; // return first image (0 is the prevous image)
             }
         }
