@@ -29,10 +29,11 @@ export default async function getMovieImageURL(
             result.length === 0 ||
             ((!result[0].imdbId || !result[0].imdbMovieId) && !result[0].tmdbId)
         ) {
+            throw 'Could not find movie id';
         }
     } catch (error) {
         console.error(
-            `Error getting movie image for movieId: ${movieId}`,
+            `Error getting movie image for movieId: ${movieId}.`,
             error
         );
         return '';
@@ -40,55 +41,59 @@ export default async function getMovieImageURL(
 
     // IMDB
     try {
-        // Add leading zeros to imdb ID
-        const imdbId = '' //'0000000'
-            .substring(result[0].imdbId.toString().length)
-            .concat(result[0].imdbId.toString());
+        if (result[0].imdbId && result[0].imdbMovieId) {
+            // Add leading zeros to imdb ID
+            const imdbId = '0000000'
+                .substring(result[0].imdbId.toString().length)
+                .concat(result[0].imdbId.toString());
 
-        // Get link to IMDB movie poster
-        const imdbFetch = await fetch(
-            `https://www.imdb.com/title/tt${imdbId}/mediaviewer/rm${result[0].imdbMovieId}/?ref_=tt_ov_i`
-        );
+            // Get link to IMDB movie poster
+            const imdbFetch = await fetch(
+                `https://www.imdb.com/title/tt${imdbId}/mediaviewer/rm${result[0].imdbMovieId}/?ref_=tt_ov_i`
+            );
 
-        const imdbFetchBody = await imdbFetch?.text();
+            const imdbFetchBody = await imdbFetch?.text();
 
-        // Find all media-amazon image links
-        const imdbImageLink = imdbFetchBody.match(
-            /https:\/\/m\.media-amazon.com\/images\/M\/+[a-zA-Z0-9]+@\._V1_\.jpg/g
-        );
+            // Find all media-amazon image links
+            const imdbImageLink = imdbFetchBody.match(
+                /https:\/\/m\.media-amazon.com\/images\/M\/+[a-zA-Z0-9]+@\._V1_\.jpg/g
+            );
 
-        // Return imdb image link
-        if (imdbImageLink && imdbImageLink.length > 1) {
-            return imdbImageLink[1]; // return first image (0 is the prevous image)
+            // Return imdb image link
+            if (imdbImageLink && imdbImageLink.length > 1) {
+                return imdbImageLink[1]; // return first image (0 is the prevous image)
+            }
         }
     } catch (error) {
         console.error(
-            `Error getting IMDB image for movieId: ${movieId}`,
+            `Error getting IMDB image for movieId: ${movieId}.`,
             error
         );
     }
 
     // TMDB
     try {
-        // Get link to IMDB movie poster
-        const tmdbFetch = await fetch(
-            `https://www.themoviedb.org/movie/${result[0].tmdbId}`
-        );
+        if (result[0].tmdbId) {
+            // Get link to TMDB movie poster
+            const tmdbFetch = await fetch(
+                `https://www.themoviedb.org/movie/${result[0].tmdbId}`
+            );
 
-        const tmdbFetchBody = await tmdbFetch?.text();
+            const tmdbFetchBody = await tmdbFetch?.text();
 
-        // Find all media-amazon image links
-        const tmdbImageLink = tmdbFetchBody.match(
-            /https:\/\/media\.themoviedb\.org\/t\/p\/w300_and_h450_bestv2\/+[a-zA-Z0-9]+\.jpg/g
-        );
+            // Find all themoviedb image links
+            const tmdbImageLink = tmdbFetchBody.match(
+                /https:\/\/media\.themoviedb\.org\/t\/p\/w300_and_h450_bestv2\/+[a-zA-Z0-9]+\.jpg/g
+            );
 
-        // Return imdb image link
-        if (tmdbImageLink && !tmdbImageLink.length) {
-            return tmdbImageLink[0]; // return first image (0 is the prevous image)
+            // Return tmdb image link
+            if (tmdbImageLink && tmdbImageLink.length) {
+                return tmdbImageLink[0]; // return first image
+            }
         }
     } catch (error) {
         console.error(
-            `Error getting TMDB image for movieId: ${movieId}`,
+            `Error getting TMDB image for movieId: ${movieId}.`,
             error
         );
     }
