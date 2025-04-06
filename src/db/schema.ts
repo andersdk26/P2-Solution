@@ -36,12 +36,11 @@ export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
 export const IMDBImageIdTable = sqliteTable('imdb_image_id', {
     id: integer('id').primaryKey(),
-    // .references(() => movieLinkIdTable.imdbId),
     imageId: integer('imageId').notNull(),
 });
 
 export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
 export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
 
-// To update the schema, run `npx drizzle-kit push`
-// After deleting fts tables, run `CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;
+// To update the schema, run: npx drizzle-kit push
+// After deleting fts tables, run: CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;
