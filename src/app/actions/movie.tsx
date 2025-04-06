@@ -25,7 +25,10 @@ export async function getMoviesByIds(ids: number[]): Promise<movie[]> {
     }));
 }
 
-export async function searchForMovie(searchQuery: string): Promise<movie[]> {
+export async function searchForMovie(
+    searchQuery: string,
+    amount: number
+): Promise<movie[]> {
     // Trim search query.
     searchQuery = searchQuery.trim();
 
