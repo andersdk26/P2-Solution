@@ -1,6 +1,6 @@
 'use server';
 import { db } from 'db';
-import { IMDBImageIdTable, movieLinkIdTable } from 'db/schema';
+import { IMDBImageIdTable, movieLinkIdTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 export default async function getMovieImageURL(
@@ -24,6 +24,7 @@ export default async function getMovieImageURL(
             )
             .where(eq(movieLinkIdTable.id, movieId));
 
+        // Check that something is returned
         if (
             !result ||
             result.length === 0 ||
@@ -51,14 +52,14 @@ export default async function getMovieImageURL(
             const imdbFetch = await fetch(
                 `https://www.imdb.com/title/tt${imdbId}/mediaviewer/rm${result[0].imdbMovieId}/?ref_=tt_ov_i`
             );
-
             const imdbFetchBody = await imdbFetch?.text();
 
+            // Find main image
             const imdbImageDiv = imdbFetchBody.match(
                 /<div style="+[\w\-:;]+calc\(50% \+ 0px\)"+.+<\/div>/g
             );
 
-            // Find all media-amazon image links
+            // Find all media-amazon image links (within main image)
             if (!imdbImageDiv) {
                 throw 'Could not find URL';
             }
@@ -85,7 +86,6 @@ export default async function getMovieImageURL(
             const tmdbFetch = await fetch(
                 `https://www.themoviedb.org/movie/${result[0].tmdbId}`
             );
-
             const tmdbFetchBody = await tmdbFetch?.text();
 
             // Find all themoviedb image links

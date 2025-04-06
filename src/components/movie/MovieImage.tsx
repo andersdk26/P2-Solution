@@ -2,7 +2,7 @@
 
 import { JSX, useEffect, useState } from 'react';
 import Image from 'next/image';
-import getMovieImageURL from '@/actions/movieImageUrl';
+import getMovieImageURL from '@/actions/movie/movieImageUrl';
 
 interface MovieImageProps {
     movieId: number;
