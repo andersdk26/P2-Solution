@@ -117,12 +117,12 @@ export default function SelectMovies(): JSX.Element {
                 {DisplayPopularMovies(handleSelectMovie)};
             </section>
 
-            <section className="fixed px-128 bottom-0 left-0 w-full bg-gray-100 p-4 flex justify-between items-center">
+            <section className="fixed px-128 bottom-0 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
                 {/* Progress bar section. */}
                 <section className="w-7/8 flex justify-center">
                     <section className="w-full bg-gray-200 rounded-full h-5">
                         <section
-                            className="bg-blue-500 rounded-full h-full transition-all duration-500"
+                            className="bg-[#282F72] rounded-full h-full transition-all duration-500"
                             style={{
                                 width: `${Math.min((selectedMovies.length / 5) * 100, 100)}%`,
                             }}
