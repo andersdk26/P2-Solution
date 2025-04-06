@@ -117,18 +117,33 @@ export default function SelectMovies(): JSX.Element {
                 {DisplayPopularMovies(handleSelectMovie)};
             </section>
 
-            <section className="fixed bottom-0 left-0 w-full bg-gray-100 p-4 text-center">
-                <button
-                    onClick={() => {
-                        if (selectedMovies.length >= 5) {
-                            window.location.href =
-                                '/coldStartSurvey/rateMovies';
-                        }
-                    }}
-                    className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}
-                >
-                    Next step
-                </button>
+            <section className="fixed px-128 bottom-0 left-0 w-full bg-gray-100 p-4 flex justify-between items-center">
+                {/* Progress bar section. */}
+                <section className="w-7/8 flex justify-center">
+                    <section className="w-full bg-gray-200 rounded-full h-5">
+                        <section
+                            className="bg-blue-500 rounded-full h-full transition-all duration-500"
+                            style={{
+                                width: `${Math.min((selectedMovies.length / 5) * 100, 100)}%`,
+                            }}
+                        ></section>
+                    </section>
+                </section>
+
+                {/* "Next step" button section. */}
+                <section className="w-1/8 flex justify-center">
+                    <button
+                        onClick={() => {
+                            if (selectedMovies.length >= 5) {
+                                window.location.href =
+                                    '/coldStartSurvey/rateMovies';
+                            }
+                        }}
+                        className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}
+                    >
+                        Next step
+                    </button>
+                </section>
             </section>
         </main>
     );
