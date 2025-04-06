@@ -25,18 +25,21 @@ export default function MovieImage({
     useEffect(() => {
         const getImage = async (): Promise<void> => {
             // Get external movie image URL
-            setImageURL(await getMovieImageURL(movieId));
+            let newImageURL = await getMovieImageURL(movieId);
 
             // Image done lading
             setLoadingImage(false);
 
             // If image URL does not exist; use placeholder image
-            if (imageURL === '') {
-                setImageURL('/placeholder.png');
+            if (newImageURL === '') {
+                newImageURL = '/placeholder.png';
             }
+
+            // Set final URL and update page only once
+            setImageURL(newImageURL);
         };
         getImage();
-    }, [movieId, imageURL]);
+    }, [movieId]); // run on movieId change
 
     return (
         <>
