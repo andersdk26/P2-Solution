@@ -54,14 +54,21 @@ export default async function getMovieImageURL(
 
             const imdbFetchBody = await imdbFetch?.text();
 
+            const imdbImageDiv = imdbFetchBody.match(
+                /<div style="+[\w\-:;]+calc\(50% \+ 0px\)"+.+<\/div>/g
+            );
+
             // Find all media-amazon image links
-            const imdbImageLink = imdbFetchBody.match(
+            if (!imdbImageDiv) {
+                throw 'Could not find URL';
+            }
+            const imdbImageLink = imdbImageDiv[0].match(
                 /https:\/\/m\.media-amazon.com\/images\/M\/+[a-zA-Z0-9]+@\._V1_\.jpg/g
             );
 
             // Return imdb image link
             if (imdbImageLink && imdbImageLink.length > 1) {
-                return imdbImageLink[1]; // return first image (0 is the prevous image)
+                return imdbImageLink[0]; // return first image (0 is the prevous image)
             }
         }
     } catch (error) {
