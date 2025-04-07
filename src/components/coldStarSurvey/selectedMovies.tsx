@@ -1,7 +1,7 @@
 'use client';
 
 import { JSX } from 'react';
-import { movie, getMoviesByIds } from 'app/actions/movie';
+import { movie, getMoviesByIds } from '@/actions/movie/movie';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
