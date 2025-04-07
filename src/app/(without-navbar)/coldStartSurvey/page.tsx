@@ -9,8 +9,6 @@ import {
 } from '@/components/coldStarSurvey/selectedMovies';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { getuid } from 'process';
-
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
