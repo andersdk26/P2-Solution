@@ -1,24 +1,100 @@
-.posterRow {
+.carouselWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 500px; /* Match Carousel height */
+    margin: 0 auto;
     display: flex;
-    gap: 20px;
-    justify-content: flex-start;
-    left: 1;
-}
-.moviePoster {
-    width: 150px;
-    height: 200px;
-    background-color: grey;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    color: rgb(0, 0, 0);
-    font-size: 15px;
-    padding: 0;
-    box-sizing: border-box;
-    border: 2px solid rgb(0, 0, 0);
+    align-items: center;
+    overflow: hidden;
+    gap: 0px;
+    white-space: nowrap;
+    z-index: 0;
+}
+
+.posterRow {
+    position: relative;
+    width: 102%;
+    max-width: 800px;
+    height: 500px; /* Match Carousel height */
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: visible;
+    gap: 0px;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
+}
+
+.posterItem:hover {
+    transform: scale(1); /* Scale to full size on hover */
+    opacity: 1;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    flex-wrap: nowrap;
+    flex: 0 0 33.33%; /* Ensures exactly 3 are visible at a time */
+}
+
+.posterRow .buttonContainer {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%); /* Center the buttons vertically */
+}
+
+.posterItem {
+    display: none;
+    position: relative;
+    transform: scale(0.9); /* Slightly smaller like Carousel */
+    transition:
+        transform 0.5s ease-in-out,
+        opacity 0.5s ease-in-out;
+    opacity: 0.7;
+    overflow: hidden;
+    display: flex;
+    border-radius: 30px;
+    flex-wrap: nowrap;
+    flex: 0 0 33.33%; /* Ensures exactly 3 are visible at a time */
+}
+
+.buttonWrapper {
+    position: absolute;
+    top: 15%;
+    width: 102%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.buttonWrapper button {
+    background-color: rgba(46, 61, 69, 0.4);
+    color: black;
+    padding: 0px;
+    border-radius: 5px;
+    font-size: 10px;
+    width: 20px;
+    height: 350px;
+    cursor: pointer;
+}
+
+.buttonWrapper button:hover {
+    box-shadow: 0px 0px 8px 8px rgba(255, 0, 0, 0.4);
+    background-color: rgb(216, 0, 0);
+}
+
+.moviePoster {
+    width: 350px;
+    height: 400px;
+    object-fit: cover;
     border-radius: 10px;
-    text-shadow: 1px 1px 2px black;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+    overflow: visible;
 }
 
 .sideBar {

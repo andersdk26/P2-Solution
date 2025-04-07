@@ -8,6 +8,23 @@ export type movie = {
     movieGenres: string;
 };
 
+export async function getMoviesByIds(ids: number[]): Promise<movie[]> {
+    // Define sql query using Full-Text Search.
+    const sql = `SELECT id, title, genres FROM movies_fts WHERE id IN (${ids.join(',')})`;
+
+    // Fetch results from the database
+    const result = await db.all<{ id: number; title: string; genres: string }>(
+        sql
+    );
+
+    // Return the movies in the desired format
+    return result.map((row) => ({
+        movieId: row.id,
+        movieTitle: row.title,
+        movieGenres: row.genres,
+    }));
+}
+
 export async function searchForMovie(
     searchQuery: string,
     amount: number

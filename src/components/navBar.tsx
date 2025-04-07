@@ -2,42 +2,71 @@
 
 // source: https://www.youtube.com/watch?v=8s4DK5PkRNQ
 
-import { JSX } from 'react';
+import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
-import { useState } from 'react';
-import { movie, searchForMovie } from 'app/actions/movie';
-
+import { useRouter } from 'next/navigation'; // Import useRouter
+import Image from 'next/image';
+import { movie, searchForMovie } from '@/actions/movie';
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const router = useRouter(); // Use the useRouter hook
 
+    const redirrectProfile = (path: string): void => {
+        if (path) {
+            router.push(path);
+        }
+    };
     return (
-        <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24">
+        <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24 z-99">
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
                 {/* right side div for bar thingies*/}
                 <div className="w-48 h-24 flex justify-between items-center h-full">
-                    <div className="ml-10 text-xl centerMyDivPlease">
-                        <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
+                    <div className="ml-4 text-xl ">
+                        <Image
+                            src={'/img/Jamfest logo.png'}
+                            alt={'Jamfest Logo'}
+                            width={100}
+                            height={100}
+                            onClick={() => redirrectProfile('/')}
+                            title="Home page"
+                        ></Image>
+                        {/* <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
                             Home
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center h-full">
                     <ul className="sm:flex">
-                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
-                            <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
+                        <li className="p-10 text-xl centerMyDivPlease">
+                            {/* 3px 3px [#9fa3d1] */}
+
+                            {/* <a hr"></a> */}
+                            <button
+                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm shadow-[0_20px_20px_rgba(220,222,239,1)]"
+                                onClick={() => redirrectProfile('/')}
+                                title="Home"
+                            >
+                                Home
+                            </button>
+                        </li>
+                        <li className="p-10 text-xl centerMyDivPlease">
+                            <button
+                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
+                                onClick={() => redirrectProfile('/Groups')}
+                                title="Groups"
+                            >
                                 Groups
                             </button>
                         </li>
-                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
-                            <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
-                                About
-                            </button>
-                        </li>
 
-                        <li className="ml-10 pr-10 text-xl centerMyDivPlease">
-                            <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
-                                Button
+                        <li className="p-10 text-xl centerMyDivPlease">
+                            <button
+                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
+                                onClick={() => redirrectProfile('/About')}
+                                title="About"
+                            >
+                                About
                             </button>
                         </li>
                     </ul>

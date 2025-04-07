@@ -8,9 +8,15 @@ interface Movie {
 import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
+import movieCurtainLeft from './public/img/movieCurtainLeft.png';
+import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
-import GetMovieImage from '@/components/GetMovieImage';
+
+import MovieImage from '@/components/movie/MovieImage';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { redirect } from 'next/navigation';
+import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -50,61 +56,199 @@ export default function Home(): JSX.Element {
         }
     };
 
-    const moviesPerPage = 5;
-    const startIndex = currentPage * moviesPerPage;
-    const moviesToDisplay = movies.slice(
-        startIndex,
-        startIndex + moviesPerPage
-    );
+    const moviesPerPage = 3;
+    const totalMovies = 30;
+    const displayedMovies = movies.slice(0, totalMovies);
 
     const handleNextPage = (): void => {
-        if ((currentPage + 1) * moviesPerPage < movies.length) {
-            setCurrentPage(currentPage + 1);
-        }
+        // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
+        //     setCurrentPage((prev) => prev + 1);
+        // } else {
+        //     // Loop back to the first set of movies
+        //     setCurrentPage(0); // Start from the first set (page 0)
+        // }
+        setCurrentPage(
+            (prev) =>
+                (prev + 1) % Math.ceil(displayedMovies.length / moviesPerPage)
+        );
     };
 
     const handlePreviousPage = (): void => {
         if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+            setCurrentPage((prev) => prev - 1);
+        } else {
+            // Go to the last set of movies
+            setCurrentPage(
+                Math.floor((displayedMovies.length - 1) / moviesPerPage)
+            );
         }
     };
 
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) < 1) {
+                redirect('/logIn');
+            }
+        };
+        checkLoginStatus();
+    }, []);
+
     return (
         <>
-            <div
-                className="background"
-                id="backgroundDiv"
-                onClick={() => {
-                    setSidebarImage(null);
-                    if (backgroundDivRef.current) {
-                        backgroundDivRef.current.style.display = 'none';
-                    }
-                }}
-            ></div>
-            {/* <section className="background"></section> */}
+            {/* Div for deselecting sidebar */}
+            {sidebarImage && (
+                <div
+                    className="absolute w-full h-full z-3"
+                    id="backgroundDiv"
+                    onClick={() => {
+                        setSidebarImage(null);
+                        if (backgroundDivRef.current) {
+                            backgroundDivRef.current.style.display = 'none';
+                        }
+                    }}
+                ></div>
+            )}
 
+            {/*Container for everything in main page below header and above footer*/}
             <div className="container">
-                <h1>Movies</h1>
-                {/* File Input */}
+                {/*Left Panel to Curtain Left Image*/}
+                <div className="border-solid border-2 border-black float-left">
+                    <Image
+                        src="/img/movieCurtainLeft.png"
+                        alt="Curtain Left"
+                        width={150}
+                        height={200}
+                    />
+                </div>
 
                 {/* Movie Posters */}
-                <div className="posterRow">
-                    {moviesToDisplay.map((movie, index) => (
-                        <Image
-                            key={index}
-                            className="moviePoster"
-                            onClick={() =>
-                                handleImageClick(movie.image, movie.title)
-                            }
-                            src={movie.image}
-                            alt={movie.title}
-                            width={150}
-                            height={200}
-                        />
-                    ))}
+                <div className="carouselWrapper">
+                    <div
+                        className="posterRow"
+                        style={{
+                            transform: `translateX(-${currentPage * 100}%)`,
+                            transition: 'transform 0.5s ease-in-out',
+                        }}
+                    >
+                        {displayedMovies.map((movie, index) => (
+                            <div key={index} className="posterItem">
+                                <Image
+                                    className="moviePoster"
+                                    onClick={() =>
+                                        handleImageClick(
+                                            movie.image,
+                                            movie.title
+                                        )
+                                    }
+                                    src={movie.image}
+                                    alt={movie.title}
+                                    width={150}
+                                    height={200}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Navigation buttons */}
+                    <div className="buttonWrapper">
+                        <button
+                            onClick={handlePreviousPage}
+                            //disabled={currentPage === 0}
+                            className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                        >
+                            &lt;
+                        </button>
+
+                        <button
+                            onClick={handleNextPage}
+                            // disabled={
+                            //     (currentPage + 1) * moviesPerPage >=
+                            //     movies.length
+                            // }
+                            className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                   </div>
+                </div>
+                {/*Right Panel to Curtain Right Image*/}
+                <div className="border-solid border-2 border-black float-right">
+                    <Image
+                        src="/img/movieCurtainRight.png"
+                        alt="Curtain Right"
+                        width={150}
+                        height={200}
+                    />
+                </div>
+
+                {/* Container for the three divs in the center (title, description, carousel and seats)*/}
+                <div className="content-center text-center">
+                    {/* Middle Top Pannel to Title and Rec. Description*/}
+                    <div className="midTopPannel">
+                        {/* Title and description of carousel*/}
+                        <h1 className="text-center">
+                            🎥Daily Recommendations🎥
+                        </h1>
+                        <p className="border-solid  text-center text-[#282f72] ">
+                            This is your recommendations for the day
+                            <br></br>You receive new ones everyday!
+                        </p>
+                    </div>
+
+                    {/* File Input */}
+
+                    {/* Movie Posters */}
+                    <div className="carouselWrapper">
+                        <div
+                            key={currentPage}
+                            className={`posterRow ${animation}`}
+                        >
+                            {moviesToDisplay.map((movie, index) => (
+                                <div key={index} className="posterItem">
+                                    <Image
+                                        className="moviePoster"
+                                        onClick={() =>
+                                            handleImageClick(
+                                                movie.image,
+                                                movie.title
+                                            )
+                                        }
+                                        src={movie.image}
+                                        alt={movie.title}
+                                        width={150}
+                                        height={200}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Navigation buttons */}
+                        <div className="buttonWrapper">
+                            <button
+                                onClick={handlePreviousPage}
+                                disabled={currentPage === 0}
+                                className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                            >
+                                &lt;
+                            </button>
+
+                            <button
+                                onClick={handleNextPage}
+                                disabled={
+                                    (currentPage + 1) * moviesPerPage >=
+                                    movies.length
+                                }
+                                className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                            >
+                                &gt;
+                            </button>
+                        </div>
+                    </div>
+
+                    {/*Bottom Middle Pannel to movie seats*/}
+                    <div className="border-solid border-2 border-black float-left">
+                        <h1>Take a seat 💺💺</h1>
+                    </div>
                 </div>
             </div>
-            {/* Movie Carousel */}
+            {/* Movie Carousel
             <div
                 className="block top-20 items-center justify-center z-2"
                 // onClick={() =>
@@ -115,11 +259,11 @@ export default function Home(): JSX.Element {
                 // }
             >
                 <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
-            </div>
+            </div> */}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
-                <>
+                <section className="z-3">
                     <div className="sideBar">
                         <button
                             onClick={() => {
@@ -138,7 +282,7 @@ export default function Home(): JSX.Element {
                             width={500}
                             height={500}
                         />
-                        <h2>{sidebarAlt}</h2>
+                        <h3>{sidebarAlt}</h3>
 
                         {/* Radio Button Row */}
                         <div className="ratingRow">
@@ -275,10 +419,11 @@ export default function Home(): JSX.Element {
                             </ul>
                         </div>
                     </div>
-                </>
+                </section>
             )}
+            <GroupSeats />
 
-            {/* Pagination Controls */}
+            {/* Pagination Controls
             <div className="pagination">
                 <button
                     onClick={handlePreviousPage}
@@ -294,7 +439,8 @@ export default function Home(): JSX.Element {
                 >
                     Next
                 </button>
-            </div>
+            </div> */}
+            <MovieImage movieId={1} />
         </>
     );
 }

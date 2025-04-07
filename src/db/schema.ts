@@ -58,6 +58,7 @@ export const usersTable = sqliteTable('users', {
     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
     settings: text('settings').default(sql`'{}'`), // JSON stringified object
 });
+
 // Contains genre and their boost values
 export const genreBoostTable = sqliteTable('genre_boost', {
     id: integer('id').primaryKey(),
@@ -107,3 +108,13 @@ export const groupMembersTable = sqliteTable('group_members', {
         .references(() => usersTable.id), // foreign key to users table
 });
 
+export const IMDBImageIdTable = sqliteTable('imdb_image_id', {
+    id: integer('id').primaryKey(),
+    imageId: integer('imageId').notNull(),
+});
+
+export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
+export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
+
+// To update the schema, run: npx drizzle-kit push
+// After deleting fts tables, run: CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;
