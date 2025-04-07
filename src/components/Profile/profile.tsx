@@ -74,7 +74,7 @@ const Profile = (): JSX.Element => {
                                 alert('Error logging out! Please try again.');
                                 return;
                             }
-                            window.location.reload();
+                            //window.location.reload();
                             router.push('/logIn');
                         }}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"

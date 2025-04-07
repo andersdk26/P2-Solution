@@ -8,7 +8,7 @@ const ProfileImage = (): JSX.Element => (
         alt="Profile Icon"
         width={64}
         height={64}
-        className="rounded-full border border-black"
+        className="rounded-full border border-black cursor-pointer"
     />
 );
 

@@ -7,6 +7,9 @@ import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
 } from '@/components/coldStarSurvey/selectedMovies';
+import getUsername from '@/actions/logIn/username';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { getuid } from 'process';
 
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
@@ -18,7 +21,14 @@ export default function SelectMovies(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+
+        const fetchUsername = async (): Promise<void> => {
+            setUsername(await getUsername(verifyUser()));
+        };
+        fetchUsername();
     }, []);
+
+    const [username, setUsername] = useState('Username');
 
     // Function for handling selection of movies.
     const handleSelectMovie = (movie: movie): void => {
@@ -56,7 +66,7 @@ export default function SelectMovies(): JSX.Element {
         <main>
             {/* Page header. */}
             <p className="text-center pt-8 text-4xl font-bold">
-                Welcome, USERNAME!
+                Welcome, {username}!
             </p>
 
             {/* Description of selection process. */}
@@ -72,7 +82,10 @@ export default function SelectMovies(): JSX.Element {
             </p>
 
             {/* Search bar for finding movies */}
-            <form className="max-w-[928px] mx-auto py-4">
+            <form
+                className="max-w-[928px] mx-auto py-4"
+                onSubmit={(e) => e.preventDefault()}
+            >
                 <input
                     type="search"
                     id="coldStartMovieSearch"
