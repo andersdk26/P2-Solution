@@ -120,7 +120,7 @@ export default function Home(): JSX.Element {
                 {/*Left Pannel to Curtain Lef Imaget*/}
                 <div className="border-solid border-2 border-black float-left">
                     <Image
-                        src="/public/img/movieCurtainLeft.png"
+                        src="/img/movieCurtainLeft.png"
                         alt="Curtain Left"
                         width={150}
                         height={200}
@@ -130,7 +130,7 @@ export default function Home(): JSX.Element {
                 {/*Right Pannel to Curtain Right Image*/}
                 <div className="border-solid border-2 border-black float-right">
                     <Image
-                        src="/public/img/movieCurtainRight.png"
+                        src="/img/movieCurtainRight.png"
                         alt="Curtain Right"
                         width={150}
                         height={200}
