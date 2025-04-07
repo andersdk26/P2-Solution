@@ -17,11 +17,13 @@ export function DisplaySelectedMovies(
         >
             {/*  */}
             {selectedMovies.map((m) => (
-                <div key={m.movieId} className="relative group">
+                <div
+                    key={m.movieId}
+                    className="relative group w-[160px] h-[240px]"
+                >
                     <MovieImage
                         movieId={m.movieId}
-                        width={160}
-                        height={240}
+                        fill={true}
                         alt={`${m.movieTitle} poster`}
                         className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
                     />
@@ -71,16 +73,16 @@ export function DisplayPopularMovies(
             className="w-[928px] min-h-[304px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select"
         >
             {popularMovies.map((m) => (
-                <MovieImage
-                    key={m.movieId}
-                    movieId={m.movieId}
-                    width={160}
-                    height={240}
-                    alt={`${m.movieTitle} poster`}
-                    className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
-                    title={`${m.movieTitle}`}
-                    onClick={() => handleSelectMovie(m)}
-                />
+                <div key={m.movieId} className="relative w-[160px] h-[240px]">
+                    <MovieImage
+                        movieId={m.movieId}
+                        fill={true}
+                        alt={`${m.movieTitle} poster`}
+                        className="fill rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
+                        title={`${m.movieTitle}`}
+                        onClick={() => handleSelectMovie(m)}
+                    />
+                </div>
             ))}
         </section>
     );
