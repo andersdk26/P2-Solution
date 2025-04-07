@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
 import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarousel';
 import GetMovieImage from '@/components/movie/MovieImage';
-import GetMovieTitle from '@/components/coldStarSurvey/rateMovies/getMovieTitle';
+import GetMovieTitle from '@/components/movie/MovieTitle';
 
 // ####################################################################################################
 // I har et useState array (selectedMovies) af movie objekter struktureret på følgende måde:

@@ -2,8 +2,9 @@
 
 import { JSX } from 'react';
 import { useState } from 'react';
-import { movie } from 'app/actions/movie';
-import GetMovieTitle from './getMovieTitle';
+import { movie } from '@/actions/movie/movie';
+import MovieImage from '@/components/movie/MovieImage';
+import MovieTitle from '@/components/movie/MovieTitle';
 
 type movieProps = { movieId: movie[] };
 
@@ -16,8 +17,8 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
             <div className="relative w-full h-full">
                 {/* Current image (center, front) */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
-                    {/* <GetMovieImage movieId={movieIds[imageIndex]} /> */}
-                    <GetMovieTitle title={movieId[imageIndex].movieTitle} />
+                    <MovieImage movieId={movieId[imageIndex]?.movieId} />
+                    <MovieTitle movieId={movieId[imageIndex]?.movieId} />
                 </div>
             </div>
 
