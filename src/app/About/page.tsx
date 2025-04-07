@@ -9,7 +9,7 @@ const About = (): JSX.Element => (
             or partner? <br />
             <b>
                 Then JamFest is for <i>you</i>!
-            </b>{' '}
+            </b>
             <br /> <br />
         </p>
         <p className="ml-8 text-xl">
@@ -57,7 +57,7 @@ const About = (): JSX.Element => (
             couch at home. However, historically, it started as a social event,
             where people lined the streets to go to the cinema. Initially,
             movies were not available to watch at home and only much later
-            become accessible for the average household. As times changed, more
+            became accessible for the average household. As times changed, more
             people got the means to watch movies and TV shows on their personal
             televisions, so they no longer needed to venture outside the home
             for entertainment. In recent years, cinema prices have also
