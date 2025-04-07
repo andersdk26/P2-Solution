@@ -18,6 +18,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+footer {
+    z-index: -1;
+}
+
 .centerMyDivPlease {
     margin: 0 auto;
     overflow: auto;

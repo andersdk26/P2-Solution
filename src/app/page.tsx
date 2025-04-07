@@ -14,6 +14,7 @@ import Carousel from '@/components/carousel';
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
+import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -336,6 +337,8 @@ export default function Home(): JSX.Element {
                     </div>
                 </section>
             )}
+            <GroupSeats />
+
             {/* Pagination Controls
             <div className="pagination">
                 <button
