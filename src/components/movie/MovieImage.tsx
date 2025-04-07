@@ -56,6 +56,7 @@ export default function MovieImage({
                     src={imageURL}
                     alt={alt}
                     fill={true}
+                    sizes={`(max-width: ${width}px)`}
                     className={`${className} ${loadingImage && 'animate-pulse'}`}
                 />
             ) : (
