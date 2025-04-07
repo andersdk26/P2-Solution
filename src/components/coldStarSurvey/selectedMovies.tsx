@@ -17,7 +17,7 @@ export function DisplaySelectedMovies(
         >
             {/*  */}
             {selectedMovies.map((m) => (
-                <div
+                <section
                     key={m.movieId}
                     className="relative group w-[160px] h-[240px]"
                 >
@@ -37,7 +37,7 @@ export function DisplaySelectedMovies(
                         title={`${m.movieTitle}`}
                         onClick={() => handleSelectMovie(m)}
                     />
-                </div>
+                </section>
             ))}
         </section>
     );

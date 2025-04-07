@@ -72,7 +72,10 @@ export default function SelectMovies(): JSX.Element {
             </p>
 
             {/* Search bar for finding movies */}
-            <form className="max-w-[928px] mx-auto py-4">
+            <form
+                className="max-w-[928px] mx-auto py-4"
+                onSubmit={(e) => e.preventDefault()}
+            >
                 <input
                     type="search"
                     id="coldStartMovieSearch"

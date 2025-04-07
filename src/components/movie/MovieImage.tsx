@@ -49,16 +49,26 @@ export default function MovieImage({
 
     return (
         <>
-            <Image
-                title={title}
-                onClick={onClick}
-                src={imageURL}
-                fill={fill}
-                alt={alt}
-                //height={height}
-                //width={width}
-                className={`${className} ${loadingImage && 'animate-pulse'}`}
-            />
+            {fill ? (
+                <Image
+                    title={title}
+                    onClick={onClick}
+                    src={imageURL}
+                    alt={alt}
+                    fill={true}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                />
+            ) : (
+                <Image
+                    title={title}
+                    onClick={onClick}
+                    src={imageURL}
+                    alt={alt}
+                    height={height}
+                    width={width}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                />
+            )}
         </>
     );
 }
