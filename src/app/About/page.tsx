@@ -14,7 +14,7 @@ const About = (): JSX.Element => (
         </p>
         <p className="ml-8 text-xl">
             JamFest lets you create and manage your watchparty as a Group, where
-            our algorithm will then give you a recommnedation based on your
+            our algorithm will then give you a recommendation based on your
             individual preferences and watch history. The algorithm combines the
             individual user profiles under a shared group-profile, which will
             then be analysed to find movies with shared interests. <br /> <br />
