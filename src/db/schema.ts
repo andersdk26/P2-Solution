@@ -17,13 +17,13 @@ export const usersTable = sqliteTable('users', {
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
-/*
-export const movieTables = sqliteTable('movies', {
+
+export const moviesTable = sqliteTable('movies', {
     id: integer('id').primaryKey(),
     title: text('title').notNull(),
     genres: text('genres').notNull(),
 });
-*/
+
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
@@ -37,15 +37,15 @@ export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
 /* Skippers tables */
-export const moviesTable = sqliteTable('movies', {
-    id: integer('id').primaryKey(),
-    InternalRating: integer('InternalRating').notNull(),
-    InternalGenre: text('InternalGenre').notNull(),
-    StreamingService: text('StreamingService').notNull(),
-    Title: text('Title').notNull(),
-    Releaseyear: integer('Releaseyear').notNull(),
-    PersonalRating: integer('PersonalRating'),
-});
+// export const moviesTable = sqliteTable('movies', {
+//     id: integer('id').primaryKey(),
+//     InternalRating: integer('InternalRating').notNull(),
+//     InternalGenre: text('InternalGenre').notNull(),
+//     StreamingService: text('StreamingService').notNull(),
+//     Title: text('Title').notNull(),
+//     Releaseyear: integer('Releaseyear').notNull(),
+//     PersonalRating: integer('PersonalRating'),
+// });
 
 export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),

@@ -1,7 +1,7 @@
 'use client';
 
 import { JSX } from 'react';
-import { movie, getMoviesByIds } from '@/actions/movie/movie';
+import { movie, getMovieById } from '@/actions/movie/movie';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import MovieImage from '@/components/movie/MovieImage';
@@ -26,11 +26,12 @@ export function DisplaySelectedMovies(
                         fill={true}
                         alt={`${m.movieTitle} poster`}
                         className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
+                        title={`${m.movieTitle}`}
                     />
 
                     <Image
                         src="/remove.png"
-                        alt={`${m.movieTitle} poster`}
+                        alt={'Remove button'}
                         width={32}
                         height={32}
                         className="absolute opacity-0 left-[124px] bottom-[204px] group-hover:opacity-100 group-hover:cursor-pointer transition-all duration-300 z-3 rounded-full"
@@ -56,15 +57,18 @@ export function DisplayPopularMovies(
             1387, 225984, 177765,
         ];
 
-        const fetchMovies = async () => {
-            // Call the bulk fetching function.
-            const movies = await getMoviesByIds(popularMovieIds);
-
-            // Set the state with the fetched movies.
-            setPopularMovies(movies);
+        const fetchAllMovies = async () => {
+            const moviePromises = popularMovieIds.map((id) => getMovieById(id));
+            const moviesWithNulls = await Promise.all(moviePromises);
+            const validMovies = moviesWithNulls.filter(
+                (movie): movie is movie => movie !== null
+            );
+            setPopularMovies(validMovies);
         };
 
-        fetchMovies();
+        fetchAllMovies();
+
+        console.log(popularMovies);
     }, []);
 
     return (

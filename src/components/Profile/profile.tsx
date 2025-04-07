@@ -22,7 +22,7 @@ const Profile = (): JSX.Element => {
 
     // skaffer the logged-in user's username
     useEffect(() => {
-        const fetchUsername = async () => {
+        const fetchUsername = async (): Promise<void> => {
             try {
                 const response = await fetch('/api/user'); // Fetch den fra API
                 if (response.ok) {

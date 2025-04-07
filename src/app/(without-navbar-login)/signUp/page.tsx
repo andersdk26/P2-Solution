@@ -46,7 +46,6 @@ export default function SignUpPage(): JSX.Element {
             setIsError(true);
             return;
         }
-        window.location.reload();
         // Redirect
         redirect('/coldStartSurvey');
     };
