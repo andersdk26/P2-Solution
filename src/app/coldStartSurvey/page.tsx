@@ -89,7 +89,7 @@ export default function SelectMovies(): JSX.Element {
 
             <section
                 id="searchResults"
-                className="max-w-1/2 mx-auto bg-gray-100 rounded-3xl"
+                className="max-w-[928px] mx-auto bg-gray-100 rounded-3xl"
             >
                 {searchResult.map((movie) => (
                     <p
@@ -114,12 +114,12 @@ export default function SelectMovies(): JSX.Element {
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                {DisplayPopularMovies(handleSelectMovie)};
+                {DisplayPopularMovies(handleSelectMovie)}
             </section>
 
-            <section className="fixed px-128 bottom-0 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
+            <section className="fixed bottom-0 pl-16 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
                 {/* Progress bar section. */}
-                <section className="w-7/8 flex justify-center">
+                <section className="w-4/5 flex justify-center px-8">
                     <section className="w-full bg-gray-200 rounded-full h-5">
                         <section
                             className="bg-[#282F72] rounded-full h-full transition-all duration-500"
@@ -131,7 +131,7 @@ export default function SelectMovies(): JSX.Element {
                 </section>
 
                 {/* "Next step" button section. */}
-                <section className="w-1/8 flex justify-center">
+                <section className="w-1/5 pr-16 flex justify-center">
                     <button
                         onClick={() => {
                             if (selectedMovies.length >= 5) {
