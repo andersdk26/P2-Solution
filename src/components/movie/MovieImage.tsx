@@ -6,6 +6,8 @@ import getMovieImageURL from '@/actions/movie/movieImageUrl';
 
 interface MovieImageProps {
     movieId: number;
+    title?: string;
+    onClick?: () => void;
     height?: number;
     width?: number;
     alt?: string;
@@ -18,6 +20,8 @@ export default function MovieImage({
     width = 300,
     alt = 'Movie image',
     className = '',
+    title = '',
+    onClick = (): void => {},
 }: MovieImageProps): JSX.Element {
     const [imageURL, setImageURL] = useState('/placeholder.png');
     const [loadingImage, setLoadingImage] = useState(true);
@@ -44,6 +48,8 @@ export default function MovieImage({
     return (
         <>
             <Image
+                title={title}
+                onClick={onClick}
                 src={imageURL}
                 alt={alt}
                 height={height}
