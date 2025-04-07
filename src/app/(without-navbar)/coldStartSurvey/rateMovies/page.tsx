@@ -46,7 +46,7 @@ export default function Home(): JSX.Element {
         setSelectedMovies(savedMovies);
     }, []);
 
-    const redirrectProfile = (path: string): void => {
+    const redirectProfile = (path: string): void => {
         if (path) {
             router.push(path);
         }
