@@ -4,6 +4,7 @@ import { JSX } from 'react';
 import { movie, getMoviesByIds } from '@/actions/movie/movie';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import MovieImage from '@/components/movie/MovieImage';
 
 export function DisplaySelectedMovies(
     selectedMovies: movie[],
@@ -17,13 +18,12 @@ export function DisplaySelectedMovies(
             {/*  */}
             {selectedMovies.map((m) => (
                 <div key={m.movieId} className="relative group">
-                    <Image
-                        src="/placeholder.png"
-                        alt={`${m.movieTitle} poster`}
+                    <MovieImage
+                        movieId={m.movieId}
                         width={160}
                         height={240}
+                        alt={`${m.movieTitle} poster`}
                         className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
-                        title={`${m.movieTitle}`}
                     />
 
                     <Image
@@ -71,13 +71,13 @@ export function DisplayPopularMovies(
             className="w-[928px] min-h-[304px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select"
         >
             {popularMovies.map((m) => (
-                <Image
+                <MovieImage
                     key={m.movieId}
-                    src="/placeholder.png"
-                    alt={`${m.movieTitle} poster`}
+                    movieId={m.movieId}
                     width={160}
                     height={240}
-                    className="rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
+                    alt={`${m.movieTitle} poster`}
+                    className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
                     title={`${m.movieTitle}`}
                     onClick={() => handleSelectMovie(m)}
                 />
