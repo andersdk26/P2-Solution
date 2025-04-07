@@ -17,7 +17,7 @@ export default function NavBar(): JSX.Element {
         }
     };
     return (
-        <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24">
+        <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24 z-99">
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
                 {/* right side div for bar thingies*/}
                 <div className="w-48 h-24 flex justify-between items-center h-full">
