@@ -2,7 +2,7 @@
 
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
-import { movie, searchForMovie } from 'app/actions/movie';
+import { movie, searchForMovie } from '@/actions/movie/movie';
 import {
     DisplaySelectedMovies,
     DisplayPopularMovies,

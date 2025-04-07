@@ -2,7 +2,7 @@
 
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
-import { movie } from 'app/actions/movie';
+import { movie } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
     // Declare array of selected movies.

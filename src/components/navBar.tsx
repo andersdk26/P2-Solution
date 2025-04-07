@@ -6,7 +6,7 @@ import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
-import { movie, searchForMovie } from '@/actions/movie';
+import { movie, searchForMovie } from '@/actions/movie/movie';
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
     const router = useRouter(); // Use the useRouter hook
