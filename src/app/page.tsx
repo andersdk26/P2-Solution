@@ -8,6 +8,8 @@ interface Movie {
 import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
+import movieCurtainLeft from './public/img/movieCurtainLeft.png';
+import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
 
@@ -115,52 +117,95 @@ export default function Home(): JSX.Element {
                 ></div>
             )}
 
+            {/*Container for everything in main page below header and above footer*/}
             <div className="container">
-                <h1>Movies</h1>
-                {/* File Input */}
+                {/*Left Panel to Curtain Left Image*/}
+                <div className="border-solid border-2 border-black float-left">
+                    <Image
+                        src="/img/movieCurtainLeft.png"
+                        alt="Curtain Left"
+                        width={150}
+                        height={200}
+                    />
+                </div>
 
-                {/* Movie Posters */}
-                <div className="carouselWrapper">
-                    <div key={currentPage} className={`posterRow ${animation}`}>
-                        {moviesToDisplay.map((movie, index) => (
-                            <div key={index} className="posterItem">
-                                <Image
-                                    className="moviePoster"
-                                    onClick={() =>
-                                        handleImageClick(
-                                            movie.image,
-                                            movie.title
-                                        )
-                                    }
-                                    src={movie.image}
-                                    alt={movie.title}
-                                    width={150}
-                                    height={200}
-                                />
-                            </div>
-                        ))}
+                {/*Right Panel to Curtain Right Image*/}
+                <div className="border-solid border-2 border-black float-right">
+                    <Image
+                        src="/img/movieCurtainRight.png"
+                        alt="Curtain Right"
+                        width={150}
+                        height={200}
+                    />
+                </div>
+
+                {/* Container for the three divs in the center (title, description, carousel and seats)*/}
+                <div className="content-center text-center">
+                    {/* Middle Top Pannel to Title and Rec. Description*/}
+                    <div className="midTopPannel">
+                        {/* Title and description of carousel*/}
+                        <h1 className="text-center">
+                            🎥Daily Recommendations🎥
+                        </h1>
+                        <p className="border-solid  text-center text-[#282f72] ">
+                            This is your recommendations for the day
+                            <br></br>You receive new ones everyday!
+                        </p>
                     </div>
 
-                    {/* Navigation buttons */}
-                    <div className="buttonWrapper">
-                        <button
-                            onClick={handlePreviousPage}
-                            disabled={currentPage === 0}
-                            className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
-                        >
-                            &lt;
-                        </button>
+                    {/* File Input */}
 
-                        <button
-                            onClick={handleNextPage}
-                            disabled={
-                                (currentPage + 1) * moviesPerPage >=
-                                movies.length
-                            }
-                            className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                    {/* Movie Posters */}
+                    <div className="carouselWrapper">
+                        <div
+                            key={currentPage}
+                            className={`posterRow ${animation}`}
                         >
-                            &gt;
-                        </button>
+                            {moviesToDisplay.map((movie, index) => (
+                                <div key={index} className="posterItem">
+                                    <Image
+                                        className="moviePoster"
+                                        onClick={() =>
+                                            handleImageClick(
+                                                movie.image,
+                                                movie.title
+                                            )
+                                        }
+                                        src={movie.image}
+                                        alt={movie.title}
+                                        width={150}
+                                        height={200}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Navigation buttons */}
+                        <div className="buttonWrapper">
+                            <button
+                                onClick={handlePreviousPage}
+                                disabled={currentPage === 0}
+                                className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                            >
+                                &lt;
+                            </button>
+
+                            <button
+                                onClick={handleNextPage}
+                                disabled={
+                                    (currentPage + 1) * moviesPerPage >=
+                                    movies.length
+                                }
+                                className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                            >
+                                &gt;
+                            </button>
+                        </div>
+                    </div>
+
+                    {/*Bottom Middle Pannel to movie seats*/}
+                    <div className="border-solid border-2 border-black float-left">
+                        <h1>Take a seat 💺💺</h1>
                     </div>
                 </div>
             </div>
