@@ -48,6 +48,13 @@ h2 {
     margin-left: 4px;
 }
 
+h3 {
+    color: #08d0f3;
+    font-weight: bolder;
+    font-size: 30px;
+    margin-left: 4px;
+}
+
 .prevent-select {
     -webkit-user-select: none;
     -ms-user-select: none;

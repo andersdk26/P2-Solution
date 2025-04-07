@@ -3,6 +3,7 @@
 import { generateToken } from '@/components/authentication/cookieAuthentication';
 import { login_check, register_user } from '@/components/db/userAuth';
 import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
 
 interface LoginResponse {
     status: number;
@@ -48,7 +49,7 @@ export async function handleSignup(formData: {
     password: string;
 }): Promise<string> {
     // Set username and email to lower case
-    formData.username = formData.username.toLowerCase();
+    //formData.username = formData.username.toLowerCase();
     formData.email = formData.email.toLowerCase();
 
     // Register the user
