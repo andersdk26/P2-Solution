@@ -129,7 +129,7 @@ export default function Home(): JSX.Element {
                     />
                 </div>
 
-                {/*Right Pannel to Curtain Right Image*/}
+                {/*Right Panel to Curtain Right Image*/}
                 <div className="border-solid border-2 border-black float-right">
                     <Image
                         src="/img/movieCurtainRight.png"
