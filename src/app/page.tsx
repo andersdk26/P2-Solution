@@ -119,7 +119,7 @@ export default function Home(): JSX.Element {
 
             {/*Container for everything in main page below header and above footer*/}
             <div className="container">
-                {/*Left Pannel to Curtain Lef Imaget*/}
+                {/*Left Panel to Curtain Left Image*/}
                 <div className="border-solid border-2 border-black float-left">
                     <Image
                         src="/img/movieCurtainLeft.png"
