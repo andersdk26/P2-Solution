@@ -10,7 +10,10 @@ import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
+
 import MovieImage from '@/components/movie/MovieImage';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { redirect } from 'next/navigation';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -86,26 +89,17 @@ export default function Home(): JSX.Element {
         }
     };
 
+    useEffect(() => {
+        const checkLoginStatus = async (): Promise<void> => {
+            if ((await verifyUser()) < 1) {
+                redirect('/logIn');
+            }
+        };
+        checkLoginStatus();
+    }, []);
+
     return (
         <>
-            {/* Pagination Controls */}
-            <div className="pagination z-2">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div>
-
             {/* Div for deselecting sidebar */}
             {sidebarImage && (
                 <div
@@ -151,7 +145,7 @@ export default function Home(): JSX.Element {
                         <button
                             onClick={handlePreviousPage}
                             disabled={currentPage === 0}
-                            className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                            className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
                         >
                             &lt;
                         </button>
@@ -162,7 +156,7 @@ export default function Home(): JSX.Element {
                                 (currentPage + 1) * moviesPerPage >=
                                 movies.length
                             }
-                            className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                            className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
                         >
                             &gt;
                         </button>

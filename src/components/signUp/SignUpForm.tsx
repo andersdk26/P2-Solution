@@ -167,6 +167,12 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
             >
                 Sign Up
             </button>
+            <p className="mt-4 text-sm text-center text-gray-600">
+                Do you already have an account?{' '}
+                <a href="/logIn" className="text-blue-600 hover:underline">
+                    Log In
+                </a>
+            </p>
         </form>
     );
 }
