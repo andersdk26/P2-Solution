@@ -27,7 +27,7 @@ export default function MovieImage({
             // Get external movie image URL
             let newImageURL = await getMovieImageURL(movieId);
 
-            // Image done lading
+            // Image done loading
             setLoadingImage(false);
 
             // If image URL does not exist; use placeholder image
