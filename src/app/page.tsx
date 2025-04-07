@@ -197,7 +197,7 @@ export default function Home(): JSX.Element {
                             width={500}
                             height={500}
                         />
-                        <h2>{sidebarAlt}</h2>
+                        <h3>{sidebarAlt}</h3>
 
                         {/* Radio Button Row */}
                         <div className="ratingRow">
