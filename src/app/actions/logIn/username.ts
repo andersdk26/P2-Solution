@@ -11,8 +11,10 @@ export default async function getUsername(
         .select({ username: usersTable.username })
         .from(usersTable)
         .where(eq(usersTable.id, await id));
+
     if (result.length === 0) {
         throw new Error(`No user found with ID ${await id}`);
     }
+
     return result[0].username;
 }
