@@ -34,4 +34,13 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
-// to update the schema, run `npx drizzle-kit push`
+export const IMDBImageIdTable = sqliteTable('imdb_image_id', {
+    id: integer('id').primaryKey(),
+    imageId: integer('imageId').notNull(),
+});
+
+export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
+export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
+
+// To update the schema, run: npx drizzle-kit push
+// After deleting fts tables, run: CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;

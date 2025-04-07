@@ -10,7 +10,8 @@ import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
-import GetMovieImage from '@/components/GetMovieImage';
+
+import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
 
@@ -352,6 +353,7 @@ export default function Home(): JSX.Element {
                     Next
                 </button>
             </div> */}
+            <MovieImage movieId={1} />
         </>
     );
 }
