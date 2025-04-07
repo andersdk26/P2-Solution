@@ -6,7 +6,7 @@
 import { JSX } from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
-import GetMovieImage from './GetMovieImage';
+import GetMovieImage from '../app/actions/movieImageUrl';
 import { useEffect } from 'react'; // Importing React state hook
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
