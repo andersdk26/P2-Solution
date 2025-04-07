@@ -121,53 +121,6 @@ export default function Home(): JSX.Element {
                     />
                 </div>
 
-                {/* Movie Posters */}
-                <div className="carouselWrapper">
-                    <div
-                        className="posterRow"
-                        style={{
-                            transform: `translateX(-${currentPage * 100}%)`,
-                            transition: 'transform 0.5s ease-in-out',
-                        }}
-                    >
-                        {displayedMovies.map((movie, index) => (
-                            <div key={index} className="posterItem">
-                                <Image
-                                    className="moviePoster"
-                                    onClick={() =>
-                                        handleImageClick(
-                                            movie.image,
-                                            movie.title
-                                        )
-                                    }
-                                    src={movie.image}
-                                    alt={movie.title}
-                                    width={150}
-                                    height={200}
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Navigation buttons */}
-                    <div className="buttonWrapper">
-                        <button
-                            onClick={handlePreviousPage}
-                            //disabled={currentPage === 0}
-                            className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
-                        >
-                            &lt;
-                        </button>
-
-                        <button
-                            onClick={handleNextPage}
-                            // disabled={
-                            //     (currentPage + 1) * moviesPerPage >=
-                            //     movies.length
-                            // }
-                            className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
-                   </div>
-                </div>
                 {/*Right Panel to Curtain Right Image*/}
                 <div className="border-solid border-2 border-black float-right">
                     <Image
@@ -192,15 +145,16 @@ export default function Home(): JSX.Element {
                         </p>
                     </div>
 
-                    {/* File Input */}
-
                     {/* Movie Posters */}
                     <div className="carouselWrapper">
                         <div
-                            key={currentPage}
-                            className={`posterRow ${animation}`}
+                            className="posterRow"
+                            style={{
+                                transform: `translateX(-${currentPage * 100}%)`,
+                                transition: 'transform 0.5s ease-in-out',
+                            }}
                         >
-                            {moviesToDisplay.map((movie, index) => (
+                            {displayedMovies.map((movie, index) => (
                                 <div key={index} className="posterItem">
                                     <Image
                                         className="moviePoster"
@@ -223,7 +177,7 @@ export default function Home(): JSX.Element {
                         <div className="buttonWrapper">
                             <button
                                 onClick={handlePreviousPage}
-                                disabled={currentPage === 0}
+                                //disabled={currentPage === 0}
                                 className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
                             >
                                 &lt;
@@ -231,14 +185,12 @@ export default function Home(): JSX.Element {
 
                             <button
                                 onClick={handleNextPage}
-                                disabled={
-                                    (currentPage + 1) * moviesPerPage >=
-                                    movies.length
-                                }
+                                // disabled={
+                                //     (currentPage + 1) * moviesPerPage >=
+                                //     movies.length
+                                // }
                                 className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
-                            >
-                                &gt;
-                            </button>
+                            />
                         </div>
                     </div>
 
