@@ -7,6 +7,7 @@ export default async function getMovieImageURL(
     movieId: number
 ): Promise<string> {
     let result;
+    console.log(`Start: ${movieId}`);
 
     // Database
     try {
@@ -40,6 +41,33 @@ export default async function getMovieImageURL(
         return '';
     }
 
+    // TMDB
+    try {
+        if (result[0].tmdbId) {
+            // Get link to TMDB movie poster
+            const tmdbFetch = await fetch(
+                `https://www.themoviedb.org/movie/${result[0].tmdbId}`
+            );
+            const tmdbFetchBody = await tmdbFetch?.text();
+
+            // Find all themoviedb image links
+            const tmdbImageLink = tmdbFetchBody.match(
+                /https:\/\/media\.themoviedb\.org\/t\/p\/w300_and_h450_bestv2\/+[a-zA-Z0-9]+\.jpg/g
+            );
+
+            // Return tmdb image link
+            if (tmdbImageLink && tmdbImageLink.length) {
+                console.log(`Found TMDB: ${movieId}`);
+                return tmdbImageLink[0]; // return first image
+            }
+        }
+    } catch (error) {
+        console.error(
+            `Error getting TMDB image for movieId: ${movieId}.`,
+            error
+        );
+    }
+
     // IMDB
     try {
         if (result[0].imdbId && result[0].imdbMovieId) {
@@ -69,6 +97,7 @@ export default async function getMovieImageURL(
 
             // Return imdb image link
             if (imdbImageLink && imdbImageLink.length) {
+                console.log(`Found IMDB: ${movieId}`);
                 return imdbImageLink[0]; // return first image (0 is the prevous image)
             }
         }
@@ -79,31 +108,6 @@ export default async function getMovieImageURL(
         );
     }
 
-    // TMDB
-    try {
-        if (result[0].tmdbId) {
-            // Get link to TMDB movie poster
-            const tmdbFetch = await fetch(
-                `https://www.themoviedb.org/movie/${result[0].tmdbId}`
-            );
-            const tmdbFetchBody = await tmdbFetch?.text();
-
-            // Find all themoviedb image links
-            const tmdbImageLink = tmdbFetchBody.match(
-                /https:\/\/media\.themoviedb\.org\/t\/p\/w300_and_h450_bestv2\/+[a-zA-Z0-9]+\.jpg/g
-            );
-
-            // Return tmdb image link
-            if (tmdbImageLink && tmdbImageLink.length) {
-                return tmdbImageLink[0]; // return first image
-            }
-        }
-    } catch (error) {
-        console.error(
-            `Error getting TMDB image for movieId: ${movieId}.`,
-            error
-        );
-    }
-
+    console.log(`Found NONE: ${movieId}`);
     return '';
 }
