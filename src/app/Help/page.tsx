@@ -6,7 +6,7 @@ import '@/styles/globals.css';
 const Help = (): JSX.Element => (
     <div className="text-center">
         <h1>Help</h1>
-        <h3>Here are the most common FAQ we recieve! </h3>
+        <h3>Here are the most common FAQ we receive! </h3>
         <button className="helpBtn">
             Here is some help with some nice pickuplines my friend
         </button>
