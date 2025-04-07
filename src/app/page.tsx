@@ -12,9 +12,11 @@ import movieCurtainLeft from './public/img/movieCurtainLeft.png';
 import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/carousel';
-import GetMovieImage from '@/components/GetMovieImage';
+
+import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
+import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -241,7 +243,7 @@ export default function Home(): JSX.Element {
                             width={500}
                             height={500}
                         />
-                        <h2>{sidebarAlt}</h2>
+                        <h3>{sidebarAlt}</h3>
 
                         {/* Radio Button Row */}
                         <div className="ratingRow">
@@ -380,6 +382,8 @@ export default function Home(): JSX.Element {
                     </div>
                 </section>
             )}
+            <GroupSeats />
+
             {/* Pagination Controls
             <div className="pagination">
                 <button
@@ -397,6 +401,7 @@ export default function Home(): JSX.Element {
                     Next
                 </button>
             </div> */}
+            <MovieImage movieId={1} />
         </>
     );
 }
