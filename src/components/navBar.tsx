@@ -38,17 +38,19 @@ export default function NavBar(): JSX.Element {
 
                 <div className="flex justify-between items-center h-full">
                     <ul className="sm:flex">
-                        <li className="ml-10 px-2 text-xl centerMyDivPlease">
+                        <li className="p-10 text-xl centerMyDivPlease">
+                            {/* 3px 3px [#9fa3d1] */}
+
                             {/* <a hr"></a> */}
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
+                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm shadow-[0_20px_20px_rgba(220,222,239,1)]"
                                 onClick={() => redirrectProfile('/')}
                                 title="Home"
                             >
                                 Home
                             </button>
                         </li>
-                        <li className="ml-10 px-2 text-xl centerMyDivPlease">
+                        <li className="p-10 text-xl centerMyDivPlease">
                             <button
                                 className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
                                 onClick={() => redirrectProfile('/Groups')}
@@ -58,7 +60,7 @@ export default function NavBar(): JSX.Element {
                             </button>
                         </li>
 
-                        <li className="ml-10 px-2 text-xl centerMyDivPlease">
+                        <li className="p-10 text-xl centerMyDivPlease">
                             <button
                                 className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
                                 onClick={() => redirrectProfile('/About')}

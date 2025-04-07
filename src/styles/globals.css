@@ -18,6 +18,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+footer {
+    z-index: -1;
+}
+
 .centerMyDivPlease {
     margin: 0 auto;
     overflow: auto;
@@ -25,15 +29,52 @@ body {
     display: flex;
 }
 
+.selectedMovieGrid {
+    display: grid;
+    gap: 4px;
+}
+
+.helpBtn {
+    background-color: #282f72;
+    color: #dcdeef;
+    border-radius: 4px;
+    padding: 2px;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+.helpBtn:hover {
+    background-color: #424ebd;
+    color: #dcdeef;
+}
+
 h1 {
     color: #282f72;
     font-weight: bolder;
     font-size: 50px;
     margin-left: 4px;
+    text-shadow: 3px 3px #9fa3d1;
 }
 
 h2 {
     color: #282f72;
+    font-weight: bolder;
+    font-size: 30px;
+    margin-left: 4px;
+    text-shadow: 3px 3px #9fa3d1;
+}
+
+h3 {
+    color: #282f72;
+    font-weight: bolder;
+    font-size: 25px;
+    margin-left: 4px;
+    text-shadow: 3px 3px #9fa3d1;
+}
+
+h3 {
+    color: #08d0f3;
     font-weight: bolder;
     font-size: 30px;
     margin-left: 4px;
