@@ -47,9 +47,7 @@ export default function Home(): JSX.Element {
     }, []);
 
     const redirrectProfile = (path: string): void => {
-        if (path) {
-            router.push(path);
-        }
+        router.push(path);
     };
 
     return (
