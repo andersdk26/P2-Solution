@@ -38,7 +38,7 @@ export default function Home(): JSX.Element {
         { length: totalMovies },
         (_, index) => ({
             title: `${index + 1}`,
-            image: `/img/movies/movie${index + 1}.png`, // Replace with your actual image paths
+            image: `/img/movies/movie${index + 1}.png`,
         })
     );
 
@@ -51,7 +51,7 @@ export default function Home(): JSX.Element {
     };
 
     const handleImageClick = (movieId: number): void => {
-        const movieTitle = getMovieTitleById(movieId); // Use the function here
+        const movieTitle = getMovieTitleById(movieId);
         if (!movieTitle) {
             console.error(`Movie with ID ${movieId} not found.`);
             return;
