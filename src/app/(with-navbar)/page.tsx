@@ -14,8 +14,6 @@ import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
 import MovieImage from '@/components/movie/MovieImage';
-import MovieTitle from '@/components/movie/MovieTitle';
-
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
@@ -50,18 +48,26 @@ export default function Home(): JSX.Element {
         return displayedMovies[movieId - 1].title; // Adjust for 0-based index
     };
 
-    const handleImageClick = (movieId: number): void => {
-        const movieTitle = getMovieTitleById(movieId);
-        if (!movieTitle) {
-            console.error(`Movie with ID ${movieId} not found.`);
-            return;
-        }
-        setSidebarImage(`/img/movies/movie${movieId}.png`); // Set the sidebar image
-        setSidebarAlt(movieTitle); // Use the retrieved title
-        setSelectedRating(null);
-        setSelectedMovieId(movieId); // Save selected movie ID
-        if (backgroundDivRef.current) {
-            backgroundDivRef.current.style.display = 'block';
+    const handleImageClick = async (movieId: number): Promise<void> => {
+        try {
+            const movies = await getMoviesByIds([movieId]);
+            const movie = movies[0]; // Since we're passing one ID, get the first result
+
+            if (!movie) {
+                console.error(`Movie with ID ${movieId} not found.`);
+                return;
+            }
+
+            setSidebarImage(`/img/movies/movie${movieId}.png`);
+            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
+            setSelectedRating(null);
+            setSelectedMovieId(movieId);
+
+            if (backgroundDivRef.current) {
+                backgroundDivRef.current.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Failed to fetch movie by ID:', error);
         }
     };
 
@@ -244,10 +250,7 @@ export default function Home(): JSX.Element {
                             <MovieImage movieId={selectedMovieId} />
                         )}
 
-                        <MovieTitle
-                            title={sidebarAlt || 'No Movie Selected'}
-                            className="text-xl font-bold text-center"
-                        />
+                        <h2>{sidebarAlt}</h2>
 
                         {/* Radio Button Row */}
                         <div className="ratingRow">
