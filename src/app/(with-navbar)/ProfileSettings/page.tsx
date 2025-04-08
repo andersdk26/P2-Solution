@@ -45,7 +45,7 @@ export default function ProfileSettings() {
                     alt="Profile Icon"
                     width={100}
                     height={100}
-                    className="rounded-full"
+                    className="rounded-full border border-black"
                 />
                 <p className="mt-2 text-blue-800 underline cursor-pointer">
                     Change icon
@@ -53,14 +53,14 @@ export default function ProfileSettings() {
                 <p className="text-xl mt-2 underline">
                     {username || 'Loading...'}
                 </p>
-                <p className="text-sm">ID: {id || 'Loading...'}</p>
+                <p className="text-sm">ID: #{id || 'Loading...'}</p>
             </div>
 
             <div className="flex flex-col items-center space-y-4 mb-10">
                 {/* Change Username Section */}
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'username' ? null : 'username'
@@ -92,7 +92,7 @@ export default function ProfileSettings() {
                 {/* Change Password Section */}
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'password' ? null : 'password'
@@ -123,7 +123,7 @@ export default function ProfileSettings() {
                 {/* Change Email Section */}
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer cursor-pointer"
                         onClick={() =>
                             setIsEditing(isEditing === 'email' ? null : 'email')
                         }
@@ -151,16 +151,16 @@ export default function ProfileSettings() {
             </div>
 
             <div className="ml-12">
-                <p className="text-lg font-semibold">User stats</p>
+                <p className="text-lg font-semibold">User statsss</p>
                 <ul className="list-disc list-inside ml-4">
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
-                            Histogrammer/graffer
+                            Histogrammer/grafferne
                         </span>
                     </li>
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
-                            watchlist
+                            watchlist her
                         </span>
                     </li>
                     <li>
@@ -169,8 +169,9 @@ export default function ProfileSettings() {
                         </span>
                         <ul className="ml-6 list-disc">
                             <li>
-                                <span className="underline text-blue-800 cursor-pointer">
-                                    Change movie ratings
+                                <span className="underline text-black-900 cursor-pointer">
+                                    under seen movies we have change movie
+                                    ratings
                                 </span>
                             </li>
                         </ul>
