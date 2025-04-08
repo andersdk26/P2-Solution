@@ -32,7 +32,7 @@ async function scoreIndContent(
     if (!movie) {
         throw new Error('Movie not found.');
     }
-    let scoreIndContent = 0; // Initialize score with PersonalRating or 0 if not set
+    let scoreIndContent = 0; // Initialize score to 0.
     // Fetch GenreBoosts for the user
     const genreBoosts: { genre: string; boost: number }[] = await db
         .select({
