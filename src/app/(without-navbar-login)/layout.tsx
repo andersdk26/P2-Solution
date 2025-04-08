@@ -28,9 +28,9 @@ export default async function RootLayout({
     const cookieStore = cookies();
     const authCookie = (await cookieStore).get('token');
 
-    // Check that the user is logged in
-    if (!authCookie) {
-        redirect('/logIn');
+    // Check that the user is not logged in
+    if (authCookie) {
+        redirect('/');
     }
 
     return (

@@ -1,6 +1,8 @@
 'use server';
 
+import { moviesTable } from '@/db/schema';
 import { db } from 'db';
+import { eq } from 'drizzle-orm';
 
 export type movie = {
     movieId: number;
@@ -8,21 +10,21 @@ export type movie = {
     movieGenres: string;
 };
 
-export async function getMoviesByIds(ids: number[]): Promise<movie[]> {
-    // Define sql query using Full-Text Search.
-    const sql = `SELECT id, title, genres FROM movies_fts WHERE id IN (${ids.join(',')})`;
+export async function getMovieById(id: number): Promise<movie | null> {
+    const result = await db
+        .select({
+            movieId: moviesTable.id,
+            movieTitle: moviesTable.title,
+            movieGenres: moviesTable.genres,
+        })
+        .from(moviesTable)
+        .where(eq(moviesTable.id, id));
 
-    // Fetch results from the database
-    const result = await db.all<{ id: number; title: string; genres: string }>(
-        sql
-    );
+    if (result.length === 0) {
+        return null;
+    }
 
-    // Return the movies in the desired format
-    return result.map((row) => ({
-        movieId: row.id,
-        movieTitle: row.title,
-        movieGenres: row.genres,
-    }));
+    return result[0];
 }
 
 export async function searchForMovie(

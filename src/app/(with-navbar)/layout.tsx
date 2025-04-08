@@ -4,6 +4,8 @@ import '@/styles/globals.css';
 import { JSX } from 'react';
 import NavBar from '@/components/navBar';
 import Footer from '@/components/footer';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',
@@ -20,11 +22,19 @@ export const metadata: Metadata = {
     description: 'Find the perfect movie for you and your watchparty!',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
-}>): JSX.Element {
+}>): Promise<JSX.Element> {
+    const cookieStore = cookies();
+    const authCookie = (await cookieStore).get('token');
+
+    // Check that the user is logged in
+    if (!authCookie) {
+        redirect('/logIn');
+    }
+
     return (
         <html lang="en">
             <body className="antialiased">
