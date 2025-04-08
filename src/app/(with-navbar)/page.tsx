@@ -35,18 +35,10 @@ export default function Home(): JSX.Element {
     const displayedMovies: Movie[] = Array.from(
         { length: totalMovies },
         (_, index) => ({
-            title: `${index + 1}`,
+            title: '',
             image: `/img/movies/movie${index + 1}.png`,
         })
     );
-
-    const getMovieTitleById = (movieId: number): string | null => {
-        if (movieId < 1 || movieId > displayedMovies.length) {
-            console.error(`Invalid movieId: ${movieId}`);
-            return null;
-        }
-        return displayedMovies[movieId - 1].title; // Adjust for 0-based index
-    };
 
     const handleImageClick = async (movieId: number): Promise<void> => {
         try {
