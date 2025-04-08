@@ -9,9 +9,15 @@ import {
 } from '@/components/coldStarSurvey/selectedMovies';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+
 export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    const [test, setTest] = useState<number>(0);
+
+    //const test = collaborativeFiltering(99999);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -19,7 +25,8 @@ export default function SelectMovies(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
-
+        const hej = async () => setTest(await collaborativeFiltering(9999));
+        hej();
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));
         };

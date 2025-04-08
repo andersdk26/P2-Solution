@@ -1,6 +1,12 @@
 import { group } from 'console';
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
+import {
+    integer,
+    sqliteTable,
+    text,
+    blob,
+    real,
+} from 'drizzle-orm/sqlite-core';
 /*
 export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),
@@ -23,6 +29,17 @@ export const moviesTable = sqliteTable('movies', {
     title: text('title').notNull(),
     genres: text('genres').notNull(),
 });
+
+export const testRatings = sqliteTable('testRatings', {
+    id: integer('id').primaryKey(),
+    userId: integer('userId').notNull(),
+    movieId: integer('movieId').notNull(),
+    movieRating: real('rating').notNull(),
+    timestamp: integer('genres').notNull(),
+});
+
+export type InsertRating = typeof testRatings.$inferInsert;
+export type SelectRating = typeof testRatings.$inferSelect;
 
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
