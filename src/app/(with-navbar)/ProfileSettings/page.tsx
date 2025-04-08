@@ -4,11 +4,13 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
+import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
     const [id, setUserID] = useState('User ID#');
+    const [email, setUserEmail] = useState('Email');
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -26,6 +28,13 @@ export default function ProfileSettings() {
             setUserID(String(await getUserID(verifyUser())));
         };
         fetchUserID();
+    }, []);
+
+    useEffect(() => {
+        const fetchUserEmail = async (): Promise<void> => {
+            setUserEmail(String(await getUserEmail(verifyUser())));
+        };
+        fetchUserEmail();
     }, []);
 
     //her skal indsættes databasen ind således at den kan ændre username, password og email
@@ -67,7 +76,7 @@ export default function ProfileSettings() {
                             )
                         }
                     >
-                        Change username
+                        Username
                     </button>
                     {isEditing === 'username' && (
                         <div className="flex flex-col items-center mt-4">
@@ -99,7 +108,7 @@ export default function ProfileSettings() {
                             )
                         }
                     >
-                        Change password
+                        Password
                     </button>
                     {isEditing === 'password' && (
                         <div className="flex flex-col items-center mt-4">
@@ -128,7 +137,7 @@ export default function ProfileSettings() {
                             setIsEditing(isEditing === 'email' ? null : 'email')
                         }
                     >
-                        Change email
+                        {email}
                     </button>
                     {isEditing === 'email' && (
                         <div className="flex flex-col items-center mt-4">
