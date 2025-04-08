@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
+import RatingPopcorn from './ratingPopcorn';
 
 type movieProps = { movieId: movie[] };
 
@@ -19,6 +20,7 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={movieId[imageIndex]?.movieId} />
                     <MovieTitle movieId={movieId[imageIndex]?.movieId} />
+                    <RatingPopcorn />
                 </div>
             </div>
 
