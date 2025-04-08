@@ -43,7 +43,7 @@ export default function NavBar(): JSX.Element {
 
                             {/* <a hr"></a> */}
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm shadow-[0_20px_20px_rgba(220,222,239,1)]"
+                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
                                 onClick={() => redirrectProfile('/')}
                                 title="Home"
                             >
