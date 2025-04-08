@@ -1,63 +1,182 @@
 'use client';
-import React, { useState, JSX } from 'react';
+
 import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import getUsername from '@/actions/logIn/username';
+import getUserID from '@/actions/logIn/userID';
+import verifyUser from '@/actions/logIn/authenticateUser';
 
-const ProfileImage = (): JSX.Element => (
-    <Image
-        src="/popcornImage.jpeg"
-        alt="Profile Icon"
-        width={64}
-        height={64}
-        className="rounded-full border border-black cursor-pointer"
-    />
-);
-
-const ProfileSettings = (): JSX.Element => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [username, setUsername] = useState('CurrentUsername');
+export default function ProfileSettings() {
+    const [username, setUsername] = useState('Username');
+    const [id, setUserID] = useState('User ID#');
+    const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newEmail, setNewEmail] = useState('');
 
-    const handleUsernameChange = (): void => {
-        if (newUsername.trim()) {
-            setUsername(newUsername); // Update the username
-            setNewUsername('');
-            setIsEditing(false);
-        }
-    };
+    useEffect(() => {
+        const fetchUsername = async (): Promise<void> => {
+            setUsername(await getUsername(verifyUser()));
+        };
+        fetchUsername();
+    }, []);
+
+    useEffect(() => {
+        const fetchUserID = async (): Promise<void> => {
+            setUserID(String(await getUserID(verifyUser())));
+        };
+        fetchUserID();
+    }, []);
+
+    //her skal indsættes databasen ind således at den kan ændre username, password og email
+    const handleUsernameChange = () => {};
+
+    const handlePasswordChange = () => {};
+
+    const handleEmailChange = () => {};
 
     return (
-        <div className="p-4">
-            <ProfileImage />
-            <h1 className="text-2xl font-bold mb-4">Profile Settings</h1>
-            <div className="mb-4">
-                <span className="text-lg font-medium">Username: </span>
-                <span className="text-lg">{username}</span>
-                <button
-                    className="ml-4 text-blue-500 hover:underline"
-                    onClick={() => setIsEditing(!isEditing)}
-                >
-                    Change Username
-                </button>
+        <div className="p-8 text-black">
+            <h1 className="text-3xl font-bold mb-6">Profile Settings</h1>
+
+            <div className="flex flex-col items-center mb-8">
+                <Image
+                    src="/popcornImage.jpeg"
+                    alt="Profile Icon"
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                />
+                <p className="mt-2 text-blue-800 underline cursor-pointer">
+                    Change icon
+                </p>
+                <p className="text-xl mt-2 underline">
+                    {username || 'Loading...'}
+                </p>
+                <p className="text-sm">ID: {id || 'Loading...'}</p>
             </div>
-            {isEditing && (
-                <div className="mt-4">
-                    <input
-                        type="text"
-                        placeholder="Enter new username"
-                        value={newUsername}
-                        onChange={(e) => setNewUsername(e.target.value)}
-                        className="border p-2 rounded-md w-full mb-2"
-                    />
+
+            <div className="flex flex-col items-center space-y-4 mb-10">
+                {/* Change Username Section */}
+                <div className="w-full flex flex-col items-center">
                     <button
-                        onClick={handleUsernameChange}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer"
+                        onClick={() =>
+                            setIsEditing(
+                                isEditing === 'username' ? null : 'username'
+                            )
+                        }
                     >
-                        Submit
+                        Change username
                     </button>
+                    {isEditing === 'username' && (
+                        <div className="flex flex-col items-center mt-4">
+                            <input
+                                type="text"
+                                placeholder="Enter new username"
+                                value={newUsername}
+                                onChange={(e) => setNewUsername(e.target.value)}
+                                className="border p-2 rounded-md w-60 mb-2"
+                            />
+
+                            <button
+                                onClick={handleUsernameChange}
+                                className="bg-[#424ebd] text-white px-4 py-2 rounded-md hover:bg-pink-600 cursor-pointer"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    )}
                 </div>
-            )}
+
+                {/* Change Password Section */}
+                <div className="w-full flex flex-col items-center">
+                    <button
+                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer"
+                        onClick={() =>
+                            setIsEditing(
+                                isEditing === 'password' ? null : 'password'
+                            )
+                        }
+                    >
+                        Change password
+                    </button>
+                    {isEditing === 'password' && (
+                        <div className="flex flex-col items-center mt-4">
+                            <input
+                                type="password"
+                                placeholder="Enter new password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                className="border p-2 rounded-md w-60 mb-2"
+                            />
+                            <button
+                                onClick={handlePasswordChange}
+                                className="bg-[#424ebd] text-white px-4 py-2 rounded-md hover:bg-pink-600 cursor-pointer"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Change Email Section */}
+                <div className="w-full flex flex-col items-center">
+                    <button
+                        className="bg-[#282F72] text-white px-6 py-2 rounded w-60 cursor-pointer cursor-pointer"
+                        onClick={() =>
+                            setIsEditing(isEditing === 'email' ? null : 'email')
+                        }
+                    >
+                        Change email
+                    </button>
+                    {isEditing === 'email' && (
+                        <div className="flex flex-col items-center mt-4">
+                            <input
+                                type="email"
+                                placeholder="Enter new email"
+                                value={newEmail}
+                                onChange={(e) => setNewEmail(e.target.value)}
+                                className="border p-2 rounded-md w-60 mb-2"
+                            />
+                            <button
+                                onClick={handleEmailChange}
+                                className="bg-[#424ebd] text-white px-4 py-2 rounded-md hover:bg-pink-600 cursor-pointer"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className="ml-12">
+                <p className="text-lg font-semibold">User stats</p>
+                <ul className="list-disc list-inside ml-4">
+                    <li>
+                        <span className="underline text-blue-800 cursor-pointer">
+                            Histogrammer/graffer
+                        </span>
+                    </li>
+                    <li>
+                        <span className="underline text-blue-800 cursor-pointer">
+                            watchlist
+                        </span>
+                    </li>
+                    <li>
+                        <span className="underline text-blue-800 cursor-pointer">
+                            Seen movies
+                        </span>
+                        <ul className="ml-6 list-disc">
+                            <li>
+                                <span className="underline text-blue-800 cursor-pointer">
+                                    Change movie ratings
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
-};
-
-export default ProfileSettings;
+}
