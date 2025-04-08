@@ -110,28 +110,28 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            <div className="container">
+            <div className="h-auto w-auto">
                 {/*Left Panel to Curtain Left Image*/}
-                <div className="border-solid border-2 border-black float-left">
+                <div className="float-left h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainLeft.png"
                         alt="Curtain Left"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
-                <div className="border-solid border-2 border-black float-right">
+                <div className="float-right h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainRight.png"
                         alt="Curtain Right"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
-                {/* Container for the three divs in the center (title, description, carousel and seats)*/}
+                {/* Container for the two divs in the center (title, description, and carousel)*/}
                 <div className="content-center text-center">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
                     <div className="midTopPannel">
@@ -141,7 +141,8 @@ export default function Home(): JSX.Element {
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] ">
                             This is your recommendations for the day
-                            <br></br>You receive new ones everyday!
+                            <br></br>You receive new ones everyday!<br></br>
+                            Click on a movie to rate it
                         </p>
                     </div>
 
@@ -192,11 +193,6 @@ export default function Home(): JSX.Element {
                                 className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
                             />
                         </div>
-                    </div>
-
-                    {/*Bottom Middle Pannel to movie seats*/}
-                    <div className="border-solid border-2 border-black float-left">
-                        <h1>Take a seat 💺💺</h1>
                     </div>
                 </div>
             </div>
