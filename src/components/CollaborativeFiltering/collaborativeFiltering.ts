@@ -1,45 +1,242 @@
 'use server';
 
-import { movie } from '@/actions/movie/movie';
+import { movieWithRating, getMovieById } from '@/actions/movie/movie';
 import { testRatings } from '@/db/schema';
 import { db } from 'db';
-import { ne } from 'drizzle-orm';
+import { eq, ne } from 'drizzle-orm';
 
 type rating = {
     movieId: number;
     rating: number;
 };
 
-export type user = {
+type user = {
     userId: number;
     ratings: rating[];
 };
 
+type similarity = {
+    userId: number;
+    similarity: number;
+};
+
 export default async function collaborativeFiltering(
-    userId: number
-): Promise<number> {
-    // Hent alle brugere fra databasen (undtagen den bruger man find anbefalinger til).
-    const ratings = await db
+    targetUserId: number
+): Promise<movieWithRating[]> {
+    // Fetch all user ratings from the table testRatings, except those from the target user.
+    const userRatingsFromDataset = await db
         .select({
             userId: testRatings.userId,
             movieId: testRatings.movieId,
             movieRating: testRatings.movieRating,
         })
         .from(testRatings)
-        .where(ne(testRatings.userId, userId));
+        .where(ne(testRatings.userId, targetUserId));
 
-    // Gem dem og deres ratings som user objects i et array.
-    // const userRatings = [];
+    // Fetch all ratings from the table testRatings that have only been made by the target user.
+    const targetUserRatings = await db
+        .select({
+            userId: testRatings.userId,
+            movieId: testRatings.movieId,
+            movieRating: testRatings.movieRating,
+        })
+        .from(testRatings)
+        .where(eq(testRatings.userId, targetUserId));
 
-    for (const user of ratings) {
-        //console.log(user);
+    // Create a map for all the other users and their ratings: (userId, { rating(movieId, rating) }).
+    const otherUserRatingsMap = new Map<number, rating[]>();
+
+    // Populate the map.
+    for (const row of userRatingsFromDataset) {
+        // Check if map already has a user entry for the current row being checked.
+        if (!otherUserRatingsMap.has(row.userId)) {
+            // If the map does not contain an entry for the user ID, create one and initialise it with an empty array.
+            otherUserRatingsMap.set(row.userId, []);
+        }
+
+        // Check if an entry for the user ID exists (TypeScript gets angry if you don't: Object is possibly 'undefined'.).
+        otherUserRatingsMap.get(row.userId)?.push({
+            // If the entry does exist, add the movie ID and rating to the rating array for the specified user ID.
+            movieId: row.movieId,
+            rating: row.movieRating,
+        });
     }
 
-    console.log(ratings.length);
+    // Convert the map to an array of users instead for easier operations later on.
+    const otherUserRatings: user[] = Array.from(
+        otherUserRatingsMap.entries()
+    ).map(([userId, ratings]) => ({
+        userId,
+        ratings,
+    }));
 
-    // Find fem brugere der minder om brugeren der bliver sat ind i funktionen med cosine similarity.
-    // Find de fem brugeres ratings, og find gennemsnittet af de film, som flere brugere har rated.
-    // Returner en sorteret liste med alle de film de fem brugere har set.
+    // Create a new map for the target users ratings: (movieId, rating).
+    const targetRatingMap = new Map<number, number>();
 
-    return 2;
+    // Populate the map with the ratings fetched from earlier.
+    for (const rating of targetUserRatings) {
+        targetRatingMap.set(rating.movieId, rating.movieRating);
+    }
+
+    // Create an array for storing the similarity between the target user and some user from the array otherUserRatings.
+    const similarityScores: similarity[] = [];
+
+    // Iterate through each rating from other users
+    for (const otherUser of otherUserRatings) {
+        // Define array for movies that the target user and the "other user" currently being checked has in common.
+        const commonMovies: number[] = [];
+
+        // Create two arrays for storing the target user and the "other user's" ratings for a movie that they have in common.
+        const targetUserRatings: number[] = [];
+        const otherUserRatings: number[] = [];
+
+        // For every rating of the current "other user".
+        for (const rating of otherUser.ratings) {
+            // Check if the target user's map contains the key (movie ID) of the current rating being checked. In other words, check if the they have both rated a movie.
+            if (targetRatingMap.has(rating.movieId)) {
+                // If they have, then add that movie ID to their common movies.
+                commonMovies.push(rating.movieId);
+
+                // And then add their respective ratings to the rating arrays.
+                // Note: targetRatingMap does contain a rating for the movie in question, but TypeScript gets angry if it is not explicitly stated that the key (movie ID) actually holds a value (a rating) (Argument of type 'number | undefined' is not assignable to parameter of type 'number'.), hence the exclamation mark.
+                targetUserRatings.push(targetRatingMap.get(rating.movieId)!);
+                otherUserRatings.push(rating.rating);
+            }
+        }
+
+        // Now, if the target user and the "other user" has at least 10 movies in common.
+        if (commonMovies.length >= 10) {
+            // Calculate a similarity between the two.
+            const similarity = cosineSimilarity(
+                targetUserRatings,
+                otherUserRatings
+            );
+            // And add it to the array of similarity scores.
+            similarityScores.push({ userId: otherUser.userId, similarity });
+        }
+    }
+
+    if (similarityScores.length === 0) {
+        // If no similar users are found, return an empty array.
+        console.log('No similar users found.');
+        return [];
+    }
+
+    // Create a sorted array of the similar users.
+    let mostSimilarUsers = similarityScores.sort(
+        (a, b) => b.similarity - a.similarity
+    );
+
+    // Get the top 10 most similar users.
+    mostSimilarUsers = mostSimilarUsers.slice(0, 10);
+
+    // Create a map for storing an aggregated score for each rated movie.
+    const movieRatingsMap = new Map<
+        number,
+        { movieScore: number; timesRated: number }
+    >();
+
+    // Iterate through all similar users.
+    for (const user of mostSimilarUsers) {
+        // Get the user's ID.
+        const userId = user.userId;
+
+        // For every rating made by the user in question.
+        for (const rating of otherUserRatingsMap.get(userId)!) {
+            const movieId = rating.movieId;
+            const userRating = rating.rating;
+
+            // If the target user has not rated the movie.
+            if (!targetRatingMap.has(movieId)) {
+                // If this movie has not been added to the map, add it with initial values.
+                if (!movieRatingsMap.has(movieId)) {
+                    movieRatingsMap.set(movieId, {
+                        movieScore: 1,
+                        timesRated: 0,
+                    });
+                }
+
+                // Get the current values for movieScore and timesRated.
+                const movieRatingData = movieRatingsMap.get(movieId)!;
+
+                // Multiply the existing movieScore by the new rating.
+                movieRatingData.movieScore *= userRating;
+
+                // Increase the timesRated count by 1.
+                movieRatingData.timesRated += 1;
+            }
+        }
+    }
+
+    // Create array for storing all movies rated by the similar users.
+    const moviesRatedBySimilarUsers: movieWithRating[] = [];
+
+    // Iterate through all entries of the movieRatingsMap.
+    for (const [
+        movieId,
+        { movieScore, timesRated },
+    ] of movieRatingsMap.entries()) {
+        // Fetch movie details using getMovieById.
+        const movie = await getMovieById(movieId);
+
+        // If movie is not NULL and the target user has not rated the movie.
+        if (movie !== null && !targetRatingMap.has(movieId)) {
+            // Add the movie to the array of rated movies by similar users.
+            moviesRatedBySimilarUsers.push({
+                movieId: movie.movieId,
+                title: movie.movieTitle,
+                genres: movie.movieGenres,
+                accumulativeRating: movieScore,
+                timesRated,
+            });
+        }
+    }
+
+    // Now sort the array of rated movies by their rating.
+    moviesRatedBySimilarUsers.sort(
+        (a, b) =>
+            b.accumulativeRating / b.timesRated -
+            a.accumulativeRating / a.timesRated
+    );
+
+    const recommendedMovies = moviesRatedBySimilarUsers.slice(0, 20);
+
+    console.log(recommendedMovies);
+
+    // Return the sorted array of recommended movies.
+    return recommendedMovies;
+}
+
+function cosineSimilarity(userA: number[], userB: number[]): number {
+    // Find dot product between the common ratings of user A and B.
+    let dotProduct = 0;
+
+    for (let i = 0; i < userA.length; i++) {
+        dotProduct += userA[i] * userB[i];
+    }
+
+    // Find the magnitude (Euclidean norm) of user A (square root of A transpose A).
+    let magnitudeA = 0;
+
+    // A transpose A.
+    for (let i = 0; i < userA.length; i++) {
+        magnitudeA += userA[i] * userA[i];
+    }
+
+    // Get the square root.
+    magnitudeA = Math.sqrt(magnitudeA);
+
+    // Find the magnitude (Euclidean norm) of user B (square root of B transpose B).
+    let magnitudeB = 0;
+
+    // B transpose B.
+    for (let i = 0; i < userB.length; i++) {
+        magnitudeB += userB[i] * userB[i];
+    }
+
+    // Get the square root.
+    magnitudeB = Math.sqrt(magnitudeB);
+
+    // Return the cosine similarity of the two users.
+    return dotProduct / (magnitudeA * magnitudeB);
 }

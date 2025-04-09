@@ -2,7 +2,7 @@
 
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
-import { movie, searchForMovie } from '@/actions/movie/movie';
+import { movie, movieWithRating, searchForMovie } from '@/actions/movie/movie';
 import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
@@ -15,9 +15,9 @@ export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
 
-    const [test, setTest] = useState<number>(0);
-
-    //const test = collaborativeFiltering(99999);
+    const [recommendedMovies, setRecommendedMovies] = useState<
+        movieWithRating[]
+    >([]);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -25,8 +25,11 @@ export default function SelectMovies(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
-        const hej = async () => setTest(await collaborativeFiltering(9999));
-        hej();
+
+        const getRecommendedMovies = async () =>
+            setRecommendedMovies(await collaborativeFiltering(200911));
+        getRecommendedMovies();
+
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));
         };
