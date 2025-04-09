@@ -141,7 +141,7 @@ export default function Home(): JSX.Element {
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] ">
                             This is your recommendations for the day
-                            <br></br>You receive new ones everyday!<br></br>
+                            <br></br>You receive new ones every day!<br></br>
                             Click on a movie to rate it
                         </p>
                     </div>
@@ -196,24 +196,13 @@ export default function Home(): JSX.Element {
                     </div>
                 </div>
             </div>
-            {/* Movie Carousel
-            <div
-                className="block top-20 items-center justify-center z-2"
-                // onClick={() =>
-                //     handleImageClick(
-                //         'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
-                //         'movie'
-                //     )
-                // }
-            >
-                <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
-            </div> */}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
                     <div className="sideBar">
                         <button
+                            className="m-4 text-xl underline cursor-pointer"
                             onClick={() => {
                                 setSidebarImage(null);
                                 if (backgroundDivRef.current) {
@@ -224,6 +213,7 @@ export default function Home(): JSX.Element {
                         >
                             Close
                         </button>
+
                         <Image
                             src={sidebarImage}
                             alt={sidebarAlt}
