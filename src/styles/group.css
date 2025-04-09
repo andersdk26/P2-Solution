@@ -1,0 +1,68 @@
+.about-group-box {
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    padding: 100px;
+    margin: auto;
+
+    transition: flipZoom 1s ease-in;
+}
+
+@keyframes flipZoom {
+    from {
+        transform: rotateY(0);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.centering {
+    /* text-align: center; */
+    justify-content: center;
+    align-items: center;
+    /* margin: auto; */
+    display: flex;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* https://codepen.io/natak0/pen/ExVwbPQ */
+close-btn {
+    border-radius: 50%;
+    padding: 0.5em;
+    width: 30px;
+    height: 30px;
+    border: 2px solid blue;
+    color: blue;
+    position: relative;
+}
+close-btn:hover {
+    border: 2px solid blue;
+    background-color: yellow;
+    color: #ffffff;
+}
+
+close-btn::before {
+    content: ' ';
+    position: absolute;
+    display: block;
+    background-color: blue;
+    width: 2px;
+    left: 12px;
+    top: 5px;
+    bottom: 5px;
+    transform: rotate(45deg);
+}
+close-btn::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    background-color: blue;
+    height: 2px;
+    top: 12px;
+    left: 5px;
+    right: 5px;
+    transform: rotate(45deg);
+}

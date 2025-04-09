@@ -21,7 +21,7 @@ const groupIdTemp: groupId = {
     Members: 7,
     Admin: 'me',
     Color: 'white',
-    TextColor: '[#282F72]',
+    TextColor: 'black',
 };
 
 const groupIdTemp2: groupId = {
@@ -31,7 +31,7 @@ const groupIdTemp2: groupId = {
     Members: 2,
     Admin: 'you',
     Color: 'blue-500',
-    TextColor: 'white',
+    TextColor: '[#282F72]',
 };
 
 const groupIdTemp3: groupId = {
@@ -66,6 +66,7 @@ const GroupSettings = (): JSX.Element => (
         <section>
             <h2>Requests...</h2>
             <p>Groups that have asked you to join</p>
+            <GroupIcon groupId={groupIdTemp2} />
         </section>
     </div>
 );
