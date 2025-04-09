@@ -12,9 +12,10 @@ import {
     seenListGenreBoostTable,
     seenListTable,
 } from '../../db/schema';
+import { and, inArray } from 'drizzle-orm';
 
 async function scoreIndContent(
-    userId: string,
+    userId: number,
     movieId: number
 ): Promise<{ scoreIndContent: number }> {
     // Fetch the movie properties
@@ -33,21 +34,31 @@ async function scoreIndContent(
         throw new Error('Movie not found.');
     }
     let scoreIndContent = 0; // Initialize score to 0.
-    // Fetch GenreBoosts for the user
+    // Fetch GenreBoosts from the user
     const genreBoosts: { genre: string; boost: number }[] = await db
         .select({
+            // The properties we want to fetch
             genre: genreBoostTable.genre,
             boost: genreBoostTable.boost,
         })
-        .from(genreBoostTable)
+        .from(genreBoostTable) // The table we want to fetch from
         .where(
-            sql`${genreBoostTable.id} IN (
-                SELECT seen_list_genre_boost.genre_boost_id
-                FROM seen_list_genre_boost
-                INNER JOIN seen_list ON seen_list.id = seen_list_genre_boost.seen_list_id
-                WHERE seen_list.user_id = ${userId}
-                )
-            )`
+            inArray(
+                //
+                genreBoostTable.id,
+                db
+                    .select(
+                        // SeenListGenreBoostTable.genreBoostId is the foreign key to GenreBoostTable})
+                        { genreBoostId: seenListGenreBoostTable.genreBoostId }
+                    )
+                    .from(seenListGenreBoostTable)
+                    .innerJoin(
+                        // join the SeenListGenreBoostTable with the SeenListTable via their foreign keys in SeenListGenreBoostTable
+                        seenListTable,
+                        eq(seenListTable.id, seenListGenreBoostTable.seenListId)
+                    )
+                    .where(eq(seenListTable.userId, userId)) // Ensure we only get the genre boosts for the userId
+            )
         );
 
     // Apply GenreBoosts

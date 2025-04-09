@@ -19,11 +19,14 @@ import {
     seenListGenreBoostTable,
     seenListTable,
     seenListMoviesTable,
+    usersTable,
 } from '../../db/schema';
 import { eq, sql } from 'drizzle-orm';
+import { and, inArray } from 'drizzle-orm';
+import { int } from 'drizzle-orm/mysql-core';
 
-async function calculatePreferredGenres(userId: string): Promise<{
-    userId: string;
+async function calculatePreferredGenres(userId: number): Promise<{
+    userId: number;
     genreBoosts: { genre: string; boost: number }[];
 }> {
     // Fetch the user's genres and PersonalRatings from seen_list
@@ -35,18 +38,22 @@ async function calculatePreferredGenres(userId: string): Promise<{
             internalGenre: moviesTable.InternalGenre,
             personalRating: moviesTable.PersonalRating,
         })
-        .from(moviesTable)
+        .from(moviesTable) // The table we want to fetch from
         .where(
-            sql`${moviesTable.id} IN (
-                SELECT seen_list_movies.movie_id
-                FROM seen_list_movies
-                WHERE seen_list_movies.seen_list_id = (
-                    SELECT seen_list.id
-                    FROM seen_list
-                    WHERE seen_list.user_id = ${userId}
-                )
-            )`
+            inArray(
+                moviesTable.id,
+                db
+                    .select({ movieId: seenListMoviesTable.movieId }) // The seenListMoviesTable.movieId is the foreign key to MoviesTable
+                    .from(seenListMoviesTable)
+                    .innerJoin(
+                        // Join the seenListMoviesTable with the seenListTable via their foreign keys in seenListMoviesTable
+                        seenListTable,
+                        eq(seenListTable.id, seenListMoviesTable.seenListId)
+                    )
+                    .where(eq(seenListTable.userId, userId)) // Ensure we only get the movies for the userId
+            )
         );
+    // I GIVE UP WTF IS THIS DRIZZLE ORM?
 
     // Create a type called genreRatings, that holds strings as keys and objects with totalRating and count as properties.
     const genreRatings: Record<string, { totalRating: number; count: number }> =
@@ -87,17 +94,34 @@ async function calculatePreferredGenres(userId: string): Promise<{
 
     // Update the genre boosts in the database for the user's genres
     for (const { genre, boost } of genreBoosts) {
-        await db.run(sql`
-           UPDATE genre_boost
-            SET boost = ${boost}
-            WHERE genre_boost.id IN (
-                SELECT seen_list_genre_boost.genre_boost_id
-                FROM seen_list_genre_boost
-                INNER JOIN seen_list ON seen_list.id = seen_list_genre_boost.seen_list_id
-                WHERE seen_list.user_id = ${userId}
-            )
-            AND genre_boost.genre = ${genre};
-        `);
+        await db
+            .update(genreBoostTable) // The table we want to update the boost property in
+            .set({ boost }) // The property we want to update
+            .where(
+                // Following conditions must be met to update the property
+                and(
+                    inArray(
+                        genreBoostTable.id,
+                        db
+                            .select({
+                                // The genreBoostTable.id is the foreign key in seenListGenreBoostTable connecting the two tables
+                                genreBoostTableId:
+                                    seenListGenreBoostTable.genreBoostId,
+                            })
+                            .from(seenListGenreBoostTable)
+                            .innerJoin(
+                                seenListTable,
+                                eq(
+                                    // if the seenListTable.id is the same as the seenListGenreBoostTable.seenListId join tables.
+                                    seenListTable.id,
+                                    seenListGenreBoostTable.seenListId
+                                )
+                            )
+                            .where(eq(seenListTable.userId, usersTable.id)) // Ensure we do it for the right userId (userstable has foreign key to the seenListTable)
+                    ),
+                    eq(genreBoostTable.genre, genre) // Ensure the genre is the same as the one we want to update
+                )
+            );
     }
 
     return { userId, genreBoosts }; // Return the userId and the calculated genreBoosts
