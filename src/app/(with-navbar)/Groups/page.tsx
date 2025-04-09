@@ -7,7 +7,7 @@ export type groupId = {
     Id: number;
     Name: string;
     Emoji: string;
-    Members: number;
+    Members: string[];
     Admin: string;
     Color: string;
     TextColor: string;
@@ -18,7 +18,7 @@ const groupIdTemp: groupId = {
     Id: 123,
     Name: 'Group1',
     Emoji: '🍿',
-    Members: 7,
+    Members: ['me', 'you', 'tom'],
     Admin: 'me',
     Color: 'white',
     TextColor: 'black',
@@ -28,7 +28,7 @@ const groupIdTemp2: groupId = {
     Id: 124,
     Name: 'Group2',
     Emoji: '🎥',
-    Members: 2,
+    Members: ['mom', 'dad', 'child', 'you'],
     Admin: 'you',
     Color: 'blue-500',
     TextColor: '[#282F72]',
@@ -38,7 +38,7 @@ const groupIdTemp3: groupId = {
     Id: 125,
     Name: 'Group5',
     Emoji: '🎞️',
-    Members: 4,
+    Members: ['sara', 'you', 'me', 'tom', 'mom', 'child', 'burger'],
     Admin: 'sara',
     Color: '[#282F72]',
     TextColor: 'black',

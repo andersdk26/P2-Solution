@@ -4,6 +4,7 @@ import '@/styles/group.css';
 export default function AboutGroup({ groupId }: groupId): JSX.Element {
     const color = `bg-${groupId.Color}`;
     const textColor = `text-${groupId.TextColor}`;
+    
 
     return (
         <div
