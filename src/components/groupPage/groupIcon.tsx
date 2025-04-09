@@ -1,28 +1,20 @@
 import { JSX } from 'react';
 import { useState } from 'react';
 import AboutGroup from './aboutGroup';
-
-export type groupId = {
-    Id: number;
-    Name: string;
-    Emoji: string;
-    Members: number;
-    Admin: string;
-    Color: string;
-    TextColor: string;
-};
+import { groupId } from 'app/(with-navbar)/Groups/page';
 
 export default function GroupIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
     const color = `bg-${groupId.Color}`;
     const textColor = `text-${groupId.TextColor}`;
 
-    const toggleGroup = () => {
+    const toggleGroup = (): void => {
         setAboutGroupOpen(!isAboutGroupOpen);
     };
 
     return (
         <>
+            {/* The div for the entire box, onclick: open the about group */}
             <div
                 className={`size-60 border-2 border-solid border-[#282F72] ${color} inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
                 onClick={toggleGroup}
@@ -36,7 +28,8 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                     <span className="font-bold">{groupId.Members}</span>
                 </p>
             </div>
-            {isAboutGroupOpen && <AboutGroup />}
+            {/* the information about the box */}
+            {isAboutGroupOpen && <AboutGroup groupId={groupId} />}
         </>
     );
 }

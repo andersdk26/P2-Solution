@@ -2,8 +2,18 @@
 'use client';
 import React, { JSX } from 'react';
 import GroupIcon from '@/components/groupPage/groupIcon';
-import { groupId } from '@/components/groupPage/groupIcon';
 
+export type groupId = {
+    Id: number;
+    Name: string;
+    Emoji: string;
+    Members: number;
+    Admin: string;
+    Color: string;
+    TextColor: string;
+};
+
+// test groups
 const groupIdTemp: groupId = {
     Id: 123,
     Name: 'Group1',
@@ -21,7 +31,7 @@ const groupIdTemp2: groupId = {
     Members: 2,
     Admin: 'you',
     Color: 'blue-500',
-    TextColor: '[#282F72]',
+    TextColor: 'white',
 };
 
 const groupIdTemp3: groupId = {
