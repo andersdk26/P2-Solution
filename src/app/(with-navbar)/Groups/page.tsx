@@ -9,6 +9,9 @@ const groupIdTemp: groupId = {
     Name: 'Group1',
     Emoji: '🍿',
     Members: 7,
+    Admin: 'me',
+    Color: 'white',
+    TextColor: '[#282F72]',
 };
 
 const groupIdTemp2: groupId = {
@@ -16,6 +19,9 @@ const groupIdTemp2: groupId = {
     Name: 'Group2',
     Emoji: '🎥',
     Members: 2,
+    Admin: 'you',
+    Color: 'blue-500',
+    TextColor: '[#282F72]',
 };
 
 const groupIdTemp3: groupId = {
@@ -23,6 +29,9 @@ const groupIdTemp3: groupId = {
     Name: 'Group5',
     Emoji: '🎞️',
     Members: 4,
+    Admin: 'sara',
+    Color: '[#282F72]',
+    TextColor: 'black',
 };
 
 const GroupSettings = (): JSX.Element => (
@@ -33,7 +42,7 @@ const GroupSettings = (): JSX.Element => (
             <p>
                 <i>You are admin</i>
             </p>
-            <section >
+            <section>
                 <GroupIcon groupId={groupIdTemp} />
                 <GroupIcon groupId={groupIdTemp3} />
             </section>
