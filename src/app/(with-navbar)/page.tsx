@@ -8,8 +8,6 @@ interface Movie {
 import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
-import movieCurtainLeft from './public/img/movieCurtainLeft.png';
-import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
@@ -18,28 +16,48 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
+import { getMoviesByIds } from '@/actions/movie/movie';
+
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
+    const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
-    useEffect(() => {
-        // Fetch the JSON file when the page loads
-        fetch('Movie.json')
-            .then((response) => response.json())
-            .then((data) => setMovies(data))
-            .catch((error) => console.error('Error loading movies:', error));
-    }, []);
 
-    const handleImageClick = (image: string, altText: string): void => {
-        setSidebarImage(image);
-        setSidebarAlt(altText); // Set the alt text (title) when the image is clicked
-        setSelectedRating(null); // Reset rating when a new image is selected
-        if (backgroundDivRef.current) {
-            backgroundDivRef.current.style.display = 'block';
+    const moviesPerPage = 3;
+    const totalMovies = 30;
+    const displayedMovies: Movie[] = Array.from(
+        { length: totalMovies },
+        (_, index) => ({
+            title: '',
+            image: `/img/movies/movie${index + 1}.png`,
+        })
+    );
+
+    const handleImageClick = async (movieId: number): Promise<void> => {
+        try {
+            const movies = await getMoviesByIds([movieId]);
+            const movie = movies[0]; // Since we're passing one ID, get the first result
+
+            if (!movie) {
+                console.error(`Movie with ID ${movieId} not found.`);
+                return;
+            }
+
+            setSidebarImage(`/img/movies/movie${movieId}.png`);
+            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
+            setSelectedRating(null);
+            setSelectedMovieId(movieId);
+
+            if (backgroundDivRef.current) {
+                backgroundDivRef.current.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Failed to fetch movie by ID:', error);
         }
     };
 
@@ -55,10 +73,6 @@ export default function Home(): JSX.Element {
             setSelectedRating(Number(event.target.value));
         }
     };
-
-    const moviesPerPage = 3;
-    const totalMovies = 30;
-    const displayedMovies = movies.slice(0, totalMovies);
 
     const handleNextPage = (): void => {
         // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
@@ -110,28 +124,28 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            <div className="container">
+            <div>
                 {/*Left Panel to Curtain Left Image*/}
-                <div className="border-solid border-2 border-black float-left">
+                <div className="float-left h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainLeft.png"
                         alt="Curtain Left"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
-                <div className="border-solid border-2 border-black float-right">
+                <div className="float-right h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainRight.png"
                         alt="Curtain Right"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
-                {/* Container for the three divs in the center (title, description, carousel and seats)*/}
+                {/* Container for the two divs in the center (title, description, and carousel)*/}
                 <div className="content-center text-center">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
                     <div className="midTopPannel">
@@ -141,7 +155,8 @@ export default function Home(): JSX.Element {
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] ">
                             This is your recommendations for the day
-                            <br></br>You receive new ones everyday!
+                            <br></br>You receive new ones every day!<br></br>
+                            Click on a movie to rate it
                         </p>
                     </div>
 
@@ -156,70 +171,48 @@ export default function Home(): JSX.Element {
                         >
                             {displayedMovies.map((movie, index) => (
                                 <div key={index} className="posterItem">
-                                    <Image
-                                        className="moviePoster"
+                                    <MovieImage
+                                        movieId={index + 1}
+                                        title={movie.title}
                                         onClick={() =>
-                                            handleImageClick(
-                                                movie.image,
-                                                movie.title
-                                            )
+                                            handleImageClick(index + 1)
                                         }
-                                        src={movie.image}
-                                        alt={movie.title}
-                                        width={150}
-                                        height={200}
                                     />
                                 </div>
                             ))}
                         </div>
-
-                        {/* Navigation buttons */}
-                        <div className="buttonWrapper">
-                            <button
-                                onClick={handlePreviousPage}
-                                //disabled={currentPage === 0}
-                                className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
-                            >
-                                &lt;
-                            </button>
-
-                            <button
-                                onClick={handleNextPage}
-                                // disabled={
-                                //     (currentPage + 1) * moviesPerPage >=
-                                //     movies.length
-                                // }
-                                className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
-                            />
-                        </div>
                     </div>
-
-                    {/*Bottom Middle Pannel to movie seats*/}
-                    <div className="border-solid border-2 border-black float-left">
-                        <h1>Take a seat 💺💺</h1>
+                    {/* Navigation buttons */}
+                    <div className="buttonWrapper">
+                        <button
+                            onClick={handlePreviousPage}
+                            //disabled={currentPage === 0}
+                            // className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                        >
+                            ⇦
+                        </button>
+                        <button
+                            onClick={handleNextPage}
+                            // disabled={
+                            //     (currentPage + 1) * moviesPerPage >=
+                            //     movies.length
+                            // }
+                            // className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                        >
+                            ⇨
+                        </button>
                     </div>
                 </div>
             </div>
-            {/* Movie Carousel
-            <div
-                className="block top-20 items-center justify-center z-2"
-                // onClick={() =>
-                //     handleImageClick(
-                //         'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
-                //         'movie'
-                //     )
-                // }
-            >
-                <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
-            </div> */}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
                     <div className="sideBar">
                         <button
+                            className="m-4 text-xl underline cursor-pointer"
                             onClick={() => {
-                                setSidebarImage(null);
+                                setSelectedMovieId(null);
                                 if (backgroundDivRef.current) {
                                     backgroundDivRef.current.style.display =
                                         'none';
@@ -228,14 +221,10 @@ export default function Home(): JSX.Element {
                         >
                             Close
                         </button>
-                        <Image
-                            src={sidebarImage}
-                            alt={sidebarAlt}
-                            width={500}
-                            height={500}
-                        />
-                        <h4>{sidebarAlt}</h4>
-
+                        {selectedMovieId !== null && (
+                            <MovieImage movieId={selectedMovieId} />
+                        )}
+                        <h2>{sidebarAlt}</h2>
                         {/* Radio Button Row */}
                         <div className="ratingRow">
                             <ul>
@@ -373,6 +362,7 @@ export default function Home(): JSX.Element {
                     </div>
                 </section>
             )}
+            {/* The group seats, redirects to groups page */}
             <GroupSeats />
 
             {/* Pagination Controls

@@ -57,7 +57,7 @@ export default function MovieImage({
                     alt={alt}
                     fill={true}
                     sizes={`(max-width: ${width}px)`}
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} rounded-xl unoptimized`}
                 />
             ) : (
                 <Image
@@ -67,7 +67,7 @@ export default function MovieImage({
                     alt={alt}
                     height={height}
                     width={width}
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} rounded-xl unoptimized`}
                 />
             )}
         </>
