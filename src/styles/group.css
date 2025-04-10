@@ -29,37 +29,37 @@
 }
 
 /* https://codepen.io/natak0/pen/ExVwbPQ */
-close-btn {
+.close-btn {
     border-radius: 50%;
     padding: 0.5em;
     width: 30px;
     height: 30px;
-    border: 2px solid blue;
-    color: blue;
+    border: 2px solid black;
+    color: #282f72;
     position: relative;
 }
-close-btn:hover {
-    border: 2px solid blue;
-    background-color: yellow;
+.close-btn:hover {
+    border: 2px solid black;
+    background-color: white;
     color: #ffffff;
 }
 
-close-btn::before {
+.close-btn::before {
     content: ' ';
     position: absolute;
     display: block;
-    background-color: blue;
+    background-color: black;
     width: 2px;
     left: 12px;
     top: 5px;
     bottom: 5px;
     transform: rotate(45deg);
 }
-close-btn::after {
+.close-btn::after {
     content: ' ';
     position: absolute;
     display: block;
-    background-color: blue;
+    background-color: black;
     height: 2px;
     top: 12px;
     left: 5px;
