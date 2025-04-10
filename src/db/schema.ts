@@ -1,32 +1,56 @@
 import { group } from 'console';
 import { sql } from 'drizzle-orm';
-// import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
+import { int, mysqlTable, timestamp, varchar } from 'drizzle-orm/mysql-core';
 
-/*
-export const usersTable = sqliteTable('users', {
-    id: integer('id').primaryKey(),
-    username: text('username').notNull(),
-    email: text('email').unique().notNull(),
-    password: text('password').notNull(),
-    createdAt: text('created_at')
-        .default(sql`(CURRENT_TIMESTAMP)`)
-        .notNull(),
-    lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
-    settings: text('settings').default(sql`'{}'`), // JSON stringified object
-});
-*/
-
-// export type InsertUser = typeof usersTable.$inferInsert;
-// export type SelectUser = typeof usersTable.$inferSelect;
-
-export const moviesTable = sqliteTable('movies', {
-    id: integer('id').primaryKey(),
-    title: text('title').notNull(),
-    genres: text('genres').notNull(),
+export const moviesTable = mysqlTable('movies', {
+    id: int('id').primaryKey(),
+    title: varchar('title', { length: 255 }).notNull(),
+    genres: varchar('genres', { length: 255 }).notNull(),
 });
 
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
+
+export const usersTable = mysqlTable('users', {
+    id: int('id').primaryKey(),
+    username: varchar('username', { length: 30 }).notNull(),
+    email: varchar('email', { length: 255 }).unique().notNull(),
+    password: varchar('password', { length: 255 }).notNull(),
+    createdAt: timestamp('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    lastLogin: timestamp('last_login').default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export type InsertUser = typeof usersTable.$inferInsert;
+export type SelectUser = typeof usersTable.$inferSelect;
+
+// *** SQLite ***
+// import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
+
+// export const usersTable = sqliteTable('users', {
+//     id: integer('id').primaryKey(),
+//     username: text('username').notNull(),
+//     email: text('email').unique().notNull(),
+//     password: text('password').notNull(),
+//     createdAt: text('created_at')
+//         .default(sql`(CURRENT_TIMESTAMP)`)
+//         .notNull(),
+//     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
+//     settings: text('settings').default(sql`'{}'`), // JSON stringified object
+// });
+
+// export type InsertUser = typeof usersTable.$inferInsert;
+// export type SelectUser = typeof usersTable.$inferSelect;
+
+// export const moviesTable = sqliteTable('movies', {
+//     id: integer('id').primaryKey(),
+//     title: text('title').notNull(),
+//     genres: text('genres').notNull(),
+// });
+
+// export type InsertMovie = typeof moviesTable.$inferInsert;
+// export type SelectMovie = typeof moviesTable.$inferSelect;
 
 // export const movieLinkIdTable = sqliteTable('movie_link_id', {
 //     id: integer('id').primaryKey(),
