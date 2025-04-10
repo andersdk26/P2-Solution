@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 'use client';
 
 import Image from 'next/image';
@@ -16,6 +17,25 @@ export default function ProfileSettings() {
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedIcon, setSelectedIcon] = useState(
+        '/img/profileSettingIcons/derpPopcornBucket.png'
+    ); // Default icon
+
+    const icons = [
+        '/img/profileSettingIcons/bucketCornPop.png',
+        '/img/profileSettingIcons/cornpop.png',
+        '/img/profileSettingIcons/cuteButterPopcorn.png',
+        '/img/profileSettingIcons/cutePopcorn.png',
+        '/img/profileSettingIcons/cutePopcornBucket.png',
+        '/img/profileSettingIcons/derpPopcornBucket.png',
+        '/img/profileSettingIcons/happyButterPopcorn.png',
+        '/img/profileSettingIcons/happyPopcorn.png',
+        '/img/profileSettingIcons/happyPopcornBucket.png',
+        '/img/profileSettingIcons/surpricedButterPopcorn.png',
+        '/img/profileSettingIcons/surpricedPopcorn.png',
+        '/img/profileSettingIcons/swagMoviePopcornBucket.png',
+    ];
 
     useEffect(() => {
         const fetchUsername = async (): Promise<void> => {
@@ -51,14 +71,18 @@ export default function ProfileSettings() {
 
             <div className="flex flex-col items-center mb-8">
                 <Image
-                    src="/img/profileSettingIcons/derpPopcornBucket.png"
+                    src={selectedIcon}
                     alt="Profile Icon"
                     width={100}
                     height={100}
-                    className="w-25 h-25 rounded-full border border-black object-cover"
+                    className="w-25 h-25 rounded-full border border-black object-cover select-none"
+                    draggable="false"
                 />
-                <p className="mt-2 text-blue-800 underline cursor-pointer">
-                    Change icon
+                <p
+                    className="mt-2 text-blue-800 underline cursor-pointer"
+                    onClick={() => setIsPopupOpen(true)} // Open popup
+                >
+                    Change Profile Icon
                 </p>
                 <p className="text-xl mt-2 underline">
                     {username || 'Loading...'}
@@ -66,6 +90,50 @@ export default function ProfileSettings() {
                 <p className="text-sm">ID: #{id || 'Loading...'}</p>
             </div>
 
+            {/* Popup til selecting profile icon */}
+            {isPopupOpen && (
+                <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-bold mb-4">
+                            Select Profile Icon
+                        </h2>
+                        <div className="grid grid-cols-3 gap-4">
+                            {icons.map((icon, index) => (
+                                <Image
+                                    key={index}
+                                    src={icon}
+                                    alt={`Icon ${index + 1}`}
+                                    width={64}
+                                    height={64}
+                                    className={`w-20 h-20 cursor-pointer rounded-full border select-none ${
+                                        selectedIcon === icon
+                                            ? 'border-blue-500'
+                                            : 'border-gray-300'
+                                    } hover:border-blue-500 object-cover`}
+                                    draggable="false"
+                                    onClick={() => setSelectedIcon(icon)}
+                                />
+                            ))}
+                        </div>
+                        <div className="flex justify-end mt-4 space-x-2">
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                                onClick={() => setIsPopupOpen(false)} // Close popup
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                onClick={() => {
+                                    setIsPopupOpen(false);
+                                }}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="flex flex-col items-center space-y-4 mb-10">
                 {/* Change Username Section */}
                 <div className="w-full flex flex-col items-center">
