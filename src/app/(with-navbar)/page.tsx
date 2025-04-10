@@ -8,8 +8,6 @@ interface Movie {
 import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
-import movieCurtainLeft from './public/img/movieCurtainLeft.png';
-import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
@@ -110,7 +108,7 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            <div className="h-auto w-auto">
+            <div>
                 {/*Left Panel to Curtain Left Image*/}
                 <div className="float-left h-auto w-auto z-2">
                     <Image
