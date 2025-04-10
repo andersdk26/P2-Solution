@@ -46,3 +46,4 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
         </div>
     );
 }
+
