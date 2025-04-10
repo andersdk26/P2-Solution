@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 export default async function getMovieTitle(movieId: number) {
     const result = await db
-        .select({ title: moviesTable.Title })
+        .select({ title: moviesTable.title })
         .from(moviesTable)
         .where(eq(moviesTable.id, movieId));
 
