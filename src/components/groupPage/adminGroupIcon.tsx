@@ -114,17 +114,29 @@ export default function AdminGroupIcon({ groupId }: groupId): JSX.Element {
                         </div>
 
                         {/* right div, change group settings */}
-                        <div className="right-8 mr-4 text-right float-right">
+                        <div className="right-8 mr-4 text-right float-right text-xl">
                             <p>Change Group name</p>
                             <input
                                 className="text-black bg-white border-black border-2"
                                 type="text"
                             />
-                            <p>Change Emoji</p>
-                            <input
-                                className="text-black bg-white border-black border-2"
-                                type="dropdown"
-                            />
+                            <br />
+                            <label htmlFor="Emoji">Change Emoji</label>
+                            <br />
+                            <select
+                                name="Emoji"
+                                id="Emoji"
+                                className="text-5xl"
+                            >
+                                <option value="camera">🎥</option>
+                                <option value="projector">📽️</option>
+                                <option value="film">🎞️</option>
+                                <option value="clapper">🎬</option>
+                                <option value="popcorn">🍿</option>
+                                <option value="tv">📺</option>
+                                <option value="vhs">📼</option>
+                                <option value="cd">💿</option>
+                            </select>
                             <p>Change Background color</p>
                             <input
                                 type="color"
