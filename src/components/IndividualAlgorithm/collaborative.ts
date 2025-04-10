@@ -23,8 +23,8 @@ async function scoreIndCollab(
     movieId: number,
     userId: number
 ): Promise<number> {
-    let score = 0; // weighed ratings from similar users
-    let totalWeight = 0; // similarity weights
+    let score = 0; // weighed ratings from similar users = similarity * rating + .... x5
+    let totalWeight = 0; // similarity + similarity + .... x5
 
     // Fetch the user's genre boosts
     const userGenreBoosts: { genre: string; boost: number }[] = await db
@@ -78,13 +78,18 @@ async function scoreIndCollab(
         if (similarity > 0) {
             // push return value to array
             userSimilarities.push({
+                // create array object with userId and similarity
                 userId: String(otherUsersObject.userId),
                 similarity,
             });
         }
     }
     // Sort the users by similarity score in descending order
-    userSimilarities.sort((a, b) => b.similarity - a.similarity);
+    userSimilarities.sort(function (a, b) {
+        // Sort in descending order (https://www.w3schools.com/jsref/jsref_sort.asp)
+        return b.similarity - a.similarity;
+    });
+
     const topSimilarUsers = userSimilarities.slice(0, 5); // Get top 5 similar users
     // Get movie ratings from the top 5 similar users
     for (const { userId: similarUserId, similarity } of topSimilarUsers) {
@@ -118,18 +123,21 @@ async function scoreIndCollab(
         userGenres: { genre: string; boost: number }[],
         otherUserGenres: { genre: string; boost: number }[]
     ): number {
-        let similarityScore = 0;
-        let totalWeight = 0;
+        let similarityScore = 0; // EX: similarityScore Action + similarityScore Horror .... x5 for each user.
+        let totalWeight = 0; // EX: totalWeight Action + totalWeight Horror .... x5 for each user.
 
         for (const { genre, boost } of userGenres) {
-            const match = otherUserGenres.find((g) => g.genre === genre);
+            // for each genre in userGenres
+            const match = otherUserGenres.find(
+                (otherUser) => otherUser.genre === genre
+            ); // find the genre in otherUserGenres that matches the genre in userGenres
             if (match) {
                 similarityScore += boost * match.boost;
                 totalWeight += boost + match.boost;
             }
         }
 
-        return totalWeight > 0 ? similarityScore / totalWeight : 0;
+        return totalWeight > 0 ? similarityScore / totalWeight : 0; // returns similarity (line 74)
     }
 }
 
