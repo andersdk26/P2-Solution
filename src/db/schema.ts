@@ -35,7 +35,7 @@ export const testRatings = sqliteTable('testRatings', {
     userId: integer('userId').notNull(),
     movieId: integer('movieId').notNull(),
     movieRating: real('rating').notNull(),
-    timestamp: integer('genres').notNull(),
+    timestamp: integer('timestamp').notNull(),
 });
 
 export type InsertRating = typeof testRatings.$inferInsert;
