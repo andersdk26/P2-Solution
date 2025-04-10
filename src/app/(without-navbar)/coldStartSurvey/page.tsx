@@ -15,9 +15,9 @@ export default function SelectMovies(): JSX.Element {
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
 
-    const [recommendedMovies, setRecommendedMovies] = useState<
-        movieWithRating[]
-    >([]);
+    // const [recommendedMovies, setRecommendedMovies] = useState<
+    //     movieWithRating[]
+    // >([]);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -26,9 +26,9 @@ export default function SelectMovies(): JSX.Element {
         );
         setSelectedMovies(savedMovies);
 
-        const getRecommendedMovies = async () =>
-            setRecommendedMovies(await collaborativeFiltering(200911));
-        getRecommendedMovies();
+        // const getRecommendedMovies = async () =>
+        //     setRecommendedMovies(await collaborativeFiltering(200911));
+        // getRecommendedMovies();
 
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));

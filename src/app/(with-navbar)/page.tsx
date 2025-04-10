@@ -13,6 +13,9 @@ import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
+import { movieWithRating } from '@/actions/movie/movie';
+import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
@@ -25,6 +28,10 @@ export default function Home(): JSX.Element {
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
 
+    const [recommendedMovies, setRecommendedMovies] = useState<
+        movieWithRating[]
+    >([]);
+
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         // Fetch the JSON file when the page loads
@@ -32,6 +39,13 @@ export default function Home(): JSX.Element {
             .then((response) => response.json())
             .then((data) => setMovies(data))
             .catch((error) => console.error('Error loading movies:', error));
+
+        // Get recommended movies by passing user ID as input parameter.
+        const getRecommendedMovies = async () =>
+            setRecommendedMovies(
+                await collaborativeFiltering(await verifyUser())
+            );
+        getRecommendedMovies();
     }, []);
 
     const handleImageClick = (image: string, altText: string): void => {
@@ -111,6 +125,15 @@ export default function Home(): JSX.Element {
 
             {/*Container for everything in main page below header and above footer*/}
             <div className="container">
+                <section>
+                    <h1>Recommended Movies</h1>
+                    {recommendedMovies.map((movie) => (
+                        <div key={movie.movieId}>
+                            <p>{movie.title}</p>
+                        </div>
+                    ))}
+                </section>
+
                 {/*Left Panel to Curtain Left Image*/}
                 <div className="border-solid border-2 border-black float-left">
                     <Image
