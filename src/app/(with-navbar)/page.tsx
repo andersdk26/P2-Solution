@@ -241,9 +241,7 @@ export default function Home(): JSX.Element {
                         {selectedMovieId !== null && (
                             <MovieImage movieId={selectedMovieId} />
                         )}
-
                         <h2>{sidebarAlt}</h2>
-
                         {/* Radio Button Row */}
                         <div className="ratingRow">
                             <ul>

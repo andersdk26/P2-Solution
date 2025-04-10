@@ -7,6 +7,7 @@ import getMovieImageURL from '@/actions/movie/movieImageUrl';
 interface MovieImageProps {
     movieId: number;
     title?: string;
+    fill?: boolean;
     onClick?: () => void;
     height?: number;
     width?: number;
@@ -16,6 +17,7 @@ interface MovieImageProps {
 
 export default function MovieImage({
     movieId,
+    fill = false,
     height = 450,
     width = 300,
     alt = 'Movie image',
@@ -47,15 +49,27 @@ export default function MovieImage({
 
     return (
         <>
-            <Image
-                title={title}
-                onClick={onClick}
-                src={imageURL}
-                alt={alt}
-                height={height}
-                width={width}
-                className={`${className} ${loadingImage && 'animate-pulse'}`}
-            />
+            {fill ? (
+                <Image
+                    title={title}
+                    onClick={onClick}
+                    src={imageURL}
+                    alt={alt}
+                    fill={true}
+                    sizes={`(max-width: ${width}px)`}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                />
+            ) : (
+                <Image
+                    title={title}
+                    onClick={onClick}
+                    src={imageURL}
+                    alt={alt}
+                    height={height}
+                    width={width}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                />
+            )}
         </>
     );
 }

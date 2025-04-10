@@ -3,10 +3,12 @@ import React, { useState, useEffect, JSX } from 'react';
 import ProfileImage from './profileImg';
 import { useRouter } from 'next/navigation';
 import userLogout from '@/actions/logIn/userLogout';
+import getUsername from '@/actions/logIn/username';
+import verifyUser from '@/actions/logIn/authenticateUser';
 
 const Profile = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [username, setUsername] = useState<string | null>(null); // State for username
+    const [username, setUsername] = useState('Username'); // State for username
     const router = useRouter();
 
     const toggleDropdown = (): void => {
@@ -21,21 +23,11 @@ const Profile = (): JSX.Element => {
     };
 
     // skaffer the logged-in user's username
-    useEffect(() => {
-        const fetchUsername = async () => {
-            try {
-                const response = await fetch('/api/user'); // Fetch den fra API
-                if (response.ok) {
-                    const data = await response.json();
-                    setUsername(data.username); // Set the username
-                } else {
-                    console.error('Failed to fetch username');
-                }
-            } catch (error) {
-                console.error('Error fetching username:', error);
-            }
-        };
 
+    useEffect(() => {
+        const fetchUsername = async (): Promise<void> => {
+            setUsername(await getUsername(verifyUser()));
+        };
         fetchUsername();
     }, []);
 
@@ -74,7 +66,7 @@ const Profile = (): JSX.Element => {
                                 alert('Error logging out! Please try again.');
                                 return;
                             }
-                            window.location.reload();
+                            //window.location.reload();
                             router.push('/logIn');
                         }}
                         className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
