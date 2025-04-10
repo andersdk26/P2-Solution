@@ -67,20 +67,12 @@ export default function Home(): JSX.Element {
                 <RatingCarousel movieId={selectedMovies} />
             </section>
 
-            {/* <section>
-                <h2>title</h2>
-                {/* <Image className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500"></Image> */}
-            {/* <Image
-                    key={index}
-                    src={`moviePosters.movie${x}`}
-                    alt="Movie poster"
-                    width={320}
-                    height={480}
-                />
-                rating */}
-            {/* <button>left</button>
-                <button>right</button>
-            </section> */}
+            <button
+                onClick={() => redirrectProfile('/')}
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
+            >
+                Submit
+            </button>
 
             <section>
                 {selectedMovies.map((movie) => (

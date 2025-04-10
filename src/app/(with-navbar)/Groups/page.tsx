@@ -2,27 +2,46 @@
 'use client';
 import React, { JSX } from 'react';
 import GroupIcon from '@/components/groupPage/groupIcon';
-import { groupId } from '@/components/groupPage/groupIcon';
 
+export type groupId = {
+    Id: number;
+    Name: string;
+    Emoji: string;
+    Members: string[];
+    Admin: string;
+    Color: string;
+    TextColor: string;
+};
+
+// test groups
 const groupIdTemp: groupId = {
     Id: 123,
     Name: 'Group1',
     Emoji: '🍿',
-    Members: 7,
+    Members: ['me', 'you', 'tom'],
+    Admin: 'me',
+    Color: 'white',
+    TextColor: 'black',
 };
 
 const groupIdTemp2: groupId = {
     Id: 124,
     Name: 'Group2',
     Emoji: '🎥',
-    Members: 2,
+    Members: ['mom', 'dad', 'child', 'you'],
+    Admin: 'you',
+    Color: 'blue-500',
+    TextColor: '[#282F72]',
 };
 
 const groupIdTemp3: groupId = {
     Id: 125,
     Name: 'Group5',
     Emoji: '🎞️',
-    Members: 4,
+    Members: ['sara', 'you', 'me', 'tom', 'mom', 'child', 'burger'],
+    Admin: 'sara',
+    Color: '[#282F72]',
+    TextColor: 'black',
 };
 
 const GroupSettings = (): JSX.Element => (
@@ -33,7 +52,7 @@ const GroupSettings = (): JSX.Element => (
             <p>
                 <i>You are admin</i>
             </p>
-            <section >
+            <section>
                 <GroupIcon groupId={groupIdTemp} />
                 <GroupIcon groupId={groupIdTemp3} />
             </section>
@@ -47,6 +66,7 @@ const GroupSettings = (): JSX.Element => (
         <section>
             <h2>Requests...</h2>
             <p>Groups that have asked you to join</p>
+            <GroupIcon groupId={groupIdTemp2} />
         </section>
     </div>
 );

@@ -31,9 +31,9 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                         index === 0 ? movieId.length - 1 : index - 1
                     )
                 }
-                className="absolute left-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                className="absolute left-0 z-30 bg-[#282F72] hover:bg-[#424ebd] text-white px-4 py-2 rounded-full shadow"
             >
-                &lt;
+                ⇦ 
             </button>
             <button
                 onClick={() =>
@@ -41,9 +41,9 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                         index === movieId.length - 1 ? 0 : index + 1
                     )
                 }
-                className="absolute right-0 z-30 bg-white/80 hover:bg-white text-black px-4 py-2 rounded-full shadow"
+                className="absolute right-0 z-30 bg-[#282F72] hover:bg-[#424ebd] text-white px-4 py-2 rounded-full shadow"
             >
-                &gt;
+                ⇨
             </button>
         </div>
     );
