@@ -19,7 +19,11 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 {/* Current image (center, front) */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={movieId[imageIndex]?.movieId} />
-                    <MovieTitle movieId={movieId[imageIndex]?.movieId} />
+
+                    <h4 className="w-[294px]">
+                        <MovieTitle movieId={movieId[imageIndex]?.movieId} />
+                    </h4>
+
                     <RatingPopcorn />
                 </div>
             </div>
@@ -33,7 +37,7 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 }
                 className="absolute left-0 z-30 bg-[#282F72] hover:bg-[#424ebd] text-white px-4 py-2 rounded-full shadow"
             >
-                ⇦ 
+                ⇦
             </button>
             <button
                 onClick={() =>

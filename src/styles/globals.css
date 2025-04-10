@@ -72,10 +72,17 @@ h3 {
     margin-left: 4px;
 }
 
-h3 {
+/* h3 {
     color: #dcdeef;
     font-weight: bolder;
     font-size: 30px;
+    margin-left: 4px;
+} */
+
+h4 {
+    color: #282f72;
+    font-weight: bolder;
+    font-size: 20px;
     margin-left: 4px;
 }
 
