@@ -23,16 +23,6 @@ type similarity = {
 export default async function collaborativeFiltering(
     targetUserId: number
 ): Promise<movieWithRating[]> {
-    // Fetch all user ratings from the table testRatings, except those from the target user.
-    const userRatingsFromDataset = await db
-        .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.movieRating,
-        })
-        .from(testRatings)
-        .where(ne(testRatings.userId, targetUserId));
-
     // Fetch all ratings from the table testRatings that have only been made by the target user.
     const targetUserRatings = await db
         .select({
@@ -42,6 +32,21 @@ export default async function collaborativeFiltering(
         })
         .from(testRatings)
         .where(eq(testRatings.userId, targetUserId));
+
+    // Abort recommendation algorithm if user has not rated enough movies.
+    if (targetUserRatings.length < 10) {
+        return [];
+    }
+
+    // Fetch all user ratings from the table testRatings, except those from the target user.
+    const userRatingsFromDataset = await db
+        .select({
+            userId: testRatings.userId,
+            movieId: testRatings.movieId,
+            movieRating: testRatings.movieRating,
+        })
+        .from(testRatings)
+        .where(ne(testRatings.userId, targetUserId));
 
     // Create a map for all the other users and their ratings: (userId, { rating(movieId, rating) }).
     const otherUserRatingsMap = new Map<number, rating[]>();
@@ -105,7 +110,7 @@ export default async function collaborativeFiltering(
         }
 
         // Now, if the target user and the "other user" has at least 10 movies in common.
-        if (commonMovies.length >= 10) {
+        if (commonMovies.length >= 6) {
             // Calculate a similarity between the two.
             const similarity = cosineSimilarity(
                 targetUserRatings,
@@ -116,9 +121,11 @@ export default async function collaborativeFiltering(
         }
     }
 
-    if (similarityScores.length === 0) {
-        // If no similar users are found, return an empty array.
-        console.log('No similar users found.');
+    if (similarityScores.length < 10) {
+        // If not enough similar users were found, return an empty array.
+        console.log(
+            `Not enough similar users found. Only ${similarityScores.length} weere found while 10 are needed.`
+        );
         return [];
     }
 
@@ -199,6 +206,7 @@ export default async function collaborativeFiltering(
             a.accumulativeRating / a.timesRated
     );
 
+    // Get the top 20 movies based on similar users ratings.
     const recommendedMovies = moviesRatedBySimilarUsers.slice(0, 20);
 
     console.log(recommendedMovies);
