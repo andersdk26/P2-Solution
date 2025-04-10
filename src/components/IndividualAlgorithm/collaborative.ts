@@ -12,12 +12,12 @@ import { eq, sql } from 'drizzle-orm';
 import { db } from '../../db';
 import {
     usersTable,
-    seenListTable,
-    seenListMoviesTable,
+    ratingsTable,
     moviesTable,
+    ratingsGenreBoostTable,
     genreBoostTable,
-    seenListGenreBoostTable,
 } from '../../db/schema';
+import { and, inArray } from 'drizzle-orm';
 
 async function scoreIndCollab(
     movieId: number,
@@ -29,21 +29,19 @@ async function scoreIndCollab(
     // Fetch the user's genre boosts
     const userGenreBoosts: { genre: string; boost: number }[] = await db
         .select({
-            userId: usersTable.id,
             genre: genreBoostTable.genre,
             boost: genreBoostTable.boost,
         })
-        .from(usersTable) // select from users table
-        .innerJoin(seenListTable, eq(usersTable.id, seenListTable.userId)) // join if ids the same as userId
-        .innerJoin(
-            seenListGenreBoostTable,
-            eq(seenListTable.id, seenListGenreBoostTable.seenListId)
-        ) // join if ids the same as seenListId
+        .from(ratingsGenreBoostTable)
         .innerJoin(
             genreBoostTable,
-            eq(seenListGenreBoostTable.genreBoostId, genreBoostTable.id)
-        ) // join if ids the same as genreBoostId
-        .where(eq(usersTable.id, userId)); // where the userId = userId
+            eq(ratingsGenreBoostTable.genreBoostId, genreBoostTable.id) // Join ratingsGenreBoostTable with genreBoostTable if ids match
+        )
+        .innerJoin(
+            ratingsTable,
+            eq(ratingsGenreBoostTable.ratingsId, ratingsTable.id) // Join ratingsGenreBoostTable with ratingsTable if ids match
+        )
+        .where(eq(ratingsTable.userId, userId)); // Ensure we do it for the right user.
 
     // fetch other users' genre boosts
     const otherUsersArray = await db
@@ -58,17 +56,16 @@ async function scoreIndCollab(
                 genre: genreBoostTable.genre,
                 boost: genreBoostTable.boost,
             })
-            .from(usersTable) // select from users table
-            .innerJoin(seenListTable, eq(usersTable.id, seenListTable.userId)) // join if ids the same as userId
-            .innerJoin(
-                seenListGenreBoostTable,
-                eq(seenListTable.id, seenListGenreBoostTable.seenListId)
-            ) // join if ids the same as seenListId
+            .from(ratingsGenreBoostTable)
             .innerJoin(
                 genreBoostTable,
-                eq(seenListGenreBoostTable.genreBoostId, genreBoostTable.id)
-            ) // join if ids the same as genreBoostId
-            .where(eq(usersTable.id, otherUsersObject.userId)); // where the userId == otherUsers.userId
+                eq(ratingsGenreBoostTable.genreBoostId, genreBoostTable.id) // Join ratingsGenreBoostTable with genreBoostTable
+            )
+            .innerJoin(
+                ratingsTable,
+                eq(ratingsGenreBoostTable.ratingsId, ratingsTable.id) // Join ratingsGenreBoostTable with ratingsTable
+            )
+            .where(eq(ratingsTable.userId, otherUsersObject.userId));
 
         // Calculate similarity score between the current user and other users
         const similarity = calculateUserSimilarity(
@@ -94,18 +91,13 @@ async function scoreIndCollab(
     // Get movie ratings from the top 5 similar users
     for (const { userId: similarUserId, similarity } of topSimilarUsers) {
         const ratedmovie = await db
-            .select({ rating: moviesTable.PersonalRating })
-            .from(moviesTable)
-            .innerJoin(
-                seenListMoviesTable,
-                eq(moviesTable.id, seenListMoviesTable.movieId)
-            )
-            .innerJoin(
-                seenListTable,
-                eq(seenListMoviesTable.seenListId, seenListTable.id)
-            )
+            .select({ rating: ratingsTable.personalRating }) // Fetch the personalRating
+            .from(ratingsTable)
             .where(
-                sql`${eq(seenListTable.userId, Number(similarUserId))} AND ${eq(moviesTable.id, movieId)}`
+                and(
+                    eq(ratingsTable.userId, Number(similarUserId)), // Match the similar user's ID
+                    eq(ratingsTable.movieId, movieId) // Match the movie ID
+                )
             )
             .limit(1); // We are expecting only one rating per user for a movie
 
