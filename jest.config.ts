@@ -1,10 +1,13 @@
 const jestConfig = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
-    setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/jest/jest.setup.ts'],
 
     transform: {
-        '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+        '^.+\\.(js|jsx|ts|tsx)$': [
+            'babel-jest',
+            { configFile: './jest/.babelrc.js' },
+        ],
     },
 
     moduleNameMapper: {
@@ -19,4 +22,3 @@ const jestConfig = {
 };
 
 export default jestConfig;
-
