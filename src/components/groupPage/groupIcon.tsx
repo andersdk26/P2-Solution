@@ -6,10 +6,8 @@ import '@/styles/group.css';
 export default function GroupIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
-    const color = `bg-${groupId.Settings.BackgroundColor}`;
+    const color = `${groupId.Settings.BackgroundColor}`;
     const textColor = `text-${groupId.Settings.TextColor}`;
-    // const textColor = `text-pink-900`;
-    console.log(color, textColor);
     const memberCount = groupId.Members.length;
 
     const toggleGroup = (): void => {

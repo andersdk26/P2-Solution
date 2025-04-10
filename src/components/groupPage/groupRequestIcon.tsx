@@ -6,8 +6,8 @@ import '@/styles/group.css';
 export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
-    const color = `bg-${groupId.Color}`;
-    const textColor = `text-${groupId.TextColor}`;
+    const color = `${groupId.Settings.BackgroundColor}`;
+    const textColor = `text-${groupId.Settings.TextColor}`;
     const memberCount = groupId.Members.length;
 
     const toggleGroup = (): void => {
@@ -24,7 +24,9 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                 <p className={`text-xl ${textColor} m-2 font-bold`}>
                     {groupId.Name}
                 </p>
-                <p className="text-9xl m-0 select-none">{groupId.Emoji}</p>
+                <p className="text-9xl m-0 select-none">
+                    {groupId.Settings.Emoji}
+                </p>
                 <p className={`text-l m-2`}>
                     Members:
                     <span className="font-bold">{memberCount}</span>

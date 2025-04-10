@@ -37,6 +37,15 @@ export default function CreateGroupIcon(): JSX.Element {
                         >
                             <u>Close</u>
                         </button>
+
+                        <h5
+                            className={` text-5xl m-2 font-bold text-center mt-10 `}
+                        >
+                            Create a group
+                        </h5>
+                        <p className="text-center mt-4 text-xl">
+                            Add friends to your group!
+                        </p>
                     </div>
                 </section>
             )}
