@@ -3,13 +3,11 @@ import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
 import '@/styles/group.css';
 
-export default function GroupIcon({ groupId }: groupId): JSX.Element {
+export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
-    const color = `bg-${groupId.Settings.BackgroundColor}`;
-    const textColor = `text-${groupId.Settings.TextColor}`;
-    // const textColor = `text-pink-900`;
-    console.log(color, textColor);
+    const color = `bg-${groupId.Color}`;
+    const textColor = `text-${groupId.TextColor}`;
     const memberCount = groupId.Members.length;
 
     const toggleGroup = (): void => {
@@ -26,9 +24,7 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                 <p className={`text-xl ${textColor} m-2 font-bold`}>
                     {groupId.Name}
                 </p>
-                <p className="text-9xl m-0 select-none">
-                    {groupId.Settings.Emoji}
-                </p>
+                <p className="text-9xl m-0 select-none">{groupId.Emoji}</p>
                 <p className={`text-l m-2`}>
                     Members:
                     <span className="font-bold">{memberCount}</span>
@@ -64,8 +60,8 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                             ID: {groupId.Id}
                         </p>
 
-                        <div className="left-8 text-left float-left ml-4 mt-0">
-                            <p className="text-xl m-2 font-bold">
+                        <div className="left-8 text-left float-left ml-4 ">
+                            <p className="text-xl m-2 font-bold mt-0">
                                 Admin:
                                 <span className="font-normal">
                                     {groupId.Admin}
@@ -82,21 +78,22 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                                     {member}
                                 </p>
                             ))}
-                            <p className="text-xl m-2 font-bold">
-                                Last movie seen in group:
-                                <span className="font-normal ml-6">?</span>
-                            </p>
-
-                            {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer">
-                                Get New Recommendation!
-                            </button>
 
                             <br />
+                            <p className="text-4xl">
+                                <i>
+                                    {groupId.Name} wants you to join their
+                                    group!
+                                </i>
+                            </p>
+                            {/* Accept invite butto */}
+                            <button className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0">
+                                Accept
+                            </button>
 
-                            {/* Leave group button */}
-                            <button className="bg-red-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer">
-                                Leave group
+                            {/* deny invite button */}
+                            <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer">
+                                Reject
                             </button>
                         </div>
                     </div>
