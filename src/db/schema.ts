@@ -30,17 +30,6 @@ export const moviesTable = sqliteTable('movies', {
     genres: text('genres').notNull(),
 });
 
-export const testRatings = sqliteTable('testRatings', {
-    id: integer('id').primaryKey(),
-    userId: integer('userId').notNull(),
-    movieId: integer('movieId').notNull(),
-    movieRating: real('rating').notNull(),
-    timestamp: integer('timestamp').notNull(),
-});
-
-export type InsertRating = typeof testRatings.$inferInsert;
-export type SelectRating = typeof testRatings.$inferSelect;
-
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
