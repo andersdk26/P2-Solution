@@ -6,9 +6,18 @@ config({ path: '.env' });
 export default defineConfig({
     schema: './src/db/schema.ts',
     out: './migrations',
-    dialect: 'turso',
+    dialect: 'mysql',
     dbCredentials: {
-        url: process.env.TURSO_CONNECTION_URL!,
-        authToken: process.env.TURSO_AUTH_TOKEN!,
+        url: `mysql://${process.env.DATABASE_USER!}:${process.env.DATABASE_PASSWORD!}@${process.env.DATABASE_HOST!}:${process.env.DATABASE_PORT!}/${process.env.DATABASE_NAME!}`,
     },
 });
+
+// export default defineConfig({
+//     schema: './src/db/schema.ts',
+//     out: './migrations',
+//     dialect: 'turso',
+//     dbCredentials: {
+//         url: process.env.TURSO_CONNECTION_URL!,
+//         authToken: process.env.TURSO_AUTH_TOKEN!,
+//     },
+// });
