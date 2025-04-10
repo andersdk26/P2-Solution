@@ -9,8 +9,8 @@ import { eq, sql } from 'drizzle-orm';
 import {
     genreBoostTable,
     moviesTable,
-    seenListGenreBoostTable,
-    seenListTable,
+    ratingsGenreBoostTable,
+    ratingsTable,
 } from '../../db/schema';
 import { and, inArray } from 'drizzle-orm';
 
@@ -18,11 +18,10 @@ async function scoreIndContent(
     userId: number,
     movieId: number
 ): Promise<{ scoreIndContent: number }> {
-    // Fetch the movie properties
+    // Fetch the movie property
     const movie = await db
         .select({
-            InternalRating: moviesTable.InternalRating,
-            InternalGenre: moviesTable.InternalGenre,
+            InternalGenre: moviesTable.internalGenre,
         })
         .from(moviesTable)
         .where(eq(moviesTable.id, movieId)) // Fetch the movie with the given movieId
@@ -48,16 +47,16 @@ async function scoreIndContent(
                 genreBoostTable.id,
                 db
                     .select(
-                        // SeenListGenreBoostTable.genreBoostId is the foreign key to GenreBoostTable})
-                        { genreBoostId: seenListGenreBoostTable.genreBoostId }
+                        // ratingsGenreBoostTable.genreBoostId is the foreign key to GenreBoostTable})
+                        { genreBoostId: ratingsGenreBoostTable.genreBoostId }
                     )
-                    .from(seenListGenreBoostTable)
+                    .from(ratingsGenreBoostTable)
                     .innerJoin(
-                        // join the SeenListGenreBoostTable with the SeenListTable via their foreign keys in SeenListGenreBoostTable
-                        seenListTable,
-                        eq(seenListTable.id, seenListGenreBoostTable.seenListId)
+                        // join the ratingsGenreBoostTable with the ratingsTable via if their ids match.
+                        ratingsTable,
+                        eq(ratingsTable.id, ratingsGenreBoostTable.genreBoostId)
                     )
-                    .where(eq(seenListTable.userId, userId)) // Ensure we only get the genre boosts for the userId
+                    .where(eq(ratingsTable.userId, userId)) // Ensure we only get the genre boosts for the userId
             )
         );
 

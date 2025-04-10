@@ -1,6 +1,12 @@
 import { group } from 'console';
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text, blob } from 'drizzle-orm/sqlite-core';
+import {
+    integer,
+    sqliteTable,
+    text,
+    blob,
+    real,
+} from 'drizzle-orm/sqlite-core';
 /*
 export const usersTable = sqliteTable('users', {
 id: integer('id').primaryKey(),
@@ -14,16 +20,9 @@ lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
 settings: text('settings').default(sql`'{}'`), // JSON stringified object
 });
 */
-
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
-/*
-export const moviesTable = sqliteTable('movies', {
-id: integer('id').primaryKey(),
-title: text('title').notNull(),
-genres: text('genres').notNull(),
-});
-*/
+
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
@@ -36,17 +35,23 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
+export const testRatings = sqliteTable('testRatings', {
+    id: integer('id').primaryKey(),
+    userId: integer('userId').notNull(),
+    movieId: integer('movieId').notNull(),
+    movieRating: real('rating').notNull(),
+    timestamp: integer('timestamp').notNull(),
+});
+
 // Skippers tables
 export const moviesTable = sqliteTable('movies', {
     id: integer('id').primaryKey(),
-    InternalRating: integer('InternalRating').notNull(),
-    InternalGenre: text('InternalGenre').notNull(),
-    StreamingService: text('StreamingService').notNull(),
-    Title: text('Title').notNull(),
-    Releaseyear: integer('Releaseyear').notNull(),
-    PersonalRating: integer('PersonalRating'),
+    internalRating: integer('InternalRating'),
+    internalGenre: text('genre').notNull(),
+    streamingService: text('StreamingService'),
+    title: text('title').notNull(),
+    releaseyear: integer('Releaseyear'),
 });
-
 export const usersTable = sqliteTable('users', {
     id: integer('id').primaryKey(),
     username: text('username').notNull(),
@@ -57,6 +62,7 @@ export const usersTable = sqliteTable('users', {
         .notNull(),
     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
     settings: text('settings').default(sql`'{}'`), // JSON stringified object
+    profileIcon: text('profile_icon'),
 });
 
 // Contains genre and their boost values
@@ -66,26 +72,21 @@ export const genreBoostTable = sqliteTable('genre_boost', {
     boost: integer('boost').notNull(),
 });
 
-export const seenListTable = sqliteTable('seen_list', {
-    id: integer('id').primaryKey(), // The id we use
+export const ratingsTable = sqliteTable('ratings', {
+    id: integer('id').primaryKey(), // Primary key
     userId: integer('user_id')
         .notNull()
-        .references(() => usersTable.id), // Who owns the seen list
-});
-
-export const seenListMoviesTable = sqliteTable('seen_list_movies', {
-    seenListId: integer('seen_list_id')
-        .notNull()
-        .references(() => seenListTable.id), // User
+        .references(() => usersTable.id), // Foreign key to usersTable
     movieId: integer('movie_id')
         .notNull()
-        .references(() => moviesTable.id), // Movies
+        .references(() => moviesTable.id), // Foreign key to moviesTable
+    personalRating: integer('personal_rating').notNull(), // User rating
 });
 
-export const seenListGenreBoostTable = sqliteTable('seen_list_genre_boost', {
-    seenListId: integer('seen_list_id')
+export const ratingsGenreBoostTable = sqliteTable('ratings_genre_boost', {
+    ratingsId: integer('ratings')
         .notNull()
-        .references(() => seenListTable.id), // User property
+        .references(() => ratingsTable.id), // User property
     genreBoostId: integer('genre_boost_id')
         .notNull()
         .references(() => genreBoostTable.id), // genre and boost property

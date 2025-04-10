@@ -4,10 +4,10 @@ Desciption: Need weights, need ERROR handling for fallback cases! Need to check 
 import { eq, sql } from 'drizzle-orm';
 import scoreIndCollab from '@/components/IndividualAlgorithm/collaborative';
 import scoreIndContent from '@/components/IndividualAlgorithm/contentbased';
-import calculatePreferredGenres from '@/components/IndividualAlgorithm/preferredGenre';
+import calculatePreferredGenres from '@/components/IndividualAlgorithm/PreferredGenre';
 
 export async function finalRecommendation(
-    userId: string,
+    userId: number,
     movieIds: number[]
 ): Promise<{ movieId: number; score: number }[]> {
     await calculatePreferredGenres(userId);
