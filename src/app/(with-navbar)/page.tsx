@@ -8,8 +8,6 @@ interface Movie {
 import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
-import movieCurtainLeft from './public/img/movieCurtainLeft.png';
-import movieCurtainRight from './public/img/movieCurtainRight.png';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
@@ -126,28 +124,28 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            <div className="container">
+            <div>
                 {/*Left Panel to Curtain Left Image*/}
-                <div className="border-solid border-2 border-black float-left">
+                <div className="float-left h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainLeft.png"
                         alt="Curtain Left"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
-                <div className="border-solid border-2 border-black float-right">
+                <div className="float-right h-auto w-auto z-2">
                     <Image
                         src="/img/movieCurtainRight.png"
                         alt="Curtain Right"
-                        width={150}
-                        height={200}
+                        width={350}
+                        height={450}
                     />
                 </div>
 
-                {/* Container for the three divs in the center (title, description, carousel and seats)*/}
+                {/* Container for the two divs in the center (title, description, and carousel)*/}
                 <div className="content-center text-center">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
                     <div className="midTopPannel">
@@ -157,7 +155,8 @@ export default function Home(): JSX.Element {
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] ">
                             This is your recommendations for the day
-                            <br></br>You receive new ones everyday!
+                            <br></br>You receive new ones every day!<br></br>
+                            Click on a movie to rate it
                         </p>
                     </div>
 
@@ -182,52 +181,36 @@ export default function Home(): JSX.Element {
                                 </div>
                             ))}
                         </div>
-
-                        {/* Navigation buttons */}
-                        <div className="buttonWrapper">
-                            <button
-                                onClick={handlePreviousPage}
-                                //disabled={currentPage === 0}
-                                className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
-                            >
-                                &lt;
-                            </button>
-
-                            <button
-                                onClick={handleNextPage}
-                                // disabled={
-                                //     (currentPage + 1) * moviesPerPage >=
-                                //     movies.length
-                                // }
-                                className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
-                            />
-                        </div>
                     </div>
-
-                    {/*Bottom Middle Pannel to movie seats*/}
-                    <div className="border-solid border-2 border-black float-left">
-                        <h1>Take a seat 💺💺</h1>
+                    {/* Navigation buttons */}
+                    <div className="buttonWrapper">
+                        <button
+                            onClick={handlePreviousPage}
+                            //disabled={currentPage === 0}
+                            // className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                        >
+                            ⇦
+                        </button>
+                        <button
+                            onClick={handleNextPage}
+                            // disabled={
+                            //     (currentPage + 1) * moviesPerPage >=
+                            //     movies.length
+                            // }
+                            // className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                        >
+                            ⇨
+                        </button>
                     </div>
                 </div>
             </div>
-            {/* Movie Carousel
-            <div
-                className="block top-20 items-center justify-center z-2"
-                // onClick={() =>
-                //     handleImageClick(
-                //         'https://media.themoviedb.org/t/p/w300_and_h450_bestv2/j067U2Krh9OlM7iDACCHRbod9Hj.jpg',
-                //         'movie'
-                //     )
-                // }
-            >
-                <Carousel movieIds={[1, 2, 3, 4, 5, 6, 7, 8, 9]}></Carousel>
-            </div> */}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
                     <div className="sideBar">
                         <button
+                            className="m-4 text-xl underline cursor-pointer"
                             onClick={() => {
                                 setSelectedMovieId(null);
                                 if (backgroundDivRef.current) {
@@ -379,6 +362,7 @@ export default function Home(): JSX.Element {
                     </div>
                 </section>
             )}
+            {/* The group seats, redirects to groups page */}
             <GroupSeats />
 
             {/* Pagination Controls
