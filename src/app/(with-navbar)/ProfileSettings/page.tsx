@@ -6,6 +6,7 @@ import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import './ProfileSettings.css';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');

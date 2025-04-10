@@ -1,0 +1,27 @@
+.profilePic {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: brown;
+    place-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.button-with-text {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.button-text {
+    font-size: 1.2rem;
+    color: #282f72;
+    font-weight: bold;
+    text-align: center;
+}
+
+.change-icon {
+    width: 20px;
+}
