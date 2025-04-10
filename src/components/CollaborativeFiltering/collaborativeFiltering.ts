@@ -1,6 +1,6 @@
 'use server';
 
-import { movieWithRating, getMovieById } from '@/actions/movie/movie';
+import { movieWithRating, getMovieById, movie } from '@/actions/movie/movie';
 import { testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
@@ -22,19 +22,22 @@ type similarity = {
 
 export default async function collaborativeFiltering(
     targetUserId: number
-): Promise<movieWithRating[]> {
+): Promise<movie[]> {
     // Fetch all ratings from the table testRatings that have only been made by the target user.
     const targetUserRatings = await db
         .select({
             userId: testRatings.userId,
             movieId: testRatings.movieId,
-            movieRating: testRatings.movieRating,
+            movieRating: testRatings.rating,
         })
         .from(testRatings)
         .where(eq(testRatings.userId, targetUserId));
 
+    console.log('Target user ratings have been fetched.');
+
     // Abort recommendation algorithm if user has not rated enough movies.
     if (targetUserRatings.length < 10) {
+        console.log('Target user has not rated enough movies.');
         return [];
     }
 
@@ -43,10 +46,12 @@ export default async function collaborativeFiltering(
         .select({
             userId: testRatings.userId,
             movieId: testRatings.movieId,
-            movieRating: testRatings.movieRating,
+            movieRating: testRatings.rating,
         })
         .from(testRatings)
         .where(ne(testRatings.userId, targetUserId));
+
+    console.log('Other user ratings have been fetched.');
 
     // Create a map for all the other users and their ratings: (userId, { rating(movieId, rating) }).
     const otherUserRatingsMap = new Map<number, rating[]>();
@@ -67,6 +72,8 @@ export default async function collaborativeFiltering(
         });
     }
 
+    console.log('Other user ratings have been mapped.');
+
     // Convert the map to an array of users instead for easier operations later on.
     const otherUserRatings: user[] = Array.from(
         otherUserRatingsMap.entries()
@@ -74,6 +81,8 @@ export default async function collaborativeFiltering(
         userId,
         ratings,
     }));
+
+    console.log('Map has been converted to array.');
 
     // Create a new map for the target users ratings: (movieId, rating).
     const targetRatingMap = new Map<number, number>();
@@ -110,7 +119,7 @@ export default async function collaborativeFiltering(
         }
 
         // Now, if the target user and the "other user" has at least 10 movies in common.
-        if (commonMovies.length >= 6) {
+        if (commonMovies.length >= 10) {
             // Calculate a similarity between the two.
             const similarity = cosineSimilarity(
                 targetUserRatings,
@@ -128,6 +137,8 @@ export default async function collaborativeFiltering(
         );
         return [];
     }
+
+    console.log('Similar users have been found.');
 
     // Create a sorted array of the similar users.
     let mostSimilarUsers = similarityScores.sort(
@@ -175,44 +186,53 @@ export default async function collaborativeFiltering(
         }
     }
 
+    console.log('Movie scores have been calculated.');
+
     // Create array for storing all movies rated by the similar users.
-    const moviesRatedBySimilarUsers: movieWithRating[] = [];
+    // const moviesRatedBySimilarUsers: movieWithRating[] = [];
+    const moviesRatedBySimilarUsersMap = new Map<number, number>();
 
     // Iterate through all entries of the movieRatingsMap.
     for (const [
         movieId,
         { movieScore, timesRated },
     ] of movieRatingsMap.entries()) {
-        // Fetch movie details using getMovieById.
-        const movie = await getMovieById(movieId);
-
         // If movie is not NULL and the target user has not rated the movie.
-        if (movie !== null && !targetRatingMap.has(movieId)) {
+        if (!targetRatingMap.has(movieId)) {
             // Add the movie to the array of rated movies by similar users.
-            moviesRatedBySimilarUsers.push({
-                movieId: movie.movieId,
-                title: movie.movieTitle,
-                genres: movie.movieGenres,
-                accumulativeRating: movieScore,
-                timesRated,
-            });
+            moviesRatedBySimilarUsersMap.set(movieId, movieScore / timesRated);
         }
     }
 
-    // Now sort the array of rated movies by their rating.
-    moviesRatedBySimilarUsers.sort(
-        (a, b) =>
-            b.accumulativeRating / b.timesRated -
-            a.accumulativeRating / a.timesRated
+    const moviesRatedBySimilarUsersArray = Array.from(
+        moviesRatedBySimilarUsersMap
     );
 
+    // Now sort the array of rated movies by their rating.
+    moviesRatedBySimilarUsersArray.sort((a, b) => b[1] - a[1]);
+
+    console.log('Movie array has been sorted.');
+
     // Get the top 20 movies based on similar users ratings.
-    const recommendedMovies = moviesRatedBySimilarUsers.slice(0, 20);
+    const recommendedMovies = moviesRatedBySimilarUsersArray.slice(0, 20);
+
+    const arrayOfRecommendedMovies: movie[] = [];
+
+    for (const recommendedMovie of recommendedMovies) {
+        const result = await getMovieById(recommendedMovie[0]);
+        if (result) {
+            arrayOfRecommendedMovies.push(result);
+        }
+    }
+    // ################################
+    // Fetch movie details using getMovieById.
+    // const movie = await getMovieById(movieId);
+    // ################################
 
     console.log(recommendedMovies);
 
     // Return the sorted array of recommended movies.
-    return recommendedMovies;
+    return arrayOfRecommendedMovies;
 }
 
 function cosineSimilarity(userA: number[], userB: number[]): number {
