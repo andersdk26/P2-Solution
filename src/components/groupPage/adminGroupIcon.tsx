@@ -1,10 +1,11 @@
-import { JSX } from 'react';
+import { JSX, useRef } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
 import '@/styles/group.css';
 
-export default function GroupIcon({ groupId }: groupId): JSX.Element {
+export default function AdminGroupIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
+    // const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     const color = `${groupId.Settings.BackgroundColor}`;
     const textColor = `text-${groupId.Settings.TextColor}`;
@@ -16,6 +17,16 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
 
     return (
         <>
+            {/* <div
+                className="none w-full h-full z-3 bg-black"
+                id="backgroundDiv"
+                onClick={() => {
+                    setAboutGroupOpen(false);
+                    if (backgroundDivRef.current) {
+                        backgroundDivRef.current.style.display = 'none';
+                    }
+                }}
+            ></div> */}
             {/* The div for the entire box, onclick: open the about group */}
             <div
                 className={`size-60 border-2 border-solid border-[#282F72] ${color} ${textColor} inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
@@ -62,8 +73,8 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                             ID: {groupId.Id}
                         </p>
 
-                        <div className="left-8 text-left float-left ml-4 mt-0">
-                            <p className="text-xl m-2 font-bold">
+                        <div className="left-8 text-left float-left ml-4">
+                            <p className="text-xl m-2 font-bold mt-0">
                                 Admin:
                                 <span className="font-normal">
                                     {groupId.Admin}
@@ -86,16 +97,58 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                             </p>
 
                             {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer">
+                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer">
                                 Get New Recommendation!
                             </button>
 
                             <br />
+                            {/* Invite group members */}
+                            <button className="bg-green-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer">
+                                Invite members
+                            </button>
 
                             {/* Leave group button */}
-                            <button className="bg-red-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer">
-                                Leave group
+                            <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer">
+                                Delete group
                             </button>
+                        </div>
+
+                        {/* right div, change group settings */}
+                        <div className="right-8 mr-4 text-right float-right text-xl">
+                            <p>Change Group name</p>
+                            <input
+                                className="text-black bg-white border-black border-2"
+                                type="text"
+                            />
+                            <br />
+                            <label htmlFor="Emoji">Change Emoji</label>
+                            <br />
+                            <select
+                                name="Emoji"
+                                id="Emoji"
+                                className="text-5xl"
+                            >
+                                <option value="camera">🎥</option>
+                                <option value="projector">📽️</option>
+                                <option value="film">🎞️</option>
+                                <option value="clapper">🎬</option>
+                                <option value="popcorn">🍿</option>
+                                <option value="tv">📺</option>
+                                <option value="vhs">📼</option>
+                                <option value="cd">💿</option>
+                            </select>
+                            <p>Change Background color</p>
+                            <input
+                                type="color"
+                                name="backgroundColor"
+                                id="backgroundColorSelect"
+                                className="rounded-sm border-black border-2"
+                            />
+                            <p>Change Text color</p>
+                            <input
+                                type="color"
+                                className="rounded-sm border-black border-2"
+                            />
                         </div>
                     </div>
                 </section>

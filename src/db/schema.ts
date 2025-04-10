@@ -35,7 +35,7 @@ export const testRatings = sqliteTable('testRatings', {
     userId: integer('userId').notNull(),
     movieId: integer('movieId').notNull(),
     movieRating: real('rating').notNull(),
-    timestamp: integer('genres').notNull(),
+    timestamp: integer('timestamp').notNull(),
 });
 
 export type InsertRating = typeof testRatings.$inferInsert;
@@ -52,6 +52,17 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
+
+export const testRatings = sqliteTable('testRatings', {
+    id: integer('id').primaryKey(),
+    userId: integer('userId').notNull(),
+    movieId: integer('movieId').notNull(),
+    rating: integer('rating').notNull(),
+    timestamp: integer('timestamp').notNull(),
+});
+
+export type InsertTestRatings = typeof testRatings.$inferInsert;
+export type SelectTestRatings = typeof testRatings.$inferSelect;
 
 /* Skippers tables */
 // export const moviesTable = sqliteTable('movies', {
