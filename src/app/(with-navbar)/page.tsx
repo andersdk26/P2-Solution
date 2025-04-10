@@ -18,28 +18,48 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import { redirect } from 'next/navigation';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
+import { getMoviesByIds } from '@/actions/movie/movie';
+
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
+    const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
-    useEffect(() => {
-        // Fetch the JSON file when the page loads
-        fetch('Movie.json')
-            .then((response) => response.json())
-            .then((data) => setMovies(data))
-            .catch((error) => console.error('Error loading movies:', error));
-    }, []);
 
-    const handleImageClick = (image: string, altText: string): void => {
-        setSidebarImage(image);
-        setSidebarAlt(altText); // Set the alt text (title) when the image is clicked
-        setSelectedRating(null); // Reset rating when a new image is selected
-        if (backgroundDivRef.current) {
-            backgroundDivRef.current.style.display = 'block';
+    const moviesPerPage = 3;
+    const totalMovies = 30;
+    const displayedMovies: Movie[] = Array.from(
+        { length: totalMovies },
+        (_, index) => ({
+            title: '',
+            image: `/img/movies/movie${index + 1}.png`,
+        })
+    );
+
+    const handleImageClick = async (movieId: number): Promise<void> => {
+        try {
+            const movies = await getMoviesByIds([movieId]);
+            const movie = movies[0]; // Since we're passing one ID, get the first result
+
+            if (!movie) {
+                console.error(`Movie with ID ${movieId} not found.`);
+                return;
+            }
+
+            setSidebarImage(`/img/movies/movie${movieId}.png`);
+            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
+            setSelectedRating(null);
+            setSelectedMovieId(movieId);
+
+            if (backgroundDivRef.current) {
+                backgroundDivRef.current.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Failed to fetch movie by ID:', error);
         }
     };
 
@@ -55,10 +75,6 @@ export default function Home(): JSX.Element {
             setSelectedRating(Number(event.target.value));
         }
     };
-
-    const moviesPerPage = 3;
-    const totalMovies = 30;
-    const displayedMovies = movies.slice(0, totalMovies);
 
     const handleNextPage = (): void => {
         // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
@@ -156,18 +172,12 @@ export default function Home(): JSX.Element {
                         >
                             {displayedMovies.map((movie, index) => (
                                 <div key={index} className="posterItem">
-                                    <Image
-                                        className="moviePoster"
+                                    <MovieImage
+                                        movieId={index + 1}
+                                        title={movie.title}
                                         onClick={() =>
-                                            handleImageClick(
-                                                movie.image,
-                                                movie.title
-                                            )
+                                            handleImageClick(index + 1)
                                         }
-                                        src={movie.image}
-                                        alt={movie.title}
-                                        width={150}
-                                        height={200}
                                     />
                                 </div>
                             ))}
@@ -219,7 +229,7 @@ export default function Home(): JSX.Element {
                     <div className="sideBar">
                         <button
                             onClick={() => {
-                                setSidebarImage(null);
+                                setSelectedMovieId(null);
                                 if (backgroundDivRef.current) {
                                     backgroundDivRef.current.style.display =
                                         'none';
@@ -228,14 +238,10 @@ export default function Home(): JSX.Element {
                         >
                             Close
                         </button>
-                        <Image
-                            src={sidebarImage}
-                            alt={sidebarAlt}
-                            width={500}
-                            height={500}
-                        />
-                        <h4>{sidebarAlt}</h4>
-
+                        {selectedMovieId !== null && (
+                            <MovieImage movieId={selectedMovieId} />
+                        )}
+                        <h2>{sidebarAlt}</h2>
                         {/* Radio Button Row */}
                         <div className="ratingRow">
                             <ul>
