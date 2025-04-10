@@ -51,11 +51,11 @@ export default function ProfileSettings() {
 
             <div className="flex flex-col items-center mb-8">
                 <Image
-                    src="/popcornImage.jpeg"
+                    src="/img/profileSettingIcons/derpPopcornBucket.png"
                     alt="Profile Icon"
                     width={100}
                     height={100}
-                    className="rounded-full border border-black"
+                    className="w-25 h-25 rounded-full border border-black object-cover"
                 />
                 <p className="mt-2 text-blue-800 underline cursor-pointer">
                     Change icon

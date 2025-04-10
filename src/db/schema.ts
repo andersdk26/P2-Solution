@@ -57,6 +57,7 @@ export const usersTable = sqliteTable('users', {
         .notNull(),
     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
     settings: text('settings').default(sql`'{}'`), // JSON stringified object
+    profileIcon: text('profile_icon'),
 });
 
 // Contains genre and their boost values
