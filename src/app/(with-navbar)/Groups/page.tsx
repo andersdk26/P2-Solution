@@ -64,8 +64,14 @@ const GroupSettings = (): JSX.Element => (
             <p className="text-2xl ml-4">
                 <i>You are admin</i>
             </p>
-            <div className="flex">
+            <div className="table-row overflow-scroll">
                 <AdminGroupIcon groupId={groupIdTemp} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
                 <AdminGroupIcon groupId={groupIdTemp3} />
                 <CreateGroupIcon />
             </div>
@@ -73,7 +79,7 @@ const GroupSettings = (): JSX.Element => (
 
         <section>
             <h2 className="ml-4">Groups you have joined</h2>
-            <div className="flex">
+            <div className="table-row">
                 <GroupIcon groupId={groupIdTemp2} />
                 <SearchGroupIcon />
             </div>

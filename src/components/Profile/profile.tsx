@@ -44,19 +44,19 @@ const Profile = (): JSX.Element => {
                     {/* Viser username. Hvis den ikke kan skaffe username insætter den Loading... istedet*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Profile Settings
                     </button>
                     <button
                         onClick={() => redirrectProfile('/Watchlist')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Watchlist
                     </button>
                     <button
                         onClick={() => redirrectProfile('/Help')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Help
                     </button>
@@ -69,7 +69,7 @@ const Profile = (): JSX.Element => {
                             //window.location.reload();
                             router.push('/logIn');
                         }}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Log out
                     </button>
