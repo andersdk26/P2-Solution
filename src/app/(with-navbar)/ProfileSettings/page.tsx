@@ -146,7 +146,7 @@ export default function ProfileSettings() {
                 </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="mb-0 mr-26 underline text-blue-800 cursor-pointer select-none"
+                        className="mb-3 mr-26 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'username' ? null : 'username'
@@ -184,7 +184,7 @@ export default function ProfileSettings() {
                 </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="mb-0 mr-26 underline text-blue-800 cursor-pointer select-none"
+                        className="mb-3 mr-26 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'password' ? null : 'password'
