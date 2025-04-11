@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { JSX } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
@@ -39,7 +39,7 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
             {isAboutGroupOpen && (
                 // Container for the about group
                 <section
-                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
                 >
                     {/* left div, About group information */}
                     <div
@@ -48,7 +48,7 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                             backgroundColor: groupId.Settings.BackgroundColor,
                             color: groupId.Settings.TextColor,
                         }}
-                        className={`float z-30 w-300 h-150 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center`}
+                        className={`float z-30 w-5/6 h-2/3 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
                         {/* close button */}
                         <button

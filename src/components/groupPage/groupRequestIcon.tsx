@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { JSX } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
@@ -39,7 +39,7 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
             {isAboutGroupOpen && (
                 // Container for the about group
                 <section
-                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center `}
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center `}
                 >
                     {/* left div, About group information */}
                     <div
@@ -48,7 +48,7 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                             backgroundColor: groupId.Settings.BackgroundColor,
                             color: groupId.Settings.TextColor,
                         }}
-                        className={`float z-30 w-300 h-150 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center`}
+                        className={`block z-30 w-5/6 h-2/3 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
                         {/* close button */}
                         <button
@@ -69,7 +69,7 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                             ID: {groupId.Id}
                         </p>
 
-                        <div className="left-8 text-left float-left ml-4 ">
+                        <div className="left-8 text-left block ml-4 ">
                             <p className="text-xl m-2 font-bold mt-0">
                                 Admin:
                                 <span className="font-normal">
@@ -87,8 +87,9 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                                     {member}
                                 </p>
                             ))}
-
-                            <br />
+                        </div>
+                        <br />
+                        <section className="text-center m-8">
                             <p className="text-4xl">
                                 <i>
                                     {groupId.Name} wants you to join their
@@ -104,7 +105,7 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                             <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80">
                                 Reject
                             </button>
-                        </div>
+                        </section>
                     </div>
                 </section>
             )}

@@ -59,11 +59,11 @@ export default function CreateGroupIcon(): JSX.Element {
             {isAboutGroupOpen && (
                 // Container for the about group
                 <section
-                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
                 >
                     {/* the box container */}
                     <div
-                        className={`z-30 w-300 h-150 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 align-center items-center`}
+                        className={`z-50 w-5/6 h-2/3 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
                         {/* close button */}
                         <button
