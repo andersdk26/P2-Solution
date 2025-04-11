@@ -23,17 +23,17 @@ export default function ProfileSettings() {
     ); // Default icon
 
     const icons = [
-        '/img/profileSettingIcons/bucketCornPop.png',
         '/img/profileSettingIcons/cornpop.png',
         '/img/profileSettingIcons/cuteButterPopcorn.png',
+        '/img/profileSettingIcons/bucketCornPop.png',
         '/img/profileSettingIcons/cutePopcorn.png',
-        '/img/profileSettingIcons/cutePopcornBucket.png',
-        '/img/profileSettingIcons/derpPopcornBucket.png',
-        '/img/profileSettingIcons/happyButterPopcorn.png',
-        '/img/profileSettingIcons/happyPopcorn.png',
-        '/img/profileSettingIcons/happyPopcornBucket.png',
         '/img/profileSettingIcons/surpricedButterPopcorn.png',
+        '/img/profileSettingIcons/derpPopcornBucket.png',
         '/img/profileSettingIcons/surpricedPopcorn.png',
+        '/img/profileSettingIcons/happyButterPopcorn.png',
+        '/img/profileSettingIcons/happyPopcornBucket.png',
+        '/img/profileSettingIcons/happyPopcorn.png',
+        '/img/profileSettingIcons/cutePopcornBucket.png',
         '/img/profileSettingIcons/swagMoviePopcornBucket.png',
     ];
 
