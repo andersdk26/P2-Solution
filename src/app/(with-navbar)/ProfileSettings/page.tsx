@@ -134,6 +134,11 @@ export default function ProfileSettings() {
                     </div>
                 </div>
             )}
+
+            <p className="flex flex-col items-center font-bold mr-37 text-lg">
+                Username
+            </p>
+
             <div className="flex flex-col items-center space-y-4 mb-10">
                 {/* Change Username Section */}
                 <div className="w-full flex flex-col items-center">
@@ -145,7 +150,7 @@ export default function ProfileSettings() {
                             )
                         }
                     >
-                        Username
+                        {username}
                     </button>
                     {isEditing === 'username' && (
                         <div className="flex flex-col items-center mt-4">
@@ -166,6 +171,8 @@ export default function ProfileSettings() {
                         </div>
                     )}
                 </div>
+
+                <p className="font-bold mb-0 mr-38 text-lg">Password</p>
 
                 {/* Change Password Section */}
                 <div className="w-full flex flex-col items-center">
@@ -197,6 +204,8 @@ export default function ProfileSettings() {
                         </div>
                     )}
                 </div>
+
+                <p className="font-bold mb-0 mr-47 text-lg">Email</p>
 
                 {/* Change Email Section */}
                 <div className="w-full flex flex-col items-center">
