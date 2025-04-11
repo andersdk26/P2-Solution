@@ -6,8 +6,6 @@ import '@/styles/group.css';
 export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
-    const color = `${groupId.Settings.BackgroundColor}`;
-    const textColor = `text-${groupId.Settings.TextColor}`;
     const memberCount = groupId.Members.length;
 
     const toggleGroup = (): void => {
@@ -18,12 +16,15 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
         <>
             {/* The div for the entire box, onclick: open the about group */}
             <div
-                className={`size-60 border-2 border-solid border-[#282F72] ${color} ${textColor} inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
+                // style inline because tailwind doesnt like dynamic colorchanges
+                style={{
+                    backgroundColor: groupId.Settings.BackgroundColor,
+                    color: groupId.Settings.TextColor,
+                }}
+                className={`size-60 border-2 border-solid border-[#282F72]  inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
                 onClick={toggleGroup}
             >
-                <p className={`text-xl ${textColor} m-2 font-bold`}>
-                    {groupId.Name}
-                </p>
+                <p className={`text-xl  m-2 font-bold`}>{groupId.Name}</p>
                 <p className="text-9xl m-0 select-none">
                     {groupId.Settings.Emoji}
                 </p>
@@ -37,11 +38,16 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
             {isAboutGroupOpen && (
                 // Container for the about group
                 <section
-                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center ${textColor}`}
+                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center `}
                 >
                     {/* left div, About group information */}
                     <div
-                        className={`float z-30 w-300 h-150 border-2 border-solid border-[#282F72] ${color} rounded-3xl m-4 align-center items-center`}
+                        // style inline because tailwind doesnt like dynamic colorchanges
+                        style={{
+                            backgroundColor: groupId.Settings.BackgroundColor,
+                            color: groupId.Settings.TextColor,
+                        }}
+                        className={`float z-30 w-300 h-150 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center`}
                     >
                         {/* close button */}
                         <button

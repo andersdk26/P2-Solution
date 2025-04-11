@@ -13,21 +13,26 @@ export default function CreateGroupIcon(): JSX.Element {
         setAboutGroupOpen(!isAboutGroupOpen);
     };
 
-    const backgroundText = `bg-[${BackgroundColor}]`;
-    const textColor = `text-[${TextColor}]`;
-    console.log(backgroundText, textColor);
+    // const backgroundText = `bg-[${BackgroundColor}]`;
+    // const textColor = `text-[${TextColor}]`;
+    // console.log(backgroundText, textColor);
 
     const handleSubmit = (e): void => {
         e.preventDefault();
 
-        const backgroundText = `bg-[${BackgroundColor}]`;
-        const textColor = `text-[${TextColor}]`;
+        // const backgroundText = `bg-[${BackgroundColor}]`;
+        // const textColor = `text-[${TextColor}]`;
         console.log(
             `Form submitted, ${GroupName}`,
-            backgroundText,
-            textColor,
+            BackgroundColor,
+            TextColor,
             EmojiSelect
         );
+    };
+
+    const handleMemberSubmit = (e) => {
+        e.preventDefault();
+        console.log('add group member');
     };
 
     return (
@@ -69,19 +74,32 @@ export default function CreateGroupIcon(): JSX.Element {
                         {/* Flex container for the content*/}
                         <section className="grid grid-cols-2">
                             {/* submit form , left side */}
-                            <div className="text-left ml-4  text-xl">
-                                <form onSubmit={handleSubmit}>
-                                    <p className="mb-1 mt-1">
+                            <div className="text-left ml-4 text-xl">
+                                {/* form for adding group members */}
+                                <form onSubmit={handleMemberSubmit}>
+                                    <label className="mb-1 mt-1">
                                         Search for friends username or user ID:
-                                    </p>
+                                    </label>{' '}
+                                    <br />
                                     <input
                                         type="text"
                                         className="bg-white text-black"
                                         placeholder="mrBeans123 or #xyz987"
                                     />
-                                    <p className="mb-1 mt-1">
+                                    <button
+                                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-1 px-2 m-2 rounded-sm text-m"
+                                        type="submit"
+                                    >
+                                        Add member
+                                    </button>
+                                </form>
+
+                                {/* Form for group visual */}
+                                <form onSubmit={handleSubmit}>
+                                    <label className="mb-1 mt-1">
                                         Choose a groupname:
-                                    </p>
+                                    </label>
+                                    <br />
                                     <input
                                         type="text"
                                         className="bg-white text-black"
@@ -91,21 +109,25 @@ export default function CreateGroupIcon(): JSX.Element {
                                         value={GroupName}
                                         placeholder="Watchparty"
                                         minLength={1}
-                                        maxLength={10}
-                                    />
-                                    <p className="mb-1 mt-1">
+                                        maxLength={16}
+                                    />{' '}
+                                    <br />
+                                    <label className="mb-1 mt-1">
                                         Pick background color:
-                                    </p>
+                                    </label>
+                                    <br />
                                     <input
                                         type="color"
                                         onChange={(e) =>
                                             setBackgroundColor(e.target.value)
                                         }
                                         value={BackgroundColor}
-                                    />
-                                    <p className="mb-1 mt-1">
-                                        Pick Text-color:{' '}
-                                    </p>
+                                    />{' '}
+                                    <br />
+                                    <label className="mb-1 mt-1">
+                                        Pick Text-color:
+                                    </label>
+                                    <br />
                                     <input
                                         type="color"
                                         onChange={(e) =>
@@ -114,14 +136,12 @@ export default function CreateGroupIcon(): JSX.Element {
                                         value={TextColor}
                                     />
                                     <br />
-                                    <label htmlFor="Emoji">
-                                        Pick an Icon:{' '}
-                                    </label>
+                                    <label htmlFor="Emoji">Pick an Icon:</label>
                                     <br />
                                     <select
                                         name="Emoji"
                                         id="Emoji"
-                                        className="text-5 xl mt-1 mb-1"
+                                        className="text-5xl mt-1 mb-1"
                                         onChange={(e) =>
                                             setEmojiSelect(e.target.value)
                                         }
@@ -162,11 +182,14 @@ export default function CreateGroupIcon(): JSX.Element {
                                 <aside className="align-right  ">
                                     {/* Group box visual */}
                                     <div
-                                        className={`float size-60 border-2 border-solid border-[#282F72] ${backgroundText} ${textColor} rounded-3xl m-4 text-center align-center content-center justify-center`}
+                                        // styling inline because tailwind doesnt like dynamic color changes
+                                        style={{
+                                            backgroundColor: BackgroundColor,
+                                            color: TextColor,
+                                        }}
+                                        className={`float size-60 border-2 border-solid border-[#282F72] rounded-3xl m-4 text-center align-center content-center justify-center`}
                                     >
-                                        <p
-                                            className={`text-xl ${textColor} m-2 font-bold`}
-                                        >
+                                        <p className={`text-xl m-2 font-bold`}>
                                             {GroupName}
                                         </p>
                                         <p

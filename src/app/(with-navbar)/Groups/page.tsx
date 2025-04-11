@@ -26,8 +26,8 @@ const groupIdTemp: groupId = {
     Members: ['me', 'you', 'tom'],
     Admin: 'me',
     Settings: {
-        BackgroundColor: 'bg-white',
-        TextColor: 'black',
+        BackgroundColor: '#ffffff',
+        TextColor: '#000000',
         Emoji: '🍿',
     },
 };
@@ -38,8 +38,8 @@ const groupIdTemp2: groupId = {
     Members: ['mom', 'dad', 'child', 'you'],
     Admin: 'you',
     Settings: {
-        BackgroundColor: 'bg-pink-700',
-        TextColor: '[#282F72]',
+        BackgroundColor: '#FF46A2',
+        TextColor: '#282F72',
         Emoji: '🎥',
     },
 };
@@ -50,8 +50,8 @@ const groupIdTemp3: groupId = {
     Members: ['sara', 'you', 'me', 'tom', 'mom', 'child', 'burger', 'bob'],
     Admin: 'sara',
     Settings: {
-        BackgroundColor: 'bg-black',
-        TextColor: 'white',
+        BackgroundColor: '#000000',
+        TextColor: '#ffffff',
         Emoji: '🎞️',
     },
 };
