@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
 import '@/styles/group.css';
 
-export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
+export default function RequestGroupIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
     const memberCount = groupId.Members.length;

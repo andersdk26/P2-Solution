@@ -3,7 +3,7 @@
 import React, { JSX } from 'react';
 import AdminGroupIcon from '@/components/groupPage/adminGroupIcon';
 import GroupIcon from '@/components/groupPage/groupIcon';
-import GroupRequestIcon from '@/components/groupPage/groupRequestIcon';
+import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
 
@@ -88,7 +88,7 @@ const GroupSettings = (): JSX.Element => (
         <section>
             <h2 className="ml-4">Requests...</h2>
             <p className="text-2xl ml-4">Groups that have asked you to join</p>
-            <GroupRequestIcon groupId={groupIdTemp2} />
+            <RequestGroupIcon groupId={groupIdTemp2} />
         </section>
     </div>
 );
