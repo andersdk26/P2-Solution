@@ -15,14 +15,16 @@ export default function redirectPath({
     const homePath = process.env.URL_PATH || '/';
 
     // Remove leading slash
-    if (path[0] === '/') {
+    if (path && path[0] === '/') {
         path = path.substring(1);
+    } else if (!path) {
+        path = '';
     }
 
     // Push last page to brower window history
     if (addToHistory) {
         // TODO something
-        window.history.pushState(null, '', homePath + path);
+        // window.history.pushState(null, '', homePath + path);
     }
 
     // Redirect including PATH variable
