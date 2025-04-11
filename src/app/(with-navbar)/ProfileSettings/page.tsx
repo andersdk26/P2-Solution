@@ -141,16 +141,20 @@ export default function ProfileSettings() {
 
             <div className="flex flex-col items-center space-y-4 mb-10">
                 {/* Change Username Section */}
+                <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
+                    {username}
+                </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer"
+                        className="mb-0 mr-26 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'username' ? null : 'username'
                             )
                         }
                     >
-                        {username}
+                        {' '}
+                        Change Username
                     </button>
                     {isEditing === 'username' && (
                         <div className="flex flex-col items-center mt-4">
@@ -175,16 +179,19 @@ export default function ProfileSettings() {
                 <p className="font-bold mb-0 mr-38 text-lg">Password</p>
 
                 {/* Change Password Section */}
+                <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
+                    Password
+                </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer"
+                        className="mb-0 mr-26 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(
                                 isEditing === 'password' ? null : 'password'
                             )
                         }
                     >
-                        Password
+                        Change Password
                     </button>
                     {isEditing === 'password' && (
                         <div className="flex flex-col items-center mt-4">
@@ -208,14 +215,17 @@ export default function ProfileSettings() {
                 <p className="font-bold mb-0 mr-47 text-lg">Email</p>
 
                 {/* Change Email Section */}
+                <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
+                    {email}
+                </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold px-6 py-2 rounded w-60 cursor-pointer cursor-pointer"
+                        className="mb-0 mr-33 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(isEditing === 'email' ? null : 'email')
                         }
                     >
-                        {email}
+                        Change Email
                     </button>
                     {isEditing === 'email' && (
                         <div className="flex flex-col items-center mt-4">
