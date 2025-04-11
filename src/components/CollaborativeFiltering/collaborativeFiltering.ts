@@ -119,7 +119,7 @@ export default async function collaborativeFiltering(
         }
 
         // Now, if the target user and the "other user" has at least 10 movies in common.
-        if (commonMovies.length >= 10) {
+        if (commonMovies.length >= 6) {
             // Calculate a similarity between the two.
             const similarity = cosineSimilarity(
                 targetUserRatings,
