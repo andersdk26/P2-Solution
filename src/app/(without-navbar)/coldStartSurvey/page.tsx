@@ -7,6 +7,7 @@ import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
 } from '@/components/coldStarSurvey/selectedMovies';
+import redirect from '@/components/redirect';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
@@ -156,8 +157,7 @@ export default function SelectMovies(): JSX.Element {
                     <button
                         onClick={() => {
                             if (selectedMovies.length >= 5) {
-                                window.location.href =
-                                    '/coldStartSurvey/rateMovies';
+                                redirect('coldStartSurvey/rateMovies');
                             }
                         }}
                         className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}

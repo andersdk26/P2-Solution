@@ -16,7 +16,7 @@ import collaborativeFiltering from '@/components/CollaborativeFiltering/collabor
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { redirect } from 'next/navigation';
+import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 // import { getMoviesByIds } from '@/actions/movie/movie';
@@ -117,7 +117,7 @@ export default function Home(): JSX.Element {
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) < 1) {
-                redirect('/logIn');
+                redirect('logIn');
             }
         };
         checkLoginStatus();
