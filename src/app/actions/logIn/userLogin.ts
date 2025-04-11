@@ -89,7 +89,7 @@ async function setCookie(data: string): Promise<boolean> {
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        path: process.env.PATH,
+        path: process.env.URL_PATH,
         maxAge: 60 * 60 * 24 * 7,
     });
 
