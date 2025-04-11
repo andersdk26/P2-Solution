@@ -1,5 +1,7 @@
+'use client';
 import { JSX } from 'react';
 import { useState } from 'react';
+
 import '@/styles/group.css';
 
 export default function CreateGroupIcon(): JSX.Element {
@@ -8,20 +10,27 @@ export default function CreateGroupIcon(): JSX.Element {
     const [BackgroundColor, setBackgroundColor] = useState('');
     const [TextColor, setTextColor] = useState('');
     const [EmojiSelect, setEmojiSelect] = useState('');
+    const [GroupMembers, setGroupMembers] = useState<string[]>([]);
 
     const toggleGroup = (): void => {
         setAboutGroupOpen(!isAboutGroupOpen);
     };
 
-    // const backgroundText = `bg-[${BackgroundColor}]`;
-    // const textColor = `text-[${TextColor}]`;
-    // console.log(backgroundText, textColor);
-
     const handleSubmit = (e): void => {
         e.preventDefault();
 
-        // const backgroundText = `bg-[${BackgroundColor}]`;
-        // const textColor = `text-[${TextColor}]`;
+        // validate the group name
+        //cannot include special characters: https://stackoverflow.com/questions/16667329/special-character-validation
+        const isValidCharacter = (text: string): boolean => {
+            const validCharacterRegex: RegExp = /^[a-zA-Z0-9]*$/;
+            return validCharacterRegex.test(text);
+        };
+        if (isValidCharacter(GroupName) === false) {
+            alert('invalid input');
+            setGroupName('');
+        }
+        // ------------------Need to only upload group to db if valid username
+
         console.log(
             `Form submitted, ${GroupName}`,
             BackgroundColor,
@@ -30,6 +39,7 @@ export default function CreateGroupIcon(): JSX.Element {
         );
     };
 
+    //---------------------------------This should work similar to select movies in cold start survey
     const handleMemberSubmit = (e) => {
         e.preventDefault();
         console.log('add group member');
@@ -39,7 +49,7 @@ export default function CreateGroupIcon(): JSX.Element {
         <>
             {/* The div for the entire box, onclick: open the create group pop-up */}
             <div
-                className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] text-[#282f72] inline-block rounded-3xl m-4 text-center align-center items-center  content-center justify-center cursor-pointer`}
+                className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] hover:brightness-80 text-[#282f72] inline-block rounded-3xl m-4 text-center align-center items-center  content-center justify-center cursor-pointer`}
                 onClick={toggleGroup}
             >
                 <p className="text-9xl m-0">+</p>
@@ -79,8 +89,11 @@ export default function CreateGroupIcon(): JSX.Element {
                                 <form onSubmit={handleMemberSubmit}>
                                     <label className="mb-1 mt-1">
                                         Search for friends username or user ID:
-                                    </label>{' '}
+                                    </label>
                                     <br />
+                                    <p>
+                                        <i>2-8 members</i>
+                                    </p>
                                     <input
                                         type="text"
                                         className="bg-white text-black"
@@ -122,7 +135,7 @@ export default function CreateGroupIcon(): JSX.Element {
                                             setBackgroundColor(e.target.value)
                                         }
                                         value={BackgroundColor}
-                                    />{' '}
+                                    />
                                     <br />
                                     <label className="mb-1 mt-1">
                                         Pick Text-color:
@@ -167,19 +180,9 @@ export default function CreateGroupIcon(): JSX.Element {
                             </div>
 
                             {/* Right div for display group */}
-                            <section className="flex grid-cols-2  ">
-                                {/* Left for the members list */}
-                                <aside className="text-left">
-                                    {/* Display members */}
-                                    <p className="mt-1 text-xl">
-                                        Group members:
-                                    </p>
-                                    <p>1</p>
-                                    <p>2</p>
-                                </aside>
-
+                            <section className="flex grid-cols-4 ">
                                 {/* right for the group icon display */}
-                                <aside className="align-right  ">
+                                <aside className="col-span-1">
                                     {/* Group box visual */}
                                     <div
                                         // styling inline because tailwind doesnt like dynamic color changes
@@ -187,7 +190,7 @@ export default function CreateGroupIcon(): JSX.Element {
                                             backgroundColor: BackgroundColor,
                                             color: TextColor,
                                         }}
-                                        className={`float size-60 border-2 border-solid border-[#282F72] rounded-3xl m-4 text-center align-center content-center justify-center`}
+                                        className={` size-60 border-2 border-solid border-[#282F72] rounded-3xl m-4 text-center align-center content-center justify-center`}
                                     >
                                         <p className={`text-xl m-2 font-bold`}>
                                             {GroupName}
@@ -204,6 +207,15 @@ export default function CreateGroupIcon(): JSX.Element {
                                         </span>
                                     </p> */}
                                     </div>
+                                </aside>
+                                {/* Left for the members list */}
+                                <aside className="text-left col-span-3 ">
+                                    {/* Display members */}
+                                    <p className="mt-1 text-xl">
+                                        Group members:
+                                    </p>
+                                    <p>1</p>
+                                    <p>2</p>
                                 </aside>
                             </section>
                         </section>

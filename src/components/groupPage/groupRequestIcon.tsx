@@ -1,3 +1,4 @@
+'use client'
 import { JSX } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
@@ -21,7 +22,7 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                     backgroundColor: groupId.Settings.BackgroundColor,
                     color: groupId.Settings.TextColor,
                 }}
-                className={`size-60 border-2 border-solid border-[#282F72]  inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
+                className={`size-60 border-2 border-solid border-[#282F72] hover:brightness-80 inline-block rounded-3xl m-4 text-center align-center content-center justify-center cursor-pointer`}
                 onClick={toggleGroup}
             >
                 <p className={`text-xl  m-2 font-bold`}>{groupId.Name}</p>
@@ -95,12 +96,12 @@ export default function GroupRequestIcon({ groupId }: groupId): JSX.Element {
                                 </i>
                             </p>
                             {/* Accept invite butto */}
-                            <button className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0">
+                            <button className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80">
                                 Accept
                             </button>
 
                             {/* deny invite button */}
-                            <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer">
+                            <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80">
                                 Reject
                             </button>
                         </div>

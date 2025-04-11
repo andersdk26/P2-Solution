@@ -1,3 +1,4 @@
+'use client'
 import { JSX } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
@@ -21,7 +22,7 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                     backgroundColor: groupId.Settings.BackgroundColor,
                     color: groupId.Settings.TextColor,
                 }}
-                className={`size-60 border-2 border-solid border-[#282F72]  inline-block rounded-3xl m-4 text-center align-center cursor-pointer`}
+                className={`size-60 border-2 border-solid border-[#282F72] hover:brightness-80 inline-block rounded-3xl m-4 text-center align-center content-center justify-center cursor-pointer`}
                 onClick={toggleGroup}
             >
                 <p className={`text-xl  m-2 font-bold`}>{groupId.Name}</p>
@@ -92,14 +93,14 @@ export default function GroupIcon({ groupId }: groupId): JSX.Element {
                             </p>
 
                             {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer">
+                            <button className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80">
                                 Get New Recommendation!
                             </button>
 
                             <br />
 
                             {/* Leave group button */}
-                            <button className="bg-red-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer">
+                            <button className="bg-red-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80">
                                 Leave group
                             </button>
                         </div>
