@@ -7,6 +7,8 @@ import Profile from '@/components/Profile/profile';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
+import Notification from './notification/notification';
+
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
     const router = useRouter(); // Use the useRouter hook
@@ -105,6 +107,9 @@ export default function NavBar(): JSX.Element {
                             ))}
                         </section>
                     </section>
+                    <div className="pl-10 block">
+                        <Notification />
+                    </div>
                     <div className="px-10">
                         <Profile />
                     </div>
