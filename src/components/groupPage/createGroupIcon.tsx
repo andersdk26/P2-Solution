@@ -1,7 +1,6 @@
 'use client';
 import { JSX } from 'react';
 import { useState } from 'react';
-import '@/styles/group.css';
 
 export default function CreateGroupIcon(): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);

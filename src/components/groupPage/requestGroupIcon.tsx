@@ -2,7 +2,6 @@
 import { JSX } from 'react';
 import { useState } from 'react';
 import { groupId } from 'app/(with-navbar)/Groups/page';
-import '@/styles/group.css';
 
 export default function RequestGroupIcon({ groupId }: groupId): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);

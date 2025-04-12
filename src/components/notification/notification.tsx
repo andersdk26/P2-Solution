@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect, JSX } from 'react';
 import Image from 'next/image';
+import '@/styles/animation.css';
+
 const Notification = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -12,7 +14,7 @@ const Notification = (): JSX.Element => {
         <>
             <button
                 onClick={toggleDropdown}
-                className="centerMyDivPlease cursor-pointer"
+                className="centerMyDivPlease cursor-pointer shakeIcon"
             >
                 <Image
                     src={'/img/Bell icon.png'}
