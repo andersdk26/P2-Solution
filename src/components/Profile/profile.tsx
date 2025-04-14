@@ -40,23 +40,29 @@ const Profile = (): JSX.Element => {
                 <div className="absolute top-21 right-0 bg-[#101010c0] text-purple-200 p-4 rounded-md w-42 my-3 z-100">
                     <p className="text-white font-bold">
                         {username || 'Loading...'}
-                    </p>{' '}
-                    {/* Viser username. Hvis den ikke kan skaffe username insætter den Loading... istedet*/}
+                    </p>
+                    {/* shows username, if not shows "loading..." instead*/}
                     <button
                         onClick={() => redirrectProfile('/ProfileSettings')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Profile Settings
                     </button>
                     <button
+                        onClick={() => redirrectProfile('/Friends')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
+                    >
+                        Friends
+                    </button>
+                    <button
                         onClick={() => redirrectProfile('/Watchlist')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Watchlist
                     </button>
                     <button
                         onClick={() => redirrectProfile('/Help')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Help
                     </button>
@@ -69,7 +75,7 @@ const Profile = (): JSX.Element => {
                             //window.location.reload();
                             router.push('/logIn');
                         }}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Log out
                     </button>
