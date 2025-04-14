@@ -213,8 +213,8 @@ export default async function collaborativeFiltering(
 
     console.log('Movie array has been sorted.');
 
-    // Get the top 20 movies based on similar users ratings.
-    const recommendedMovies = moviesRatedBySimilarUsersArray.slice(0, 20);
+    // Get the top 30 movies based on similar users ratings.
+    const recommendedMovies = moviesRatedBySimilarUsersArray.slice(0, 30);
 
     const arrayOfRecommendedMovies: movie[] = [];
 

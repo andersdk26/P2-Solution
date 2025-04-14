@@ -13,6 +13,7 @@ import Carousel from '@/components/dump/carousel';
 
 import { movieWithRating, movie } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
@@ -42,7 +43,8 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
-                await collaborativeFiltering(await verifyUser())
+                //await collaborativeFiltering(await verifyUser())
+                await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
     }, []);

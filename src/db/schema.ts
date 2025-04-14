@@ -27,7 +27,7 @@ export type SelectUser = typeof usersTable.$inferSelect;
 export const moviesTable = sqliteTable('movies', {
     id: integer('id').primaryKey(),
     title: text('title').notNull(),
-    genres: text('genres').notNull(),
+    genres: text('genre').notNull(),
 });
 
 export type InsertMovie = typeof moviesTable.$inferInsert;
