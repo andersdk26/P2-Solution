@@ -105,6 +105,21 @@ h4 {
     background-color: #424ebd;
 }
 
+.settingBtn {
+    background-color: #424ebd;
+    color: #dcdeef;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.settingBtn:hover {
+    background-color: #e43270;
+}
+
 h5 {
     color: #dcdeef;
     font-weight: bolder;

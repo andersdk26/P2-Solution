@@ -144,7 +144,7 @@ export default function ProfileSettings() {
 
     return (
         <div className="p-8 text-black">
-            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d115]">
                 <h1 className="mb-6 text-center">Profile Settings</h1>
 
                 <div className="flex flex-col items-center mb-8">
@@ -247,7 +247,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handleUsernameChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -295,7 +295,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handlePasswordChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -335,7 +335,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handleEmailChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
