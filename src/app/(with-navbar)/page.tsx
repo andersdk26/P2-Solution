@@ -9,9 +9,8 @@ import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
-import Carousel from '@/components/dump/carousel';
 
-import { movieWithRating, movie, getMovieById } from '@/actions/movie/movie';
+import { movie, getMovieById } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
 
@@ -42,8 +41,8 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
-                //await collaborativeFiltering(await verifyUser())
-                await contentBasedFiltering(await verifyUser())
+                await collaborativeFiltering(await verifyUser())
+                // await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
     }, []);
