@@ -8,7 +8,7 @@ import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
-import changePassword from '@/api/changePassword';
+import changePassword from '@/actions/profileSettings/changePassword';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
