@@ -34,6 +34,7 @@ footer {
     gap: 4px;
 }
 
+/* 
 .helpBtn {
     background-color: #282f72;
     color: #dcdeef;
@@ -44,10 +45,11 @@ footer {
     align-items: center;
 }
 
+
 .helpBtn:hover {
     background-color: #424ebd;
     color: #dcdeef;
-}
+} */
 
 h1 {
     color: #282f72;

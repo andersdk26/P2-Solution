@@ -1,14 +1,14 @@
 //taken from https://medium.com/edonec/build-a-react-collapsible-component-from-scratch-using-react-hooks-typescript-73dfd02c9208
 
 import React, { ReactNode, useState } from 'react';
-
 interface IProps {
     open?: boolean;
     title: string;
     children: ReactNode;
 }
 
-const HelpBtn: React.FC<IProps> = ({ open, children, title }) => {
+// at default, the button is set to close (open = false)
+const HelpBtn: React.FC<IProps> = ({ open = false, children, title }) => {
     const [isOpen, setIsOpen] = useState(open);
 
     const handleFilterOpening = () => {
@@ -17,16 +17,19 @@ const HelpBtn: React.FC<IProps> = ({ open, children, title }) => {
 
     return (
         <>
-            <div className="card">
+            <div>
                 <div>
                     {/* css to question container */}
-                    <div className="p-5 bg-[#9fa3d1] ml-100 mr-100 rounded-t-sm">
+                    <div className="p-5 pb-15 bg-[#9fa3d1] ml-100 mr-100 rounded-t-sm">
+                        {/* title is to the left side */}
                         <h5 className="float-left">{title}</h5>
+                        {/* button is to the right side */}
                         <button
                             type="button"
-                            className="btn"
+                            className="float-right"
                             onClick={handleFilterOpening}
                         >
+                            {/* open and close button - css*/}
                             {!isOpen ? (
                                 <p className="bg-[#282F72] hover:bg-[#424ebd] text-white px-4 py-2 rounded-full shadow">
                                     ⇩

@@ -5,23 +5,25 @@ import HelpBtn from '@/components/Help/HelpBtn';
 
 const helpBtn = (): JSX.Element => (
     <div className="text-center">
-        <h1>Help</h1>
-        <HelpBtn open title="Who are we?">
-            We are group number ... from Software!
+        <h1>FAQ</h1>
+        <HelpBtn title="Who are we?">
+            We are group cs-25-sw-2-10 from Software!
         </HelpBtn>
-        <HelpBtn open title="What is this website?">
+        <HelpBtn title="What is this website?">
             This is a website where you and/or your group can recieve movie
             recommendations, in case you guys can't agree on anything to watch!
         </HelpBtn>
-        <HelpBtn open title="When is our project exam?">
-            No clue yet ☹️
+        <HelpBtn title="How does my recommendations work?">dsadsadsa</HelpBtn>
+        <HelpBtn title="How does my groups recommendations work?">
+            The algorithm takes your individual movie recommendations, compares
+            it, and finds a movie the entire lot of you might be interested to
+            see
         </HelpBtn>
-        <HelpBtn open title="When is the project deadline due?">
+        <HelpBtn title="When is our project exam?">No clue yet ☹️</HelpBtn>
+        <HelpBtn title="When is the project deadline due?">
             The 28th of May 2025!
         </HelpBtn>
-        <HelpBtn open title="Hvem er Saunagusmester?">
-            Mia! 🧖🏻‍♀️
-        </HelpBtn>
+        <HelpBtn title="Hvem er Saunagusmester?">Mia! 🧖🏻‍♀️</HelpBtn>
     </div>
 );
 export default helpBtn;
