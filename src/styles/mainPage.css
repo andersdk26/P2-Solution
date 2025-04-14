@@ -85,6 +85,7 @@
     cursor: pointer;
 }
 
+{/* bruges denne her? */}
 .buttonWrapper button:hover {
     /* box-shadow: 0px 0px 8px 8px [#424ebd]; */
     background-color: #424ebd;
