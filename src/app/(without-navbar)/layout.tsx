@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { JSX } from 'react';
-import { redirect } from 'next/navigation';
+import redirectServer from '@/components/redirectServer';
 import { cookies } from 'next/headers';
 
 // const geistSans = Geist({
@@ -30,7 +30,7 @@ export default async function RootLayout({
 
     // Check that the user is logged in
     if (!authCookie) {
-        redirect('/logIn');
+        redirectServer('logIn');
     }
 
     return (

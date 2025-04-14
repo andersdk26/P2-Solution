@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import userLogout from '@/actions/logIn/userLogout';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import redirect from '@/components/redirect';
 
 const Profile = (): JSX.Element => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,15 +16,7 @@ const Profile = (): JSX.Element => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const redirrectProfile = (path: string): void => {
-        if (path) {
-            router.push(path);
-        }
-        setIsDropdownOpen(false);
-    };
-
     // skaffer the logged-in user's username
-
     useEffect(() => {
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));
@@ -40,23 +33,29 @@ const Profile = (): JSX.Element => {
                 <div className="absolute top-21 right-0 bg-[#101010c0] text-purple-200 p-4 rounded-md w-42 my-3 z-100">
                     <p className="text-white font-bold">
                         {username || 'Loading...'}
-                    </p>{' '}
-                    {/* Viser username. Hvis den ikke kan skaffe username insætter den Loading... istedet*/}
+                    </p>
+                    {/* shows username, if not shows "loading..." instead*/}
                     <button
-                        onClick={() => redirrectProfile('/ProfileSettings')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        onClick={() => redirect('ProfileSettings')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Profile Settings
                     </button>
                     <button
-                        onClick={() => redirrectProfile('/Watchlist')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        onClick={() => redirect('Friends')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
+                    >
+                        Friends
+                    </button>
+                    <button
+                        onClick={() => redirect('Watchlist')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Watchlist
                     </button>
                     <button
-                        onClick={() => redirrectProfile('/Help')}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        onClick={() => redirect('Help')}
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Help
                     </button>
@@ -66,10 +65,9 @@ const Profile = (): JSX.Element => {
                                 alert('Error logging out! Please try again.');
                                 return;
                             }
-                            //window.location.reload();
-                            router.push('/logIn');
+                            redirect('logIn');
                         }}
-                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1"
+                        className="flex items-center space-x-2 w-full p-2 hover:font-bold text-left my-1 cursor-pointer"
                     >
                         Log out
                     </button>

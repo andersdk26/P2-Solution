@@ -3,26 +3,31 @@
 import { JSX, useEffect, useState } from 'react';
 import Image from 'next/image';
 import getMovieImageURL from '@/actions/movie/movieImageUrl';
+import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props';
 
 interface MovieImageProps {
     movieId: number;
     title?: string;
     fill?: boolean;
-    onClick?: () => void;
     height?: number;
     width?: number;
     alt?: string;
+    blur?: 'empty' | 'blur';
+    blurDataURL?: string;
     className?: string;
+    onClick?: () => void;
 }
 
 export default function MovieImage({
     movieId,
+    title = '',
     fill = false,
     height = 450,
     width = 300,
     alt = 'Movie image',
+    blur = 'empty',
+    blurDataURL = undefined,
     className = '',
-    title = '',
     onClick = (): void => {},
 }: MovieImageProps): JSX.Element {
     const [imageURL, setImageURL] = useState('/placeholder.png');
@@ -57,7 +62,9 @@ export default function MovieImage({
                     alt={alt}
                     fill={true}
                     sizes={`(max-width: ${width}px)`}
-                    className={`${className} ${loadingImage && 'animate-pulse'} rounded-xl unoptimized`}
+                    placeholder={blur as PlaceholderValue}
+                    blurDataURL={blurDataURL}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
                 />
             ) : (
                 <Image
@@ -67,7 +74,9 @@ export default function MovieImage({
                     alt={alt}
                     height={height}
                     width={width}
-                    className={`${className} ${loadingImage && 'animate-pulse'} rounded-xl unoptimized`}
+                    placeholder={blur as PlaceholderValue}
+                    blurDataURL={blurDataURL}
+                    className={`${className} ${loadingImage && 'animate-pulse'}`}
                 />
             )}
         </>

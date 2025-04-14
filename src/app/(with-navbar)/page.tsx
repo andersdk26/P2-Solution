@@ -11,15 +11,14 @@ import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
-import { movieWithRating, movie } from '@/actions/movie/movie';
+import { movieWithRating, movie, getMovieById } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { redirect } from 'next/navigation';
+import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
-
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
@@ -60,23 +59,22 @@ export default function Home(): JSX.Element {
     );
 
     const handleImageClick = async (movieId: number): Promise<void> => {
-        // try {
-        //     const movies = await getMoviesByIds([movieId]);
-        //     const movie = movies[0]; // Since we're passing one ID, get the first result
-        //     if (!movie) {
-        //         console.error(`Movie with ID ${movieId} not found.`);
-        //         return;
-        //     }
-        //     setSidebarImage(`/img/movies/movie${movieId}.png`);
-        //     setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
-        //     setSelectedRating(null);
-        //     setSelectedMovieId(movieId);
-        //     if (backgroundDivRef.current) {
-        //         backgroundDivRef.current.style.display = 'block';
-        //     }
-        // } catch (error) {
-        //     console.error('Failed to fetch movie by ID:', error);
-        // }
+        try {
+            const movie = await getMovieById(movieId);
+            if (!movie) {
+                console.error(`Movie with ID ${movieId} not found.`);
+                return;
+            }
+            setSidebarImage(`/img/movies/movie${movieId}.png`);
+            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
+            setSelectedRating(null);
+            setSelectedMovieId(movieId);
+            if (backgroundDivRef.current) {
+                backgroundDivRef.current.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Failed to fetch movie by ID:', error);
+        }
     };
 
     const handleRatingChange = (
@@ -119,7 +117,7 @@ export default function Home(): JSX.Element {
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) < 1) {
-                redirect('/logIn');
+                redirect('logIn');
             }
         };
         checkLoginStatus();
@@ -157,20 +155,22 @@ export default function Home(): JSX.Element {
                 {/*Left Panel to Curtain Left Image*/}
                 <div className="float-left h-auto w-auto z-2">
                     <Image
-                        src="/img/movieCurtainLeft.png"
+                        src="/img/left curtain.png"
                         alt="Curtain Left"
+                        quality={100}
                         width={350}
-                        height={450}
+                        height={800}
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
                 <div className="float-right h-auto w-auto z-2">
                     <Image
-                        src="/img/movieCurtainRight.png"
+                        src="/img/right curtain.png"
                         alt="Curtain Right"
+                        quality={100}
                         width={350}
-                        height={450}
+                        height={800}
                     />
                 </div>
 
@@ -411,7 +411,6 @@ export default function Home(): JSX.Element {
                     Next
                 </button>
             </div> */}
-            <MovieImage movieId={1} />
         </>
     );
 }

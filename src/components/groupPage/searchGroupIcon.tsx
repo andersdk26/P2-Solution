@@ -1,6 +1,6 @@
+'use client';
 import { JSX } from 'react';
 import { useState } from 'react';
-import '@/styles/group.css';
 
 export default function SearchGroupIcon(): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
@@ -13,7 +13,7 @@ export default function SearchGroupIcon(): JSX.Element {
         <>
             {/* The div for the entire box, onclick: open the create group pop-up */}
             <div
-                className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] text-[#282f72] inline-block rounded-3xl m-4 text-center align-center items-center  content-center justify-center cursor-pointer`}
+                className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] hover:brightness-80 text-[#282f72] inline-block rounded-3xl m-4 text-center align-top items-center  content-center justify-center  cursor-pointer`}
                 onClick={toggleGroup}
             >
                 <p className="text-9xl m-0">+</p>
@@ -24,11 +24,11 @@ export default function SearchGroupIcon(): JSX.Element {
             {isAboutGroupOpen && (
                 // Container for the about group
                 <section
-                    className={`fixed top-0 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
                 >
                     {/* left div, About group information */}
                     <div
-                        className={`float z-30 w-300 h-150 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 align-center items-center`}
+                        className={`float z-30 w-5/6 h-2/3 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
                         {/* close button */}
                         <button
