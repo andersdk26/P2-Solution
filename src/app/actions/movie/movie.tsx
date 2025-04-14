@@ -10,6 +10,14 @@ export type movie = {
     movieGenres: string;
 };
 
+export type movieWithRating = {
+    movieId: number;
+    title: string;
+    genres: string;
+    accumulativeRating: number;
+    timesRated: number;
+};
+
 export async function getMovieById(id: number): Promise<movie | null> {
     const result = await db
         .select({

@@ -46,7 +46,7 @@ export default function NavBar(): JSX.Element {
                             {/* <a hr"></a> */}
 
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                                className="basicBtn"
                                 onClick={() => redirrectProfile('/')}
                                 title="Home"
                             >
@@ -55,7 +55,7 @@ export default function NavBar(): JSX.Element {
                         </li>
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                                className="basicBtn"
                                 onClick={() => redirrectProfile('/Groups')}
                                 title="Groups"
                             >
@@ -65,7 +65,7 @@ export default function NavBar(): JSX.Element {
 
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                                className="basicBtn"
                                 onClick={() => redirrectProfile('/About')}
                                 title="About"
                             >
