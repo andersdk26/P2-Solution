@@ -18,7 +18,7 @@ export default function redirectClient(
         path = '';
     }
 
-    // Push last page to brower window history
+    // Push last page to browser window history
     if (addToHistory) {
         // TODO something
         // window.history.pushState({ pathname: rootPath }, '');

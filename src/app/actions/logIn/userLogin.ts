@@ -89,8 +89,8 @@ async function setCookie(data: string): Promise<boolean> {
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        path: process.env.URL_PATH,
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 1,
+        path: process.env.URL_PATH || '/',
     });
 
     // Check if the token cookie is set

@@ -155,20 +155,22 @@ export default function Home(): JSX.Element {
                 {/*Left Panel to Curtain Left Image*/}
                 <div className="float-left h-auto w-auto z-2">
                     <Image
-                        src="/img/movieCurtainLeft.png"
+                        src="/img/left curtain.png"
                         alt="Curtain Left"
+                        quality={100}
                         width={350}
-                        height={450}
+                        height={800}
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
                 <div className="float-right h-auto w-auto z-2">
                     <Image
-                        src="/img/movieCurtainRight.png"
+                        src="/img/right curtain.png"
                         alt="Curtain Right"
+                        quality={100}
                         width={350}
-                        height={450}
+                        height={800}
                     />
                 </div>
 
