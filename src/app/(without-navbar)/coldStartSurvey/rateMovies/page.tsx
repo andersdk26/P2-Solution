@@ -11,6 +11,7 @@ import GetMovieTitle from '@/components/movie/MovieTitle';
 import saveMovieRatings from '@/actions/movie/saveMovieRating';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import redirect from '@/components/redirect';
+import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 type rating = {
     movieId: number;
@@ -40,8 +41,6 @@ type rating = {
 
 //movie posters: moviePosters from public
 // ####################################################################################################
-
-export const ratedMovies = new Map<number, number>();
 
 export default function Home(): JSX.Element {
     // Declare array of selected movies.
