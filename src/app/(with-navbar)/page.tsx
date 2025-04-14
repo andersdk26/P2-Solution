@@ -409,7 +409,6 @@ export default function Home(): JSX.Element {
                     Next
                 </button>
             </div> */}
-            <MovieImage movieId={1} />
         </>
     );
 }

@@ -1,14 +1,9 @@
-'use client';
-
 import { config } from 'dotenv';
 import { redirect } from 'next/navigation';
 
 config({ path: '.env' }); // or .env.local
 
-export default function redirectClient(
-    path: string,
-    addToHistory: boolean = true
-): void {
+export default function redirectServer(path: string): void {
     const rootPath = process.env.URL_PATH || '/';
 
     // Remove leading slash
@@ -18,12 +13,7 @@ export default function redirectClient(
         path = '';
     }
 
-    // Push last page to brower window history
-    if (addToHistory) {
-        // TODO something
-        // window.history.pushState({ pathname: rootPath }, '');
-    }
-
     // Redirect including PATH variable
+    // Does not add redirection to history
     redirect(rootPath + path);
 }
