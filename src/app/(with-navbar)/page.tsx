@@ -11,13 +11,14 @@ import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import Carousel from '@/components/dump/carousel';
 
-import { movieWithRating, movie } from '@/actions/movie/movie';
+import { movieWithRating, movie, getMovieById } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
+import getMovieTitle from '@/actions/movie/getMovieTitle';
 
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
@@ -58,23 +59,22 @@ export default function Home(): JSX.Element {
     );
 
     const handleImageClick = async (movieId: number): Promise<void> => {
-        // try {
-        //     const movies = await getMoviesByIds([movieId]);
-        //     const movie = movies[0]; // Since we're passing one ID, get the first result
-        //     if (!movie) {
-        //         console.error(`Movie with ID ${movieId} not found.`);
-        //         return;
-        //     }
-        //     setSidebarImage(`/img/movies/movie${movieId}.png`);
-        //     setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
-        //     setSelectedRating(null);
-        //     setSelectedMovieId(movieId);
-        //     if (backgroundDivRef.current) {
-        //         backgroundDivRef.current.style.display = 'block';
-        //     }
-        // } catch (error) {
-        //     console.error('Failed to fetch movie by ID:', error);
-        // }
+        try {
+            const movie = await getMovieById(movieId);
+            if (!movie) {
+                console.error(`Movie with ID ${movieId} not found.`);
+                return;
+            }
+            setSidebarImage(`/img/movies/movie${movieId}.png`);
+            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
+            setSelectedRating(null);
+            setSelectedMovieId(movieId);
+            if (backgroundDivRef.current) {
+                backgroundDivRef.current.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Failed to fetch movie by ID:', error);
+        }
     };
 
     const handleRatingChange = (
