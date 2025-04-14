@@ -9,6 +9,8 @@ import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
+import changeUsername from '@/actions/profileSettings/changeUsername';
+import changeEmail from '@/actions/profileSettings/changeEmail';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
@@ -17,6 +19,7 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [newUserEmail, setNewUserEmail] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -60,7 +63,30 @@ export default function ProfileSettings() {
         fetchUserEmail();
     }, []);
 
-    const handleUsernameChange = () => {};
+    const handleUsernameChange = async () => {
+        if (!newUsername) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeUsername(userId, newUsername);
+
+            if (response.status === 200) {
+                alert('Username updated successfully!');
+                setUsername(newUsername);
+                setIsEditing(null);
+                setNewUsername('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword) {
@@ -91,7 +117,30 @@ export default function ProfileSettings() {
         }
     };
 
-    const handleEmailChange = () => {};
+    const handleEmailChange = async () => {
+        if (!newEmail) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeEmail(userId, newEmail);
+
+            if (response.status === 200) {
+                alert('Email updated successfully!');
+                setUserEmail(newEmail);
+                setIsEditing(null);
+                setNewUserEmail('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     return (
         <div className="p-8 text-black">
@@ -163,10 +212,6 @@ export default function ProfileSettings() {
                 </div>
             )}
 
-            <p className="flex flex-col items-center font-bold mr-37 text-lg">
-                Username
-            </p>
-
             <div className="flex flex-col items-center space-y-4 mb-10">
                 {/* Change Username Section */}
                 <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
@@ -181,7 +226,6 @@ export default function ProfileSettings() {
                             )
                         }
                     >
-                        {' '}
                         Change Username
                     </button>
                     {isEditing === 'username' && (
@@ -193,7 +237,6 @@ export default function ProfileSettings() {
                                 onChange={(e) => setNewUsername(e.target.value)}
                                 className="border p-2 rounded-md w-60 mb-2"
                             />
-
                             <button
                                 onClick={handleUsernameChange}
                                 className="bg-[#424ebd] text-white px-4 py-2 rounded-md hover:bg-pink-600 cursor-pointer"
@@ -256,7 +299,7 @@ export default function ProfileSettings() {
                 </p>
                 <div className="w-full flex flex-col items-center">
                     <button
-                        className="mb-0 mr-33 underline text-blue-800 cursor-pointer select-none"
+                        className="mb-3 mr-30 underline text-blue-800 cursor-pointer select-none"
                         onClick={() =>
                             setIsEditing(isEditing === 'email' ? null : 'email')
                         }
@@ -266,7 +309,7 @@ export default function ProfileSettings() {
                     {isEditing === 'email' && (
                         <div className="flex flex-col items-center mt-4">
                             <input
-                                type="email"
+                                type="text"
                                 placeholder="Enter new email"
                                 value={newEmail}
                                 onChange={(e) => setNewEmail(e.target.value)}

@@ -5,34 +5,34 @@ import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import defaultResponse from '@/components/defaultResponse';
 
-export default async function changeUsername(
+export default async function changeEmail(
     userId: number,
-    newUsername: string
+    newEmail: string
 ): Promise<defaultResponse> {
-    if (!userId || !newUsername) {
+    if (!userId || !newEmail) {
         return { status: 400, message: 'Missing required fields' };
     }
 
     try {
-        // Check hvis den nye username already exists
+        // Check hvis den nye email already exists
         const existingUser = await db
             .select({ id: usersTable.id })
             .from(usersTable)
-            .where(eq(usersTable.username, newUsername));
+            .where(eq(usersTable.email, newEmail));
 
         if (existingUser.length > 0) {
-            return { status: 409, message: 'Username already taken' };
+            return { status: 409, message: 'Email already taken' };
         }
 
-        // opdater username i databasen
+        // opdatere Email i databasen
         await db
             .update(usersTable)
-            .set({ username: newUsername })
+            .set({ email: newEmail })
             .where(eq(usersTable.id, userId));
 
-        return { status: 200, message: 'Username updated successfully' };
+        return { status: 200, message: 'Email updated successfully' };
     } catch (error) {
-        console.error('Error changing username:', error);
+        console.error('Error changing email:', error);
         return { status: 500, message: 'Internal server error' };
     }
 }
