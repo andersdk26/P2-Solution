@@ -21,7 +21,7 @@ export default function redirectPath({
         path = '';
     }
 
-    // Push last page to brower window history
+    // Push last page to browser window history
     if (addToHistory) {
         // TODO something
         // window.history.pushState(null, '', homePath + path);
