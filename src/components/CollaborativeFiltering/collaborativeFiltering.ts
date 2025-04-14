@@ -1,6 +1,6 @@
 'use server';
 
-import { movieWithRating, getMovieById, movie } from '@/actions/movie/movie';
+import { getMovieById, movie } from '@/actions/movie/movie';
 import { testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';

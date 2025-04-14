@@ -4,7 +4,6 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import { moviesTable, testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
-import { stringify } from 'querystring';
 
 export default async function contentBasedFiltering(
     targetUserId: number
@@ -47,7 +46,7 @@ export default async function contentBasedFiltering(
             for (const genre of genreArray) {
                 // If the genre score map does not contain an entry for the specified genre, initialise it.
                 if (!genreScoreMap.has(genre)) {
-                    genreScoreMap.set(genre, 1);
+                    genreScoreMap.set(genre, 0);
                 }
 
                 // Update the score for the current genre.
