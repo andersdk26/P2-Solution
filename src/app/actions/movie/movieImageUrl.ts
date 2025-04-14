@@ -2,12 +2,21 @@
 import { db } from 'db';
 import { IMDBImageIdTable, movieLinkIdTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import {
+    movieImageCacheInsert,
+    movieImageCacheLookup,
+} from '@/components/movie/movieImageCache';
 
 export default async function getMovieImageURL(
     movieId: number
 ): Promise<string> {
     let result;
-    console.log(`Start: ${movieId}`);
+
+    // Check if movieId is in cache
+    const cachedMovie = await movieImageCacheLookup(movieId);
+    if (cachedMovie) {
+        return cachedMovie.url;
+    }
 
     // Database
     try {
@@ -57,7 +66,7 @@ export default async function getMovieImageURL(
 
             // Return tmdb image link
             if (tmdbImageLink && tmdbImageLink.length) {
-                console.log(`Found TMDB: ${movieId}`);
+                movieImageCacheInsert(movieId, tmdbImageLink[0]);
                 return tmdbImageLink[0]; // return first image
             }
         }
@@ -97,7 +106,6 @@ export default async function getMovieImageURL(
 
             // Return imdb image link
             if (imdbImageLink && imdbImageLink.length) {
-                console.log(`Found IMDB: ${movieId}`);
                 return imdbImageLink[0]; // return first image (0 is the prevous image)
             }
         }
@@ -108,6 +116,5 @@ export default async function getMovieImageURL(
         );
     }
 
-    console.log(`Found NONE: ${movieId}`);
     return '';
 }
