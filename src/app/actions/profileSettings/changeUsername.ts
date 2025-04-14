@@ -24,7 +24,7 @@ export default async function changeUsername(
             return { status: 409, message: 'Username already taken' };
         }
 
-        // opdater username i databasen
+        // Update username in the database
         await db
             .update(usersTable)
             .set({ username: newUsername })
