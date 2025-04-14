@@ -14,7 +14,7 @@ export default async function changeEmail(
     }
 
     try {
-        // Check hvis den nye email already exists
+        // Check if the new email already exists
         const existingUser = await db
             .select({ id: usersTable.id })
             .from(usersTable)
