@@ -19,9 +19,8 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [newUserEmail, setNewUserEmail] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
@@ -69,6 +68,13 @@ export default function ProfileSettings() {
             return;
         }
 
+        // Validate username so that it has a maximum number charectors (15)
+        if (newUsername.length > 15) {
+            alert('Username cannot exceed 15 characters.');
+            return;
+        }
+
+        // Check if the new username already exists
         const userId = parseInt(id);
 
         try {
@@ -123,6 +129,14 @@ export default function ProfileSettings() {
             return;
         }
 
+        // Validate email format (it makes it so that the users email has to include @ and .)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(newEmail)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Check if the new email already exists
         const userId = parseInt(id);
 
         try {
@@ -132,7 +146,7 @@ export default function ProfileSettings() {
                 alert('Email updated successfully!');
                 setUserEmail(newEmail);
                 setIsEditing(null);
-                setNewUserEmail('');
+                setNewEmail('');
             } else {
                 alert(response.message);
             }
