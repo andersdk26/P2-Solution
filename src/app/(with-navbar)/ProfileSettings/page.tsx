@@ -19,9 +19,8 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [newUserEmail, setNewUserEmail] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
@@ -69,6 +68,13 @@ export default function ProfileSettings() {
             return;
         }
 
+        // Validate username so that it has a maximum number charectors (15)
+        if (newUsername.length > 15) {
+            alert('Username cannot exceed 15 characters.');
+            return;
+        }
+
+        // Check if the new username already exists
         const userId = parseInt(id);
 
         try {
@@ -123,6 +129,14 @@ export default function ProfileSettings() {
             return;
         }
 
+        // Validate email format (it makes it so that the users email has to include @ and .)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(newEmail)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Check if the new email already exists
         const userId = parseInt(id);
 
         try {
@@ -132,7 +146,7 @@ export default function ProfileSettings() {
                 alert('Email updated successfully!');
                 setUserEmail(newEmail);
                 setIsEditing(null);
-                setNewUserEmail('');
+                setNewEmail('');
             } else {
                 alert(response.message);
             }
@@ -144,7 +158,7 @@ export default function ProfileSettings() {
 
     return (
         <div className="p-8 text-black">
-            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d115]">
                 <h1 className="mb-6 text-center">Profile Settings</h1>
 
                 <div className="flex flex-col items-center mb-8">
@@ -247,7 +261,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handleUsernameChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -295,7 +309,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handlePasswordChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -335,7 +349,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handleEmailChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
