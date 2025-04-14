@@ -8,6 +8,7 @@ import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
+import changePassword from '@/api/changePassword';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
@@ -16,6 +17,7 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
@@ -61,7 +63,34 @@ export default function ProfileSettings() {
     //her skal indsættes databasen ind således at den kan ændre username, password og email
     const handleUsernameChange = () => {};
 
-    const handlePasswordChange = () => {};
+    const handlePasswordChange = async () => {
+        if (!currentPassword || !newPassword) {
+            alert('Please fill in both fields.');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changePassword(
+                userId,
+                currentPassword,
+                newPassword
+            );
+
+            if (response.status === 200) {
+                alert('Password updated successfully!');
+                setIsEditing(null);
+                setCurrentPassword('');
+                setNewPassword('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing password:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     const handleEmailChange = () => {};
 
@@ -176,9 +205,8 @@ export default function ProfileSettings() {
                     )}
                 </div>
 
+                {/* Password Section */}
                 <p className="font-bold mb-0 mr-38 text-lg">Password</p>
-
-                {/* Change Password Section */}
                 <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
                     Password
                 </p>
@@ -195,6 +223,15 @@ export default function ProfileSettings() {
                     </button>
                     {isEditing === 'password' && (
                         <div className="flex flex-col items-center mt-4">
+                            <input
+                                type="password"
+                                placeholder="Enter current password"
+                                value={currentPassword}
+                                onChange={(e) =>
+                                    setCurrentPassword(e.target.value)
+                                }
+                                className="border p-2 rounded-md w-60 mb-2"
+                            />
                             <input
                                 type="password"
                                 placeholder="Enter new password"
