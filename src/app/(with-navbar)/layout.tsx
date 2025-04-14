@@ -5,7 +5,7 @@ import { JSX } from 'react';
 import NavBar from '@/components/navBar';
 import Footer from '@/components/footer';
 import { cookies } from 'next/headers';
-import redirect from '@/components/redirect';
+import redirectServer from '@/components/redirectServer';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',
@@ -32,7 +32,7 @@ export default async function RootLayout({
 
     // Check that the user is logged in
     if (!authCookie) {
-        redirect('logIn');
+        redirectServer('logIn');
     }
 
     return (
