@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     max-width: 800px;
-    height: 500px; /* Match Carousel height */
+    height: 450px; /* Match Carousel height */
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -85,6 +85,7 @@
     cursor: pointer;
 }
 
+{/* bruges denne her? */}
 .buttonWrapper button:hover {
     /* box-shadow: 0px 0px 8px 8px [#424ebd]; */
     background-color: #424ebd;

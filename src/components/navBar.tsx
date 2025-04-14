@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
 import redirect from '@/components/redirect';
+import Notification from './notification/notification';
 
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
@@ -41,7 +42,7 @@ export default function NavBar(): JSX.Element {
                             {/* <a hr"></a> */}
 
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                                className="basicBtn"
                                 onClick={() => redirect('')}
                                 title="Home"
                             >
@@ -50,8 +51,8 @@ export default function NavBar(): JSX.Element {
                         </li>
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
-                                onClick={() => redirect('Groups')}
+                                className="basicBtn"
+                                onClick={() => redirect('/Groups')}
                                 title="Groups"
                             >
                                 Groups
@@ -60,8 +61,8 @@ export default function NavBar(): JSX.Element {
 
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm cursor-pointer"
-                                onClick={() => redirect('About')}
+                                className="basicBtn"
+                                onClick={() => redirect('/About')}
                                 title="About"
                             >
                                 About
@@ -102,6 +103,9 @@ export default function NavBar(): JSX.Element {
                             ))}
                         </section>
                     </section>
+                    <div className="pl-10 block">
+                        <Notification />
+                    </div>
                     <div className="px-10">
                         <Profile />
                     </div>

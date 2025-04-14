@@ -3,7 +3,7 @@
 import React, { JSX } from 'react';
 import AdminGroupIcon from '@/components/groupPage/adminGroupIcon';
 import GroupIcon from '@/components/groupPage/groupIcon';
-import GroupRequestIcon from '@/components/groupPage/groupRequestIcon';
+import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
 
@@ -26,8 +26,8 @@ const groupIdTemp: groupId = {
     Members: ['me', 'you', 'tom'],
     Admin: 'me',
     Settings: {
-        BackgroundColor: 'bg-white',
-        TextColor: 'black',
+        BackgroundColor: '#ffffff',
+        TextColor: '#000000',
         Emoji: '🍿',
     },
 };
@@ -38,8 +38,8 @@ const groupIdTemp2: groupId = {
     Members: ['mom', 'dad', 'child', 'you'],
     Admin: 'you',
     Settings: {
-        BackgroundColor: 'bg-pink-700',
-        TextColor: '[#282F72]',
+        BackgroundColor: '#FF46A2',
+        TextColor: '#282F72',
         Emoji: '🎥',
     },
 };
@@ -50,8 +50,8 @@ const groupIdTemp3: groupId = {
     Members: ['sara', 'you', 'me', 'tom', 'mom', 'child', 'burger', 'bob'],
     Admin: 'sara',
     Settings: {
-        BackgroundColor: 'bg-black',
-        TextColor: 'white',
+        BackgroundColor: '#000000',
+        TextColor: '#ffffff',
         Emoji: '🎞️',
     },
 };
@@ -64,8 +64,14 @@ const GroupSettings = (): JSX.Element => (
             <p className="text-2xl ml-4">
                 <i>You are admin</i>
             </p>
-            <div className="flex">
+            <div className="table-row overflow-scroll">
                 <AdminGroupIcon groupId={groupIdTemp} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
+                <AdminGroupIcon groupId={groupIdTemp3} />
                 <AdminGroupIcon groupId={groupIdTemp3} />
                 <CreateGroupIcon />
             </div>
@@ -73,7 +79,7 @@ const GroupSettings = (): JSX.Element => (
 
         <section>
             <h2 className="ml-4">Groups you have joined</h2>
-            <div className="flex">
+            <div className="table-row">
                 <GroupIcon groupId={groupIdTemp2} />
                 <SearchGroupIcon />
             </div>
@@ -82,7 +88,7 @@ const GroupSettings = (): JSX.Element => (
         <section>
             <h2 className="ml-4">Requests...</h2>
             <p className="text-2xl ml-4">Groups that have asked you to join</p>
-            <GroupRequestIcon groupId={groupIdTemp2} />
+            <RequestGroupIcon groupId={groupIdTemp2} />
         </section>
     </div>
 );

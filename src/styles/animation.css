@@ -1,0 +1,22 @@
+@keyframes shake {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+    10%,
+    40% {
+        transform: rotate(6deg);
+    }
+    40%,
+    60% {
+        transform: rotate(0deg);
+    }
+    60%,
+    90% {
+        transform: rotate(-6deg);
+    }
+}
+.shakeIcon:hover {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
