@@ -24,7 +24,7 @@ export default async function changeEmail(
             return { status: 409, message: 'Email already taken' };
         }
 
-        // opdatere Email i databasen
+        // Update email in the database
         await db
             .update(usersTable)
             .set({ email: newEmail })
