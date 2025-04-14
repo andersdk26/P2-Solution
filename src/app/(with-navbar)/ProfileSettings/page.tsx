@@ -9,6 +9,8 @@ import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
+import changeUsername from '@/actions/profileSettings/changeUsername';
+import changeEmail from '@/actions/profileSettings/changeEmail';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
@@ -17,6 +19,7 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [newUserEmail, setNewUserEmail] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -60,8 +63,30 @@ export default function ProfileSettings() {
         fetchUserEmail();
     }, []);
 
-    //her skal indsættes databasen ind således at den kan ændre username, password og email
-    const handleUsernameChange = () => {};
+    const handleUsernameChange = async () => {
+        if (!newUsername) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeUsername(userId, newUsername);
+
+            if (response.status === 200) {
+                alert('Username updated successfully!');
+                setUsername(newUsername);
+                setIsEditing(null);
+                setNewUsername('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword) {
@@ -92,7 +117,30 @@ export default function ProfileSettings() {
         }
     };
 
-    const handleEmailChange = () => {};
+    const handleEmailChange = async () => {
+        if (!newEmail) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeEmail(userId, newEmail);
+
+            if (response.status === 200) {
+                alert('Email updated successfully!');
+                setUserEmail(newEmail);
+                setIsEditing(null);
+                setNewUserEmail('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     return (
         <div className="p-8 text-black">
@@ -197,7 +245,6 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-
                                 <button
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
@@ -298,7 +345,7 @@ export default function ProfileSettings() {
                 </div>
             </div>
             <div className="ml-12">
-                <p className="text-lg font-semibold">User statsss</p>
+                <p className="text-lg font-semibold">User stats</p>
                 <ul className="list-disc list-inside ml-4">
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">

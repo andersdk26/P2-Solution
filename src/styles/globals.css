@@ -70,14 +70,21 @@ h3 {
     font-weight: bolder;
     font-size: 25px;
     margin-left: 4px;
-    text-shadow: 3px 3px #9fa3d1;
 }
 
-h4 {
-    color: #08d0f3;
+/* h3 {
+    color: #dcdeef;
     font-weight: bolder;
     font-size: 30px;
     margin-left: 4px;
+} */
+
+h4 {
+    color: #282f72;
+    font-weight: bolder;
+    font-size: 20px;
+    margin-left: 4px;
+    text-shadow: 2px 2px #9fa3d1;
 }
 
 .basicBtn {
