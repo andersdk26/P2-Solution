@@ -90,7 +90,7 @@ async function setCookie(data: string): Promise<boolean> {
         secure: true,
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1,
-        path: process.env.URL_PATH || '/',
+        path: process.env.NEXT_PUBLIC_URL_PATH || '/',
     });
 
     // Check if the token cookie is set
