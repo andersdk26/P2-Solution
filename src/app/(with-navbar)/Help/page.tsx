@@ -11,7 +11,8 @@ const helpBtn = (): JSX.Element => (
         </HelpBtn>
         <HelpBtn title="What is this website?">
             This is a website where you and/or your group can recieve movie
-            recommendations, in case you guys can't agree on anything to watch!
+            recommendations, in case you guys can&apos;t agree on anything to
+            watch!
         </HelpBtn>
         <HelpBtn title="How does my recommendations work?">dsadsadsa</HelpBtn>
         <HelpBtn title="How does my groups recommendations work?">
