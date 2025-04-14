@@ -327,7 +327,7 @@ export default function ProfileSettings() {
             </div>
 
             <div className="ml-12">
-                <p className="text-lg font-semibold">User statsss</p>
+                <p className="text-lg font-semibold">User stats</p>
                 <ul className="list-disc list-inside ml-4">
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
