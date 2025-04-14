@@ -14,7 +14,7 @@ export default async function changeUsername(
     }
 
     try {
-        // Check hvis den nye username already exists
+        // Check if the new username already exists
         const existingUser = await db
             .select({ id: usersTable.id })
             .from(usersTable)
