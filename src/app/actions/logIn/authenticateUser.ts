@@ -3,10 +3,6 @@
 import { verifyToken } from '@/components/authentication/cookieAuthentication';
 import { cookies } from 'next/headers';
 
-interface Token {
-    userId: number;
-}
-
 export default async function verifyUser(): Promise<number> {
     const cookieStore = await cookies();
     // Get the token cookie
@@ -19,9 +15,8 @@ export default async function verifyUser(): Promise<number> {
     }
 
     // Verify the token
-    const token = (await verifyToken(response?.value || '')) as Token;
-    console.log('Token:', token);
+    const userId: string = await verifyToken(response?.value || '');
 
     // Return the user ID
-    return token.userId;
+    return parseInt(userId);
 }

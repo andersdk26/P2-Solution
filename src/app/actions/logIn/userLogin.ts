@@ -82,14 +82,14 @@ export async function handleSignup(formData: {
     return 'Signup successful';
 }
 
-async function setCookie(data: string): Promise<boolean> {
+export async function setCookie(data: string): Promise<boolean> {
     const cookieStore = await cookies();
 
     // Set the token cookie
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 1,
+        maxAge: 60 * 60 * 24 * 1, // 1 days
         path: process.env.NEXT_PUBLIC_URL_PATH || '/',
     });
 

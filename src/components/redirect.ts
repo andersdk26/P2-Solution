@@ -13,8 +13,6 @@ export default function useRedirect() {
         const cleanPath = path.startsWith('/') ? path.slice(1) : path;
         const finalPath = rootPath + cleanPath;
 
-        alert(process.env.NEXT_PUBLIC_URL_PATH); // Debugging log
-
         if (addToHistory) {
             router.push(finalPath);
         } else {
