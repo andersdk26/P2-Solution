@@ -60,7 +60,6 @@ export default function ProfileSettings() {
         fetchUserEmail();
     }, []);
 
-    //her skal indsættes databasen ind således at den kan ændre username, password og email
     const handleUsernameChange = () => {};
 
     const handlePasswordChange = async () => {
