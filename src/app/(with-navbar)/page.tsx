@@ -18,8 +18,6 @@ import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
-import getMovieTitle from '@/actions/movie/getMovieTitle';
-
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
