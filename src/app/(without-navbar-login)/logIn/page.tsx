@@ -5,7 +5,7 @@ import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import userLogout from '@/actions/logIn/userLogout';
 import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation';
+import redirect from '@/components/redirect';
 
 export default function Page(): JSX.Element {
     const [loginResponse, setLoginResponse] = useState('');
@@ -17,7 +17,7 @@ export default function Page(): JSX.Element {
         // Check if the user is logged in. If they are already logged in, redirect them to the main page
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) > 1) {
-                redirect('/');
+                redirect('');
             }
         };
         checkLoginStatus();
@@ -49,7 +49,7 @@ export default function Page(): JSX.Element {
                         setLoginResponse(responseMessage);
 
                         if (responseMessage === 'Login successful') {
-                            router.push('/'); // Redirect to the main page only if login is successful
+                            redirect(''); // Redirect to the main page only if login is successful
                         }
                     }}
                     className="flex flex-col gap-4"

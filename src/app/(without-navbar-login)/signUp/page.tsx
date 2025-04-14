@@ -3,7 +3,7 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { handleSignup as serverHandleSignup } from '@/actions/logIn/userLogin';
 import SignUpForm from 'components/signUp/SignUpForm'; // Importing the signup form component
-import { redirect } from 'next/navigation';
+import redirect from '@/components/redirect';
 import { JSX, useEffect, useState } from 'react'; // Importing React state hook
 
 export default function SignUpPage(): JSX.Element {
@@ -13,7 +13,7 @@ export default function SignUpPage(): JSX.Element {
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) > 1) {
-                redirect('/coldStartSurvey');
+                redirect('coldStartSurvey');
             }
         };
         checkLoginStatus();
@@ -47,7 +47,7 @@ export default function SignUpPage(): JSX.Element {
             return;
         }
         // Redirect
-        redirect('/coldStartSurvey');
+        redirect('coldStartSurvey');
     };
 
     return (

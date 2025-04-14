@@ -3,7 +3,9 @@
 import { generateToken } from '@/components/authentication/cookieAuthentication';
 import { login_check, register_user } from '@/components/db/userAuth';
 import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
+
+config({ path: '.env' }); // or .env.local
 
 interface LoginResponse {
     status: number;
@@ -87,8 +89,8 @@ async function setCookie(data: string): Promise<boolean> {
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 1,
+        path: process.env.URL_PATH || '/',
     });
 
     // Check if the token cookie is set
