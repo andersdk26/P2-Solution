@@ -34,13 +34,13 @@ export async function generateToken(userId: string): Promise<string> {
     });
 }
 
-export async function verifyToken(token: string): Promise<string> {
+export async function verifyToken(token: string): Promise<number> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
     // Verify JWT token with HS512 or HS256 algorithm
-    const userId: Promise<string> = new Promise((resolve, reject): void => {
+    const userId: Promise<number> = new Promise((resolve, reject): void => {
         jwt.verify(
             token,
             process.env.JWT_SECRET as string,
@@ -62,12 +62,12 @@ export async function verifyToken(token: string): Promise<string> {
                 }
 
                 // update the token expiration time to 7 days from now
-                resolve(decoded as string);
+                resolve(Number(decoded));
             }
         );
     });
 
-    const newToken = generateToken(await userId);
+    const newToken = generateToken(((await userId) || 0).toString());
     setCookie(await newToken);
 
     return await userId;

@@ -15,8 +15,8 @@ export default async function verifyUser(): Promise<number> {
     }
 
     // Verify the token
-    const userId: string = await verifyToken(response?.value || '');
+    const userId = await verifyToken(response?.value);
 
     // Return the user ID
-    return parseInt(userId);
+    return userId;
 }
