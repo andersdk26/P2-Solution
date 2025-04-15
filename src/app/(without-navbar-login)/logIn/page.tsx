@@ -5,9 +5,10 @@ import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import userLogout from '@/actions/logIn/userLogout';
 import { useRouter } from 'next/navigation';
-import redirect from '@/components/redirect';
+import useRedirect from '@/components/redirect';
 
 export default function Page(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     const [loginResponse, setLoginResponse] = useState('');
     const [signupResponse, setSignupResponse] = useState('');
     const [userId, setUserId] = useState(0);
