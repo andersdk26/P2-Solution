@@ -61,8 +61,16 @@ export async function verifyToken(token: string): Promise<number> {
                     return reject(new Error('JWT token is not defined'));
                 }
 
-                // update the token expiration time to 7 days from now
-                resolve(Number(decoded));
+                // Extract the userId field from the decoded object
+                const userId = typeof decoded === 'object' && decoded !== null ? decoded.userId : undefined;
+
+                // Validate that userId is a valid number
+                if (typeof userId !== 'number' || isNaN(userId)) {
+                    return reject(new Error('Invalid or missing userId in token'));
+                }
+
+                // Resolve the promise with the numeric userId
+                resolve(userId);
             }
         );
     });
