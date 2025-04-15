@@ -69,6 +69,7 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     value={formData.username}
                     onChange={handleChange} // Updates the name state when the user types
                     className="mt-1 p-2 w-full border rounded-md"
+                    maxLength={15} // Limit the username to 15 characters
                     required
                 />
             </div>
@@ -88,6 +89,8 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     value={formData.email}
                     onChange={handleChange} // opdater email state when the user types
                     className="mt-1 p-2 w-full border rounded-md"
+                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                    title="Please enter a valid email address"
                     required
                 />
             </div>
