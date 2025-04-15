@@ -30,7 +30,7 @@ export default function MovieImage({
     className = '',
     onClick = (): void => {},
 }: MovieImageProps): JSX.Element {
-    const [imageURL, setImageURL] = useState('/placeholder.png');
+    const [imageURL, setImageURL] = useState('');
     const [loadingImage, setLoadingImage] = useState(true);
     const [placeholderDataURL, setPlaceholderDataURL] = useState<
         string | undefined
@@ -49,11 +49,6 @@ export default function MovieImage({
             // Image done loading
             setLoadingImage(false);
 
-            // If image URL does not exist; use placeholder image
-            if (!newImage.url) {
-                newImage.url = '/placeholder.png';
-            }
-
             // Set final URL and update page only once
             setImageURL(newImage.url);
         };
@@ -66,7 +61,7 @@ export default function MovieImage({
                 <Image
                     title={title}
                     onClick={onClick}
-                    src={imageURL}
+                    src={imageURL ? imageURL : '/placeholder.png'}
                     alt={alt}
                     fill={true}
                     sizes={`(max-width: ${width}px)`}
@@ -82,7 +77,7 @@ export default function MovieImage({
                 <Image
                     title={title}
                     onClick={onClick}
-                    src={imageURL}
+                    src={imageURL ? imageURL : '/placeholder.png'}
                     alt={alt}
                     height={height}
                     width={width}

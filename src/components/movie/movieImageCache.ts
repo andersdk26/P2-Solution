@@ -59,5 +59,5 @@ async function generateBlurHash(url: string): Promise<string> {
 
     const { base64 } = await getPlaiceholder(Buffer.from(buffer));
 
-    return `data:image/jpeg;base64,${base64}`;
+    return base64;
 }
