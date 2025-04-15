@@ -6,6 +6,8 @@ import NavBar from '@/components/navBar';
 import Footer from '@/components/footer';
 import { cookies } from 'next/headers';
 import redirectServer from '@/components/redirectServer';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import userLogout from '@/actions/logIn/userLogout';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',

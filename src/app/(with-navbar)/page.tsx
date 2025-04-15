@@ -16,8 +16,8 @@ import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBas
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
+import { useRouter } from 'next/router';
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
@@ -112,15 +112,6 @@ export default function Home(): JSX.Element {
             );
         }
     };
-
-    useEffect(() => {
-        const checkLoginStatus = async (): Promise<void> => {
-            if ((await verifyUser()) < 1) {
-                redirect('logIn');
-            }
-        };
-        checkLoginStatus();
-    }, []);
 
     return (
         <>
