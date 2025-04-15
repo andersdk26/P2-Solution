@@ -3,13 +3,14 @@ import { db } from 'db';
 import { IMDBImageIdTable, movieLinkIdTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import {
+    movieImageCache,
     movieImageCacheInsert,
     movieImageCacheLookup,
 } from '@/components/movie/movieImageCache';
 
 export default async function getMovieImageURL(
     movieId: number
-): Promise<string> {
+): Promise<movieImageCache> {
     let result;
 
     // Check if movieId is in cache

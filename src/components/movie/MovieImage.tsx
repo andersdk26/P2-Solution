@@ -32,22 +32,30 @@ export default function MovieImage({
 }: MovieImageProps): JSX.Element {
     const [imageURL, setImageURL] = useState('/placeholder.png');
     const [loadingImage, setLoadingImage] = useState(true);
+    const [placeholderDataURL, setPlaceholderDataURL] = useState<
+        string | undefined
+    >();
 
     useEffect(() => {
         const getImage = async (): Promise<void> => {
             // Get external movie image URL
-            let newImageURL = await getMovieImageURL(movieId);
+            const newImage = await getMovieImageURL(movieId);
+
+            // Check if image blurHash exists
+            if (newImage.blurHash) {
+                setPlaceholderDataURL(newImage.blurHash);
+            }
 
             // Image done loading
             setLoadingImage(false);
 
             // If image URL does not exist; use placeholder image
-            if (newImageURL === '') {
-                newImageURL = '/placeholder.png';
+            if (!newImage.url) {
+                newImage.url = '/placeholder.png';
             }
 
             // Set final URL and update page only once
-            setImageURL(newImageURL);
+            setImageURL(newImage.url);
         };
         getImage();
     }, [movieId]); // run on movieId change
@@ -62,8 +70,12 @@ export default function MovieImage({
                     alt={alt}
                     fill={true}
                     sizes={`(max-width: ${width}px)`}
-                    placeholder={blur as PlaceholderValue}
-                    blurDataURL={blurDataURL}
+                    placeholder={
+                        placeholderDataURL ? 'blur' : (blur as PlaceholderValue)
+                    }
+                    blurDataURL={
+                        placeholderDataURL ? placeholderDataURL : blurDataURL
+                    }
                     className={`${className} ${loadingImage && 'animate-pulse'}`}
                 />
             ) : (
@@ -74,8 +86,12 @@ export default function MovieImage({
                     alt={alt}
                     height={height}
                     width={width}
-                    placeholder={blur as PlaceholderValue}
-                    blurDataURL={blurDataURL}
+                    placeholder={
+                        placeholderDataURL ? 'blur' : (blur as PlaceholderValue)
+                    }
+                    blurDataURL={
+                        placeholderDataURL ? placeholderDataURL : blurDataURL
+                    }
                     className={`${className} ${loadingImage && 'animate-pulse'}`}
                 />
             )}

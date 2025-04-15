@@ -3,6 +3,7 @@
 import { db } from '@/db/index';
 import { movieImageCacheTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { getPlaiceholder } from 'plaiceholder';
 
 export interface movieImageCache {
     id: number;
@@ -13,6 +14,7 @@ export interface movieImageCache {
 export async function movieImageCacheLookup(
     movieId: number
 ): Promise<movieImageCache | undefined> {
+    // Check if movieId is in cache
     const result = await db
         .select({
             id: movieImageCacheTable.movieId,
@@ -26,6 +28,7 @@ export async function movieImageCacheLookup(
         return undefined;
     }
 
+    // Return the first result
     return result[0];
 }
 
@@ -33,9 +36,10 @@ export async function movieImageCacheInsert(
     movieId: number,
     movieURL: string
 ): Promise<void> {
-    const blurHash = '';
+    const blurHash = await generateBlurHash(movieURL);
 
     try {
+        // Insert movie image cache
         await db.insert(movieImageCacheTable).values({
             movieId,
             url: movieURL,
@@ -47,4 +51,13 @@ export async function movieImageCacheInsert(
             error
         );
     }
+}
+
+async function generateBlurHash(url: string): Promise<string> {
+    const res = await fetch(url);
+    const buffer = await res.arrayBuffer();
+
+    const { base64 } = await getPlaiceholder(Buffer.from(buffer));
+
+    return `data:image/jpeg;base64,${base64}`;
 }
