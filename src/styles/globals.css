@@ -120,12 +120,12 @@ h4 {
     background-color: #e43270;
 }
 
-h5 {
+/* h5 {
     color: #dcdeef;
     font-weight: bolder;
     font-size: 15px;
     margin-left: 4px;
-}
+} */
 
 .prevent-select {
     -webkit-user-select: none;
