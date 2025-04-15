@@ -50,6 +50,7 @@ export async function register_user({
     username,
     email,
     password,
+    profileIcon,
 }: registerUserProps): Promise<defaultResponse> {
     let passwordHash: string;
     let userId: number;
@@ -113,6 +114,7 @@ export async function register_user({
                 username,
                 email,
                 password: passwordHash,
+                profileIcon,
             })
             .returning();
 
