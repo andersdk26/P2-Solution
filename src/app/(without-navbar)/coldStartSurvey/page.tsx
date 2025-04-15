@@ -7,12 +7,13 @@ import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
 } from '@/components/coldStarSurvey/selectedMovies';
-import redirect from '@/components/redirect';
+import useRedirect from '@/components/redirect';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 
 export default function SelectMovies(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
 

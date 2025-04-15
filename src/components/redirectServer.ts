@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 config({ path: '.env' }); // or .env.local
 
 export default function redirectServer(path: string): void {
-    const rootPath = process.env.URL_PATH || '/';
+    const rootPath = process.env.NEXT_PUBLIC_URL_PATH || '/';
 
     // Remove leading slashes
     if (path) {
