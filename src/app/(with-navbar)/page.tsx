@@ -197,13 +197,13 @@ export default function Home(): JSX.Element {
                                 transition: 'transform 0.5s ease-in-out',
                             }}
                         >
-                            {displayedMovies.map((movie, index) => (
+                            {recommendedMovies.map((movie, index) => (
                                 <div key={index} className="posterItem">
                                     <MovieImage
-                                        movieId={index + 1}
-                                        title={movie.title}
+                                        movieId={movie.movieId}
+                                        title={movie.movieTitle}
                                         onClick={() =>
-                                            handleImageClick(index + 1)
+                                            handleImageClick(movie.movieId)
                                         }
                                     />
                                 </div>
