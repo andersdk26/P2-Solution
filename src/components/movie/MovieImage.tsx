@@ -26,7 +26,7 @@ export default function MovieImage({
     width = 300,
     alt = 'Movie image',
     blur = 'empty',
-    blurDataURL = undefined,
+    blurDataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAECAIAAADETxJQAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGHRFWHRTb2Z0d2FyZQBQYWludC5ORVQgNS4xLjQS36aDAAAAG0lEQVR4nGOQEJeAIAZXF9e3b9+6urgiseCyANDoCnHLSeiYAAAAAElFTkSuQmCC',
     className = '',
     onClick = (): void => {},
 }: MovieImageProps): JSX.Element {
