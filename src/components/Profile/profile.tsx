@@ -10,7 +10,6 @@ const Profile = (): JSX.Element => {
     const redirect = useRedirect(); // Custom hook for redirection
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [username, setUsername] = useState('Username'); // State for username
-    const router = useRouter();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const toggleDropdown = (): void => {
