@@ -9,16 +9,15 @@ import { useState, useEffect, useRef } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
-import Carousel from '@/components/dump/carousel';
 
-import { movieWithRating, movie, getMovieById } from '@/actions/movie/movie';
+import { movie, getMovieById } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import redirect from '@/components/redirect';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
+import { useRouter } from 'next/router';
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
@@ -42,8 +41,8 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
-                //await collaborativeFiltering(await verifyUser())
-                await contentBasedFiltering(await verifyUser())
+                await collaborativeFiltering(await verifyUser())
+                // await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
     }, []);
@@ -60,15 +59,15 @@ export default function Home(): JSX.Element {
 
     const handleImageClick = async (movieId: number): Promise<void> => {
         try {
-            const movie = await getMovieById(movieId);
+            const movie = await getMovieById(movieId); // Fetch movie by ID
             if (!movie) {
                 console.error(`Movie with ID ${movieId} not found.`);
                 return;
             }
-            setSidebarImage(`/img/movies/movie${movieId}.png`);
-            setSidebarAlt(movie.movieTitle); // Set the sidebarAlt to the movie title
-            setSelectedRating(null);
-            setSelectedMovieId(movieId);
+            setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
+            setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
+            setSelectedRating(null); // This part needs some more work
+            setSelectedMovieId(movieId); // set the rating to the selected movie ID
             if (backgroundDivRef.current) {
                 backgroundDivRef.current.style.display = 'block';
             }
@@ -114,15 +113,6 @@ export default function Home(): JSX.Element {
         }
     };
 
-    useEffect(() => {
-        const checkLoginStatus = async (): Promise<void> => {
-            if ((await verifyUser()) < 1) {
-                redirect('logIn');
-            }
-        };
-        checkLoginStatus();
-    }, []);
-
     return (
         <>
             {/* Div for deselecting sidebar */}
@@ -140,7 +130,7 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            <div className="container">
+            {/* <div className="container">
                 <section>
                     <h1>Recommended Movies</h1>
                     {recommendedMovies.map((movie) => (
@@ -149,7 +139,7 @@ export default function Home(): JSX.Element {
                         </div>
                     ))}
                 </section>
-            </div>
+            </div> */}
 
             <div>
                 {/*Left Panel to Curtain Left Image*/}
@@ -198,13 +188,13 @@ export default function Home(): JSX.Element {
                                 transition: 'transform 0.5s ease-in-out',
                             }}
                         >
-                            {displayedMovies.map((movie, index) => (
+                            {recommendedMovies.map((movie, index) => (
                                 <div key={index} className="posterItem">
                                     <MovieImage
-                                        movieId={index + 1}
-                                        title={movie.title}
+                                        movieId={movie.movieId}
+                                        title={movie.movieTitle}
                                         onClick={() =>
-                                            handleImageClick(index + 1)
+                                            handleImageClick(movie.movieId)
                                         }
                                     />
                                 </div>

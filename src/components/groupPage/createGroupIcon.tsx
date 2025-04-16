@@ -14,7 +14,7 @@ export default function CreateGroupIcon(): JSX.Element {
         setAboutGroupOpen(!isAboutGroupOpen);
     };
 
-    const handleSubmit = (e): void => {
+    const handleSubmit = (e: { preventDefault: () => void }): void => {
         e.preventDefault();
 
         // validate the group name
@@ -38,7 +38,7 @@ export default function CreateGroupIcon(): JSX.Element {
     };
 
     //---------------------------------This should work similar to select movies in cold start survey
-    const handleMemberSubmit = (e) => {
+    const handleMemberSubmit = (e: { preventDefault: () => void }): void => {
         e.preventDefault();
         console.log('add group member');
     };

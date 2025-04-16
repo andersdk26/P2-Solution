@@ -1,13 +1,13 @@
 'use client';
 import React, { useState, useEffect, JSX, useRef } from 'react';
 import ProfileImage from './profileImg';
-import { useRouter } from 'next/navigation';
 import userLogout from '@/actions/logIn/userLogout';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import redirect from '@/components/redirect';
+import useRedirect from '@/components/redirect';
 
 const Profile = (): JSX.Element => {
+    const redirect = useRedirect(); // Custom hook for redirection
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [username, setUsername] = useState('Username'); // State for username
     const router = useRouter();

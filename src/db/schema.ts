@@ -1,5 +1,6 @@
 import { group } from 'console';
 import { sql } from 'drizzle-orm';
+import { timestamp } from 'drizzle-orm/gel-core';
 import {
     integer,
     sqliteTable,
@@ -133,6 +134,21 @@ export const IMDBImageIdTable = sqliteTable('imdb_image_id', {
 
 export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
 export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
+
+export const movieImageCacheTable = sqliteTable('movie_image_cache', {
+    id: integer('id').primaryKey(), // auto increment
+    movieId: integer('movieId')
+        .notNull()
+        .references(() => moviesTable.id),
+    url: text('url').notNull(),
+    blurHash: text('blurHash'),
+    timestamp: text('timestamp')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+});
+
+export type InsertmovieImageCache = typeof movieImageCacheTable.$inferInsert;
+export type SelectmovieImageCache = typeof movieImageCacheTable.$inferSelect;
 
 // To update the schema, run: npx drizzle-kit push
 // After deleting fts tables, run: CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;

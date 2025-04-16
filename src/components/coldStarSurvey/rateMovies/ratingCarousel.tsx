@@ -6,7 +6,7 @@ import { movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
-import { ratedMovies } from 'app/(without-navbar)/coldStartSurvey/rateMovies/page';
+import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 type movieProps = { movieId: movie[] };
 
