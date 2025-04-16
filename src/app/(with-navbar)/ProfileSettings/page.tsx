@@ -180,7 +180,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
-                        src={profileIcon}
+                        src={selectedIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
