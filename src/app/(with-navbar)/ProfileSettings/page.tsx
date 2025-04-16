@@ -10,6 +10,12 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 
+// import of movies to user stats - seenlist
+import { movie, getMovieById } from '@/actions/movie/movie';
+import MovieImage from '@/components/movie/MovieImage';
+import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarousel';
+import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
+
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
     const [id, setUserID] = useState('User ID#');
@@ -23,6 +29,7 @@ export default function ProfileSettings() {
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
     ); // Default icon
+    const [seenMovies, setSeenMovies] = useState<number[]>([1]);
 
     const icons = [
         '/img/profileSettingIcons/cornpop.png',
@@ -60,8 +67,49 @@ export default function ProfileSettings() {
         fetchUserEmail();
     }, []);
 
+<<<<<<< Updated upstream
     //her skal indsættes databasen ind således at den kan ændre username, password og email
     const handleUsernameChange = () => {};
+=======
+    useEffect(() => {
+        const fetchSeenMovies = async () => {
+            setSeenMovies(await getSeenMovies(await verifyUser()));
+        };
+        fetchSeenMovies();
+    }, []);
+
+    const handleUsernameChange = async () => {
+        if (!newUsername) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        // Validate username so that it has a maximum number charectors (15)
+        if (newUsername.length > 15) {
+            alert('Username cannot exceed 15 characters.');
+            return;
+        }
+
+        // Check if the new username already exists
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeUsername(userId, newUsername);
+
+            if (response.status === 200) {
+                alert('Username updated successfully!');
+                setUsername(newUsername);
+                setIsEditing(null);
+                setNewUsername('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
+>>>>>>> Stashed changes
 
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword) {
@@ -95,9 +143,16 @@ export default function ProfileSettings() {
     const handleEmailChange = () => {};
 
     return (
+<<<<<<< Updated upstream
         <div className="p-8 text-black">
             <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
                 <h1 className="mb-6 text-center">Profile Settings</h1>
+=======
+        <div className="p-8">
+            {/* Profile Settings container and content*/}
+            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+                <h2 className="mb-6 text-center">Profile Settings</h2>
+>>>>>>> Stashed changes
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
@@ -124,8 +179,8 @@ export default function ProfileSettings() {
 
                 {/* Popup til selecting profile icon */}
                 {isPopupOpen && (
-                    <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <div className="fixed mt-25 inset-0 bg-opacity-50 flex justify-center items-center z-50">
+                        <div className="bg-[#babdde] p-6 rounded-lg shadow-lg border-3 border-[#282f72]">
                             <h2>Select Profile Icon</h2>
                             <div className="grid grid-cols-3 gap-4">
                                 {icons.map((icon, index) => (
@@ -138,7 +193,7 @@ export default function ProfileSettings() {
                                         className={`w-20 h-20 cursor-pointer rounded-full border select-none ${
                                             selectedIcon === icon
                                                 ? 'border-blue-500'
-                                                : 'border-gray-300'
+                                                : 'border-gray-400'
                                         } hover:border-blue-500 object-cover`}
                                         draggable="false"
                                         onClick={() => setSelectedIcon(icon)}
@@ -147,13 +202,13 @@ export default function ProfileSettings() {
                             </div>
                             <div className="flex justify-end mt-4 space-x-2">
                                 <button
-                                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                                    className="border-[#282f72] border-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
                                     onClick={() => setIsPopupOpen(false)} // Close popup
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    className="basicBtn"
                                     onClick={() => {
                                         setIsPopupOpen(false);
                                     }}
@@ -171,7 +226,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center space-y-4 mb-10">
                     {/* Change Username Section */}
-                    <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
+                    <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
                         {username}
                     </p>
                     <div className="w-full flex flex-col items-center">
@@ -212,8 +267,8 @@ export default function ProfileSettings() {
                     <p className="font-bold mb-0 mr-38 text-lg text-[#282f72]">
                         Password
                     </p>
-                    <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
-                        Password
+                    <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
+                        *********
                     </p>
                     <div className="w-full flex flex-col items-center">
                         <button
@@ -261,7 +316,7 @@ export default function ProfileSettings() {
                     </p>
 
                     {/* Change Email Section */}
-                    <p className="mb-0 flex flex-col items-center bg-[#282F72] text-[#dcdeef] font-bold px-6 py-2 rounded w-60">
+                    <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
                         {email}
                     </p>
                     <div className="w-full flex flex-col items-center">
@@ -297,19 +352,32 @@ export default function ProfileSettings() {
                     </div>
                 </div>
             </div>
+<<<<<<< Updated upstream
             <div className="ml-12">
                 <p className="text-lg font-semibold">User statsss</p>
                 <ul className="list-disc list-inside ml-4">
+=======
+            {/* User stats container and content */}
+            <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
+                <h2>User stats</h2>
+                <div className="bg-[#282f72] m-5">
+                    Visualisering af stats, evt. m. graffer
+                </div>
+
+                <div className="bg-[#282f72] m-5">
+                    Seenlist - under seen movies, we have change movie ratings
+                    <MovieImage movieId={seenMovies[0]} />
+                </div>
+                {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
+
+                {/* <ul className="list-disc list-inside ml-4">
+>>>>>>> Stashed changes
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
                             Histogrammer/grafferne
                         </span>
                     </li>
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            watchlist her
-                        </span>
-                    </li>
+                   
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
                             Seen movies
@@ -323,7 +391,7 @@ export default function ProfileSettings() {
                             </li>
                         </ul>
                     </li>
-                </ul>
+                </ul> */}
             </div>
         </div>
     );
