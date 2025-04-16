@@ -62,12 +62,12 @@ export async function verifyToken(token: string): Promise<number> {
                 }
 
                 // Extract the userId field from the decoded object
+                const userId = typeof decoded === 'object' && decoded !== null ? decoded.userId : undefined;
+
                 const userId =
                     typeof decoded === 'object' && decoded !== null
                         ? decoded.userId
                         : undefined;
-
-                console.log('###################', userId);
 
                 // Validate that userId is a valid number
                 if (typeof parseInt(userId) !== 'number' || isNaN(userId)) {
