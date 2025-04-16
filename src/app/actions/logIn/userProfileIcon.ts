@@ -11,7 +11,7 @@ export default async function getProfileIcon(
 ): Promise<string> {
     const resolvedId = await id;
 
-    // query the database to get the users profileIcon using the resolved ID
+    // query/request the database to get the users profileIcon using the resolved ID
     const result = await db
         .select({ profileIcon: usersTable.profileIcon }) // only select the profileIcon column
         .from(usersTable) // from the users table
