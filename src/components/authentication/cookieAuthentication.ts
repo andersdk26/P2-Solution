@@ -67,8 +67,6 @@ export async function verifyToken(token: string): Promise<number> {
                         ? decoded.userId
                         : undefined;
 
-                console.log('###################', userId);
-
                 // Validate that userId is a valid number
                 if (typeof parseInt(userId) !== 'number' || isNaN(userId)) {
                     return reject(
