@@ -187,7 +187,7 @@ export default function ProfileSettings() {
     return (
         <div className="p-8">
             {/* Profile Settings container and content*/}
-            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+            <div className="ml-120 mr-120 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
                 <h2 className="mb-6 text-center">Profile Settings</h2>
 
                 <div className="flex flex-col items-center mb-8">
@@ -396,8 +396,8 @@ export default function ProfileSettings() {
 
                 <div className="bg-[#282f72] m-5">
                     Seenlist - under seen movies, we have change movie ratings
-                    <MovieImage movieId={seenMovies[0]} />
-                    <MovieImage movieId={seenMovies[1]} />
+                    <MovieImage movieId={seenMovies[40]} />
+                    <MovieImage movieId={seenMovies[50]} />
                 </div>
                 {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
 
