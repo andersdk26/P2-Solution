@@ -2,7 +2,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, JSX } from 'react';
 import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
@@ -11,6 +11,7 @@ import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
+import getProfileIcon from '@/actions/logIn/userProfileIcon';
 
 export default function ProfileSettings() {
     const [username, setUsername] = useState('Username');
@@ -25,6 +26,7 @@ export default function ProfileSettings() {
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
     ); // Default icon
+    const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
 
     const icons = [
         '/img/profileSettingIcons/cornpop.png',
@@ -60,6 +62,21 @@ export default function ProfileSettings() {
             setUserEmail(String(await getUserEmail(verifyUser())));
         };
         fetchUserEmail();
+    }, []);
+
+    useEffect(() => {
+        // Define an async function to fetch the user's profile icon
+        const fetchProfileIcon = async (): Promise<void> => {
+            const userId = await verifyUser(); // this calls a function to verify the user and get their ID
+            // if the user ID is valid (greater than 0), fetch their profile icon
+            if (userId > 0) {
+                const icon = await getProfileIcon(userId); // here we call another function to get the actual icon URL from the database
+
+                setProfileIcon(icon); // then we update the profileIcon state with the fetched icon
+            }
+        };
+
+        fetchProfileIcon(); //we call the call the fetchProfileIcon function
     }, []);
 
     const handleUsernameChange = async () => {
@@ -163,7 +180,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
-                        src={selectedIcon}
+                        src={profileIcon}
                         alt="Profile Icon"
                         width={100}
                         height={100}
