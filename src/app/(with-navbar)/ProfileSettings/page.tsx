@@ -67,10 +67,6 @@ export default function ProfileSettings() {
         fetchUserEmail();
     }, []);
 
-<<<<<<< Updated upstream
-    //her skal indsættes databasen ind således at den kan ændre username, password og email
-    const handleUsernameChange = () => {};
-=======
     useEffect(() => {
         const fetchSeenMovies = async () => {
             setSeenMovies(await getSeenMovies(await verifyUser()));
@@ -109,7 +105,6 @@ export default function ProfileSettings() {
             alert('An error occurred. Please try again.');
         }
     };
->>>>>>> Stashed changes
 
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword) {
@@ -143,16 +138,10 @@ export default function ProfileSettings() {
     const handleEmailChange = () => {};
 
     return (
-<<<<<<< Updated upstream
-        <div className="p-8 text-black">
-            <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
-                <h1 className="mb-6 text-center">Profile Settings</h1>
-=======
         <div className="p-8">
             {/* Profile Settings container and content*/}
             <div className="ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
                 <h2 className="mb-6 text-center">Profile Settings</h2>
->>>>>>> Stashed changes
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
@@ -352,11 +341,6 @@ export default function ProfileSettings() {
                     </div>
                 </div>
             </div>
-<<<<<<< Updated upstream
-            <div className="ml-12">
-                <p className="text-lg font-semibold">User statsss</p>
-                <ul className="list-disc list-inside ml-4">
-=======
             {/* User stats container and content */}
             <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
                 <h2>User stats</h2>
@@ -367,11 +351,11 @@ export default function ProfileSettings() {
                 <div className="bg-[#282f72] m-5">
                     Seenlist - under seen movies, we have change movie ratings
                     <MovieImage movieId={seenMovies[0]} />
+                    <MovieImage movieId={seenMovies[1]} />
                 </div>
                 {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
 
                 {/* <ul className="list-disc list-inside ml-4">
->>>>>>> Stashed changes
                     <li>
                         <span className="underline text-blue-800 cursor-pointer">
                             Histogrammer/grafferne
