@@ -44,6 +44,7 @@ interface registerUserProps {
     username: string;
     email: string;
     password: string;
+    profileIcon: string;
 }
 
 export async function register_user({
