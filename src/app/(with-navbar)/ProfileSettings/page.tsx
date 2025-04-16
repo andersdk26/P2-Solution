@@ -2,13 +2,16 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, JSX } from 'react';
 import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
+import changeUsername from '@/actions/profileSettings/changeUsername';
+import changeEmail from '@/actions/profileSettings/changeEmail';
+import getProfileIcon from '@/actions/logIn/userProfileIcon';
 
 // import of movies to user stats - seenlist
 import { movie, getMovieById } from '@/actions/movie/movie';
@@ -23,13 +26,14 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState<string | null>(null);
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
     ); // Default icon
     const [seenMovies, setSeenMovies] = useState<number[]>([1]);
+    const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
 
     const icons = [
         '/img/profileSettingIcons/cornpop.png',
@@ -72,6 +76,18 @@ export default function ProfileSettings() {
             setSeenMovies(await getSeenMovies(await verifyUser()));
         };
         fetchSeenMovies();
+        // Define an async function to fetch the user's profile icon
+        const fetchProfileIcon = async (): Promise<void> => {
+            const userId = await verifyUser(); // this calls a function to verify the user and get their ID
+            // if the user ID is valid (greater than 0), fetch their profile icon
+            if (userId > 0) {
+                const icon = await getProfileIcon(userId); // here we call another function to get the actual icon URL from the database
+
+                setProfileIcon(icon); // then we update the profileIcon state with the fetched icon
+            }
+        };
+
+        fetchProfileIcon(); //we call the call the fetchProfileIcon function
     }, []);
 
     const handleUsernameChange = async () => {
@@ -135,7 +151,38 @@ export default function ProfileSettings() {
         }
     };
 
-    const handleEmailChange = () => {};
+    const handleEmailChange = async () => {
+        if (!newEmail) {
+            alert('Please fill in the field');
+            return;
+        }
+
+        // Validate email format (it makes it so that the users email has to include @ and .)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(newEmail)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Check if the new email already exists
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeEmail(userId, newEmail);
+
+            if (response.status === 200) {
+                alert('Email updated successfully!');
+                setUserEmail(newEmail);
+                setIsEditing(null);
+                setNewEmail('');
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     return (
         <div className="p-8">
@@ -145,7 +192,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
-                        src={selectedIcon}
+                        src={selectedIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -241,10 +288,9 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-
                                 <button
                                     onClick={handleUsernameChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -292,7 +338,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handlePasswordChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>
@@ -332,7 +378,7 @@ export default function ProfileSettings() {
                                 />
                                 <button
                                     onClick={handleEmailChange}
-                                    className="basicBtn"
+                                    className="settingBtn"
                                 >
                                     Submit
                                 </button>

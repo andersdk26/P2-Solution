@@ -4,18 +4,16 @@
 
 import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
-export default function NavBar(): JSX.Element {
-    const [searchResult, setSearchResult] = useState<movie[]>([]);
-    const router = useRouter(); // Use the useRouter hook
+import useRedirect from '@/components/redirect';
+import Notification from './notification/notification';
 
-    const redirrectProfile = (path: string): void => {
-        if (path) {
-            router.push(path);
-        }
-    };
+export default function NavBar(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
+    const [searchResult, setSearchResult] = useState<movie[]>([]);
+
     return (
         <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24 z-99">
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
@@ -27,7 +25,7 @@ export default function NavBar(): JSX.Element {
                             alt={'Jamfest Logo'}
                             width={100}
                             height={100}
-                            onClick={() => redirrectProfile('/')}
+                            onClick={() => redirect('')}
                             title="Home page"
                         ></Image>
                         {/* <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
@@ -45,7 +43,7 @@ export default function NavBar(): JSX.Element {
 
                             <button
                                 className="basicBtn"
-                                onClick={() => redirrectProfile('/')}
+                                onClick={() => redirect('')}
                                 title="Home"
                             >
                                 Home
@@ -54,7 +52,7 @@ export default function NavBar(): JSX.Element {
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
                                 className="basicBtn"
-                                onClick={() => redirrectProfile('/Groups')}
+                                onClick={() => redirect('/Groups')}
                                 title="Groups"
                             >
                                 Groups
@@ -64,7 +62,7 @@ export default function NavBar(): JSX.Element {
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
                                 className="basicBtn"
-                                onClick={() => redirrectProfile('/About')}
+                                onClick={() => redirect('/About')}
                                 title="About"
                             >
                                 About
@@ -105,6 +103,9 @@ export default function NavBar(): JSX.Element {
                             ))}
                         </section>
                     </section>
+                    <div className="pl-10 block">
+                        <Notification />
+                    </div>
                     <div className="px-10">
                         <Profile />
                     </div>

@@ -25,6 +25,7 @@ export function DisplaySelectedMovies(
                         movieId={m.movieId}
                         fill={true}
                         alt={`${m.movieTitle} poster`}
+                        blur="blur"
                         className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
                         title={`${m.movieTitle}`}
                     />
@@ -57,7 +58,7 @@ export function DisplayPopularMovies(
             1387, 225984, 177765,
         ];
 
-        const fetchAllMovies = async () => {
+        const fetchAllMovies = async (): Promise<void> => {
             const moviePromises = popularMovieIds.map((id) => getMovieById(id));
             const moviesWithNulls = await Promise.all(moviePromises);
             const validMovies = moviesWithNulls.filter(
@@ -82,6 +83,7 @@ export function DisplayPopularMovies(
                         movieId={m.movieId}
                         fill={true}
                         alt={`${m.movieTitle} poster`}
+                        blur="blur"
                         className="fill rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
                         title={`${m.movieTitle}`}
                         onClick={() => handleSelectMovie(m)}

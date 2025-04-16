@@ -48,7 +48,8 @@ const About = (): JSX.Element => (
             The name <cite>JamFest</cite> is an anagram derived from the first
             letters of each of the groupmembers first names. Moreover, we wanted
             to highlight the social aspect of a watching movies with others. A
-            watchparty is a form of "fest" and it should be a jamming good time!
+            watchparty is a form of &quot;fest&quot; and it should be a jamming
+            good time!
         </p>
         <h2 className="ml-8">Motivation</h2>
         <p className="ml-8 text-xl">

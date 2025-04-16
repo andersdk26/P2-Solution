@@ -2,16 +2,24 @@
 
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
-import { movie, searchForMovie } from '@/actions/movie/movie';
+import { movie, movieWithRating, searchForMovie } from '@/actions/movie/movie';
 import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
 } from '@/components/coldStarSurvey/selectedMovies';
+import useRedirect from '@/components/redirect';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+
 export default function SelectMovies(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // const [recommendedMovies, setRecommendedMovies] = useState<
+    //     movieWithRating[]
+    // >([]);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -19,6 +27,10 @@ export default function SelectMovies(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+
+        // const getRecommendedMovies = async () =>
+        //     setRecommendedMovies(await collaborativeFiltering(200911));
+        // getRecommendedMovies();
 
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));
@@ -146,8 +158,7 @@ export default function SelectMovies(): JSX.Element {
                     <button
                         onClick={() => {
                             if (selectedMovies.length >= 5) {
-                                window.location.href =
-                                    '/coldStartSurvey/rateMovies';
+                                redirect('coldStartSurvey/rateMovies');
                             }
                         }}
                         className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}
