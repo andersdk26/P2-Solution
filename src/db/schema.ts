@@ -34,6 +34,15 @@ export const moviesTable = sqliteTable('movies', {
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
+export const friendsTable = sqliteTable('friends', {
+    id: integer('id').primaryKey(),
+    userIdA: integer('userIdA').notNull(),
+    userIdB: integer('userIdB').notNull(),
+});
+
+export type InserFriend = typeof friendsTable.$inferInsert;
+export type SelectFriend = typeof friendsTable.$inferSelect;
+
 export const movieLinkIdTable = sqliteTable('movie_link_id', {
     id: integer('id').primaryKey(),
     imdbId: integer('imdbId').notNull(),
