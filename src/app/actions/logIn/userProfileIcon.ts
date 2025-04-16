@@ -5,7 +5,7 @@ import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 // this async function fetches a user's profile icon URL from the database
-// it takes the users ID that is loged in and returns the profileIcon URL under the table users
+// it takes the user's ID that is logged in and returns the profileIcon URL under the table users
 export default async function getProfileIcon(
     id: number | Promise<number>
 ): Promise<string> {
