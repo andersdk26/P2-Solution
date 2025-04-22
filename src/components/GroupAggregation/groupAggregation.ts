@@ -13,8 +13,13 @@ export default async function groupAggregation(groupId: number) {
         .from(groupsTable)
         .where(eq(groupsTable.groupId, groupId));
 
-    for (const id of memberIds) {
-        console.log(id);
+    // Split string into individual IDs.
+    const individualIds = memberIds[0].members.split('|');
+
+    // Map of group members average ratings.
+
+    // Iterate through each group member's ID.
+    for (const id of individualIds) {
     }
 
     return 0;
