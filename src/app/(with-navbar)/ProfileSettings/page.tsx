@@ -12,6 +12,7 @@ import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
+import useRedirect from '@/components/redirect';
 
 // import of movies to user stats - seenlist
 import { movie, getMovieById } from '@/actions/movie/movie';
@@ -20,6 +21,7 @@ import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarouse
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 
 export default function ProfileSettings() {
+    const redirect = useRedirect(); // Custom hook for redirection
     const [username, setUsername] = useState('Username');
     const [id, setUserID] = useState('User ID#');
     const [email, setUserEmail] = useState('Email');
@@ -415,6 +417,12 @@ export default function ProfileSettings() {
                             </div>
                         )}
                     </section>
+                    <button
+                        className="basicBtn"
+                        onClick={() => redirect('/About')}
+                    >
+                        User Statistics
+                    </button>
                 </section>
             </section>
 
