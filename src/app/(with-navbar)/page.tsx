@@ -18,6 +18,7 @@ import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 import { useRouter } from 'next/router';
+import groupAggregation from '@/components/GroupAggregation/groupAggregation';
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 export default function Home(): JSX.Element {
@@ -42,9 +43,12 @@ export default function Home(): JSX.Element {
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
                 // await collaborativeFiltering(await verifyUser())
-                await contentBasedFiltering(await verifyUser())
+                // await contentBasedFiltering(await verifyUser())
+                []
             );
         getRecommendedMovies();
+
+        groupAggregation(12345);
     }, []);
 
     const moviesPerPage = 3;

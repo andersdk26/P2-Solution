@@ -62,8 +62,6 @@ export async function verifyToken(token: string): Promise<number> {
                 }
 
                 // Extract the userId field from the decoded object
-                const userId = typeof decoded === 'object' && decoded !== null ? decoded.userId : undefined;
-
                 const userId =
                     typeof decoded === 'object' && decoded !== null
                         ? decoded.userId
