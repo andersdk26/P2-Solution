@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
             .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async () =>
+        const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
                 // await collaborativeFiltering(await verifyUser())
                 await contentBasedFiltering(await verifyUser())
