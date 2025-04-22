@@ -10,7 +10,7 @@ import GetMovieImage from '@/components/movie/MovieImage';
 import GetMovieTitle from '@/components/movie/MovieTitle';
 import saveMovieRatings from '@/actions/movie/saveMovieRating';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import redirect from '@/components/redirect';
+import useRedirect from '@/components/redirect';
 import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 type rating = {
@@ -43,6 +43,7 @@ type rating = {
 // ####################################################################################################
 
 export default function Home(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     // Declare array of selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
     const router = useRouter(); // Use the useRouter hook
