@@ -1,53 +1,65 @@
-import { JSX, useState } from 'react'; // Import Reacts useState for handling form data
+import { JSX, useState } from 'react';
 
-//define si props for sii componentsss
 interface SignUpFormProps {
     onSignUp: (formData: {
         username: string;
         email: string;
         password: string;
+        profileIcon: string; // Add profileIcon to the form data
     }) => void;
 }
 
-// this is the SignUpForm componentssss
 export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
-    // State to manage form inputs
     const [formData, setFormData] = useState({
-        username: '', // Stores the name input
-        email: '', // the email
-        password: '', // passworrrrrrrs
-        confirmPassword: '', // ect
-        dob: '', // age
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        dob: '',
     });
 
-    const [passwordError, setPasswordError] = useState(false); // Tracks if the passwords matche
+    const [passwordError, setPasswordError] = useState(false);
 
-    // this handles text input changes (like name, email, password, confirmPassword)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
 
-        // this checks for tje password field
-        // so like if the user is typing in then confirm password field
-        // check for a match
         if (e.target.name === 'confirmPassword') {
-            setPasswordError(e.target.value !== formData.password); // hvis passwords ikke matcher, show error
+            setPasswordError(e.target.value !== formData.password);
         }
     };
 
-    // handles form submission
-    const handleSubmit = (e: React.FormEvent): void => {
-        e.preventDefault(); // Prevents page refresh on form submission
+    // List of predefined profile icons
+    const icons = [
+        '/img/profileSettingIcons/cornpop.png',
+        '/img/profileSettingIcons/cuteButterPopcorn.png',
+        '/img/profileSettingIcons/bucketCornPop.png',
+        '/img/profileSettingIcons/cutePopcorn.png',
+        '/img/profileSettingIcons/surpricedButterPopcorn.png',
+        '/img/profileSettingIcons/derpPopcornBucket.png',
+        '/img/profileSettingIcons/surpricedPopcorn.png',
+        '/img/profileSettingIcons/happyButterPopcorn.png',
+        '/img/profileSettingIcons/happyPopcornBucket.png',
+        '/img/profileSettingIcons/happyPopcorn.png',
+        '/img/profileSettingIcons/cutePopcornBucket.png',
+        '/img/profileSettingIcons/swagMoviePopcornBucket.png',
+    ];
 
-        // check if passwords matches before being able to signup/register/submit/mmmmmmm yea
+    const handleSubmit = (e: React.FormEvent): void => {
+        e.preventDefault();
+
         if (formData.password !== formData.confirmPassword) {
-            setPasswordError(true); // show error if passwords do not match
+            setPasswordError(true);
             return;
         }
 
-        onSignUp(formData); // Call the parent function to process the form data
+        // Randomly select a profile icon
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+        // Include the selected profile icon in the form data
+        onSignUp({ ...formData, profileIcon: randomIcon });
     };
 
-    const today = new Date().toISOString().split('T')[0]; // tager datoen som vi har ida altså dd-mm-åååå således at man ikke kan overskride den
+    const today = new Date().toISOString().split('T')[0];
 
     return (
         <form
@@ -67,8 +79,9 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     name="username"
                     id="username"
                     value={formData.username}
-                    onChange={handleChange} // Updates the name state when the user types
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md"
+                    maxLength={15}
                     required
                 />
             </div>
@@ -86,13 +99,15 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     name="email"
                     id="email"
                     value={formData.email}
-                    onChange={handleChange} // opdater email state when the user types
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md"
+                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                    title="Please enter a valid email address"
                     required
                 />
             </div>
 
-            {/* selecter age */}
+            {/* Date of Birth Input */}
             <div className="mb-4">
                 <label
                     htmlFor="dob"
@@ -128,13 +143,13 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     name="password"
                     id="password"
                     value={formData.password}
-                    onChange={handleChange} // det her opdatere password state nor user inputs nye ting
+                    onChange={handleChange}
                     className="mt-1 p-2 w-full border rounded-md"
                     required
                 />
             </div>
 
-            {/* onfirm password input */}
+            {/* Confirm Password Input */}
             <div className="mb-4">
                 <label
                     htmlFor="confirmPassword"
@@ -147,9 +162,9 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     name="confirmPassword"
                     id="confirmPassword"
                     value={formData.confirmPassword}
-                    onChange={handleChange} // opdatere confirmPassword når user types
+                    onChange={handleChange}
                     className={`mt-1 p-2 w-full border rounded-md ${
-                        passwordError ? 'border-red-500' : '' // Lyserød border hvis passwords ikke matcher
+                        passwordError ? 'border-red-500' : ''
                     }`}
                     required
                 />

@@ -25,6 +25,7 @@ export default function SignUpPage(): JSX.Element {
         username: string;
         email: string;
         password: string;
+        profileIcon: string;
     }): Promise<void> => {
         // validation: sikkere at email contains "@" and password er 6 characters long
         if (!formData.email.includes('@')) {

@@ -34,6 +34,26 @@ export const moviesTable = sqliteTable('movies', {
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
+export const friendsTable = sqliteTable('friends', {
+    id: integer('id').primaryKey(),
+    userIdA: integer('userIdA').notNull(),
+    userIdB: integer('userIdB').notNull(),
+});
+
+export type InserFriend = typeof friendsTable.$inferInsert;
+export type SelectFriend = typeof friendsTable.$inferSelect;
+
+export const groupsTable = sqliteTable('groups', {
+    id: integer('id').primaryKey(),
+    groupId: integer('groupId').notNull(),
+    groupName: text('groupName').notNull(),
+    adminId: integer('adminId').notNull(),
+    members: text('members').notNull(),
+});
+
+export type InsertGroup = typeof groupsTable.$inferInsert;
+export type SelectGroup = typeof groupsTable.$inferSelect;
+
 export const movieLinkIdTable = sqliteTable('movie_link_id', {
     id: integer('id').primaryKey(),
     imdbId: integer('imdbId').notNull(),
