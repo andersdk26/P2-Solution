@@ -1,6 +1,6 @@
 'use client';
 import { JSX, useState } from 'react';
-import { getUserById, searchForUsers, user } from './friends';
+import { getUserById, user } from './friends';
 
 export function SearchFriends(): JSX.Element {
     const [searchResult, setSearchResult] = useState<user[]>([]);
@@ -27,7 +27,7 @@ export function SearchFriends(): JSX.Element {
                 {searchResult.map((user) => (
                     <p
                         key={user.userId} // movieId is used as identifier as it ensures that each item has a unique key.
-                        // onClick={/* does something when click on movie */}
+                        // onClick={/* does something when click on user */}
                         className={`py-2 px-4 justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                     >
                         <span className="text-left text-black prevent-select">

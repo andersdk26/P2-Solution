@@ -4,7 +4,6 @@
 
 import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
-import { useRouter } from 'next/navigation'; // Import useRouter
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
 import redirect from '@/components/redirect';
@@ -12,7 +11,6 @@ import Notification from './notification/notification';
 
 export default function NavBar(): JSX.Element {
     const [searchResult, setSearchResult] = useState<movie[]>([]);
-    const router = useRouter(); // Use the useRouter hook
 
     return (
         <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24 z-99">
@@ -84,15 +82,6 @@ export default function NavBar(): JSX.Element {
                                     );
                                 }}
                             />
-                            <button
-                                className="fixed mx-112 -my-10 cursor-pointer"
-                                onClick={() => {
-                                    setSearchResult('');
-                                }}
-                                type="button"
-                            >
-                                ✖
-                            </button>
                         </form>
 
                         <section
