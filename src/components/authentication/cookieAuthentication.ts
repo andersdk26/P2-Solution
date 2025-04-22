@@ -64,7 +64,7 @@ export async function verifyToken(token: string): Promise<number> {
                     return reject(new Error('JWT token is not defined'));
                 }
 
-                // Chech decoded message is an object
+                // Check decoded message is an object
                 if (
                     typeof decoded !== 'object' ||
                     typeof (decoded as jwt.JwtPayload).object !== 'string'
