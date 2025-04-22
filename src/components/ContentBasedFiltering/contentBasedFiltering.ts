@@ -79,9 +79,8 @@ export default async function contentBasedFiltering(
     for (const genre of averageGenreRating) {
         genreScoreMap.set(
             genre[0],
-            ((genre[1].runningTotal / genre[1].timesRated) *
-                genre[1].timesRated) /
-                totalMoviesRated
+            (genre[1].runningTotal / genre[1].timesRated) *
+                (genre[1].timesRated / totalMoviesRated)
         );
     }
 
