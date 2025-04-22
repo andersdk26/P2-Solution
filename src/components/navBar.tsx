@@ -84,6 +84,15 @@ export default function NavBar(): JSX.Element {
                                     );
                                 }}
                             />
+                            <button
+                                className="fixed mx-112 -my-10 cursor-pointer"
+                                onClick={() => {
+                                    setSearchResult('');
+                                }}
+                                type="button"
+                            >
+                                ✖
+                            </button>
                         </form>
 
                         <section
@@ -93,7 +102,7 @@ export default function NavBar(): JSX.Element {
                             {searchResult.map((movie) => (
                                 <p
                                     key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
-                                    // onClick={/* Gør noget når man trykker på filmen */}
+                                    // onClick={/* does something when click on movie */}
                                     className={`py-2 px-4 flex justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                                 >
                                     <span className="text-left text-black prevent-select">

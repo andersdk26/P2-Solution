@@ -1,45 +1,37 @@
+'use client';
 import { JSX, useState } from 'react';
+import { getUserById, searchForUsers, user } from './friends';
 
 export function SearchFriends(): JSX.Element {
-    // Create useState array for storing search results.
-    const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const [searchResult, setSearchResult] = useState<user[]>([]);
 
     return (
         <>
-            {/* Search bar for finding movies */}
-            <form
-                className="max-w-[928px] mx-auto py-4"
-                onSubmit={(e) => e.preventDefault()}
-            >
+            <form className="w-120 justify-stretch mx-auto py-4 text-black">
                 <input
                     type="search"
                     id="coldStartMovieSearch"
-                    className="block w-full p-4 rounded-full bg-gray-100 text-black"
-                    placeholder="Search for movies..."
+                    className="block w-full p-4 rounded-full bg-gray-100"
+                    placeholder="Search for users..."
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
-                        setSearchResult(
-                            await searchForMovie(e.target.value, 10)
-                        );
+                        setSearchResult(await getUserById(e.target.value));
                     }}
                 />
             </form>
 
             <section
                 id="searchResults"
-                className="max-w-[928px] mx-auto bg-gray-100 rounded-3xl"
+                className="absolute w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll"
             >
-                {searchResult.map((movie) => (
+                {searchResult.map((user) => (
                     <p
-                        key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
-                        onClick={() => handleSelectMovie(movie)} // Call function to toggle movie selection when clicked on.
-                        className={`py-2 px-4 flex justify-between ${selectedMovies.some((m) => m.movieId === movie.movieId) ? 'bg-green-500 font-bold' : 'bg-gray-100 font-normal'} hover:bg-blue-500 text-black hover:text-white rounded-3xl cursor-pointer`}
+                        key={user.userId} // movieId is used as identifier as it ensures that each item has a unique key.
+                        // onClick={/* does something when click on movie */}
+                        className={`py-2 px-4 justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                     >
-                        <span className="text-left prevent-select">
-                            {movie.movieTitle}
-                        </span>
-                        <span className="text-right prevent-select">
-                            ID: {movie.movieId}
+                        <span className="text-left text-black prevent-select">
+                            {user.userName}
                         </span>
                     </p>
                 ))}
