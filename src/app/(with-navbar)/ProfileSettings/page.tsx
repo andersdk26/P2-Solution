@@ -2,7 +2,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect, JSX } from 'react';
+import React, { useState, useEffect } from 'react';
 import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
@@ -11,6 +11,7 @@ import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
+import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
 
@@ -32,7 +33,7 @@ export default function ProfileSettings() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
-        '/img/profileSettingIcons/derpPopcornBucket.png'
+        '/img/profileSettingIcons/cornpop.png'
     ); // Default icon
     const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
 
@@ -90,6 +91,38 @@ export default function ProfileSettings() {
 
         fetchProfileIcon(); //we call the call the fetchProfileIcon function
     }, []);
+
+    // Set selectedIcon to profileIcon when the component mounts
+    useEffect(() => {
+        if (profileIcon) {
+            setSelectedIcon(profileIcon);
+        }
+    }, [profileIcon]); // Dependency array ensures this runs when profileIcon changes
+
+    const handleIconChange = async () => {
+        if (!selectedIcon) {
+            alert('Please select an icon');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeProfileIcon(userId, selectedIcon);
+
+            if (response.status === 200) {
+                alert('Profile icon updated successfully!');
+                setProfileIcon(selectedIcon);
+                setIsPopupOpen(false); // Close the popup after saving
+                window.location.reload(); // Reload the page after successful login
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing profile icon:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     const handleUsernameChange = async () => {
         if (!newUsername) {
@@ -195,7 +228,7 @@ export default function ProfileSettings() {
                 {/* Profile icon container */}
                 <section className="flex flex-col items-center mb-8">
                     <Image
-                        src={selectedIcon} // You can change this to profileIcon if you want to use the one from the database
+                        src={profileIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -248,6 +281,7 @@ export default function ProfileSettings() {
                                     )
                                 )}
                             </div>
+                            ...
                             <div className="flex justify-end mt-4 space-x-2">
                                 <button
                                     className="border-[#282f72] border-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
@@ -257,13 +291,12 @@ export default function ProfileSettings() {
                                 </button>
                                 <button
                                     className="basicBtn"
-                                    onClick={() => {
-                                        setIsPopupOpen(false); // Closes popup, and saves your changes
-                                    }}
+                                    onClick={handleIconChange} // Save selected icon
                                 >
                                     Save
                                 </button>
                             </div>
+                            ...
                         </div>
                     </section>
                 )}
@@ -302,7 +335,10 @@ export default function ProfileSettings() {
                                     value={newUsername}
                                     onChange={
                                         (e) => setNewUsername(e.target.value) // needs comment
-                                    }
+}
+                                    maxLength={15}
+                                    onChange={(e) =>>>>>>>> main
+                                    
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
                                 <button //submit button
@@ -425,5 +461,47 @@ export default function ProfileSettings() {
                 </section>
             </section>
         </section>
+                    </div>
+                </div>
+            </div>
+            {/* User stats container and content */}
+            <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
+                <h2>User stats</h2>
+                <div className="bg-[#282f72] m-5">
+                    Visualisering af stats, evt. m. graffer
+                </div>
+
+                {/* <div className="bg-[#282f72] m-5">
+                    Seenlist - under seen movies, we have change movie ratings
+                    <MovieImage movieId={seenMovies[40]} />
+                    <MovieImage movieId={seenMovies[41]} />
+                    <MovieImage movieId={seenMovies[42]} />
+                    <MovieImage movieId={seenMovies[50]} />
+                </div> */}
+                {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
+
+                {/* <ul className="list-disc list-inside ml-4">
+                    <li>
+                        <span className="underline text-blue-800 cursor-pointer">
+                            Histogrammer/grafferne
+                        </span>
+                    </li>
+                   
+                    <li>
+                        <span className="underline text-blue-800 cursor-pointer">
+                            Seen movies
+                        </span>
+                        <ul className="ml-6 list-disc">
+                            <li>
+                                <span className="underline text-black-900 cursor-pointer">
+                                    under seen movies we have change movie
+                                    ratings
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul> */}
+            </div>
+        </div>
     );
 }

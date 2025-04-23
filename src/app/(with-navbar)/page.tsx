@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
                 await collaborativeFiltering(await verifyUser())
-                // await contentBasedFiltering(await verifyUser())
+                //await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
     }, []);
@@ -85,7 +85,7 @@ export default function Home(): JSX.Element {
             {/*Container for everything in main page below header and above footer*/}
             {/* <div className="container">
                 <section>
-                    <h1>Recommended Movies</h1>
+                    {/* <h1>Recommended Movies</h1>
                     {recommendedMovies.map((movie) => (
                         <div key={movie.movieId}>
                             <p>{movie.movieTitle}</p>

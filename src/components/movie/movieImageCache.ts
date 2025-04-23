@@ -57,6 +57,7 @@ async function generateBlurHash(url: string): Promise<string> {
     const res = await fetch(url);
     const buffer = await res.arrayBuffer();
 
+    // Encode image
     const { base64 } = await getPlaiceholder(Buffer.from(buffer));
 
     return base64;
