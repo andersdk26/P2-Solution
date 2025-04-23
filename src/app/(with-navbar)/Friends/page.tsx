@@ -1,13 +1,21 @@
 'use client';
 import React, { JSX, useEffect, useState } from 'react';
 import { SearchFriends } from '@/components/Profile/Friends/searchFriends';
-import { GetFriendRequest } from '@/actions/friends/friendRequests';
+import {
+    AcceptFriendRequest,
+    GetFriendRequest,
+} from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import getUserById from '@/actions/friends/getUserById';
+import getUserID from '@/actions/logIn/userID';
 
 export default function Friends(): JSX.Element {
     const [FriendRequests, setFriendRequests] = useState<{ from: number }[]>(
         []
     );
+    const [friendRequestList, setFriendRequestList] = useState([
+        <p key={0}>No friend requests</p>,
+    ]);
 
     useEffect(() => {
         const getFriendRequests = async (): Promise<void> => {
@@ -15,6 +23,31 @@ export default function Friends(): JSX.Element {
         };
         getFriendRequests();
     }, []);
+
+    useEffect(() => {
+        const updateFriendRequestList = async (): Promise<void> => {
+            const resolvedRequests = await Promise.all(
+                FriendRequests.map(async (request) => (
+                    <div key={request.from}>
+                        <p>{await getUserById(request.from)}</p>
+                        <button
+                            onClick={async () =>
+                                AcceptFriendRequest(
+                                    await verifyUser(),
+                                    request.from
+                                )
+                            }
+                        >
+                            ✔️
+                        </button>
+                        <button onClick={() => alert('NO')}>❌</button>
+                    </div>
+                ))
+            );
+            setFriendRequestList(resolvedRequests);
+        };
+        updateFriendRequestList();
+    }, [FriendRequests]);
 
     return (
         <>
@@ -26,13 +59,7 @@ export default function Friends(): JSX.Element {
                 <SearchFriends />
             </aside>
             <h2>Friend requests</h2>
-            <div>
-                {FriendRequests.map((request) => {
-                    <div key={request.from}>
-                        <p>{request.from}</p>
-                    </div>;
-                })}
-            </div>
+            <div>{friendRequestList}</div>
         </>
     );
 }

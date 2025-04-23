@@ -33,7 +33,7 @@ export async function SendFriendRequest(
 export async function AcceptFriendRequest(
     userIDSender: number,
     userIDReceiver: number
-): Promise<null> {
+): Promise<void> {
     await db
         .update(friendsTable)
         .set({ status: 1 })
@@ -43,6 +43,4 @@ export async function AcceptFriendRequest(
                 eq(friendsTable.userIdB, userIDReceiver)
             )
         );
-
-    return null;
 }
