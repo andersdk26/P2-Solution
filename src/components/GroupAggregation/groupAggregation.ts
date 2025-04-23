@@ -1,8 +1,20 @@
 'use server';
 
 import { moviesTable, groupsTable, testRatings } from '@/db/schema';
+import { group } from 'console';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
+
+type averageRating = {
+    runningTotal: number;
+    timesRated: number;
+};
+
+type groupRatings = {
+    memberIds: string;
+    movieId: number;
+    movieRating: number;
+};
 
 export default async function groupAggregation(groupId: number) {
     // Get group members' ID.
@@ -17,7 +29,7 @@ export default async function groupAggregation(groupId: number) {
     const individualIds = memberIds[0].members.split('|');
 
     // Map of group members average ratings.
-    const averageGroupRatings = new Map<number, number>();
+    const averageGroupRatings = new Map<number, averageRating>();
 
     // Iterate through each group member's ID.
     for (const id of individualIds) {
@@ -33,8 +45,43 @@ export default async function groupAggregation(groupId: number) {
 
         // Add each rating to 'averageGroupRatings'.
         for (const rating of memberRatings) {
+            if (!averageGroupRatings.has(rating.movieId)) {
+                // If the movie does not exist in the map, add it.
+                averageGroupRatings.set(rating.movieId, {
+                    runningTotal: rating.movieRating,
+                    timesRated: 1,
+                });
+            } else {
+                // If the movie does exist in the map, update score and times rated.
+                averageGroupRatings.set(rating.movieId, {
+                    runningTotal:
+                        averageGroupRatings.get(rating.movieId)!.runningTotal +
+                        rating.movieRating,
+                    timesRated:
+                        averageGroupRatings.get(rating.movieId)!.runningTotal +
+                        1,
+                });
+            }
         }
     }
 
-    return 0;
+    const groupRatingsMap = new Map<number, number>();
+
+    for (const rating of averageGroupRatings) {
+        groupRatingsMap.set(
+            rating[0],
+            rating[1].runningTotal / rating[1].timesRated
+        );
+    }
+
+    // Convert to groupRatings array
+    const groupRatingsArray: groupRatings[] = Array.from(
+        groupRatingsMap.entries()
+    ).map(([movieId, movieRating]) => ({
+        memberIds: memberIds[0].members,
+        movieId,
+        movieRating,
+    }));
+
+    return groupRatingsArray;
 }
