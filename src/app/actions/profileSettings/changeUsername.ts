@@ -4,6 +4,7 @@ import { db } from 'db';
 import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import defaultResponse from '@/components/defaultResponse';
+import badWord from '@/actions/logIn/badWord.json'; 
 
 export default async function changeUsername(
     userId: number,
@@ -11,6 +12,21 @@ export default async function changeUsername(
 ): Promise<defaultResponse> {
     if (!userId || !newUsername) {
         return { status: 400, message: 'Missing required fields' };
+    }
+
+    // Check if the username contains any bad words
+    const containsBadWord = (username: string): boolean => {
+        const lowerCaseUsername = username.toLowerCase();
+        return badWord.some((word) =>
+            lowerCaseUsername.includes(word.toLowerCase())
+        );
+    };
+
+    if (containsBadWord(newUsername)) {
+        return {
+            status: 400,
+            message: 'Username contains inappropriate language',
+        };
     }
 
     try {
