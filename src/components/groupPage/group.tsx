@@ -1,12 +1,13 @@
 'use server';
 
-import { groupInfoTable } from '@/db/schema';
+import { groupsTable } from '@/db/schema';
 import { db } from 'db';
 import { like } from 'drizzle-orm';
 
 export type group = {
     groupId: number;
-    groupAdmin: string;
+    groupName: string;
+    groupAdmin: number;
 };
 
 export async function getGroupById(id: string): Promise<group[]> {
@@ -18,11 +19,11 @@ export async function getGroupById(id: string): Promise<group[]> {
     // search db for id
     const result = await db
         .select({
-            groupId: groupInfoTable.groupId,
-            groupAdmin: groupInfoTable.groupAdmin,
+            groupId: groupsTable.groupId,
+            groupAdmin: groupsTable.adminId,
         })
-        .from(groupInfoTable)
-        .where(like(groupInfoTable.groupId, `${id}%`));
+        .from(groupsTable)
+        .where(like(groupsTable.groupId, `${id}%`));
 
     return result;
 }

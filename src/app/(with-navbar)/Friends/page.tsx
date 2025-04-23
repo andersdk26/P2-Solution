@@ -1,8 +1,21 @@
 'use client';
-import React, { JSX } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { SearchFriends } from '@/components/Profile/Friends/searchFriends';
+import { GetFriendRequest } from '@/actions/friends/friendRequests';
+import verifyUser from '@/actions/logIn/authenticateUser';
 
 export default function Friends(): JSX.Element {
+    const [FriendRequests, setFriendRequests] = useState<{ from: number }[]>(
+        []
+    );
+
+    useEffect(() => {
+        const getFriendRequests = async (): Promise<void> => {
+            setFriendRequests(await GetFriendRequest(await verifyUser()));
+        };
+        getFriendRequests();
+    }, []);
+
     return (
         <>
             <h1>Your friends</h1>
@@ -13,6 +26,13 @@ export default function Friends(): JSX.Element {
                 <SearchFriends />
             </aside>
             <h2>Friend requests</h2>
+            <div>
+                {FriendRequests.map((request) => {
+                    <div key={request.from}>
+                        <p>{request.from}</p>
+                    </div>;
+                })}
+            </div>
         </>
     );
 }

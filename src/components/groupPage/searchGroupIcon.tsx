@@ -61,7 +61,7 @@ export default function SearchGroupIcon(): JSX.Element {
 
                         <aside
                             id="searchResults"
-                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll"
+                            className="block w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll align-center content-center"
                         >
                             {searchResult.map((group) => (
                                 // movieId is used as identifier as it ensures that each item has a unique key.

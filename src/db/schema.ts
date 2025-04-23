@@ -38,6 +38,7 @@ export const friendsTable = sqliteTable('friends', {
     id: integer('id').primaryKey(),
     userIdA: integer('userIdA').notNull(),
     userIdB: integer('userIdB').notNull(),
+    status: integer('status').notNull(),
 });
 
 export type InserFriend = typeof friendsTable.$inferInsert;
