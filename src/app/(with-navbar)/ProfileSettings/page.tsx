@@ -34,7 +34,6 @@ export default function ProfileSettings() {
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/derpPopcornBucket.png'
     ); // Default icon
-    const [seenMovies, setSeenMovies] = useState<number[]>([1]);
     const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
 
     const icons = [
@@ -74,10 +73,10 @@ export default function ProfileSettings() {
     }, []);
 
     useEffect(() => {
-        const fetchSeenMovies = async () => {
-            setSeenMovies(await getSeenMovies(await verifyUser()));
-        };
-        fetchSeenMovies();
+        // const fetchSeenMovies = async () => {
+        //     setSeenMovies(await getSeenMovies(await verifyUser()));
+        // };
+        // fetchSeenMovies();
         // Define an async function to fetch the user's profile icon
         const fetchProfileIcon = async (): Promise<void> => {
             const userId = await verifyUser(); // this calls a function to verify the user and get their ID
@@ -419,50 +418,12 @@ export default function ProfileSettings() {
                     </section>
                     <button
                         className="basicBtn"
-                        onClick={() => redirect('/About')}
+                        onClick={() => redirect('/userStats')}
                     >
                         User Statistics
                     </button>
                 </section>
             </section>
-
-            {/* User stats container and content */}
-            <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
-                <h2>User stats</h2>
-                <div className="bg-[#282f72] m-5">
-                    Visualisering af stats, evt. m. graffer
-                </div>
-
-                <div className="bg-[#282f72] m-5">
-                    Seenlist - under seen movies, we have change movie ratings
-                    {/* needs a for-loop to iterate through all rated movies */}
-                    <MovieImage movieId={seenMovies[0]} />
-                    <MovieImage movieId={seenMovies[1]} />
-                </div>
-                {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
-
-                {/* <ul className="list-disc list-inside ml-4">
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Histogrammer/grafferne
-                        </span>
-                    </li>
-                   
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Seen movies
-                        </span>
-                        <ul className="ml-6 list-disc">
-                            <li>
-                                <span className="underline text-black-900 cursor-pointer">
-                                    under seen movies we have change movie
-                                    ratings
-                                </span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul> */}
-            </div>
         </section>
     );
 }
