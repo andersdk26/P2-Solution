@@ -333,12 +333,10 @@ export default function ProfileSettings() {
                                     type="text"
                                     placeholder="Enter new username"
                                     value={newUsername}
-                                    onChange={
-                                        (e) => setNewUsername(e.target.value) // needs comment
-}
+                                    onChange={(e) =>
+                                        setNewUsername(e.target.value)
+                                    } // needs comment
                                     maxLength={15}
-                                    onChange={(e) =>>>>>>>> main
-                                    
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
                                 <button //submit button
@@ -460,10 +458,6 @@ export default function ProfileSettings() {
                     </button>
                 </section>
             </section>
-        </section>
-                    </div>
-                </div>
-            </div>
             {/* User stats container and content */}
             <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
                 <h2>User stats</h2>
@@ -502,6 +496,6 @@ export default function ProfileSettings() {
                     </li>
                 </ul> */}
             </div>
-        </div>
+        </section>
     );
 }
