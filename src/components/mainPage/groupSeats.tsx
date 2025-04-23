@@ -1,12 +1,11 @@
 'use client';
 import React, { JSX } from 'react'; // useState has isDropdown functions
 
-import { useRouter } from 'next/navigation'; // Import useRouter
-import redirect from '@/components/redirect';
 import Image from 'next/image';
+import useRedirect from '@/components/redirect';
 
 export default function GroupSeats(): JSX.Element {
-    const router = useRouter(); // Use the useRouter hook
+    const redirect = useRedirect(); // Custom hook for redirection
 
     return (
         <section className="centerMyDivPlease text-center content-center justify-center m-auto">

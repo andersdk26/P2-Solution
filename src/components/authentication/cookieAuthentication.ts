@@ -1,16 +1,22 @@
 'use server';
 
+import userLogout from '@/actions/logIn/userLogout';
 import jwt from 'jsonwebtoken';
+import redirectServer from '../redirectServer';
+import { setCookie } from '@/actions/logIn/userLogin';
+import { decode } from 'punycode';
 
 export async function generateToken(userId: string): Promise<string> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
+    const object = JSON.stringify({ userId: userId });
+
     // Create JWT token with HS512 algorithm
     return new Promise((resolve, reject) => {
         jwt.sign(
-            { userId },
+            { object },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '1d',
@@ -31,13 +37,13 @@ export async function generateToken(userId: string): Promise<string> {
     });
 }
 
-export async function verifyToken(token: string): Promise<object> {
+export async function verifyToken(token: string): Promise<number> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
     // Verify JWT token with HS512 or HS256 algorithm
-    return new Promise((resolve, reject) => {
+    const userId: Promise<number> = new Promise((resolve, reject): void => {
         jwt.verify(
             token,
             process.env.JWT_SECRET as string,
@@ -47,16 +53,48 @@ export async function verifyToken(token: string): Promise<object> {
             },
             (err, decoded) => {
                 if (err) {
+                    userLogout();
+                    redirectServer('logIn');
                     return reject(new Error('JWT token verification failed'));
                 }
 
                 if (!decoded) {
+                    userLogout();
+                    redirectServer('logIn');
                     return reject(new Error('JWT token is not defined'));
                 }
 
-                // Return the decoded token
-                resolve(decoded as object);
+                // Check decoded message is an object
+                if (
+                    typeof decoded !== 'object' ||
+                    typeof (decoded as jwt.JwtPayload).object !== 'string'
+                ) {
+                    userLogout();
+                    redirectServer('logIn');
+                    return reject(new Error('JWT token missing userId'));
+                }
+
+                // Extract the userId field from the decoded object
+                const decodedObject = JSON.parse(decoded.object);
+                console.log(decodedObject);
+                const userId = parseInt(decodedObject.userId);
+
+                // Validate that userId is a valid number
+                if (typeof userId !== 'number' || isNaN(userId)) {
+                    return reject(
+                        new Error('Invalid or missing userId in token')
+                    );
+                }
+
+                // Resolve the promise with the numeric userId
+                resolve(userId);
             }
         );
     });
+
+    const newToken = generateToken((await userId).toString());
+    setCookie(await newToken);
+    console.log(`USERID: ${userId}`);
+
+    return await userId;
 }

@@ -4,12 +4,14 @@
 
 import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
-import redirect from '@/components/redirect';
+import useRedirect from '@/components/redirect';
 import Notification from './notification/notification';
 
 export default function NavBar(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     const [searchResult, setSearchResult] = useState<movie[]>([]);
 
     return (

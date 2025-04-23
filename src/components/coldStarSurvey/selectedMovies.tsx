@@ -15,7 +15,6 @@ export function DisplaySelectedMovies(
             id="selectedMovies"
             className="w-[928px] min-h-[304px] max-h-[560px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select overflow-y-auto overflow-x-hidden"
         >
-            {/*  */}
             {selectedMovies.map((m) => (
                 <section
                     key={m.movieId}
@@ -25,6 +24,7 @@ export function DisplaySelectedMovies(
                         movieId={m.movieId}
                         fill={true}
                         alt={`${m.movieTitle} poster`}
+                        blur="blur"
                         className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
                         title={`${m.movieTitle}`}
                     />
@@ -57,7 +57,7 @@ export function DisplayPopularMovies(
             1387, 225984, 177765,
         ];
 
-        const fetchAllMovies = async () => {
+        const fetchAllMovies = async (): Promise<void> => {
             const moviePromises = popularMovieIds.map((id) => getMovieById(id));
             const moviesWithNulls = await Promise.all(moviePromises);
             const validMovies = moviesWithNulls.filter(
@@ -82,6 +82,7 @@ export function DisplayPopularMovies(
                         movieId={m.movieId}
                         fill={true}
                         alt={`${m.movieTitle} poster`}
+                        blur="blur"
                         className="fill rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
                         title={`${m.movieTitle}`}
                         onClick={() => handleSelectMovie(m)}
@@ -90,4 +91,27 @@ export function DisplayPopularMovies(
             ))}
         </section>
     );
+}
+
+function movieImage(m: movie, handleSelectMovie: (m: movie) => void) {
+    <section key={m.movieId} className="relative group w-[160px] h-[240px]">
+        <MovieImage
+            movieId={m.movieId}
+            fill={true}
+            alt={`${m.movieTitle} poster`}
+            blur="blur"
+            className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
+            title={`${m.movieTitle}`}
+        />
+
+        <Image
+            src="/remove.png"
+            alt={'Remove button'}
+            width={32}
+            height={32}
+            className="absolute opacity-0 left-[124px] bottom-[204px] group-hover:opacity-100 group-hover:cursor-pointer transition-all duration-300 z-3 rounded-full"
+            title={`${m.movieTitle}`}
+            onClick={() => handleSelectMovie(m)}
+        />
+    </section>;
 }
