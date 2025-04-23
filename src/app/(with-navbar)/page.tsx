@@ -42,9 +42,8 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
-                // await collaborativeFiltering(await verifyUser(), "individual")
+                await collaborativeFiltering(12345, 'group')
                 // await contentBasedFiltering(await verifyUser(), "individual")
-                []
             );
         getRecommendedMovies();
 
