@@ -16,7 +16,12 @@ function FriendRequest({
             Send <b>{user.userName}</b> a friend request?
             <br />
             {/* send request button */}
-            <button className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80">
+            <button
+                className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
+                onClick={() => {
+                    alert('Friend request sent');
+                }}
+            >
                 Add friend
             </button>
             {/* close button */}

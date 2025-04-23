@@ -20,6 +20,7 @@ export async function getGroupById(id: string): Promise<group[]> {
     const result = await db
         .select({
             groupId: groupsTable.groupId,
+            groupName: groupsTable.groupName,
             groupAdmin: groupsTable.adminId,
         })
         .from(groupsTable)
