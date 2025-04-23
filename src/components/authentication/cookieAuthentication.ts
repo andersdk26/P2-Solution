@@ -4,16 +4,19 @@ import userLogout from '@/actions/logIn/userLogout';
 import jwt from 'jsonwebtoken';
 import redirectServer from '../redirectServer';
 import { setCookie } from '@/actions/logIn/userLogin';
+import { decode } from 'punycode';
 
 export async function generateToken(userId: string): Promise<string> {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
+    const object = JSON.stringify({ userId: userId });
+
     // Create JWT token with HS512 algorithm
     return new Promise((resolve, reject) => {
         jwt.sign(
-            { userId },
+            { object },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '1d',
@@ -61,14 +64,23 @@ export async function verifyToken(token: string): Promise<number> {
                     return reject(new Error('JWT token is not defined'));
                 }
 
+                // Check decoded message is an object
+                if (
+                    typeof decoded !== 'object' ||
+                    typeof (decoded as jwt.JwtPayload).object !== 'string'
+                ) {
+                    userLogout();
+                    redirectServer('logIn');
+                    return reject(new Error('JWT token missing userId'));
+                }
+
                 // Extract the userId field from the decoded object
-                const userId =
-                    typeof decoded === 'object' && decoded !== null
-                        ? decoded.userId
-                        : undefined;
+                const decodedObject = JSON.parse(decoded.object);
+                console.log(decodedObject);
+                const userId = parseInt(decodedObject.userId);
 
                 // Validate that userId is a valid number
-                if (typeof parseInt(userId) !== 'number' || isNaN(userId)) {
+                if (typeof userId !== 'number' || isNaN(userId)) {
                     return reject(
                         new Error('Invalid or missing userId in token')
                     );
@@ -80,8 +92,9 @@ export async function verifyToken(token: string): Promise<number> {
         );
     });
 
-    const newToken = generateToken(((await userId) || 0).toString());
+    const newToken = generateToken((await userId).toString());
     setCookie(await newToken);
+    console.log(`USERID: ${userId}`);
 
     return await userId;
 }
