@@ -42,7 +42,7 @@ export default function Home(): JSX.Element {
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
                 await collaborativeFiltering(await verifyUser())
-                // await contentBasedFiltering(await verifyUser())
+                //await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
     }, []);
