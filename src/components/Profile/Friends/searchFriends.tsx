@@ -12,7 +12,7 @@ function FriendRequest({
 }): JSX.Element {
     //returns the pop-up to send friend request
     return (
-        <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 fixed  w-100 h-40 text-center align-center justify-center top-74">
+        <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-74">
             Send <b>{user.userName}</b> a friend request?
             <br />
             {/* send request button */}

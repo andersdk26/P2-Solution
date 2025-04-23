@@ -130,16 +130,17 @@ export default function Home(): JSX.Element {
             )}
 
             {/*Container for everything in main page below header and above footer*/}
-            {/* <div className="container">
-                <section>
+            {/* <div className="container">/*}
+                
                     {/* <h1>Recommended Movies</h1> */}
-                    {recommendedMovies.map((movie) => (
-                        <div key={movie.movieId}>
-                            <p>{movie.movieTitle}</p>
-                        </div>
-                    ))}
-                </section>
-            </div> */}
+            <section>
+                {recommendedMovies.map((movie) => (
+                    <div key={movie.movieId}>
+                        <p>{movie.movieTitle}</p>
+                    </div>
+                ))}
+            </section>
+            {/* </div>  */}
 
             <div>
                 {/*Left Panel to Curtain Left Image*/}
