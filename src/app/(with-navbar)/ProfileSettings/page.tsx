@@ -2,7 +2,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect, JSX } from 'react';
+import React, { useState, useEffect } from 'react';
 import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
@@ -11,6 +11,7 @@ import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
+import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 
 // import of movies to user stats - seenlist
@@ -30,7 +31,7 @@ export default function ProfileSettings() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(
-        '/img/profileSettingIcons/derpPopcornBucket.png'
+        '/img/profileSettingIcons/cornpop.png'
     ); // Default icon
     const [seenMovies, setSeenMovies] = useState<number[]>([1]);
     const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
@@ -89,6 +90,38 @@ export default function ProfileSettings() {
 
         fetchProfileIcon(); //we call the call the fetchProfileIcon function
     }, []);
+
+    // Set selectedIcon to profileIcon when the component mounts
+    useEffect(() => {
+        if (profileIcon) {
+            setSelectedIcon(profileIcon);
+        }
+    }, [profileIcon]); // Dependency array ensures this runs when profileIcon changes
+
+    const handleIconChange = async () => {
+        if (!selectedIcon) {
+            alert('Please select an icon');
+            return;
+        }
+
+        const userId = parseInt(id);
+
+        try {
+            const response = await changeProfileIcon(userId, selectedIcon);
+
+            if (response.status === 200) {
+                alert('Profile icon updated successfully!');
+                setProfileIcon(selectedIcon);
+                setIsPopupOpen(false); // Close the popup after saving
+                window.location.reload(); // Reload the page after successful login
+            } else {
+                alert(response.message);
+            }
+        } catch (error) {
+            console.error('Error changing profile icon:', error);
+            alert('An error occurred. Please try again.');
+        }
+    };
 
     const handleUsernameChange = async () => {
         if (!newUsername) {
@@ -192,7 +225,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
-                        src={selectedIcon} //you can change this to profileIcon if you want to use the one from the database
+                        src={profileIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -236,6 +269,7 @@ export default function ProfileSettings() {
                                     />
                                 ))}
                             </div>
+                            ...
                             <div className="flex justify-end mt-4 space-x-2">
                                 <button
                                     className="border-[#282f72] border-2 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
@@ -245,13 +279,12 @@ export default function ProfileSettings() {
                                 </button>
                                 <button
                                     className="basicBtn"
-                                    onClick={() => {
-                                        setIsPopupOpen(false);
-                                    }}
+                                    onClick={handleIconChange} // Save selected icon
                                 >
                                     Save
                                 </button>
                             </div>
+                            ...
                         </div>
                     </div>
                 )}
@@ -283,6 +316,7 @@ export default function ProfileSettings() {
                                     type="text"
                                     placeholder="Enter new username"
                                     value={newUsername}
+                                    maxLength={15}
                                     onChange={(e) =>
                                         setNewUsername(e.target.value)
                                     }
@@ -397,6 +431,8 @@ export default function ProfileSettings() {
                 <div className="bg-[#282f72] m-5">
                     Seenlist - under seen movies, we have change movie ratings
                     <MovieImage movieId={seenMovies[40]} />
+                    <MovieImage movieId={seenMovies[41]} />
+                    <MovieImage movieId={seenMovies[42]} />
                     <MovieImage movieId={seenMovies[50]} />
                 </div>
                 {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
