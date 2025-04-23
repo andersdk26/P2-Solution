@@ -7,8 +7,8 @@ export default function Friends(): JSX.Element {
         <>
             <h1>Your friends</h1>
             <p className="ml-4">Here you can view your friends</p>
-            <h2>Search for friends!</h2>
-            <p className="ml-4">Search by their username or user ID</p>
+            <h2>Search for users</h2>
+            <p className="ml-4">Search by their user ID</p>
             <aside className="align-left content-left justify-left text-left table m-4">
                 <SearchFriends />
             </aside>

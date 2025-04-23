@@ -12,9 +12,9 @@ const Profile = (): JSX.Element => {
     const [username, setUsername] = useState('Username'); // State for username
     const router = useRouter();
 
-    const toggleDropdown = (): void => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+    // const toggleDropdown = (): void => {
+    //     setIsDropdownOpen(!isDropdownOpen);
+    // };
 
     // skaffer the logged-in user's username
     useEffect(() => {
@@ -26,7 +26,10 @@ const Profile = (): JSX.Element => {
 
     return (
         <>
-            <button onClick={toggleDropdown} className="centerMyDivPlease">
+            <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="centerMyDivPlease"
+            >
                 <ProfileImage />
             </button>
             {isDropdownOpen && (
