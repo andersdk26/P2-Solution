@@ -428,13 +428,13 @@ export default function ProfileSettings() {
                     Visualisering af stats, evt. m. graffer
                 </div>
 
-                <div className="bg-[#282f72] m-5">
+                {/* <div className="bg-[#282f72] m-5">
                     Seenlist - under seen movies, we have change movie ratings
                     <MovieImage movieId={seenMovies[40]} />
                     <MovieImage movieId={seenMovies[41]} />
                     <MovieImage movieId={seenMovies[42]} />
                     <MovieImage movieId={seenMovies[50]} />
-                </div>
+                </div> */}
                 {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
 
                 {/* <ul className="list-disc list-inside ml-4">

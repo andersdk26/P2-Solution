@@ -12,9 +12,9 @@ const Profile = (): JSX.Element => {
     const [username, setUsername] = useState('Username'); // State for username
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // const toggleDropdown = (): void => {
-    //     setIsDropdownOpen(!isDropdownOpen);
-    // };
+    const toggleDropdown = (): void => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
     // Fetch the logged-in user's username
     useEffect(() => {
