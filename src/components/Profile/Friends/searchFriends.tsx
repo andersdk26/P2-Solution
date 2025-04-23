@@ -1,6 +1,6 @@
 'use client';
 import { JSX, useState } from 'react';
-import { getUserById, user } from './friends';
+import { searchUserById, user } from './friends';
 
 // input: takes a user and a conditional function as input
 function FriendRequest({
@@ -49,7 +49,7 @@ export function SearchFriends(): JSX.Element {
                     placeholder="Search for users..."
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
-                        setSearchResult(await getUserById(e.target.value));
+                        setSearchResult(await searchUserById(e.target.value));
                     }}
                 />
             </form>

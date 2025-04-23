@@ -9,7 +9,7 @@ export type user = {
     userName: string;
 };
 
-export async function getUserById(id: string): Promise<user[]> {
+export async function searchUserById(id: string): Promise<user[]> {
     // only show if written more than 1 character
     if (id.length < 1) {
         return [];
