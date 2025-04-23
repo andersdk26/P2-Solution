@@ -225,7 +225,7 @@ export default function ProfileSettings() {
 
                 <div className="flex flex-col items-center mb-8">
                     <Image
-                        src={profileIcon} //you can change this to profileIcon if you want to use the one from the database
+                        src={profileIcon}
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -322,6 +322,7 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
+
                                 <button
                                     onClick={handleUsernameChange}
                                     className="settingBtn"
