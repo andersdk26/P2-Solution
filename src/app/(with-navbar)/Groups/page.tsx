@@ -47,7 +47,7 @@ const GroupSettings = (): JSX.Element => (
             </div>
         </section>
 
-        <section>
+        <section className="min-h-90">
             <h2 className="ml-4">Requests...</h2>
             <p className="text-2xl ml-4">Groups that have asked you to join</p>
             <RequestGroupIcon group={tempGroup2} />

@@ -9,7 +9,7 @@ export type group = {
     groupName: string;
     groupAdmin: number;
     groupMembers: string;
-    settings: string,
+    settings: string;
 };
 
 export async function getGroupById(id: string): Promise<group[]> {
@@ -32,3 +32,5 @@ export async function getGroupById(id: string): Promise<group[]> {
 
     return result;
 }
+
+// export
