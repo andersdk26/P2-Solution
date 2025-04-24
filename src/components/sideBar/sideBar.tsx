@@ -19,7 +19,7 @@ export default function SideBar(id: number): JSX.Element {
                 console.error(`Movie with ID ${movieId} not found.`);
                 return;
             }
-            setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
+            // setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
             setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
             setSelectedRating(null); // This part needs some more work
             setSelectedMovieId(movieId); // set the rating to the selected movie ID
