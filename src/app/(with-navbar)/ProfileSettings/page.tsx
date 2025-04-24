@@ -341,7 +341,6 @@ export default function ProfileSettings() {
                                 />
 
                                 <button
-
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
                                 >
@@ -453,51 +452,13 @@ export default function ProfileSettings() {
                         )}
                     </section>
                     <button
-                        className="basicBtn"
+                        className="basicBtn mt-10"
                         onClick={() => redirect('/userStats')}
                     >
                         User Statistics
                     </button>
                 </section>
             </section>
-            {/* User stats container and content */}
-            <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
-                <h2>User stats</h2>
-                <div className="bg-[#282f72] m-5">
-                    Visualisering af stats, evt. m. graffer
-                </div>
-
-                {/* <div className="bg-[#282f72] m-5">
-                    Seenlist - under seen movies, we have change movie ratings
-                    <MovieImage movieId={seenMovies[40]} />
-                    <MovieImage movieId={seenMovies[41]} />
-                    <MovieImage movieId={seenMovies[42]} />
-                    <MovieImage movieId={seenMovies[50]} />
-                </div> */}
-                {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
-
-                {/* <ul className="list-disc list-inside ml-4">
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Histogrammer/grafferne
-                        </span>
-                    </li>
-                   
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Seen movies
-                        </span>
-                        <ul className="ml-6 list-disc">
-                            <li>
-                                <span className="underline text-black-900 cursor-pointer">
-                                    under seen movies we have change movie
-                                    ratings
-                                </span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul> */}
-            </div>
         </section>
     );
 }
