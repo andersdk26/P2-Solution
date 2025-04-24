@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react';
 import { getGroupById, group } from './group';
 import getUserById from '@/actions/friends/getUserById';
 
+interface GroupRequestProps {
+    group: group;
+    conditionalFunction: (value: boolean) => void;
+}
+
 // input: takes a group and a conditional function as input
 function GroupRequest({
     group,
     conditionalFunction,
-}: {
-    group: group;
-    conditionalFunction: any; // figure out the actual typing required for functions
-}): JSX.Element {
+}: GroupRequestProps): JSX.Element {
     //returns the pop-up to send friend request
     return (
         <div className="border-[#282F72] text-[#282F72] bg-[#babdde] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-84">
@@ -52,10 +54,13 @@ export default function SearchGroupIcon(): JSX.Element {
     //set username of the admin
     useEffect(() => {
         const getAdminName = async (): Promise<void> => {
+            if (!AdminId) {
+                return;
+            }
             setAdminUsername(await getUserById(AdminId));
         };
         getAdminName();
-    });
+    }, [AdminId]);
 
     return (
         <>

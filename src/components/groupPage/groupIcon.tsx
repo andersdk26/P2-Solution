@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { group } from './group';
 import getUserById from '@/actions/friends/getUserById';
 
-export default function GroupIcon({ group }: group): JSX.Element {
+export default function GroupIcon({
+    groupId,
+    groupName,
+    groupAdmin,
+    groupMembers,
+    settings,
+}: group): JSX.Element {
     //keeps track of the pop up
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
     //the array with the usernames of members
@@ -13,11 +19,11 @@ export default function GroupIcon({ group }: group): JSX.Element {
     const [AdminUsername, setAdminUsername] = useState('');
 
     // make array with the settings
-    const settings = group.settings.split('|');
+    const settingsList = settings.split('|');
 
     // get the members id's to usernames
     //first make into array
-    const membersId = group.groupMembers.split('|');
+    const membersId = groupMembers.split('|');
     // get how many members in the group by counting length of array
     const memberCount = membersId.length;
     // then get username for each of the members
@@ -25,7 +31,7 @@ export default function GroupIcon({ group }: group): JSX.Element {
         const getMemberUsernames = async (): Promise<void> => {
             const array = [];
             for (const id of membersId) {
-                array.push(await getUserById(id));
+                array.push(await getUserById(parseInt(id)));
             }
             setMemberUsernames(array);
         };
@@ -35,10 +41,10 @@ export default function GroupIcon({ group }: group): JSX.Element {
     //set username of the admin
     useEffect(() => {
         const getAdminName = async (): Promise<void> => {
-            setAdminUsername(await getUserById(group.groupAdmin));
+            setAdminUsername(await getUserById(groupAdmin));
         };
         getAdminName();
-    });
+    }, []);
 
     return (
         <>
@@ -46,14 +52,14 @@ export default function GroupIcon({ group }: group): JSX.Element {
             <div
                 // style inline because tailwind doesnt like dynamic colorchanges
                 style={{
-                    backgroundColor: settings[1],
-                    color: settings[2],
+                    backgroundColor: settingsList[1],
+                    color: settingsList[2],
                 }}
                 className={`size-60 border-2 border-solid border-[#282F72] hover:brightness-80 inline-block rounded-3xl m-4 text-center align-center content-center justify-center cursor-pointer`}
                 onClick={() => setAboutGroupOpen(!isAboutGroupOpen)}
             >
-                <p className={`text-xl  m-2 font-bold`}>{group.groupName}</p>
-                <p className="text-9xl m-0 select-none">{settings[0]}</p>
+                <p className={`text-xl  m-2 font-bold`}>{groupName}</p>
+                <p className="text-9xl m-0 select-none">{settingsList[0]}</p>
                 <p className={`text-l m-2`}>
                     Members:
                     <span className="font-bold">{memberCount}</span>
@@ -70,8 +76,8 @@ export default function GroupIcon({ group }: group): JSX.Element {
                     <div
                         // style inline because tailwind doesnt like dynamic colorchanges
                         style={{
-                            backgroundColor: settings[1],
-                            color: settings[2],
+                            backgroundColor: settingsList[1],
+                            color: settingsList[2],
                         }}
                         className={`float z-30 w-5/6 h-2/3 border-2 border-solid border-[#282F72]  rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
@@ -88,10 +94,10 @@ export default function GroupIcon({ group }: group): JSX.Element {
                         <h5
                             className={`text-5xl m-2 font-bold text-center mt-4`}
                         >
-                            {group.groupName}
+                            {groupName}
                         </h5>
                         <p className="text-s m-0 text-center mt-0">
-                            ID: {group.groupId}
+                            ID: {groupId}
                         </p>
 
                         <div className="left-8 text-left float-left ml-4 mt-0">
