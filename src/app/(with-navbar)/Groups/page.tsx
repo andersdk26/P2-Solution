@@ -5,7 +5,11 @@ import GroupIcon from '@/components/groupPage/groupIcon';
 import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
-import { getGroupByAdminId, group } from '@/components/groupPage/group';
+import {
+    getGroupsByAdminId,
+    getRegularGroupsByMemberId,
+    group,
+} from '@/components/groupPage/group';
 import verifyUser from '@/actions/logIn/authenticateUser';
 
 const tempGroup: group = {
@@ -25,14 +29,27 @@ const tempGroup2: group = {
 };
 
 export default function GroupSettings(): JSX.Element {
+    // array for the groups current user is admin of
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
+    // array for groups current user is a part of but NOT admin
+    const [RegularGroups, setRegularGroups] = useState<group[]>([]);
 
+    // get the groups user is admin of
     useEffect(() => {
         const getAdminGroups = async (): Promise<void> => {
-            setAdminGroups(await getGroupByAdminId(await verifyUser()));
+            setAdminGroups(await getGroupsByAdminId(await verifyUser()));
         };
         getAdminGroups();
-        console.log(AdminGroups);
+    }, []);
+
+    // set the groups user is not admin of
+    useEffect(() => {
+        const getRegularGroups = async (): Promise<void> => {
+            setRegularGroups(
+                await getRegularGroupsByMemberId(await verifyUser())
+            );
+        };
+        getRegularGroups();
     }, []);
 
     return (
@@ -44,27 +61,36 @@ export default function GroupSettings(): JSX.Element {
                     <p className="text-2xl ml-4">
                         <i>You are admin</i>
                     </p>
-                    <div className="table-row overflow-scroll">
-                        {/* <AdminGroupIcon group={tempGroup} />
-                        <AdminGroupIcon group={tempGroup2} /> */}
-
-                        {AdminGroups.map((AdminGroup) => {
-                            <AdminGroupIcon group={AdminGroup} />;
-                        })}
+                    <div className="inline-flex overflow-scroll">
+                        {AdminGroups.map((Group) => (
+                            <div key={Group.groupId}>
+                                <AdminGroupIcon
+                                    groupId={Group.groupId}
+                                    groupName={Group.groupName}
+                                    groupAdmin={Group.groupAdmin}
+                                    groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
+                                />
+                            </div>
+                        ))}
                         <CreateGroupIcon />
                     </div>
                 </section>
 
                 <section>
                     <h2 className="ml-4">Groups you have joined</h2>
-                    <div className="table-row">
-                        <GroupIcon
-                            groupId={tempGroup2.groupId}
-                            groupName={tempGroup2.groupName}
-                            groupAdmin={tempGroup2.groupAdmin}
-                            groupMembers={tempGroup2.groupMembers}
-                            settings={tempGroup2.settings}
-                        />
+                    <div className="inline-flex">
+                        {RegularGroups.map((Group) => (
+                            <div key={Group.groupId}>
+                                <GroupIcon
+                                    groupId={Group.groupId}
+                                    groupName={Group.groupName}
+                                    groupAdmin={Group.groupAdmin}
+                                    groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
+                                />
+                            </div>
+                        ))}
                         <SearchGroupIcon />
                     </div>
                 </section>

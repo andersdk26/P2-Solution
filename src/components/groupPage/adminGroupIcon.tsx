@@ -3,7 +3,6 @@ import { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import { group } from './group';
 import getUserById from '@/actions/friends/getUserById';
-import { useFormState } from 'react-dom';
 
 export default function AdminGroupIcon({
     groupId,

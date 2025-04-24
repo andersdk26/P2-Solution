@@ -47,20 +47,21 @@ export default function SearchGroupIcon(): JSX.Element {
     const [isGroupRequestIconOpen, setGroupRequestIconOpen] = useState(false);
     // sets the selected group for the pop-up
     const [SelectedGroup, setSelectedGroup] = useState<group>();
-    //the username of the admin
-    const [AdminUsername, setAdminUsername] = useState('');
-    const [AdminId, setAdminId] = useState<number>();
 
-    //set username of the admin
-    useEffect(() => {
-        const getAdminName = async (): Promise<void> => {
-            if (!AdminId) {
-                return;
-            }
-            setAdminUsername(await getUserById(AdminId));
-        };
-        getAdminName();
-    }, [AdminId]);
+    // //the username of the admin
+    // const [AdminUsername, setAdminUsername] = useState('');
+    // const [AdminId, setAdminId] = useState<number>();
+
+    // //set username of the admin
+    // useEffect(() => {
+    //     const getAdminName = async (): Promise<void> => {
+    //         if (!AdminId) {
+    //             return;
+    //         }
+    //         setAdminUsername(await getUserById(AdminId));
+    //     };
+    //     getAdminName();
+    // }, [AdminId]);
 
     return (
         <>
@@ -119,8 +120,6 @@ export default function SearchGroupIcon(): JSX.Element {
                             className="block w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll align-center content-center"
                         >
                             {searchResult.map((group) => (
-                                //get groupadmin's username
-
                                 // movieId is used as identifier as it ensures that each item has a unique key.
                                 <div key={group.groupId}>
                                     <p
@@ -129,14 +128,15 @@ export default function SearchGroupIcon(): JSX.Element {
                                             setGroupRequestIconOpen(
                                                 !isGroupRequestIconOpen
                                             );
-                                            setAdminId(group.groupAdmin);
+                                            // setAdminId(group.groupAdmin);
                                         }}
                                         className={`py-2 px-4 justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                                     >
                                         <span className="text-left text-black prevent-select">
                                             <b>{group.groupName}</b> ID:{' '}
                                             {group.groupId}, Admin:{' '}
-                                            {AdminUsername}
+                                            {group.groupAdmin}
+                                            {/* {AdminUsername} */}
                                         </span>
                                     </p>
                                 </div>

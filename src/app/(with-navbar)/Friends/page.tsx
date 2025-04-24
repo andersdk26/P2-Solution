@@ -63,11 +63,17 @@ export default function Friends(): JSX.Element {
 
     useEffect(() => {
         const updateFriendList = async (): Promise<void> => {
+            if (!FriendsList.length) {
+                return;
+            }
+
             const resolvedFriends = await Promise.all(
                 FriendsList.map(async (id) => (
                     <div key={id}>
-                        <p>{await getUserById(id)}</p>
-                        <button onClick={() => alert('HI')}>🫡</button>
+                        <p className="ml-4">{await getUserById(id)}</p>
+                        <button className="ml-4" onClick={() => alert('HI')}>
+                            🫡
+                        </button>
                     </div>
                 ))
             );

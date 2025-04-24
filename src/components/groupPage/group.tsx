@@ -4,7 +4,7 @@ import getUserById from '@/actions/friends/getUserById';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { groupsTable } from '@/db/schema';
 import { db } from 'db';
-import { eq, like } from 'drizzle-orm';
+import { eq, like, ne, and, ilike } from 'drizzle-orm';
 
 export type group = {
     groupId: number;
@@ -35,7 +35,7 @@ export async function getGroupById(id: string): Promise<group[]> {
     return result;
 }
 
-export async function getGroupByAdminId(id: number): Promise<group[]> {
+export async function getGroupsByAdminId(id: number): Promise<group[]> {
     // search db for id, admin id and current user id is the same
     const result = await db
         .select({
@@ -52,18 +52,23 @@ export async function getGroupByAdminId(id: number): Promise<group[]> {
 }
 
 //return array with groups that part of but not admin
-// export async function getGroupByMemberId(id: number): Promise<group[]> {
-//     // search db for id
-//     const result = await db
-//         .select({
-//             groupId: groupsTable.groupId,
-//             groupName: groupsTable.groupName,
-//             groupAdmin: groupsTable.adminId,
-//             groupMembers: groupsTable.members,
-//             settings: groupsTable.settings,
-//         })
-//         .from(groupsTable)
-//         .where(and(not(eq(groupsTable.adminId, id))));
+export async function getRegularGroupsByMemberId(id: number): Promise<group[]> {
+    // search db for id
+    const result = await db
+        .select({
+            groupId: groupsTable.groupId,
+            groupName: groupsTable.groupName,
+            groupAdmin: groupsTable.adminId,
+            groupMembers: groupsTable.members,
+            settings: groupsTable.settings,
+        })
+        .from(groupsTable)
+        .where(
+            and(
+                like(groupsTable.members, `%${id}%`),
+                ne(groupsTable.adminId, id)
+            )
+        );
 
-//     return result;
-// }
+    return result;
+}
