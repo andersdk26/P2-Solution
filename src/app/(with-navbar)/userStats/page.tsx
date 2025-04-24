@@ -5,7 +5,6 @@ import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
 import { useEffect, useState } from 'react';
 import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
-// import { Home } from
 
 export default function userStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);

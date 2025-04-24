@@ -67,12 +67,10 @@ export default function SideBar(id: number): JSX.Element {
                 ></div>
             )}
 
-            {sidebarImage && <p>Heeeeeeeeeeeeeeeeej</p>}
-
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
-                    <div className="sideBar ">
+                    <div className="sideBar">
                         <button
                             className="basicBtn cursor-pointer mb-5"
                             // onClick={() => {
@@ -95,10 +93,12 @@ export default function SideBar(id: number): JSX.Element {
                         {selectedMovieId !== null && (
                             <MovieImage movieId={selectedMovieId} />
                         )}
-                        <h2>{sidebarAlt}</h2>
+                        <h4 className="text-center mt-100 fixed">
+                            {sidebarAlt}
+                        </h4>
                         {/* Radio Button Row */}
                         <div className="ratingRow">
-                            <ul>
+                            <ul className="mt-20">
                                 <li>
                                     <input
                                         type="checkbox"
