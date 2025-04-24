@@ -32,7 +32,10 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     useEffect(() => {
-        async () => handleImageClick(id);
+        const fetchMovie = async () => {
+            await handleImageClick(id);
+        };
+        fetchMovie();
     }, [id]);
 
     const handleRatingChange = (
