@@ -8,6 +8,8 @@ export type group = {
     groupId: number;
     groupName: string;
     groupAdmin: number;
+    groupMembers: string;
+    settings: string,
 };
 
 export async function getGroupById(id: string): Promise<group[]> {
@@ -22,6 +24,8 @@ export async function getGroupById(id: string): Promise<group[]> {
             groupId: groupsTable.groupId,
             groupName: groupsTable.groupName,
             groupAdmin: groupsTable.adminId,
+            groupMembers: groupsTable.members,
+            settings: groupsTable.settings,
         })
         .from(groupsTable)
         .where(like(groupsTable.groupId, `${id}%`));

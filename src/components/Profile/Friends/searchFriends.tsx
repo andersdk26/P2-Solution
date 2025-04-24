@@ -20,6 +20,7 @@ function FriendRequest({
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
                 onClick={() => {
                     alert('Friend request sent');
+                    conditionalFunction(false);
                 }}
             >
                 Add friend

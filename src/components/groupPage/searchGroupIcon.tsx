@@ -1,7 +1,8 @@
 'use client';
 import { JSX } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getGroupById, group } from './group';
+import getUserById from '@/actions/friends/getUserById';
 
 // input: takes a group and a conditional function as input
 function GroupRequest({
@@ -21,6 +22,7 @@ function GroupRequest({
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
                 onClick={() => {
                     alert('Request sent');
+                    conditionalFunction(false);
                 }}
             >
                 Join
@@ -43,6 +45,17 @@ export default function SearchGroupIcon(): JSX.Element {
     const [isGroupRequestIconOpen, setGroupRequestIconOpen] = useState(false);
     // sets the selected group for the pop-up
     const [SelectedGroup, setSelectedGroup] = useState<group>();
+    //the username of the admin
+    const [AdminUsername, setAdminUsername] = useState('');
+    const [AdminId, setAdminId] = useState<number>();
+
+    //set username of the admin
+    useEffect(() => {
+        const getAdminName = async (): Promise<void> => {
+            setAdminUsername(await getUserById(AdminId));
+        };
+        getAdminName();
+    });
 
     return (
         <>
@@ -111,13 +124,14 @@ export default function SearchGroupIcon(): JSX.Element {
                                             setGroupRequestIconOpen(
                                                 !isGroupRequestIconOpen
                                             );
+                                            setAdminId(group.groupAdmin);
                                         }}
                                         className={`py-2 px-4 justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                                     >
                                         <span className="text-left text-black prevent-select">
                                             <b>{group.groupName}</b> ID:{' '}
                                             {group.groupId}, Admin:{' '}
-                                            {group.groupAdmin}
+                                            {AdminUsername}
                                         </span>
                                     </p>
                                 </div>

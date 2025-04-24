@@ -50,6 +50,7 @@ export const groupsTable = sqliteTable('groups', {
     groupName: text('groupName').notNull(),
     adminId: integer('adminId').notNull(),
     members: text('members').notNull(),
+    settings: text('settings').notNull(),
 });
 
 export type InsertGroup = typeof groupsTable.$inferInsert;
