@@ -18,6 +18,7 @@ import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 import { useRouter } from 'next/router';
+import groupAggregation from '@/components/GroupAggregation/groupAggregation';
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 import SideBar from '@/components/sideBar/sideBar';
@@ -36,12 +37,15 @@ export default function Home(): JSX.Element {
             .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async () =>
+        const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
-                await collaborativeFiltering(await verifyUser())
-                //await contentBasedFiltering(await verifyUser())
+                // Use "await verifyUser()" or a group ID as input parameter.
+                // await collaborativeFiltering(12345, 'group')
+                await contentBasedFiltering(12345, 'group')
             );
         getRecommendedMovies();
+
+        groupAggregation(12345);
     }, []);
 
     const moviesPerPage = 3;
