@@ -1,5 +1,11 @@
 import { sql } from 'drizzle-orm';
-import { int, mysqlTable, timestamp, varchar } from 'drizzle-orm/mysql-core';
+import {
+    int,
+    mysqlTable,
+    serial,
+    timestamp,
+    varchar,
+} from 'drizzle-orm/mysql-core';
 
 // *** Movie ***
 export const moviesTable = mysqlTable('movies', {
@@ -11,16 +17,25 @@ export const moviesTable = mysqlTable('movies', {
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
 
+export const movieLinkIdTable = mysqlTable('movie_link_id', {
+    id: int('id').primaryKey(),
+    imdbId: int('imdbId').notNull(),
+    tmdbId: int('tmdbId').notNull(),
+});
+
+export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
+export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
+
 export const IMDBImageIdTable = mysqlTable('imdb_image_id', {
     id: int('id').primaryKey(),
-    imageId: int('imageId').notNull(),
+    imageId: int('imageId', { unsigned: true }).notNull(),
 });
 
 export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
 export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
 
 export const movieImageCacheTable = mysqlTable('movie_image_cache', {
-    id: int('id').primaryKey(), // auto increment
+    id: serial('id').primaryKey(), // auto increment
     movieId: int('movieId')
         .notNull()
         .references(() => moviesTable.id),
@@ -36,7 +51,7 @@ export type SelectmovieImageCache = typeof movieImageCacheTable.$inferSelect;
 
 // *** User ***
 export const usersTable = mysqlTable('users', {
-    id: int('id').primaryKey(),
+    id: int('id', { unsigned: true }).primaryKey(),
     username: varchar('username', { length: 30 }).notNull(),
     email: varchar('email', { length: 255 }).unique().notNull(),
     password: varchar('password', { length: 255 }).notNull(),
