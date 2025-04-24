@@ -17,7 +17,10 @@ export default function Friends(): JSX.Element {
     const [friendRequestList, setFriendRequestList] = useState([
         <p key={0}>No friend requests</p>,
     ]);
-    const [FriendsList, setFriendsList] = useState<string[]>([]);
+    const [FriendsList, setFriendsList] = useState<number[]>([]);
+    const [friendsListObject, setFriendsListObject] = useState([
+        <p key={0}>Hej</p>,
+    ]);
 
     useEffect(() => {
         const getFriendRequests = async (): Promise<void> => {
@@ -53,14 +56,25 @@ export default function Friends(): JSX.Element {
 
     useEffect(() => {
         const getFriendsList = async (): Promise<void> => {
-            const list = await GetFriends(await verifyUser());
-            const list2: string[] = list.map(
-                async (id) => await getUserById(id)
-            );
-            setFriendsList(list2);
+            setFriendsList(await GetFriends(await verifyUser()));
         };
         getFriendsList();
     }, []);
+
+    useEffect(() => {
+        const updateFriendList = async (): Promise<void> => {
+            const resolvedFriends = await Promise.all(
+                FriendsList.map(async (id) => (
+                    <div key={id}>
+                        <p>{await getUserById(id)}</p>
+                        <button onClick={() => alert('HI')}>🫡</button>
+                    </div>
+                ))
+            );
+            setFriendsListObject(resolvedFriends);
+        };
+        updateFriendList();
+    }, [FriendsList]);
 
     return (
         <>
@@ -68,9 +82,7 @@ export default function Friends(): JSX.Element {
             <section className="h-80">
                 <h1>Your friends</h1>
                 <p className="ml-4">Here you can view your friends</p>
-                {FriendsList.map(async (friend) => (
-                    <p key={friend}>{await getUserById(friend)}</p>
-                ))}
+                {friendsListObject}
             </section>
 
             {/* searching for users section */}
