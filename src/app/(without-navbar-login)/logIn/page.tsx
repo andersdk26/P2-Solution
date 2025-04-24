@@ -3,7 +3,6 @@
 import { JSX, useEffect, useState } from 'react';
 import { handleLogin, handleSignup } from '@/actions/logIn/userLogin';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import userLogout from '@/actions/logIn/userLogout';
 import { useRouter } from 'next/navigation';
 import useRedirect from '@/components/redirect';
 

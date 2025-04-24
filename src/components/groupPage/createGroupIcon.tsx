@@ -10,10 +10,6 @@ export default function CreateGroupIcon(): JSX.Element {
     const [EmojiSelect, setEmojiSelect] = useState('');
     const [GroupMembers, setGroupMembers] = useState<string[]>([]);
 
-    const toggleGroup = (): void => {
-        setAboutGroupOpen(!isAboutGroupOpen);
-    };
-
     const handleSubmit = (e: { preventDefault: () => void }): void => {
         e.preventDefault();
 
@@ -48,7 +44,7 @@ export default function CreateGroupIcon(): JSX.Element {
             {/* The div for the entire box, onclick: open the create group pop-up */}
             <div
                 className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] hover:brightness-80 text-[#282f72] inline-block rounded-3xl m-4 text-center align-top items-center content-center justify-center cursor-pointer `}
-                onClick={toggleGroup}
+                onClick={() => setAboutGroupOpen(!isAboutGroupOpen)}
             >
                 <p className="text-9xl m-0">+</p>
                 <p className="text-2xl m-0">Create Group</p>
@@ -67,7 +63,7 @@ export default function CreateGroupIcon(): JSX.Element {
                         {/* close button */}
                         <button
                             className={`float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85`}
-                            onClick={toggleGroup}
+                            onClick={() => setAboutGroupOpen(!isAboutGroupOpen)}
                         >
                             <u>Close</u>
                         </button>

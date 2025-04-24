@@ -1,4 +1,5 @@
 import { JSX, useState } from 'react';
+import badWord from '@/actions/logIn/badWord.json'; // Importing the bad word list
 
 interface SignUpFormProps {
     onSignUp: (formData: {
@@ -19,12 +20,32 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
     });
 
     const [passwordError, setPasswordError] = useState(false);
+    const [usernameError, setUsernameError] = useState<string | null>(null); // State for username error
+
+    // Function to check if the username contains any bad words
+    const containsBadWord = (username: string): boolean => {
+        const lowerCaseUsername = username.toLowerCase();
+        return badWord.some((word) =>
+            lowerCaseUsername.includes(word.toLowerCase())
+        );
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
 
-        if (e.target.name === 'confirmPassword') {
-            setPasswordError(e.target.value !== formData.password);
+        setFormData({ ...formData, [name]: value });
+
+        if (name === 'confirmPassword') {
+            setPasswordError(value !== formData.password);
+        }
+
+        if (name === 'username') {
+            // Check for bad words in the username
+            if (containsBadWord(value)) {
+                setUsernameError('Username contains inappropriate language.');
+            } else {
+                setUsernameError(null); // Clear the error if the username is valid
+            }
         }
     };
 
@@ -49,6 +70,12 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
 
         if (formData.password !== formData.confirmPassword) {
             setPasswordError(true);
+            return;
+        }
+
+        if (usernameError) {
+            // Prevent submission if the username contains a bad word
+            alert('Please choose a different username.');
             return;
         }
 
@@ -80,10 +107,15 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
                     id="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="mt-1 p-2 w-full border rounded-md"
+                    className={`mt-1 p-2 w-full border rounded-md ${
+                        usernameError ? 'border-red-500' : ''
+                    }`}
                     maxLength={15}
                     required
                 />
+                {usernameError && (
+                    <p className="text-red-500 text-sm mt-1">{usernameError}</p>
+                )}
             </div>
 
             {/* Email Input */}

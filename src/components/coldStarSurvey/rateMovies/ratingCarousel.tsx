@@ -13,7 +13,7 @@ type movieProps = { movieId: movie[] };
 export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
 
-    console.log('Jeg blev kørt');
+    console.log('I run');
 
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
