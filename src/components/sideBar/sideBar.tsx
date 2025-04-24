@@ -16,7 +16,7 @@ export default function SideBar(id: number): JSX.Element {
         try {
             const movie = await getMovieById(movieId); // Fetch movie by ID
             if (!movie) {
-                console.error(`Movie with ID ${movieId} not found.`);
+                console.log(`Movie with ID ${movieId} not found.`);
                 return;
             }
             setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
