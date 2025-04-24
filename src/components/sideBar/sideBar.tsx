@@ -5,6 +5,7 @@ import { movie, getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
 import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
+import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
 
 export default function SideBar(id: number): JSX.Element {
@@ -68,6 +69,21 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
+    const handleRemovefromWatchlist = async (): Promise<void> => {
+        if (selectedMovieId !== null) {
+            try {
+                const userId = await verifyUser();
+                const message = await removeMovieToWatchlist(
+                    userId,
+                    selectedMovieId
+                );
+                alert(message); // Display the returned message
+            } catch (error) {
+                console.error('Failed to remove movie from watchlist:', error);
+            }
+        }
+    };
+
     return (
         <>
             {/* Div for deselecting sidebar */}
@@ -83,8 +99,6 @@ export default function SideBar(id: number): JSX.Element {
                     }}
                 ></div>
             )}
-
-            {/*sidebarImage && <p>Heeeeeeeeeeeeeeeeej</p>}
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
@@ -246,12 +260,18 @@ export default function SideBar(id: number): JSX.Element {
                                 </li>
                             </ul>
                         </div>
-                        {/* Add to Watchlist Button */}
+                        {/* buttoonsssssss */}
                         <button
                             className="basicBtn mt-4"
                             onClick={handleAddToWatchlist}
                         >
                             Add to Watchlist
+                        </button>
+                        <button
+                            className="basicBtn mt-4"
+                            onClick={handleRemovefromWatchlist}
+                        >
+                            Remove from Watchlist
                         </button>
                     </div>
                 </section>
