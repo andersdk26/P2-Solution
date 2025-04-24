@@ -43,6 +43,15 @@ export const friendsTable = sqliteTable('friends', {
 export type InserFriend = typeof friendsTable.$inferInsert;
 export type SelectFriend = typeof friendsTable.$inferSelect;
 
+export const watchlistTable = sqliteTable('watchlist', {
+    id: integer('id').primaryKey(),
+    userid: integer('userid').notNull(),
+    movieid: integer('movieid').notNull(),
+});
+
+export type InserWatchlist = typeof watchlistTable.$inferInsert;
+export type SelectWatchlist = typeof watchlistTable.$inferSelect;
+
 export const groupsTable = sqliteTable('groups', {
     id: integer('id').primaryKey(),
     groupId: integer('groupId').notNull(),
