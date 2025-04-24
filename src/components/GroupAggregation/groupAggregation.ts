@@ -66,6 +66,7 @@ export default async function groupAggregation(
         }
     }
 
+    // Create map of average ratings.
     const groupRatingsMap = new Map<number, number>();
 
     for (const rating of averageGroupRatings) {

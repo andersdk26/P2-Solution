@@ -88,9 +88,7 @@ export default async function contentBasedFiltering(
         }
     }
 
-    console.log('Genres have been scored.');
-    console.log(averageGenreRating);
-
+    // Convert running total and times rated to a score for each genre.
     const genreScoreMap = new Map<string, number>();
 
     for (const genre of averageGenreRating) {
