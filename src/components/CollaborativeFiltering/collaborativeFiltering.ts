@@ -3,7 +3,7 @@
 import { getMovieById, movie } from '@/actions/movie/movie';
 import { testRatings } from '@/db/schema';
 import { db } from 'db';
-import { eq, ne, and, notInArray } from 'drizzle-orm';
+import { eq, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
 
 type rating = {
@@ -64,7 +64,7 @@ export default async function collaborativeFiltering(
         // Get average group ratings.
         targetUserRatings = await groupAggregation(targetId);
 
-        // Abort recommendation algorithm if user has not rated enough movies.
+        // Abort recommendation algorithm if the group has not rated enough movies.
         if (targetUserRatings.length < 10) {
             console.log('Target group has not rated enough movies.');
             return [];

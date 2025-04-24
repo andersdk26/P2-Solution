@@ -1,7 +1,6 @@
 'use server';
 
-import { moviesTable, groupsTable, testRatings } from '@/db/schema';
-import { group } from 'console';
+import { groupsTable, testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 
@@ -16,7 +15,9 @@ type groupRatings = {
     movieRating: number;
 };
 
-export default async function groupAggregation(groupId: number) {
+export default async function groupAggregation(
+    groupId: number
+): Promise<groupRatings[]> {
     // Get group members' ID.
     const memberIds = await db
         .select({

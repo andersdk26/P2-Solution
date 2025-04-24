@@ -4,6 +4,7 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import { moviesTable, testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
+import groupAggregation from '../GroupAggregation/groupAggregation';
 
 type averageRating = {
     runningTotal: number;
@@ -11,29 +12,45 @@ type averageRating = {
 };
 
 export default async function contentBasedFiltering(
-    targetUserId: number
+    targetId: number,
+    type: string
 ): Promise<movie[]> {
-    // Fetch the target user's ratings.
-    const targetUserRatings = await db
-        .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
-        })
-        .from(testRatings)
-        .where(eq(testRatings.userId, targetUserId));
+    // Declare variable used for storing movie ratings.
+    let targetUserRatings;
 
-    console.log('Got target user ratings.');
-    console.log(targetUserRatings);
+    // Check whether the input ID represents a group or an individual.
+    if (type === 'individual') {
+        // Fetch the target user's ratings.
+        targetUserRatings = await db
+            .select({
+                userId: testRatings.userId,
+                movieId: testRatings.movieId,
+                movieRating: testRatings.rating,
+            })
+            .from(testRatings)
+            .where(eq(testRatings.userId, targetId));
+
+        console.log('Got target user ratings.');
+        console.log(targetUserRatings);
+    } else if (type === 'group') {
+        // Fetch the target users' average ratings.
+        targetUserRatings = await groupAggregation(targetId);
+
+        // Abort recommendation algorithm if the group has not rated enough movies.
+        if (targetUserRatings.length < 10) {
+            console.log('Target group has not rated enough movies.');
+            return [];
+        }
+    }
 
     // Find the total number of movies rated by the target user.
-    const totalMoviesRated = targetUserRatings.length;
+    const totalMoviesRated = targetUserRatings!.length;
 
     // Initialise genre score map.
     const averageGenreRating = new Map<string, averageRating>();
 
     // Iterate through each rating made by the target user.
-    for (const rating of targetUserRatings) {
+    for (const rating of targetUserRatings!) {
         // Fetch the movie in question.
         const movie = await getMovieById(rating.movieId);
 
@@ -104,7 +121,7 @@ export default async function contentBasedFiltering(
         // Check if movie has already been rated by the target user.
         let movieHasBeenRated = 0;
 
-        for (const rating of targetUserRatings) {
+        for (const rating of targetUserRatings!) {
             if (rating.movieId === movie.movieId) {
                 movieHasBeenRated = 1;
                 break;
