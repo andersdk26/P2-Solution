@@ -176,7 +176,7 @@ export default function CreateGroupIcon(): JSX.Element {
                             {/* Right div for display group */}
                             <section className="flex grid-cols-4 ">
                                 {/* right for the group icon display */}
-                                <aside className="col-span-1">
+                                <aside className="col-span-3">
                                     {/* Group box visual */}
                                     <div
                                         // styling inline because tailwind doesnt like dynamic color changes
@@ -203,11 +203,9 @@ export default function CreateGroupIcon(): JSX.Element {
                                     </div>
                                 </aside>
                                 {/* Left for the members list */}
-                                <aside className="text-left col-span-3 ">
+                                <aside className="text-left text-col-span-1 justify-left content-left align-left left-0 text-2xl">
                                     {/* Display members */}
-                                    <p className="mt-1 text-xl">
-                                        Group members:
-                                    </p>
+                                    <p className="mt-1 ">Group members:</p>
                                     <p>1</p>
                                     <p>2</p>
                                 </aside>
