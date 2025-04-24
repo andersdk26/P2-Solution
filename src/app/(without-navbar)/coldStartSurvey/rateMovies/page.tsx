@@ -85,6 +85,7 @@ export default function Home(): JSX.Element {
                     for (const rating of ratedMovies) {
                         saveMovieRatings(userId, rating[0], rating[1]);
                     }
+                    localStorage.removeItem('selectedMovies');
                 }}
                 className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
             >
