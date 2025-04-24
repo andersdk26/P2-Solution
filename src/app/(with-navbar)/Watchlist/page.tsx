@@ -1,10 +1,14 @@
-// /Users/frederikskipper-andersen/Documents/GitHub/P2-Solution/src/components/Profile/ProfileSettings/page.tsx
 'use client';
 import React, { JSX } from 'react';
+import MovieImage from '@/components/movie/MovieImage';
 
-const Watchlist = (): JSX.Element => (
-    <div>
-        <h1>Watchlist</h1>
-    </div>
-);
-export default Watchlist;
+export default function Watchlist(): JSX.Element {
+    return (
+        <>
+            <div>
+                <h1>Watchlist</h1>
+                <p>Movies you want to watch</p>
+            </div>
+        </>
+    );
+}

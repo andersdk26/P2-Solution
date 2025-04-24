@@ -2,12 +2,22 @@
 import { db } from 'db';
 import { IMDBImageIdTable, movieLinkIdTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import {
+    movieImageCache,
+    movieImageCacheInsert,
+    movieImageCacheLookup,
+} from '@/components/movie/movieImageCache';
 
 export default async function getMovieImageURL(
     movieId: number
-): Promise<string> {
+): Promise<movieImageCache> {
     let result;
-    console.log(`Start: ${movieId}`);
+
+    // Check if movieId is in cache
+    const cachedMovie = await movieImageCacheLookup(movieId);
+    if (cachedMovie) {
+        return cachedMovie;
+    }
 
     // Database
     try {
@@ -38,7 +48,7 @@ export default async function getMovieImageURL(
             `Error getting movie image for movieId: ${movieId}.`,
             error
         );
-        return '';
+        return { id: 0, url: '', blurHash: null };
     }
 
     // TMDB
@@ -57,8 +67,8 @@ export default async function getMovieImageURL(
 
             // Return tmdb image link
             if (tmdbImageLink && tmdbImageLink.length) {
-                console.log(`Found TMDB: ${movieId}`);
-                return tmdbImageLink[0]; // return first image
+                movieImageCacheInsert(movieId, tmdbImageLink[0]);
+                return { id: movieId, url: tmdbImageLink[0], blurHash: null }; // return first image
             }
         }
     } catch (error) {
@@ -97,8 +107,7 @@ export default async function getMovieImageURL(
 
             // Return imdb image link
             if (imdbImageLink && imdbImageLink.length) {
-                console.log(`Found IMDB: ${movieId}`);
-                return imdbImageLink[0]; // return first image (0 is the prevous image)
+                return { id: movieId, url: imdbImageLink[0], blurHash: null }; // return first image (0 is the prevous image)
             }
         }
     } catch (error) {
@@ -108,6 +117,5 @@ export default async function getMovieImageURL(
         );
     }
 
-    console.log(`Found NONE: ${movieId}`);
-    return '';
+    return { id: 0, url: '', blurHash: null };
 }

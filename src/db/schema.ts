@@ -1,5 +1,6 @@
 import { group } from 'console';
 import { sql } from 'drizzle-orm';
+
 import { int, mysqlTable, timestamp, varchar } from 'drizzle-orm/mysql-core';
 
 export const moviesTable = mysqlTable('movies', {
@@ -17,6 +18,22 @@ export const usersTable = mysqlTable('users', {
     email: varchar('email', { length: 255 }).unique().notNull(),
     password: varchar('password', { length: 255 }).notNull(),
     createdAt: timestamp('created_at')
+/*
+import { timestamp } from 'drizzle-orm/gel-core';
+import {
+    integer,
+    sqliteTable,
+    text,
+    blob,
+    real,
+} from 'drizzle-orm/sqlite-core';
+
+export const usersTable = sqliteTable('users', {
+    id: integer('id').primaryKey(),
+    username: text('username').notNull(),
+    email: text('email').unique().notNull(),
+    password: text('password').notNull(),
+    createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
     lastLogin: timestamp('last_login').default(sql`(CURRENT_TIMESTAMP)`),
@@ -39,10 +56,47 @@ export type SelectUser = typeof usersTable.$inferSelect;
 //     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
 //     settings: text('settings').default(sql`'{}'`), // JSON stringified object
 // });
+export const friendsTable = sqliteTable('friends', {
+    id: integer('id').primaryKey(),
+    userIdA: integer('userIdA').notNull(),
+    userIdB: integer('userIdB').notNull(),
+});
+
+export type InserFriend = typeof friendsTable.$inferInsert;
+export type SelectFriend = typeof friendsTable.$inferSelect;
+
+export const groupsTable = sqliteTable('groups', {
+    id: integer('id').primaryKey(),
+    groupId: integer('groupId').notNull(),
+    groupName: text('groupName').notNull(),
+    adminId: integer('adminId').notNull(),
+    members: text('members').notNull(),
+});
+
+export type InsertGroup = typeof groupsTable.$inferInsert;
+export type SelectGroup = typeof groupsTable.$inferSelect;
+
+export const movieLinkIdTable = sqliteTable('movie_link_id', {
+    id: integer('id').primaryKey(),
+    imdbId: integer('imdbId').notNull(),
+    tmdbId: integer('tmdbId').notNull(),
+});
 
 // export type InsertUser = typeof usersTable.$inferInsert;
 // export type SelectUser = typeof usersTable.$inferSelect;
 
+export const testRatings = sqliteTable('testRatings', {
+    id: integer('id').primaryKey(),
+    userId: integer('userId').notNull(),
+    movieId: integer('movieId').notNull(),
+    rating: integer('rating').notNull(),
+    timestamp: integer('timestamp').notNull(),
+});
+
+export type InsertTestRatings = typeof testRatings.$inferInsert;
+export type SelectTestRatings = typeof testRatings.$inferSelect;
+
+/* Skippers tables */
 // export const moviesTable = sqliteTable('movies', {
 //     id: integer('id').primaryKey(),
 //     title: text('title').notNull(),
@@ -51,6 +105,18 @@ export type SelectUser = typeof usersTable.$inferSelect;
 
 // export type InsertMovie = typeof moviesTable.$inferInsert;
 // export type SelectMovie = typeof moviesTable.$inferSelect;
+export const usersTable = sqliteTable('users', {
+    id: integer('id').primaryKey(),
+    username: text('username').notNull(),
+    email: text('email').unique().notNull(),
+    password: text('password').notNull(),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
+    settings: text('settings').default(sql`'{}'`), // JSON stringified object
+    profileIcon: text('profile_icon'),
+});
 
 // export const movieLinkIdTable = sqliteTable('movie_link_id', {
 //     id: integer('id').primaryKey(),
@@ -140,6 +206,21 @@ export type SelectUser = typeof usersTable.$inferSelect;
 
 // export type InsertIMDBImageId = typeof IMDBImageIdTable.$inferInsert;
 // export type SelectIMDBImageId = typeof IMDBImageIdTable.$inferSelect;
+
+export const movieImageCacheTable = sqliteTable('movie_image_cache', {
+    id: integer('id').primaryKey(), // auto increment
+    movieId: integer('movieId')
+        .notNull()
+        .references(() => moviesTable.id),
+    url: text('url').notNull(),
+    blurHash: text('blurHash'),
+    timestamp: text('timestamp')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+});
+
+export type InsertmovieImageCache = typeof movieImageCacheTable.$inferInsert;
+export type SelectmovieImageCache = typeof movieImageCacheTable.$inferSelect;
 
 // To update the schema, run: npx drizzle-kit push
 // After deleting fts tables, run: CREATE VIRTUAL TABLE movies_fts USING fts5(id UNINDEXED, title, genres); INSERT INTO movies_fts (rowid, id, title, genres) SELECT id, id, title, genres FROM movies;

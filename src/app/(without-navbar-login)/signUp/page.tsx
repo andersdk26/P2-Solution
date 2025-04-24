@@ -3,17 +3,18 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { handleSignup as serverHandleSignup } from '@/actions/logIn/userLogin';
 import SignUpForm from 'components/signUp/SignUpForm'; // Importing the signup form component
-import { redirect } from 'next/navigation';
+import useRedirect from '@/components/redirect';
 import { JSX, useEffect, useState } from 'react'; // Importing React state hook
 
 export default function SignUpPage(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     const [message, setMessage] = useState(''); // State to store feedback messages hvilket er error beskeder til users
     const [isError, setIsError] = useState(false); // State to track hvis message har en error
 
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) > 1) {
-                redirect('/coldStartSurvey');
+                redirect('coldStartSurvey');
             }
         };
         checkLoginStatus();
@@ -24,6 +25,7 @@ export default function SignUpPage(): JSX.Element {
         username: string;
         email: string;
         password: string;
+        profileIcon: string;
     }): Promise<void> => {
         // validation: sikkere at email contains "@" and password er 6 characters long
         if (!formData.email.includes('@')) {
@@ -47,7 +49,7 @@ export default function SignUpPage(): JSX.Element {
             return;
         }
         // Redirect
-        redirect('/coldStartSurvey');
+        redirect('coldStartSurvey');
     };
 
     return (

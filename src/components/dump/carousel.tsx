@@ -9,7 +9,7 @@ import Image from 'next/image';
 import GetMovieImage from '../app/actions/movieImageUrl';
 import { useEffect } from 'react'; // Importing React state hook
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { redirect } from 'next/navigation';
+import redirect from '@/components/redirect';
 
 type CarouselProps = {
     movieIds: number[];
@@ -24,7 +24,7 @@ export default function Carousel({ movieIds }: CarouselProps): JSX.Element {
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) < 1) {
-                redirect('/logIn');
+                redirect('logIn');
             }
         };
         checkLoginStatus();

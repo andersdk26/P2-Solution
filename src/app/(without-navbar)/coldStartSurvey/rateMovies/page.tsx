@@ -8,6 +8,15 @@ import Image from 'next/image';
 import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarousel';
 import GetMovieImage from '@/components/movie/MovieImage';
 import GetMovieTitle from '@/components/movie/MovieTitle';
+import saveMovieRatings from '@/actions/movie/saveMovieRating';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import useRedirect from '@/components/redirect';
+import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
+
+type rating = {
+    movieId: number;
+    rating: number;
+};
 
 // ####################################################################################################
 // I har et useState array (selectedMovies) af movie objekter struktureret på følgende måde:
@@ -34,6 +43,7 @@ import GetMovieTitle from '@/components/movie/MovieTitle';
 // ####################################################################################################
 
 export default function Home(): JSX.Element {
+    const redirect = useRedirect(); // Custom hook for redirection
     // Declare array of selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
     const router = useRouter(); // Use the useRouter hook
@@ -44,13 +54,14 @@ export default function Home(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+
+        const fetchUserId = async (): Promise<void> => {
+            setUserId(await verifyUser());
+        };
+        fetchUserId();
     }, []);
 
-    const redirectProfile = (path: string): void => {
-        if (path) {
-            router.push(path);
-        }
-    };
+    const [userId, setUserId] = useState<number>(0);
 
     return (
         <main>
@@ -59,7 +70,7 @@ export default function Home(): JSX.Element {
             </h1>
 
             <button
-                onClick={() => redirrectProfile('/coldStartSurvey')}
+                onClick={() => redirect('coldStartSurvey')}
                 className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm ml-10"
             >
                 Back
@@ -69,20 +80,16 @@ export default function Home(): JSX.Element {
                 <RatingCarousel movieId={selectedMovies} />
             </section>
 
-            {/* <section>
-                <h2>title</h2>
-                {/* <Image className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500"></Image> */}
-            {/* <Image
-                    key={index}
-                    src={`moviePosters.movie${x}`}
-                    alt="Movie poster"
-                    width={320}
-                    height={480}
-                />
-                rating */}
-            {/* <button>left</button>
-                <button>right</button>
-            </section> */}
+            <button
+                onClick={() => {
+                    for (const rating of ratedMovies) {
+                        saveMovieRatings(userId, rating[0], rating[1]);
+                    }
+                }}
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
+            >
+                Submit
+            </button>
 
             <section>
                 {selectedMovies.map((movie) => (

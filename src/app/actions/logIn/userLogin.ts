@@ -3,7 +3,9 @@
 import { generateToken } from '@/components/authentication/cookieAuthentication';
 import { login_check, register_user } from '@/components/db/userAuth';
 import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
+
+config({ path: '.env' }); // or .env.local
 
 interface LoginResponse {
     status: number;
@@ -47,6 +49,7 @@ export async function handleSignup(formData: {
     username: string;
     email: string;
     password: string;
+    profileIcon: string;
 }): Promise<string> {
     // Set username and email to lower case
     //formData.username = formData.username.toLowerCase();
@@ -80,15 +83,15 @@ export async function handleSignup(formData: {
     return 'Signup successful';
 }
 
-async function setCookie(data: string): Promise<boolean> {
+export async function setCookie(data: string): Promise<boolean> {
     const cookieStore = await cookies();
 
     // Set the token cookie
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 1, // 1 days
+        path: process.env.NEXT_PUBLIC_URL_PATH || '/',
     });
 
     // Check if the token cookie is set
