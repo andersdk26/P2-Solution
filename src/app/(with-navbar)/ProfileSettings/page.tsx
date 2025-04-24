@@ -156,9 +156,11 @@ export default function ProfileSettings() {
         }
     };
 
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
-        if (!currentPassword || !newPassword) {
-            alert('Please fill in both fields.');
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert('Please fill all the fields.');
             return;
         }
 
@@ -176,6 +178,7 @@ export default function ProfileSettings() {
                 setIsEditing(null);
                 setCurrentPassword('');
                 setNewPassword('');
+                setConfirmPassword('');
             } else {
                 alert(response.message);
             }
@@ -341,7 +344,6 @@ export default function ProfileSettings() {
                                 />
 
                                 <button
-
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
                                 >
@@ -377,7 +379,7 @@ export default function ProfileSettings() {
                         {isEditing === 'password' && (
                             // Input boxes
                             <div className="flex flex-col items-center mt-4">
-                                {/* Input box 1 */}
+                                {/* enter current password */}
                                 <input
                                     type="password"
                                     placeholder="Enter current password"
@@ -388,7 +390,7 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-                                {/* Input box 2 */}
+                                {/* enter new password */}
                                 <input
                                     type="password"
                                     placeholder="Enter new password"
@@ -398,6 +400,29 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
+
+                                {/* Confirm Password  */}
+                                <input
+                                    type="password"
+                                    placeholder="Confirm new password"
+                                    value={confirmPassword}
+                                    onChange={(e) => {
+                                        setConfirmPassword(e.target.value);
+                                        setPasswordError(
+                                            e.target.value !== newPassword
+                                        ); // Check if passwords match
+                                    }}
+                                    className={`border p-2 rounded-md w-60 mb-2 ${
+                                        passwordError ? 'border-red-500' : ''
+                                    }`}
+                                    required
+                                />
+                                {passwordError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Passwords do not match!
+                                    </p>
+                                )}
+
                                 <button // Submit button
                                     onClick={handlePasswordChange}
                                     className="basicBtn"
