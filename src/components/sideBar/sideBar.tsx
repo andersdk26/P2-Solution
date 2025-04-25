@@ -7,6 +7,7 @@ import Image from 'next/image';
 import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
 import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import { OutgoingMessage } from 'http';
 
 type WatchlistStatus =
     | 'set'
@@ -44,9 +45,9 @@ const checkmark = (
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         className="feather feather-check-circle"
     >
         <path data-circle d="M22 11.07V12a10 10 0 1 1-5.93-9.14" />
@@ -110,7 +111,12 @@ export default function SideBar(id: number): JSX.Element {
                     userId,
                     selectedMovieId
                 );
-                handleLoadingCompleation();
+
+                if (message === 'Movie added to the watchlist successfully.') {
+                    handleLoadingCompleation('setReq');
+                } else {
+                    handleLoadingCompleation('unsetReq');
+                }
             } catch (error) {
                 console.error('Failed to add movie to watchlist:', error);
             }
@@ -125,22 +131,26 @@ export default function SideBar(id: number): JSX.Element {
                     userId,
                     selectedMovieId
                 );
-                handleLoadingCompleation();
+
+                if (
+                    message ===
+                    'successfully removed the Movie from the watchlist.'
+                ) {
+                    handleLoadingCompleation('unsetReq');
+                } else {
+                    handleLoadingCompleation('setReq');
+                }
             } catch (error) {
                 console.error('Failed to remove movie from watchlist:', error);
             }
         }
     };
 
-    const handleLoadingCompleation = (): void => {
-        setWatchlistStatus(
-            watchlistStatus === 'setReq' ? 'setCheck' : 'unsetCheck'
-        );
+    const handleLoadingCompleation = (state: WatchlistStatus): void => {
+        setWatchlistStatus(state === 'setReq' ? 'setCheck' : 'unsetCheck');
+
         setTimeout(
-            () =>
-                setWatchlistStatus(
-                    watchlistStatus === 'setCheck' ? 'set' : 'unset'
-                ),
+            () => setWatchlistStatus(state === 'setReq' ? 'set' : 'unset'),
             1000
         );
     };
