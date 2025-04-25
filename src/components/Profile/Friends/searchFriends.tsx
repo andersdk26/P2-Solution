@@ -14,11 +14,7 @@ function FriendRequest({
     conditionalFunction: (boolean: boolean) => void; // figure out the actual typing required for functions
 }): JSX.Element {
     //returns the pop-up to send friend request
-    const [FriendsList, setFriendsList] = useState<number[]>([]);
 
-    const getFriendsList = async (): Promise<void> => {
-        setFriendsList(await GetFriends(await verifyUser()));
-    };
     return (
         <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-74">
             Send <b>{user.userName}</b> a friend request?
@@ -27,14 +23,25 @@ function FriendRequest({
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
                 onClick={async () => {
-                    await getFriendsList();
                     if ((await verifyUser()) === user.userId) {
                         alert('You can not send friend requests to yourself!');
-                    } else if (FriendsList.includes(user.userId)) {
-                        alert('You are already friends with this user!');
                     } else {
-                        SendFriendRequest(await verifyUser(), user.userId);
+                        const status = await SendFriendRequest(
+                            await verifyUser(),
+                            user.userId
+                        );
+
+                        if (status === -1) {
+                            alert('You are already friends with this user!');
+                        } else if (status === 0) {
+                            alert(
+                                'One of you already has a pending friend request from the other!'
+                            );
+                        } else {
+                            alert(`Friend request sent to ${user.userName}!`);
+                        }
                     }
+
                     conditionalFunction(false);
                 }}
             >

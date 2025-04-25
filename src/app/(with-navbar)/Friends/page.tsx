@@ -5,6 +5,7 @@ import {
     AcceptFriendRequest,
     DeclineFriendRequest,
     GetFriendRequest,
+    RemoveFriend,
 } from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
@@ -93,10 +94,21 @@ export default function Friends(): JSX.Element {
 
             const resolvedFriends = await Promise.all(
                 FriendsList.map(async (id) => (
-                    <div key={id}>
-                        <p className="ml-4">{await getUserById(id)}</p>
-                        <button className="ml-4" onClick={() => alert('HI')}>
-                            🫡
+                    <div className="flex items-start space-x-2" key={id}>
+                        <p className="ml-4 my-auto w-64 py-4">
+                            {await getUserById(id)}
+                        </p>
+                        <button
+                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
+                            onClick={async () => {
+                                RemoveFriend(await verifyUser(), id);
+                                alert(
+                                    `${await getUserById(id)} has been removed from your friends!`
+                                );
+                                getFriendsList();
+                            }}
+                        >
+                            Remove friend
                         </button>
                         {/* TODO: Gør så man kan fjerne venner. */}
                     </div>
