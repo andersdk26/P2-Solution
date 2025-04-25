@@ -29,7 +29,7 @@ export async function searchUserById(id: string): Promise<user[]> {
             )
         );
 
-    return result;
+    return result.slice(0, 5);
 }
 
 // export async function searchForUsers(

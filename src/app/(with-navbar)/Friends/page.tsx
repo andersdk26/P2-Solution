@@ -94,12 +94,15 @@ export default function Friends(): JSX.Element {
 
             const resolvedFriends = await Promise.all(
                 FriendsList.map(async (id) => (
-                    <div className="flex items-start space-x-2" key={id}>
+                    <div
+                        className="w-1/4 flex items-start rounded-lg ml-4 space-x-2 my-2 bg-black/15"
+                        key={id}
+                    >
                         <p className="ml-4 my-auto w-64 py-4">
                             {await getUserById(id)}
                         </p>
                         <button
-                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
+                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 mr-4 ml-auto relative rounded-sm cursor-pointer"
                             onClick={async () => {
                                 RemoveFriend(await verifyUser(), id);
                                 alert(
@@ -122,7 +125,7 @@ export default function Friends(): JSX.Element {
     return (
         <>
             {/* your friends section */}
-            <section className="h-80 ml-4">
+            <section className="ml-4">
                 <h2>Your friends</h2>
                 <p className="ml-4">
                     Here you can view and manage your friends.
@@ -134,8 +137,8 @@ export default function Friends(): JSX.Element {
             <section className="h-80 ml-4">
                 <h2>Search for users</h2>
                 <p className="ml-4">
-                    Search for users by their user ID and to send them a friend
-                    request.
+                    Search for users by their user ID or their username to send
+                    them a friend request.
                 </p>
                 <aside className="align-left content-left justify-left text-left table ml-4">
                     <SearchFriends />
