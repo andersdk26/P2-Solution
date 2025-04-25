@@ -1,6 +1,9 @@
 'use client';
 import { JSX, useState } from 'react';
 import { searchUserById, user } from './friends';
+import { SendFriendRequest } from '@/actions/friends/friendRequests';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { GetFriends } from '@/actions/friends/friendsList';
 
 // input: takes a user and a conditional function as input
 function FriendRequest({
@@ -8,9 +11,14 @@ function FriendRequest({
     conditionalFunction,
 }: {
     user: user;
-    conditionalFunction: any; // figure out the actual typing required for functions
+    conditionalFunction: (boolean: boolean) => void; // figure out the actual typing required for functions
 }): JSX.Element {
     //returns the pop-up to send friend request
+    const [FriendsList, setFriendsList] = useState<number[]>([]);
+
+    const getFriendsList = async (): Promise<void> => {
+        setFriendsList(await GetFriends(await verifyUser()));
+    };
     return (
         <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-74">
             Send <b>{user.userName}</b> a friend request?
@@ -18,8 +26,15 @@ function FriendRequest({
             {/* send request button */}
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
-                onClick={() => {
-                    alert('Friend request sent');
+                onClick={async () => {
+                    await getFriendsList();
+                    if ((await verifyUser()) === user.userId) {
+                        alert('You can not send friend requests to yourself!');
+                    } else if (FriendsList.includes(user.userId)) {
+                        alert('You are already friends with this user!');
+                    } else {
+                        SendFriendRequest(await verifyUser(), user.userId);
+                    }
                     conditionalFunction(false);
                 }}
             >
@@ -47,7 +62,7 @@ export function SearchFriends(): JSX.Element {
     return (
         <>
             {/* search form input */}
-            <form className="w-120 justify-stretch mx-auto py-4 text-black">
+            <form className="w-120 justify-stretch py-4 text-black">
                 <input
                     type="search"
                     id="UserSearch"
@@ -63,14 +78,14 @@ export function SearchFriends(): JSX.Element {
             {/* section for the search results */}
             <section
                 id="searchResults"
-                className="absolute w-120 mx-auto bg-gray-100 rounded-3xl max-h-50 overflow-scroll"
+                className="absolute w-120 mx-auto bg-gray-100 rounded-3xl max-h-50"
             >
                 {searchResult.map((user) => (
-                    // movieId is used as identifier as it ensures that each item has a unique key.
+                    // User ID is used as identifier as it ensures that each item has a unique key.
                     <div key={user.userId}>
                         <p
                             onClick={() => {
-                                // set the current selected user to the user that is clicked
+                                // Set the current selected user to the user that is clicked on.
                                 setSelectedUser(user);
                                 setFriendRequestIconOpen(
                                     !isFriendRequestIconOpen
@@ -87,7 +102,7 @@ export function SearchFriends(): JSX.Element {
                 {/* the box to send friend request for that ID */}
                 {isFriendRequestIconOpen && (
                     <FriendRequest
-                        user={selectedUser}
+                        user={selectedUser!}
                         conditionalFunction={setFriendRequestIconOpen}
                     />
                 )}

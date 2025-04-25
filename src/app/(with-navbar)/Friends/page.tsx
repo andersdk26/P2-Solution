@@ -16,11 +16,13 @@ export default function Friends(): JSX.Element {
         []
     );
     const [friendRequestList, setFriendRequestList] = useState([
-        <p key={0}>No friend requests</p>,
+        <p key={0}>You have no pending friend requests.</p>,
     ]);
     const [FriendsList, setFriendsList] = useState<number[]>([]);
     const [friendsListObject, setFriendsListObject] = useState([
-        <p key={0}>Hej</p>,
+        <p className="ml-4" key={0}>
+            No friends to show.
+        </p>,
     ]);
 
     const getFriendRequests = async (): Promise<void> => {
@@ -35,10 +37,15 @@ export default function Friends(): JSX.Element {
         const updateFriendRequestList = async (): Promise<void> => {
             const resolvedRequests = await Promise.all(
                 FriendRequests.map(async (request) => (
-                    <div key={request.from}>
-                        <p>{await getUserById(request.from)}</p>
+                    <div
+                        className="flex items-start space-x-2"
+                        key={request.from}
+                    >
+                        <p className="my-auto w-64 py-4">
+                            {await getUserById(request.from)}
+                        </p>
                         <button
-                            className="cursor-pointer"
+                            className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
                             onClick={async () => {
                                 AcceptFriendRequest(
                                     request.from,
@@ -48,10 +55,10 @@ export default function Friends(): JSX.Element {
                                 getFriendsList();
                             }}
                         >
-                            ✔️
+                            Accept
                         </button>
                         <button
-                            className="cursor-pointer"
+                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
                             onClick={async () => {
                                 DeclineFriendRequest(
                                     request.from,
@@ -60,7 +67,7 @@ export default function Friends(): JSX.Element {
                                 getFriendRequests();
                             }}
                         >
-                            ❌
+                            Decline
                         </button>
                     </div>
                 ))
@@ -91,6 +98,7 @@ export default function Friends(): JSX.Element {
                         <button className="ml-4" onClick={() => alert('HI')}>
                             🫡
                         </button>
+                        {/* TODO: Gør så man kan fjerne venner. */}
                     </div>
                 ))
             );
@@ -102,25 +110,33 @@ export default function Friends(): JSX.Element {
     return (
         <>
             {/* your friends section */}
-            <section className="h-80">
-                <h1>Your friends</h1>
-                <p className="ml-4">Here you can view your friends</p>
+            <section className="h-80 ml-4">
+                <h2>Your friends</h2>
+                <p className="ml-4">
+                    Here you can view and manage your friends.
+                </p>
                 {friendsListObject}
             </section>
 
             {/* searching for users section */}
-            <section className="h-80">
+            <section className="h-80 ml-4">
                 <h2>Search for users</h2>
-                <p className="ml-8">Search by their user ID</p>
-                <aside className="align-left content-left justify-left text-left table mx-4">
+                <p className="ml-4">
+                    Search for users by their user ID and to send them a friend
+                    request.
+                </p>
+                <aside className="align-left content-left justify-left text-left table ml-4">
                     <SearchFriends />
                 </aside>
             </section>
 
             {/* friend requests section */}
-            <section className="h-80">
+            <section className="h-80 ml-4">
                 <h2>Friend requests</h2>
-                <div>{friendRequestList}</div>
+                <p className="ml-4">
+                    Here you can accept or decline incoming friend requests.
+                </p>
+                <div className="ml-4">{friendRequestList}</div>
             </section>
         </>
     );
