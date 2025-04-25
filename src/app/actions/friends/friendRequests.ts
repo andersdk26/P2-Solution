@@ -14,7 +14,7 @@ export async function GetFriendRequest(userID: number): Promise<
         .where(
             and(eq(friendsTable.userIdB, userID), eq(friendsTable.status, 0))
         );
-    console.log(await friendRequests);
+    console.log(friendRequests);
 
     return friendRequests;
 }
@@ -37,6 +37,20 @@ export async function AcceptFriendRequest(
     await db
         .update(friendsTable)
         .set({ status: 1 })
+        .where(
+            and(
+                eq(friendsTable.userIdA, userIDSender),
+                eq(friendsTable.userIdB, userIDReceiver)
+            )
+        );
+}
+
+export async function DeclineFriendRequest(
+    userIDSender: number,
+    userIDReceiver: number
+): Promise<void> {
+    await db
+        .delete(friendsTable)
         .where(
             and(
                 eq(friendsTable.userIdA, userIDSender),

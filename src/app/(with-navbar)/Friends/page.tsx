@@ -38,8 +38,8 @@ export default function Friends(): JSX.Element {
                         <button
                             onClick={async () =>
                                 AcceptFriendRequest(
-                                    await verifyUser(),
-                                    request.from
+                                    request.from,
+                                    await verifyUser()
                                 )
                             }
                         >
