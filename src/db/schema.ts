@@ -45,8 +45,7 @@ export type InserFriend = typeof friendsTable.$inferInsert;
 export type SelectFriend = typeof friendsTable.$inferSelect;
 
 export const groupsTable = sqliteTable('groups', {
-    id: integer('id').primaryKey(),
-    groupId: integer('groupId').notNull(),
+    groupId: integer('groupId').primaryKey(),
     groupName: text('groupName').notNull(),
     adminId: integer('adminId').notNull(),
     members: text('members').notNull(),
@@ -64,6 +63,19 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
+
+export const watchlistTable = sqliteTable('watchlist', {
+    id: integer('id').primaryKey(),
+    movieId: integer('movieId')
+        .notNull()
+        .references(() => moviesTable.id),
+    userId: integer('userId')
+        .notNull()
+        .references(() => usersTable.id),
+});
+
+export type InsertWatchlist = typeof watchlistTable.$inferInsert;
+export type SelectWatchlist = typeof watchlistTable.$inferSelect;
 
 export const testRatings = sqliteTable('testRatings', {
     id: integer('id').primaryKey(),
@@ -98,38 +110,6 @@ export const usersTable = sqliteTable('users', {
     lastLogin: text('last_login').default(sql`(CURRENT_TIMESTAMP)`),
     settings: text('settings').default(sql`'{}'`), // JSON stringified object
     profileIcon: text('profile_icon'),
-});
-
-// Contains genre and their boost values
-export const genreBoostTable = sqliteTable('genre_boost', {
-    id: integer('id').primaryKey(),
-    genre: text('genre').notNull(),
-    boost: integer('boost').notNull(),
-});
-
-export const seenListTable = sqliteTable('seen_list', {
-    id: integer('id').primaryKey(), // The id we use
-    userId: integer('user_id')
-        .notNull()
-        .references(() => usersTable.id), // Who owns the seen list
-});
-
-export const seenListMoviesTable = sqliteTable('seen_list_movies', {
-    seenListId: integer('seen_list_id')
-        .notNull()
-        .references(() => seenListTable.id), // User
-    movieId: integer('movie_id')
-        .notNull()
-        .references(() => moviesTable.id), // Movies
-});
-
-export const seenListGenreBoostTable = sqliteTable('seen_list_genre_boost', {
-    seenListId: integer('seen_list_id')
-        .notNull()
-        .references(() => seenListTable.id), // User property
-    genreBoostId: integer('genre_boost_id')
-        .notNull()
-        .references(() => genreBoostTable.id), // genre and boost property
 });
 
 export const groupInfoTable = sqliteTable('group_info', {
