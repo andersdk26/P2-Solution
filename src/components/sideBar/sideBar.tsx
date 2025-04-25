@@ -4,6 +4,7 @@ import { JSX, useState, useRef, useEffect } from 'react';
 import { movie, getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
+import '@/styles/mainPage.css'; // Import my CSS file
 
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
@@ -13,21 +14,23 @@ export default function SideBar(id: number): JSX.Element {
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     const handleImageClick = async (movieId: number): Promise<void> => {
-        try {
-            const movie = await getMovieById(movieId); // Fetch movie by ID
-            if (!movie) {
-                console.error(`Movie with ID ${movieId} not found.`);
-                return;
+        if (movieId !== 0) {
+            try {
+                const movie = await getMovieById(movieId); // Fetch movie by ID
+                if (!movie) {
+                    console.error(`Movie with ID ${movieId} not found.`);
+                    return;
+                }
+                setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
+                setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
+                setSelectedRating(null); // This part needs some more work
+                setSelectedMovieId(movieId); // set the rating to the selected movie ID
+                if (backgroundDivRef.current) {
+                    backgroundDivRef.current.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Failed to fetch movie by ID:', error);
             }
-            setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
-            setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-            setSelectedRating(null); // This part needs some more work
-            setSelectedMovieId(movieId); // set the rating to the selected movie ID
-            if (backgroundDivRef.current) {
-                backgroundDivRef.current.style.display = 'block';
-            }
-        } catch (error) {
-            console.error('Failed to fetch movie by ID:', error);
         }
     };
 

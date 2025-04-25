@@ -10,15 +10,24 @@ export default function RatingPopcorn(): JSX.Element {
     const handleRatingChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        const newRating = Number(event.target.value);
+        const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
+
         if (newRating === selectedRating) {
-            //undo rating
-            setSelectedRating(0);
-        } else {
-            // To change rating
-            setSelectedRating(Number(event.currentTarget.value));
-            console.log('event:', event.currentTarget.value);
-            console.log('selected:', selectedRating);
+            // if the previously new rating is equal to the newly selected rating,
+            setSelectedRating(0); // then delete the raitng
+            console.log('deletus'); // console log to visualise the deletion
+        } else if (newRating !== selectedRating) {
+            // else if the previously new rating does not equal to the selected rating,
+            setSelectedRating(Number(event.currentTarget.value)); // then the newly selected rating will become the new rating
+            console.log(newRating); // console log to visualise the current rating
+
+            //want it to save the rating to the db
+
+            // } else {
+            //     // To change rating
+            //     setSelectedRating(Number(event.currentTarget.value));
+            //     console.log('event:', event.currentTarget.value);
+            //     console.log('selected:', selectedRating);
         }
     };
 
