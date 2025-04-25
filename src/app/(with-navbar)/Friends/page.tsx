@@ -3,6 +3,7 @@ import React, { JSX, useEffect, useState } from 'react';
 import { SearchFriends } from '@/components/Profile/Friends/searchFriends';
 import {
     AcceptFriendRequest,
+    DeclineFriendRequest,
     GetFriendRequest,
 } from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
@@ -45,7 +46,16 @@ export default function Friends(): JSX.Element {
                         >
                             ✔️
                         </button>
-                        <button onClick={() => alert('NO')}>❌</button>
+                        <button
+                            onClick={async () =>
+                                DeclineFriendRequest(
+                                    request.from,
+                                    await verifyUser()
+                                )
+                            }
+                        >
+                            ❌
+                        </button>
                     </div>
                 ))
             );
