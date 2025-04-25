@@ -2,7 +2,7 @@
 
 import { usersTable } from '@/db/schema';
 import { db } from 'db';
-import { like } from 'drizzle-orm';
+import { or, like } from 'drizzle-orm';
 
 export type user = {
     userId: number;
@@ -22,9 +22,14 @@ export async function searchUserById(id: string): Promise<user[]> {
             userName: usersTable.username,
         })
         .from(usersTable)
-        .where(like(usersTable.id, `${id}%`));
+        .where(
+            or(
+                like(usersTable.id, `${id}%`),
+                like(usersTable.username, `${id}%`)
+            )
+        );
 
-    return result;
+    return result.slice(0, 5);
 }
 
 // export async function searchForUsers(
