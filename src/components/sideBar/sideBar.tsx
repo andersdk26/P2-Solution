@@ -15,7 +15,9 @@ type WatchlistStatus =
     | 'setReq'
     | 'unsetReq'
     | 'setCheck'
-    | 'unsetCheck';
+    | 'unsetCheck'
+    | 'setCross'
+    | 'unsetCross';
 
 const spinner = (
     <svg
@@ -36,25 +38,6 @@ const spinner = (
     </svg>
 );
 
-const checkmark = (
-    <svg
-        data-checked-animation
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="feather feather-check-circle"
-    >
-        <path data-circle d="M22 11.07V12a10 10 0 1 1-5.93-9.14" />
-        <path data-checkmark d="M23 3L12 14l-3-3" />
-    </svg>
-);
-
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
@@ -63,6 +46,63 @@ export default function SideBar(id: number): JSX.Element {
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     const [watchlistStatus, setWatchlistStatus] =
         useState<WatchlistStatus>('unset');
+    const svgRef = useRef<SVGSVGElement>(null);
+
+    const checkmark = (
+        <svg
+            ref={svgRef}
+            viewBox="0 0 52 52"
+            width="100"
+            height="100"
+            xmlns="http://www.w3.org/2000/svg"
+            begin="indefinite"
+        >
+            <path
+                fill="none"
+                stroke="white"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14 27 L22 35 L38 19"
+            >
+                <animate
+                    attributeName="stroke-dasharray"
+                    from="0, 100"
+                    to="100, 0"
+                    dur="2s"
+                    fill="freeze"
+                />
+            </path>
+        </svg>
+    );
+
+    const cross = (
+        <svg
+            ref={svgRef}
+            viewBox="0 0 52 52"
+            width="100"
+            height="100"
+            xmlns="http://www.w3.org/2000/svg"
+            begin="indefinite"
+        >
+            <path
+                fill="none"
+                stroke="white"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 16 L36 36 M36 16 L16 36"
+            >
+                <animate
+                    attributeName="stroke-dasharray"
+                    from="0, 200"
+                    to="100, 0"
+                    dur="2s"
+                    fill="freeze"
+                />
+            </path>
+        </svg>
+    );
 
     const handleImageClick = async (movieId: number): Promise<void> => {
         try {
@@ -84,7 +124,7 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     useEffect(() => {
-        const fetchMovie = async () => {
+        const fetchMovie = async (): Promise<void> => {
             await handleImageClick(id);
         };
         fetchMovie();
@@ -114,8 +154,10 @@ export default function SideBar(id: number): JSX.Element {
 
                 if (message === 'Movie added to the watchlist successfully.') {
                     handleLoadingCompleation('setReq');
+                } else if (message === 'Movie is already in the watchlist.') {
+                    handleLoadingMalfunction('set');
                 } else {
-                    handleLoadingCompleation('unsetReq');
+                    handleLoadingMalfunction('unset');
                 }
             } catch (error) {
                 console.error('Failed to add movie to watchlist:', error);
@@ -137,8 +179,10 @@ export default function SideBar(id: number): JSX.Element {
                     'successfully removed the Movie from the watchlist.'
                 ) {
                     handleLoadingCompleation('unsetReq');
+                } else if (message === 'Movie is not in the watchlist.') {
+                    handleLoadingMalfunction('unset');
                 } else {
-                    handleLoadingCompleation('setReq');
+                    handleLoadingMalfunction('set');
                 }
             } catch (error) {
                 console.error('Failed to remove movie from watchlist:', error);
@@ -146,7 +190,7 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
-    const handleLoadingCompleation = (state: WatchlistStatus): void => {
+    const handleLoadingCompleation = (state: 'setReq' | 'unsetReq'): void => {
         setWatchlistStatus(state === 'setReq' ? 'setCheck' : 'unsetCheck');
 
         setTimeout(
@@ -154,6 +198,38 @@ export default function SideBar(id: number): JSX.Element {
             1000
         );
     };
+
+    const handleLoadingMalfunction = (state: 'set' | 'unset'): void => {
+        alert('MAL');
+        setWatchlistStatus(state === 'set' ? 'setCross' : 'unsetCross');
+
+        setTimeout(
+            () => setWatchlistStatus(state === 'set' ? 'set' : 'unset'),
+            1000
+        );
+    };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    const svg = svgRef.current;
+                    const anim = svg?.querySelector(
+                        'animate'
+                    ) as SVGAnimateElement;
+                    anim?.beginElement();
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (svgRef.current) {
+            observer.observe(svgRef.current);
+        }
+
+        return (): void => observer.disconnect();
+    }, [watchlistStatus]);
 
     return (
         <>
@@ -333,7 +409,7 @@ export default function SideBar(id: number): JSX.Element {
                         </div>
                         {/* buttoonsssssss */}
                         <button
-                            className="basicBtn mt-4"
+                            className="basicBtn mt-4 w-60"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':
@@ -360,8 +436,12 @@ export default function SideBar(id: number): JSX.Element {
                                   : watchlistStatus === 'setCheck'
                                     ? checkmark
                                     : watchlistStatus === 'unsetCheck'
-                                      ? checkmark
-                                      : spinner}
+                                      ? cross
+                                      : watchlistStatus === 'setCross'
+                                        ? cross
+                                        : watchlistStatus === 'unsetCross'
+                                          ? checkmark
+                                          : spinner}
                         </button>
                     </div>
                 </section>
