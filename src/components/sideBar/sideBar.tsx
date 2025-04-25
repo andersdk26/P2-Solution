@@ -22,8 +22,10 @@ type WatchlistStatus =
 const spinner = (
     <svg
         aria-hidden="true"
-        className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 mx-auto"
         viewBox="0 0 100 101"
+        width="35"
+        height="35"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -51,9 +53,10 @@ export default function SideBar(id: number): JSX.Element {
     const checkmark = (
         <svg
             ref={svgRef}
+            className="mx-auto"
             viewBox="0 0 52 52"
-            width="100"
-            height="100"
+            width="35"
+            height="35"
             xmlns="http://www.w3.org/2000/svg"
             begin="indefinite"
         >
@@ -79,9 +82,10 @@ export default function SideBar(id: number): JSX.Element {
     const cross = (
         <svg
             ref={svgRef}
+            className="mx-auto"
             viewBox="0 0 52 52"
-            width="100"
-            height="100"
+            width="35"
+            height="35"
             xmlns="http://www.w3.org/2000/svg"
             begin="indefinite"
         >
@@ -200,7 +204,6 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     const handleLoadingMalfunction = (state: 'set' | 'unset'): void => {
-        alert('MAL');
         setWatchlistStatus(state === 'set' ? 'setCross' : 'unsetCross');
 
         setTimeout(
@@ -409,7 +412,7 @@ export default function SideBar(id: number): JSX.Element {
                         </div>
                         {/* buttoonsssssss */}
                         <button
-                            className="basicBtn mt-4 w-60"
+                            className="basicBtn mt-4 w-60 h-12"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':
@@ -436,11 +439,11 @@ export default function SideBar(id: number): JSX.Element {
                                   : watchlistStatus === 'setCheck'
                                     ? checkmark
                                     : watchlistStatus === 'unsetCheck'
-                                      ? cross
+                                      ? checkmark
                                       : watchlistStatus === 'setCross'
                                         ? cross
                                         : watchlistStatus === 'unsetCross'
-                                          ? checkmark
+                                          ? cross
                                           : spinner}
                         </button>
                     </div>
