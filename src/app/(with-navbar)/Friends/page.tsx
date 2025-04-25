@@ -23,10 +23,11 @@ export default function Friends(): JSX.Element {
         <p key={0}>Hej</p>,
     ]);
 
+    const getFriendRequests = async (): Promise<void> => {
+        setFriendRequests(await GetFriendRequest(await verifyUser()));
+    };
+
     useEffect(() => {
-        const getFriendRequests = async (): Promise<void> => {
-            setFriendRequests(await GetFriendRequest(await verifyUser()));
-        };
         getFriendRequests();
     }, []);
 
@@ -37,22 +38,27 @@ export default function Friends(): JSX.Element {
                     <div key={request.from}>
                         <p>{await getUserById(request.from)}</p>
                         <button
-                            onClick={async () =>
+                            className="cursor-pointer"
+                            onClick={async () => {
                                 AcceptFriendRequest(
                                     request.from,
                                     await verifyUser()
-                                )
-                            }
+                                );
+                                getFriendRequests();
+                                getFriendsList();
+                            }}
                         >
                             ✔️
                         </button>
                         <button
-                            onClick={async () =>
+                            className="cursor-pointer"
+                            onClick={async () => {
                                 DeclineFriendRequest(
                                     request.from,
                                     await verifyUser()
-                                )
-                            }
+                                );
+                                getFriendRequests();
+                            }}
                         >
                             ❌
                         </button>
@@ -64,10 +70,11 @@ export default function Friends(): JSX.Element {
         updateFriendRequestList();
     }, [FriendRequests]);
 
+    const getFriendsList = async (): Promise<void> => {
+        setFriendsList(await GetFriends(await verifyUser()));
+    };
+
     useEffect(() => {
-        const getFriendsList = async (): Promise<void> => {
-            setFriendsList(await GetFriends(await verifyUser()));
-        };
         getFriendsList();
     }, []);
 
