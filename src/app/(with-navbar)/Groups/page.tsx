@@ -20,14 +20,6 @@ const tempGroup: group = {
     settings: '🎥|#9fa3d1|#282f72',
 };
 
-const tempGroup2: group = {
-    groupId: 12345,
-    groupName: 'TobiasOgAnders',
-    groupAdmin: 6050670358,
-    groupMembers: '6050670358|8271494205|6565229868',
-    settings: '🍿|#ffffff|#000000',
-};
-
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
