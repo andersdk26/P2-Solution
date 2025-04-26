@@ -13,6 +13,8 @@ export default function AdminGroupIcon({
 }: group): JSX.Element {
     //keeps track of the pop up
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
+    //open popup for adding group members
+    const [isAddFriendsOpen, setAddFriendsOpen] = useState(false);
     //the array with the usernames of members
     const [MemberUsernames, setMemberUsernames] = useState<string[]>([]);
     //the username of the admin
@@ -131,7 +133,7 @@ export default function AdminGroupIcon({
                             <br />
                             {/* Invite group members */}
                             <button className="bg-green-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80">
-                                Invite members
+                                Add members
                             </button>
 
                             {/* Leave group button */}

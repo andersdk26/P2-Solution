@@ -130,10 +130,18 @@ export function FormCreateGroup(): JSX.Element {
         location.reload();
     };
 
+    // reset group button
+    const resetSettings = () => {
+        setEmojiSelect('🎥');
+        setBackgroundColor('#9fa3d1');
+        setTextColor('#282f72');
+        setGroupName('');
+    };
+
     return (
         <>
             {/* Flex container for the content*/}
-            <section className="grid grid-cols-2">
+            <section className="grid grid-cols-2 mb-8">
                 {/* submit form , left side */}
                 <div className="text-left ml-4 text-xl">
                     {/* form for adding group members */}
@@ -249,13 +257,24 @@ export function FormCreateGroup(): JSX.Element {
                         >
                             Create Group
                         </button>
+
+                        <button
+                            className="text-[#ededed] hover:opacity-80 font-bold py-2 px-4 ml-2 rounded-sm cursor-pointer"
+                            type="submit"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                resetSettings();
+                            }}
+                        >
+                            <u>Reset settings</u>
+                        </button>
                     </form>
                 </div>
 
                 {/* Right div for display group */}
-                <section className="flex grid-cols-4 ">
+                <section className="flex text-center align-items">
                     {/* right for the group icon display */}
-                    <aside className="col-span-3">
+                    <aside className="flex ">
                         {/* Group box visual */}
                         <div
                             // styling inline because tailwind doesnt like dynamic color changes
@@ -263,7 +282,7 @@ export function FormCreateGroup(): JSX.Element {
                                 backgroundColor: BackgroundColor,
                                 color: TextColor,
                             }}
-                            className={` size-60 border-2 border-solid border-[#282F72] rounded-3xl m-4 text-center align-center content-center justify-center`}
+                            className={`size-60 border-2 border-solid border-[#282F72] rounded-3xl m-4 text-center align-center content-center justify-center`}
                         >
                             <p className={`text-xl m-2 font-bold`}>
                                 {GroupName}
@@ -278,9 +297,9 @@ export function FormCreateGroup(): JSX.Element {
                         </div>
                     </aside>
                     {/* Left for the members list */}
-                    <aside className="text-left text-col-span-1 justify-left content-left align-left left-0 text-2xl">
+                    <aside className="text-left justify-left content-left align-left left-0 text-2xl">
                         {/* Display members */}
-                        <p className="mt-1">Group members:</p>
+                        <p className="mt-3">Group members:</p>
                         <p>You</p>
                         {SelectedUsers.map((user) => (
                             <div key={user.userId}>
