@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { group } from './group';
 import getUserById from '@/actions/friends/getUserById';
 import { searchUserById, user } from '../Profile/Friends/friends';
-import { AddUserToGroup } from '@/actions/groups/adminGroupActions';
+import {
+    AddUserToGroup,
+    DeleteGroup,
+} from '@/actions/groups/adminGroupActions';
 
 export default function AdminGroupIcon({
     groupId,
@@ -16,7 +19,12 @@ export default function AdminGroupIcon({
     //keeps track of the pop up
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
     //open popup for adding group members
-    const [isAddFriendsOpen, setAddFriendsOpen] = useState(false);
+    const [isAddMembersOpen, setAddMembersOpen] = useState(false);
+    // open pop up to confirm delete group
+    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
+    // open popup for removing group members
+    const [isRemoveMembersOpen, setRemoveMembersOpen] = useState(false);
     //the array with the usernames of members
     const [MemberUsernames, setMemberUsernames] = useState<string[]>([]);
     //the username of the admin
@@ -57,7 +65,7 @@ export default function AdminGroupIcon({
         // notify that there has been a success
         alert(`${addedUser} has been added to your group!`);
         // close the pop up for the add friend
-        setAddFriendsOpen(false);
+        setAddMembersOpen(false);
     };
 
     return (
@@ -147,14 +155,29 @@ export default function AdminGroupIcon({
                             <button
                                 className="bg-green-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
                                 onClick={() => {
-                                    setAddFriendsOpen(true);
+                                    setAddMembersOpen(true);
                                 }}
                             >
                                 Add members
                             </button>
 
-                            {/* Leave group button */}
-                            <button className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80">
+                            {/* remove members button */}
+                            <button
+                                className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                                onClick={() => {
+                                    setRemoveMembersOpen(true);
+                                }}
+                            >
+                                Remove members
+                            </button>
+
+                            {/* delete group button */}
+                            <button
+                                className="bg-red-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                                onClick={() => {
+                                    setConfirmDeleteOpen(true);
+                                }}
+                            >
                                 Delete group
                             </button>
                         </div>
@@ -199,8 +222,8 @@ export default function AdminGroupIcon({
                     </div>
                 </section>
             )}
-            {/* the information about groups in the box */}
-            {isAddFriendsOpen && (
+            {/* add members pop up*/}
+            {isAddMembersOpen && (
                 <aside
                     className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
                 >
@@ -212,7 +235,7 @@ export default function AdminGroupIcon({
                         <button
                             className="cursor-pointer float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 "
                             onClick={() => {
-                                setAddFriendsOpen(false);
+                                setAddMembersOpen(false);
                             }}
                         >
                             <u>Close</u>
@@ -259,6 +282,78 @@ export default function AdminGroupIcon({
                                     </div>
                                 ))}
                             </aside>
+                        </div>
+                    </div>
+                </aside>
+            )}
+            {/* remove members pop up */}
+            {isRemoveMembersOpen && (
+                <aside
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                >
+                    {/* the box container */}
+                    <div
+                        className={`z-50 w-2/3 h-1/2 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 align-center items-center overflow-scroll`}
+                    >
+                        {/* the close button */}
+                        <button
+                            className="cursor-pointer float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 "
+                            onClick={() => {
+                                setRemoveMembersOpen(false);
+                            }}
+                        >
+                            <u>Close</u>
+                        </button>
+
+                        <div className="content-center text-center items-center mt-10">
+                            <p
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    alert(':D :) :| :( ');
+                                }}
+                            >
+                                :D
+                            </p>
+                        </div>
+                    </div>
+                </aside>
+            )}
+
+            {/* the information about groups in the box */}
+            {isConfirmDeleteOpen && (
+                <aside
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                >
+                    {/* the box container */}
+                    <div
+                        className={`z-50 w-2/3 h-1/2 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 overflow-scroll`}
+                    >
+                        {/* the close button */}
+                        <button
+                            className="cursor-pointer float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 "
+                            onClick={() => {
+                                setConfirmDeleteOpen(false);
+                            }}
+                        >
+                            <u>Close</u>
+                        </button>
+
+                        <div className="align-center items-center content-center text-center mt-10">
+                            <p className="text-red-500 text-4xl ">
+                                Are you sure you want to delete the group?
+                            </p>
+                            <p>This action cannot be undone.</p>
+                            <button
+                                className="bg-red-500 text-4xl text-black m-12 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                                onClick={async () => {
+                                    await DeleteGroup(groupId);
+                                    setConfirmDeleteOpen(false);
+                                    setAboutGroupOpen(false);
+                                    location.reload();
+                                }}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </aside>

@@ -110,6 +110,9 @@ export function FormCreateGroup(): JSX.Element {
         // Member user array into string
         let memberString = `${currentUser}`;
         for (const members of SelectedUsers) {
+            if (members.userId === currentUser) {
+                continue;
+            }
             memberString += `|${members.userId}`;
         }
 

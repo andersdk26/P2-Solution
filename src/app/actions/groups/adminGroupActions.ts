@@ -24,3 +24,7 @@ export async function AddUserToGroup(
     console.log(addedUserId);
     console.log('User added to group');
 }
+
+export async function DeleteGroup(groupId: number): Promise<void> {
+    await db.delete(groupsTable).where(eq(groupsTable.groupId, groupId));
+}
