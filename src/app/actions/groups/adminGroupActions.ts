@@ -1,5 +1,6 @@
 'use server';
 
+import { changeSettingsProps } from '@/components/groupPage/changeGroupSettings';
 import { db } from '@/db/index';
 import { groupsTable } from '@/db/schema';
 import { and, eq, like, not } from 'drizzle-orm';
@@ -27,4 +28,24 @@ export async function AddUserToGroup(
 
 export async function DeleteGroup(groupId: number): Promise<void> {
     await db.delete(groupsTable).where(eq(groupsTable.groupId, groupId));
+}
+
+export async function ChangeDbGroupSettings(
+    groupId: number,
+    newSettings: string
+): Promise<void> {
+    await db
+        .update(groupsTable)
+        .set({ settings: newSettings })
+        .where(eq(groupsTable.groupId, groupId));
+}
+
+export async function ChangeDbGroupName(
+    groupId: number,
+    newGroupName: string
+): Promise<void> {
+    await db
+        .update(groupsTable)
+        .set({ groupName: newGroupName })
+        .where(eq(groupsTable.groupId, groupId));
 }

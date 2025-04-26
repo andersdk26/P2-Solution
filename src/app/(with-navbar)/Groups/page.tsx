@@ -51,7 +51,10 @@ export default function GroupSettings(): JSX.Element {
                 <section>
                     <h2 className="ml-4">Your groups</h2>
                     <p className="text-2xl ml-4">
-                        <i>You are admin</i>
+                        <i>
+                            You are the admin. Only you can add or remove
+                            members.{' '}
+                        </i>
                     </p>
                     <div className="inline-flex overflow-scroll">
                         {AdminGroups.map((Group) => (
