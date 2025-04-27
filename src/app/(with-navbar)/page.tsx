@@ -41,10 +41,20 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async () =>
             setRecommendedMovies(
+<<<<<<< Updated upstream
                 await collaborativeFiltering(await verifyUser())
                 // await contentBasedFiltering(await verifyUser())
             );
         getRecommendedMovies();
+=======
+                // Use "await verifyUser()" or a group ID as input parameter.
+                //await collaborativeFiltering(5928906644, 'group')
+                await contentBasedFiltering(5928906644, 'group')
+            );
+        getRecommendedMovies();
+
+        //groupAggregation(12345);
+>>>>>>> Stashed changes
     }, []);
 
     const moviesPerPage = 3;

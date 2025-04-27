@@ -84,6 +84,24 @@ export const testRatings = sqliteTable('testRatings', {
     rating: integer('rating').notNull(),
     timestamp: integer('timestamp').notNull(),
 });
+<<<<<<< Updated upstream
+=======
+// export const testRatings = sqliteTable(
+//     'testRatings',
+//     {
+//         id: integer('id').primaryKey(),
+//         userId: integer('userId').notNull(),
+//         movieId: integer('movieId').notNull(),
+//         rating: integer('rating').notNull(),
+//         timestamp: text('timestamp')
+//             .default(sql`(CURRENT_TIMESTAMP)`)
+//             .notNull(),
+//     },
+//     (table) => ({
+//         uniqueUserMovie: unique().on(table.userId, table.movieId), // Add UNIQUE constraint
+//     })
+// );
+>>>>>>> Stashed changes
 
 export type InsertTestRatings = typeof testRatings.$inferInsert;
 export type SelectTestRatings = typeof testRatings.$inferSelect;
