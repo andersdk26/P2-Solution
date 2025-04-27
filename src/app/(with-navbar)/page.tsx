@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
             setRecommendedMovies(
                 // Use "await verifyUser()" or a group ID as input parameter.
                 // await collaborativeFiltering(12345, 'group')
-                await contentBasedFiltering(12345, 'group')
+                await contentBasedFiltering(5928906644, 'group')
             );
         getRecommendedMovies();
 
