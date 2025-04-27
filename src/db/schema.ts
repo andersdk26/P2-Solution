@@ -86,7 +86,10 @@ export const testRatings = sqliteTable('testRatings', {
 });
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 // export const testRatings = sqliteTable(
@@ -105,6 +108,9 @@ export const testRatings = sqliteTable('testRatings', {
 //     })
 // );
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
