@@ -11,7 +11,7 @@ export async function generateToken(userId: string): Promise<string> {
         throw new Error('JWT_SECRET is not defined');
     }
 
-    const object = JSON.stringify({ userId: userId });
+    const object = JSON.stringify({ userId });
 
     // Create JWT token with HS512 algorithm
     return new Promise((resolve, reject) => {

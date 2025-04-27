@@ -4,29 +4,53 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import { moviesTable, testRatings } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
-import { stringify } from 'querystring';
+import groupAggregation from '../GroupAggregation/groupAggregation';
+
+type averageRating = {
+    runningTotal: number;
+    timesRated: number;
+};
 
 export default async function contentBasedFiltering(
-    targetUserId: number
+    targetId: number,
+    type: string
 ): Promise<movie[]> {
-    // Fetch the target user's ratings.
-    const targetUserRatings = await db
-        .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
-        })
-        .from(testRatings)
-        .where(eq(testRatings.userId, targetUserId));
+    // Declare variable used for storing movie ratings.
+    let targetUserRatings;
 
-    console.log('Got target user ratings.');
-    console.log(targetUserRatings);
+    // Check whether the input ID represents a group or an individual.
+    if (type === 'individual') {
+        // Fetch the target user's ratings.
+        targetUserRatings = await db
+            .select({
+                userId: testRatings.userId,
+                movieId: testRatings.movieId,
+                movieRating: testRatings.rating,
+            })
+            .from(testRatings)
+            .where(eq(testRatings.userId, targetId));
+
+        console.log('Got target user ratings.');
+        console.log(targetUserRatings);
+    } else if (type === 'group') {
+        // Fetch the target users' average ratings.
+        targetUserRatings = await groupAggregation(targetId);
+
+        // Abort recommendation algorithm if the group has not rated enough movies.
+        if (targetUserRatings.length < 10) {
+            console.log('Target group has not rated enough movies.');
+            return [];
+        }
+    }
+
+    // Find the total number of movies rated by the target user.
+    const totalMoviesRated = targetUserRatings!.length;
 
     // Initialise genre score map.
-    const genreScoreMap = new Map<string, number>();
+    const averageGenreRating = new Map<string, averageRating>();
 
     // Iterate through each rating made by the target user.
-    for (const rating of targetUserRatings) {
+    for (const rating of targetUserRatings!) {
         // Fetch the movie in question.
         const movie = await getMovieById(rating.movieId);
 
@@ -46,21 +70,34 @@ export default async function contentBasedFiltering(
             // Iterate through each genre.
             for (const genre of genreArray) {
                 // If the genre score map does not contain an entry for the specified genre, initialise it.
-                if (!genreScoreMap.has(genre)) {
-                    genreScoreMap.set(genre, 1);
+                if (!averageGenreRating.has(genre)) {
+                    averageGenreRating.set(genre, {
+                        runningTotal: 0,
+                        timesRated: 0,
+                    });
                 }
 
                 // Update the score for the current genre.
-                genreScoreMap.set(
-                    genre,
-                    genreScoreMap.get(genre)! + rating.movieRating
-                );
+                averageGenreRating.set(genre, {
+                    runningTotal:
+                        averageGenreRating.get(genre)!.runningTotal +
+                        rating.movieRating,
+                    timesRated: averageGenreRating.get(genre)!.timesRated + 1,
+                });
             }
         }
     }
 
-    console.log('Genres have been scored.');
-    console.log(genreScoreMap);
+    // Convert running total and times rated to a score for each genre.
+    const genreScoreMap = new Map<string, number>();
+
+    for (const genre of averageGenreRating) {
+        genreScoreMap.set(
+            genre[0],
+            (genre[1].runningTotal / genre[1].timesRated) *
+                (genre[1].timesRated / totalMoviesRated)
+        );
+    }
 
     // Fetch all movies from the database.
     const movies = await db
@@ -82,7 +119,7 @@ export default async function contentBasedFiltering(
         // Check if movie has already been rated by the target user.
         let movieHasBeenRated = 0;
 
-        for (const rating of targetUserRatings) {
+        for (const rating of targetUserRatings!) {
             if (rating.movieId === movie.movieId) {
                 movieHasBeenRated = 1;
                 break;
@@ -106,7 +143,7 @@ export default async function contentBasedFiltering(
         }
 
         // Set movie score.
-        movieScoreMap.set(movie.movieId, score);
+        movieScoreMap.set(movie.movieId, score / genres.length);
     }
 
     // Turn map into array.
@@ -129,6 +166,10 @@ export default async function contentBasedFiltering(
 
         // If the movie exists, add it to the recommended movies array.
         if (m !== null) {
+            console.log();
+            console.log(m.movieTitle);
+            console.log(m.movieGenres);
+            console.log(movie[1]);
             recommendedMovies.push(m);
         }
     }

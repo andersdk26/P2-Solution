@@ -14,6 +14,7 @@ import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
+
     const [selectedRating, setSelectedRating] = useState<number>(0);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +29,7 @@ export default function SideBar(id: number): JSX.Element {
                 }
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
+
                 setSelectedRating(0); // This part needs some more work
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
@@ -40,6 +42,7 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     useEffect(() => {
+
         (async (): Promise<void> => {
             if (selectedMovieId === null) return; // If no movie is selected, do nothing
             setSelectedRating(await getMovieRating(selectedMovieId));
@@ -83,7 +86,7 @@ export default function SideBar(id: number): JSX.Element {
                     }}
                 ></div>
             )}
-
+        
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
