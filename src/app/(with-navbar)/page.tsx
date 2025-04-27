@@ -39,28 +39,13 @@ export default function Home(): JSX.Element {
             .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async () =>
-            setRecommendedMovies(
-<<<<<<< Updated upstream
-                await collaborativeFiltering(await verifyUser())
-                // await contentBasedFiltering(await verifyUser())
-            );
+        // Get recommended movies by passing user ID as input parameter.
+        const getRecommendedMovies = async (): Promise<void> =>
+            setRecommendedMovies();
+            // Use "await verifyUser()" or a group ID as input parameter.
+            //await collaborativeFiltering(await verifyUser(), 'individual')
+            // await contentBasedFiltering(12345, 'group')
         getRecommendedMovies();
-=======
-                // Use "await verifyUser()" or a group ID as input parameter.
-                //await collaborativeFiltering(5928906644, 'group')
-                await contentBasedFiltering(5928906644, 'group')
-            );
-        getRecommendedMovies();
-
-        //groupAggregation(12345);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }, []);
 
     const moviesPerPage = 3;
