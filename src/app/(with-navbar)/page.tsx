@@ -54,6 +54,9 @@ export default function Home(): JSX.Element {
         getRecommendedMovies();
 
         //groupAggregation(12345);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }, []);
 
