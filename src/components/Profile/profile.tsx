@@ -43,10 +43,7 @@ const Profile = (): JSX.Element => {
 
     return (
         <>
-            <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="centerMyDivPlease"
-            >
+            <button onClick={toggleDropdown} className="centerMyDivPlease">
                 <ProfileImage />
             </button>
             {isDropdownOpen && (

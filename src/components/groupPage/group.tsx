@@ -1,12 +1,17 @@
 'use server';
 
-import { groupInfoTable } from '@/db/schema';
+import getUserById from '@/actions/friends/getUserById';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import { groupsTable } from '@/db/schema';
 import { db } from 'db';
-import { like } from 'drizzle-orm';
+import { eq, like, ne, and, ilike } from 'drizzle-orm';
 
 export type group = {
     groupId: number;
-    groupAdmin: string;
+    groupName: string;
+    groupAdmin: number;
+    groupMembers: string;
+    settings: string;
 };
 
 export async function getGroupById(id: string): Promise<group[]> {
@@ -18,11 +23,52 @@ export async function getGroupById(id: string): Promise<group[]> {
     // search db for id
     const result = await db
         .select({
-            groupId: groupInfoTable.groupId,
-            groupAdmin: groupInfoTable.groupAdmin,
+            groupId: groupsTable.groupId,
+            groupName: groupsTable.groupName,
+            groupAdmin: groupsTable.adminId,
+            groupMembers: groupsTable.members,
+            settings: groupsTable.settings,
         })
-        .from(groupInfoTable)
-        .where(like(groupInfoTable.groupId, `${id}%`));
+        .from(groupsTable)
+        .where(like(groupsTable.groupId, `${id}%`));
+
+    return result;
+}
+
+export async function getGroupsByAdminId(id: number): Promise<group[]> {
+    // search db for id, admin id and current user id is the same
+    const result = await db
+        .select({
+            groupId: groupsTable.groupId,
+            groupName: groupsTable.groupName,
+            groupAdmin: groupsTable.adminId,
+            groupMembers: groupsTable.members,
+            settings: groupsTable.settings,
+        })
+        .from(groupsTable)
+        .where(eq(groupsTable.adminId, id));
+
+    return result;
+}
+
+//return array with groups that part of but not admin
+export async function getRegularGroupsByMemberId(id: number): Promise<group[]> {
+    // search db for id
+    const result = await db
+        .select({
+            groupId: groupsTable.groupId,
+            groupName: groupsTable.groupName,
+            groupAdmin: groupsTable.adminId,
+            groupMembers: groupsTable.members,
+            settings: groupsTable.settings,
+        })
+        .from(groupsTable)
+        .where(
+            and(
+                like(groupsTable.members, `%${id}%`),
+                ne(groupsTable.adminId, id)
+            )
+        );
 
     return result;
 }

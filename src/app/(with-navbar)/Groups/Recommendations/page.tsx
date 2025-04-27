@@ -15,11 +15,6 @@ import collaborativeFiltering from '@/components/CollaborativeFiltering/collabor
 import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
-import verifyUser from '@/actions/logIn/authenticateUser';
-import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
-import { useRouter } from 'next/router';
-import groupAggregation from '@/components/GroupAggregation/groupAggregation';
-// import { getMoviesByIds } from '@/actions/movie/movie';
 
 import SideBar from '@/components/sideBar/sideBar';
 
@@ -29,7 +24,16 @@ export default function Home(): JSX.Element {
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    const [groupName, setGroupName] = useState<string>();
+    const [groupId, setGroupId] = useState<number>();
+
     useEffect(() => {
+        const gn = JSON.parse(localStorage.getItem('groupName') || '');
+        setGroupName(gn);
+
+        const gi = JSON.parse(localStorage.getItem('groupId') || '');
+        setGroupId(gi);
+
         // Fetch the JSON file when the page loads
         fetch('Movie.json')
             .then((response) => response.json())
@@ -37,12 +41,12 @@ export default function Home(): JSX.Element {
             .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
-        // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
-            //setRecommendedMovies();
+            // setRecommendedMovies();
             // Use "await verifyUser()" or a group ID as input parameter.
-            await collaborativeFiltering(await verifyUser(), 'individual')
+            //await collaborativeFiltering(groupId!, 'group')
             // await contentBasedFiltering(12345, 'group')
+
             getRecommendedMovies();
     }, []);
 
@@ -82,9 +86,6 @@ export default function Home(): JSX.Element {
 
     return (
         <>
-            {/* Deselecting sideBar was here */}
-
-            {/*Container for everything in main page below header and above footer*/}
             <div>
                 {/*Left Panel to Curtain Left Image*/}
                 <div className="float-left h-auto w-auto z-2">
@@ -114,13 +115,8 @@ export default function Home(): JSX.Element {
                     <div className="midTopPannel">
                         {/* Title and description of carousel*/}
                         <h1 className="text-center">
-                            🎥Daily Recommendations🎥
+                            Recommendations for ${groupName}
                         </h1>
-                        <p className="border-solid  text-center text-[#282f72] ">
-                            This is your recommendations for the day
-                            <br></br>You receive new ones every day!<br></br>
-                            Click on a movie to rate it
-                        </p>
                     </div>
 
                     {/* Movie Posters */}
@@ -147,50 +143,14 @@ export default function Home(): JSX.Element {
                     </div>
                     {/* Navigation buttons */}
                     <div className="buttonWrapper">
-                        <button
-                            onClick={handlePreviousPage}
-                            //disabled={currentPage === 0}
-                            // className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
-                        >
-                            ⇦
-                        </button>
-                        <button
-                            onClick={handleNextPage}
-                            // disabled={
-                            //     (currentPage + 1) * moviesPerPage >=
-                            //     movies.length
-                            // }
-                            // className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
-                        >
-                            ⇨
-                        </button>
+                        <button onClick={handlePreviousPage}>⇦</button>
+                        <button onClick={handleNextPage}>⇨</button>
                     </div>
                 </div>
             </div>
 
             {/* Here, the sideBar would appear */}
             {SideBar(selectedMovieId || 0)}
-
-            {/* The group seats, redirects to groups page */}
-            <GroupSeats />
-
-            {/* Pagination Controls
-            <div className="pagination">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div> */}
         </>
     );
 }

@@ -1,104 +1,109 @@
-// /Users/frederikskipper-andersen/Documents/GitHub/P2-Solution/src/components/Profile/ProfileSettings/page.tsx
 'use client';
-import React, { JSX } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import AdminGroupIcon from '@/components/groupPage/adminGroupIcon';
 import GroupIcon from '@/components/groupPage/groupIcon';
 import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
+import {
+    getGroupsByAdminId,
+    getRegularGroupsByMemberId,
+    group,
+} from '@/components/groupPage/group';
+import verifyUser from '@/actions/logIn/authenticateUser';
 
-export type groupId = {
-    Id: number;
-    Name: string;
-    Members: string[];
-    Admin: string;
-    Settings: {
-        BackgroundColor: string;
-        TextColor: string;
-        Emoji: string;
-    };
+const tempGroup: group = {
+    groupId: 12345,
+    groupName: 'TobiasOgAnders',
+    groupAdmin: 6050670358,
+    groupMembers: '6050670358|8271494205|6565229868',
+    settings: '🎥|#9fa3d1|#282f72',
 };
 
-// test groups
-const groupIdTemp: groupId = {
-    Id: 123,
-    Name: 'Group1',
-    Members: ['me', 'you', 'the cat'],
-    Admin: 'me',
-    Settings: {
-        BackgroundColor: '#ffffff',
-        TextColor: '#000000',
-        Emoji: '🍿',
-    },
-};
+export default function GroupSettings(): JSX.Element {
+    // array for the groups current user is admin of
+    const [AdminGroups, setAdminGroups] = useState<group[]>([]);
+    // array for groups current user is a part of but NOT admin
+    const [RegularGroups, setRegularGroups] = useState<group[]>([]);
 
-const groupIdTemp2: groupId = {
-    Id: 124,
-    Name: 'Group2',
-    Members: ['mom', 'dad', 'child', 'you'],
-    Admin: 'you',
-    Settings: {
-        BackgroundColor: '#FF46A2',
-        TextColor: '#282F72',
-        Emoji: '🎥',
-    },
-};
+    // get the groups user is admin of
+    useEffect(() => {
+        const getAdminGroups = async (): Promise<void> => {
+            setAdminGroups(await getGroupsByAdminId(await verifyUser()));
+        };
+        getAdminGroups();
+    }, []);
 
-const groupIdTemp3: groupId = {
-    Id: 125,
-    Name: 'Group5',
-    Members: [
-        'sara',
-        'you',
-        'anders',
-        'tobias',
-        'mia',
-        'emil',
-        'frederik',
-        'jacob',
-    ],
-    Admin: 'sara',
-    Settings: {
-        BackgroundColor: '#000000',
-        TextColor: '#ffffff',
-        Emoji: '🎞️',
-    },
-};
+    // set the groups user is not admin of
+    useEffect(() => {
+        const getRegularGroups = async (): Promise<void> => {
+            setRegularGroups(
+                await getRegularGroupsByMemberId(await verifyUser())
+            );
+        };
+        getRegularGroups();
+    }, []);
 
-const GroupSettings = (): JSX.Element => (
-    <div>
-        <h1>Groups</h1>
-        <section>
-            <h2 className="ml-4">Your groups</h2>
-            <p className="text-2xl ml-4">
-                <i>You are admin</i>
-            </p>
-            <div className="table-row overflow-scroll">
-                <AdminGroupIcon groupId={groupIdTemp} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <AdminGroupIcon groupId={groupIdTemp3} />
-                <CreateGroupIcon />
+    return (
+        <>
+            <div>
+                <h1>Groups</h1>
+                <section>
+                    <h2 className="ml-4">Your groups</h2>
+                    <p className="text-2xl ml-4">
+                        <i>
+                            You are the admin. Only you can add or remove
+                            members.{' '}
+                        </i>
+                    </p>
+                    <div className="inline-flex overflow-scroll">
+                        {AdminGroups.map((Group) => (
+                            <div key={Group.groupId}>
+                                <AdminGroupIcon
+                                    groupId={Group.groupId}
+                                    groupName={Group.groupName}
+                                    groupAdmin={Group.groupAdmin}
+                                    groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
+                                />
+                            </div>
+                        ))}
+                        <CreateGroupIcon />
+                    </div>
+                </section>
+
+                <section>
+                    <h2 className="ml-4">Groups you have joined</h2>
+                    <div className="inline-flex">
+                        {RegularGroups.map((Group) => (
+                            <div key={Group.groupId}>
+                                <GroupIcon
+                                    groupId={Group.groupId}
+                                    groupName={Group.groupName}
+                                    groupAdmin={Group.groupAdmin}
+                                    groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
+                                />
+                            </div>
+                        ))}
+                        <SearchGroupIcon />
+                    </div>
+                </section>
+
+                <section className="min-h-90">
+                    <h2 className="ml-4">Requests...</h2>
+                    <p className="text-2xl ml-4">
+                        Groups that have asked you to join
+                    </p>
+                    <RequestGroupIcon
+                        groupId={tempGroup.groupId}
+                        groupName={tempGroup.groupName}
+                        groupAdmin={tempGroup.groupAdmin}
+                        groupMembers={tempGroup.groupMembers}
+                        settings={tempGroup.settings}
+                    />
+                </section>
             </div>
-        </section>
-
-        <section>
-            <h2 className="ml-4">Groups you have joined</h2>
-            <div className="table-row">
-                <GroupIcon groupId={groupIdTemp2} />
-                <SearchGroupIcon />
-            </div>
-        </section>
-
-        <section>
-            <h2 className="ml-4">Requests...</h2>
-            <p className="text-2xl ml-4">Groups that have asked you to join</p>
-            <RequestGroupIcon groupId={groupIdTemp2} />
-        </section>
-    </div>
-);
-export default GroupSettings;
+        </>
+    );
+}
