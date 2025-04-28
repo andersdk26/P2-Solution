@@ -99,7 +99,7 @@ export default function SideBar(id: number): JSX.Element {
                 }
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-                setSelectedRating(null); // This part needs some more work
+                setSelectedRating(0); // This part needs some more work
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
@@ -309,9 +309,7 @@ export default function SideBar(id: number): JSX.Element {
                         {selectedMovieId !== null && (
                             <MovieImage movieId={selectedMovieId} />
                         )}
-                        <h4 className="text-center mt-100 fixed">
-                            {sidebarAlt}
-                        </h4>
+                        <h4 className="text-center">{sidebarAlt}</h4>
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 
