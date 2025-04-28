@@ -1,11 +1,62 @@
 'use client';
 import { JSX } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getGroupById, group } from './group';
+import getUserById from '@/actions/friends/getUserById';
+import { requestToJoinGroup } from '@/actions/groups/groupRequests';
+import verifyUser from '@/actions/logIn/authenticateUser';
+
+interface GroupRequestProps {
+    group: group;
+    conditionalFunction: (value: boolean) => void;
+}
+
+// input: takes a group and a conditional function as input
+function GroupRequest({
+    group,
+    conditionalFunction,
+}: GroupRequestProps): JSX.Element {
+    //returns the pop-up to send friend request
+    return (
+        <div className="border-[#282F72] text-[#282F72] bg-[#babdde] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-84">
+            Ask to join <b>{group.groupName}</b>?
+            <br />
+            {/* send request button */}
+            <button
+                className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
+                onClick={async () => {
+                    // if user is the admin, then dont send a request
+                    if ((await verifyUser()) === group.groupAdmin) {
+                        alert('You are admin');
+                        conditionalFunction(false);
+                        return;
+                    }
+                    // otherwise, send request
+                    await requestToJoinGroup(await verifyUser(), group.groupId);
+                    alert('Request sent');
+                    conditionalFunction(false);
+                }}
+            >
+                Join
+            </button>
+            {/* close button */}
+            <button
+                className="bg-[#282F72] text-[#f3f4f6] m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                onClick={() => conditionalFunction(false)}
+            >
+                Close
+            </button>
+        </div>
+    );
+}
 
 export default function SearchGroupIcon(): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
     const [searchResult, setSearchResult] = useState<group[]>([]);
+    // open the send request to group admin
+    const [isGroupRequestIconOpen, setGroupRequestIconOpen] = useState(false);
+    // sets the selected group for the pop-up
+    const [SelectedGroup, setSelectedGroup] = useState<group>();
 
     return (
         <>
@@ -61,26 +112,40 @@ export default function SearchGroupIcon(): JSX.Element {
 
                         <aside
                             id="searchResults"
-                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll"
+                            className="block w-120 mx-auto bg-gray-100 rounded-3xl max-h-100 overflow-scroll align-center content-center"
                         >
                             {searchResult.map((group) => (
                                 // movieId is used as identifier as it ensures that each item has a unique key.
                                 <div key={group.groupId}>
                                     <p
-                                        // onClick={}
+                                        onClick={() => {
+                                            setSelectedGroup(group);
+                                            setGroupRequestIconOpen(
+                                                !isGroupRequestIconOpen
+                                            );
+                                            // setAdminId(group.groupAdmin);
+                                        }}
                                         className={`py-2 px-4 justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                                     >
                                         <span className="text-left text-black prevent-select">
-                                            ID: {group.groupId}, Admin:
+                                            <b>{group.groupName}</b> ID:{' '}
+                                            {group.groupId}, Admin:{' '}
                                             {group.groupAdmin}
+                                            {/* {AdminUsername} */}
                                         </span>
                                     </p>
-                                    {/* {isFriendRequestIconOpen && (
-                                                    <div className="bg-white w-16 h-16 block">
-                                                    </div>
-                                                )} */}
                                 </div>
                             ))}
+
+                            {/* the box to send group request for that ID */}
+                            {isGroupRequestIconOpen && (
+                                <GroupRequest
+                                    group={SelectedGroup}
+                                    conditionalFunction={
+                                        setGroupRequestIconOpen
+                                    }
+                                />
+                            )}
                         </aside>
                     </div>
                 </section>

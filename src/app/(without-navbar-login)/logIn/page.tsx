@@ -88,7 +88,7 @@ export default function Page(): JSX.Element {
 
                     <button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
                     >
                         Login
                     </button>
@@ -101,7 +101,10 @@ export default function Page(): JSX.Element {
                 )}
                 <p className="mt-4 text-sm text-center text-gray-600">
                     Do you not have an account?{' '}
-                    <a href="/signUp" className="text-blue-600 hover:underline">
+                    <a
+                        href="/signUp"
+                        className="text-blue-600 hover:underline cursor-pointer"
+                    >
                         Sign Up
                     </a>
                 </p>
