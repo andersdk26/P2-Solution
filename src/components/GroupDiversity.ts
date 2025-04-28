@@ -9,7 +9,6 @@ import { eq, ne } from 'drizzle-orm';
 export default async function Diversity(
     targetUserId: number
 ): Promise<Map<string, number>> {
-    for (const UserID of group) {
         if (UserID === targetUserId) {
             // Fetch the target user's ratings.
             const group; // Fetch the group of users
