@@ -307,10 +307,7 @@ export default function SideBar(id: number): JSX.Element {
                             Close
                         </button>
                         {selectedMovieId !== null && (
-                            <MovieImage
-                                movieId={selectedMovieId}
-                                //className="mb-100px"
-                            />
+                            <MovieImage movieId={selectedMovieId} />
                         )}
                         <h4 className="text-center">{sidebarAlt}</h4>
                         {/* Rating Buttons */}
