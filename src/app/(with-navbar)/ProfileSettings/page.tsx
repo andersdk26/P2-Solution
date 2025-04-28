@@ -160,12 +160,11 @@ export default function ProfileSettings() {
         }
     };
 
-    const [passwordError, setPasswordError] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert('Please fill in all the fields');
+            alert('Please fill all the fields.');
             return;
         }
 
@@ -420,7 +419,6 @@ export default function ProfileSettings() {
                                     }`}
                                     required
                                 />
-
                                 {passwordError && (
                                     <p className="text-red-500 text-sm mt-1">
                                         Passwords do not match!

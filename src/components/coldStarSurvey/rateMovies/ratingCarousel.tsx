@@ -6,7 +6,6 @@ import { movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
-import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 type movieProps = { movieId: movie[] };
 
@@ -20,54 +19,12 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 {/* Current image (center, front) */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={movieId[imageIndex]?.movieId} />
-                    {/* <form className="scale-200">
-                        <input
-                            type="radio"
-                            value="1"
-                            name="poprating"
-                            onChange={() =>
-                                ratedMovies.set(movieId[imageIndex]?.movieId, 1)
-                            }
-                        />
-                        <input
-                            type="radio"
-                            value="1"
-                            name="poprating"
-                            onChange={() =>
-                                ratedMovies.set(movieId[imageIndex]?.movieId, 2)
-                            }
-                        />
-                        <input
-                            type="radio"
-                            value="1"
-                            name="poprating"
-                            onChange={() =>
-                                ratedMovies.set(movieId[imageIndex]?.movieId, 3)
-                            }
-                        />
-                        <input
-                            type="radio"
-                            value="1"
-                            name="poprating"
-                            onChange={() =>
-                                ratedMovies.set(movieId[imageIndex]?.movieId, 4)
-                            }
-                        />
-                        <input
-                            type="radio"
-                            value="1"
-                            name="poprating"
-                            id="pop5"
-                            onChange={() =>
-                                ratedMovies.set(movieId[imageIndex]?.movieId, 5)
-                            }
-                        />
-                    </form> */}
 
                     <h4 className="w-[294px] mt-3">
                         <MovieTitle movieId={movieId[imageIndex]?.movieId} />
                     </h4>
-                    <RatingPopcorn />
+
+                    <RatingPopcorn movieId={movieId[imageIndex]?.movieId} />
                 </div>
             </div>
 

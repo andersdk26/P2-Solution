@@ -3,13 +3,16 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 import SideBar from '@/components/sideBar/sideBar';
 
 export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
+    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchSeenMovies = async () => {
@@ -17,6 +20,10 @@ export default function UserStats() {
         };
         fetchSeenMovies();
     }, []);
+
+    const hej = (id: number) => {
+        SideBar(id);
+    };
 
     return (
         <>
