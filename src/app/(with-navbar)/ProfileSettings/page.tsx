@@ -410,7 +410,7 @@ export default function ProfileSettings() {
                                     placeholder="Confirm new password"
                                     value={confirmPassword}
                                     onChange={(e) => {
-                                        setConfirmPassword(e.target.value); // missing comment
+                                        setConfirmPassword(e.target.value); // Updates the state with the value entered in the "Confirm new password" input field
                                         setPasswordError(
                                             e.target.value !== newPassword
                                         ); //checks if the passwords matches
