@@ -14,6 +14,10 @@ import changeEmail from '@/actions/profileSettings/changeEmail';
 import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
+import formData from '@/components/signUp/SignUpForm';
+import handleChange from '@/components/signUp/SignUpForm';
+import passwordError from '@/components/signUp/SignUpForm';
+import confirmPassword from '@/components/signUp/SignUpForm';
 
 // import of movies to user stats - seenlist
 import { movie, getMovieById } from '@/actions/movie/movie';
@@ -156,9 +160,12 @@ export default function ProfileSettings() {
         }
     };
 
+    const [passwordError, setPasswordError] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     const handlePasswordChange = async () => {
-        if (!currentPassword || !newPassword) {
-            alert('Please fill in both fields.');
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert('Please fill in all the fields');
             return;
         }
 
@@ -176,6 +183,7 @@ export default function ProfileSettings() {
                 setIsEditing(null);
                 setCurrentPassword('');
                 setNewPassword('');
+                setConfirmPassword('');
             } else {
                 alert(response.message);
             }
@@ -228,7 +236,7 @@ export default function ProfileSettings() {
                 {/* Profile icon container */}
                 <section className="flex flex-col items-center mb-8">
                     <Image
-                        src={profileIcon}
+                        src={profileIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -339,7 +347,6 @@ export default function ProfileSettings() {
                                     maxLength={15}
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-
                                 <button
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
@@ -376,7 +383,7 @@ export default function ProfileSettings() {
                         {isEditing === 'password' && (
                             // Input boxes
                             <div className="flex flex-col items-center mt-4">
-                                {/* Input box 1 */}
+                                {/* Input box 1: Enter current password */}
                                 <input
                                     type="password"
                                     placeholder="Enter current password"
@@ -387,7 +394,7 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-                                {/* Input box 2 */}
+                                {/* Input box 2: Enter new password */}
                                 <input
                                     type="password"
                                     placeholder="Enter new password"
@@ -397,6 +404,28 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
+                                {/* Input box 3: Confirm new password */}
+                                <input
+                                    type="password"
+                                    placeholder="Confirm new password"
+                                    value={confirmPassword}
+                                    onChange={(e) => {
+                                        setConfirmPassword(e.target.value); // Updates the state with the value entered in the "Confirm new password" input field
+                                        setPasswordError(
+                                            e.target.value !== newPassword
+                                        ); //checks if the passwords matches
+                                    }}
+                                    className={`border p-2 rounded-md w-60 mb-2 ${
+                                        passwordError ? 'border-red-500' : ''
+                                    }`}
+                                    required
+                                />
+
+                                {passwordError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Passwords do not match!
+                                    </p>
+                                )}
                                 <button // Submit button
                                     onClick={handlePasswordChange}
                                     className="basicBtn"
