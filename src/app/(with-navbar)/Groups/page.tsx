@@ -93,15 +93,17 @@ export default function GroupSettings(): JSX.Element {
                 <section className="min-h-90">
                     <h2 className="ml-4">Requests...</h2>
                     <p className="text-2xl ml-4">
-                        Groups that have asked you to join
+                        <i>
+                            Requests from other users to join one of your group
+                        </i>
                     </p>
-                    <RequestGroupIcon
+                    {/* <RequestGroupIcon
                         groupId={tempGroup.groupId}
                         groupName={tempGroup.groupName}
                         groupAdmin={tempGroup.groupAdmin}
                         groupMembers={tempGroup.groupMembers}
                         settings={tempGroup.settings}
-                    />
+                    /> */}
                 </section>
             </div>
         </>

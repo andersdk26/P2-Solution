@@ -7,6 +7,7 @@ import { searchUserById, user } from '../Profile/Friends/friends';
 import {
     AddUserToGroup,
     DeleteGroup,
+    RemoveMemberFromDb,
 } from '@/actions/groups/adminGroupActions';
 import { ChangeGroupSettings } from './changeGroupSettings';
 
@@ -32,6 +33,13 @@ export default function AdminGroupIcon({
     const [AdminUsername, setAdminUsername] = useState('');
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
+
+    // Keeps track of members in group object
+    const [MembersListObject, setMembersListObject] = useState([
+        <p className="ml-4" key={0}>
+            No members to show.
+        </p>,
+    ]);
 
     // make array with the settings
     const settingsList = settings.split('|');
@@ -68,6 +76,43 @@ export default function AdminGroupIcon({
         // close the pop up for the add friend
         setAddMembersOpen(false);
     };
+
+    // map remove friend
+    useEffect(() => {
+        const updateMembersList = async (): Promise<void> => {
+            if (!membersId.length) {
+                return;
+            }
+
+            const resolvedMembers = await Promise.all(
+                membersId.map(async (id) => (
+                    <div
+                        className="w-1/4 flex items-start rounded-lg ml-4 space-x-2 my-2 bg-black/15"
+                        key={id}
+                    >
+                        <p className="ml-4 my-auto w-64 py-4 hover:brightness-120 hover:text-bold">
+                            {await getUserById(parseInt(id))}
+                            <span
+                                className="cursor-pointer text-xl hover:brightness-100"
+                                onClick={() => {
+                                    RemoveMemberFromDb(
+                                        id,
+                                        groupAdmin,
+                                        groupMembers,
+                                        groupId
+                                    );
+                                }}
+                            >
+                                ❌
+                            </span>
+                        </p>
+                    </div>
+                ))
+            );
+            setMembersListObject(resolvedMembers);
+        };
+        updateMembersList();
+    }, []);
 
     return (
         <>
@@ -278,14 +323,10 @@ export default function AdminGroupIcon({
                         </button>
 
                         <div className="content-center text-center items-center mt-10">
-                            <p
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    alert(':D :) :| :( ');
-                                }}
-                            >
-                                :D
+                            <p className="text-3xl">
+                                Click ❌ to remove members
                             </p>
+                            {MembersListObject}
                         </div>
                     </div>
                 </aside>
