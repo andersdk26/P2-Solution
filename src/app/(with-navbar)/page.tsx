@@ -38,14 +38,20 @@ export default function Home(): JSX.Element {
             .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
+        //this is for group
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
                 // await nameBasedFiltering(await verifyUser())
                 // await contentBasedFiltering(await verifyUser())
                 // Use "await verifyUser()" or a group ID as input parameter.
+                // await collaborativeFiltering(12345, 'group') //group
+                // await contentBasedFiltering(12345, 'group') //group
+                await collaborativeFiltering(await verifyUser(), 'individual') //individual user
+                //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
                 // await collaborativeFiltering(12345, 'group')
-                await contentBasedFiltering(5928906644, 'group')
+                // await contentBasedFiltering(5928906644, 'group')
             );
+
         getRecommendedMovies();
 
         groupAggregation(12345);
@@ -129,10 +135,10 @@ export default function Home(): JSX.Element {
                     {/* Middle Top Pannel to Title and Rec. Description*/}
                     <div className="midTopPannel">
                         {/* Title and description of carousel*/}
-                        <h1 className="text-center">
+                        <h1 className="text-center select-none">
                             🎥Daily Recommendations🎥
                         </h1>
-                        <p className="border-solid  text-center text-[#282f72] ">
+                        <p className="border-solid  text-center text-[#282f72] select-none ">
                             This is your recommendations for the day
                             <br></br>You receive new ones every day!<br></br>
                             Click on a movie to rate it
