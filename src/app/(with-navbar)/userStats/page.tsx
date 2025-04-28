@@ -3,7 +3,8 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
-import { JSX, useEffect, useState } from 'react';
+import { JSX, useEffect, useState, useRef } from 'react';
+import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 import SideBar from '@/components/sideBar/sideBar';
 import getMovieGenres from '@/actions/movie/getMovieGenres';
@@ -17,6 +18,8 @@ export default function UserStats() {
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [movieGenreCount, setMovieGenreCount] = useState({});
     const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
+    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
+    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchSeenMovies = async () => {
@@ -93,7 +96,7 @@ export default function UserStats() {
                     </div>
                 </section>
             </section>
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId || 0} />
         </>
     );
 }

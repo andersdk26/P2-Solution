@@ -1,11 +1,22 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import CSS file
+import {
+    getMovieRating,
+    rateMovie,
+    removeMovieRating,
+} from '@/actions/movie/movieRating';
 
-export default function RatingPopcorn(): JSX.Element {
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+interface RatingPopcornProps {
+    movieId: number;
+}
+
+export default function RatingPopcorn({
+    movieId,
+}: RatingPopcornProps): JSX.Element {
+    const [selectedRating, setSelectedRating] = useState<number>(0);
 
     const handleRatingChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -13,21 +24,22 @@ export default function RatingPopcorn(): JSX.Element {
         const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
 
         if (newRating === selectedRating) {
-            // if the previously new rating is equal to the newly selected rating,
-            setSelectedRating(0); // then delete the raitng
-            console.log('deletus'); // console log to visualise the deletion
-        } else if (newRating !== selectedRating) {
-            // else if the previously new rating does not equal to the current selected rating,
-            setSelectedRating(Number(event.currentTarget.value)); // then the current selected rating will become the new rating
-            console.log(newRating); // console log to visualise the current rating
-
-            // } else {
-            //     // To change rating
-            //     setSelectedRating(Number(event.currentTarget.value));
-            //     console.log('event:', event.currentTarget.value);
-            //     console.log('selected:', selectedRating);
+            //undo rating
+            setSelectedRating(0);
+            removeMovieRating(movieId); // Remove rating from the database
+        } else {
+            // To change rating
+            setSelectedRating(Number(event.target.value));
+            rateMovie(movieId, newRating); // Update rating in the database
         }
     };
+
+    useEffect(() => {
+        (async (): Promise<void> => {
+            if (!movieId) return; // If no movie is selected, do nothing
+            setSelectedRating(await getMovieRating(movieId));
+        })();
+    }, [movieId]); // Get the rating when a movie is selected
 
     return (
         <div className="ratingRow">
@@ -37,13 +49,7 @@ export default function RatingPopcorn(): JSX.Element {
                         type="checkbox"
                         name="rating"
                         value="1"
-                        checked={
-                            selectedRating === 1 ||
-                            selectedRating === 2 ||
-                            selectedRating === 3 ||
-                            selectedRating === 4 ||
-                            selectedRating === 5
-                        }
+                        checked={selectedRating > 0 && selectedRating <= 5}
                         onChange={handleRatingChange}
                         id="rating1"
                     />
@@ -63,12 +69,7 @@ export default function RatingPopcorn(): JSX.Element {
                         type="checkbox"
                         name="rating"
                         value="2"
-                        checked={
-                            selectedRating === 2 ||
-                            selectedRating === 3 ||
-                            selectedRating === 4 ||
-                            selectedRating === 5
-                        }
+                        checked={selectedRating > 1 && selectedRating <= 5}
                         onChange={handleRatingChange}
                         id="rating2"
                     />
@@ -88,11 +89,7 @@ export default function RatingPopcorn(): JSX.Element {
                         type="checkbox"
                         name="rating"
                         value="3"
-                        checked={
-                            selectedRating === 3 ||
-                            selectedRating === 4 ||
-                            selectedRating === 5
-                        }
+                        checked={selectedRating > 2 && selectedRating <= 5}
                         onChange={handleRatingChange}
                         id="rating3"
                     />
@@ -112,7 +109,7 @@ export default function RatingPopcorn(): JSX.Element {
                         type="checkbox"
                         name="rating"
                         value="4"
-                        checked={selectedRating === 4 || selectedRating === 5}
+                        checked={selectedRating > 3 && selectedRating <= 5}
                         onChange={handleRatingChange}
                         id="rating4"
                     />
