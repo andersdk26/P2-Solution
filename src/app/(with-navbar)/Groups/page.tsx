@@ -6,25 +6,32 @@ import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
 import {
+    getGroupNameById,
     getGroupsByAdminId,
     getRegularGroupsByMemberId,
     group,
 } from '@/components/groupPage/group';
 import verifyUser from '@/actions/logIn/authenticateUser';
-
-const tempGroup: group = {
-    groupId: 12345,
-    groupName: 'TobiasOgAnders',
-    groupAdmin: 6050670358,
-    groupMembers: '6050670358|8271494205|6565229868',
-    settings: '🎥|#9fa3d1|#282f72',
-};
+import {
+    acceptGroupRequest,
+    getGroupRequests,
+    rejectGroupRequest,
+    request,
+} from '@/actions/groups/groupRequests';
+import getUserById from '@/actions/friends/getUserById';
 
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
     // array for groups current user is a part of but NOT admin
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
+
+    // Array for requests
+    // const [RequestsList, setRequestsList] = useState<request[]>([]);
+    // // state for displaying requests
+    // const [DisplayRequestsList, setDisplayRequestsList] = useState([
+    //     <p key={0}>You have no pending requests.</p>,
+    // ]);
 
     // get the groups user is admin of
     useEffect(() => {
@@ -43,6 +50,59 @@ export default function GroupSettings(): JSX.Element {
         };
         getRegularGroups();
     }, []);
+
+    // // get the requests list
+    // const getRequestList = async (): Promise<void> => {
+    //     alert(JSON.stringify(await getGroupRequests(await verifyUser())));
+    //     setRequestsList(await getGroupRequests(await verifyUser()));
+    // };
+    // useEffect(() => {
+    //     getRequestList();
+    // }, []);
+
+    // useEffect(() => {
+    //     const updateRequestsList = async (): Promise<void> => {
+    //         const resolvedRequests = await Promise.all(
+    //             RequestsList.map(async (request) => (
+    //                 <div
+    //                     className="flex items-start space-x-2"
+    //                     key={`${request.groupId}${request.userId}`}
+    //                 >
+    //                     <p className="my-auto w-64 py-4">
+    //                         {await getUserById(request.userId)} wants to join{' '}
+    //                         {await getGroupNameById(request.groupId)}
+    //                     </p>
+    //                     <button
+    //                         className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
+    //                         onClick={async () => {
+    //                             acceptGroupRequest(
+    //                                 request.userId,
+    //                                 request.groupId
+    //                             );
+    //                             getRequestList();
+    //                         }}
+    //                     >
+    //                         Accept
+    //                     </button>
+    //                     <button
+    //                         className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
+    //                         onClick={async () => {
+    //                             rejectGroupRequest(
+    //                                 request.userId,
+    //                                 request.groupId
+    //                             );
+    //                             getRequestList();
+    //                         }}
+    //                     >
+    //                         Decline
+    //                     </button>
+    //                 </div>
+    //             ))
+    //         );
+    //         setDisplayRequestsList(resolvedRequests);
+    //     };
+    //     updateRequestsList();
+    // }, [RequestsList]);
 
     return (
         <>
@@ -99,7 +159,7 @@ export default function GroupSettings(): JSX.Element {
                             groups
                         </i>
                     </p>
-                    <div></div>
+                    {/* <div>{DisplayRequestsList}</div> */}
                 </section>
             </div>
         </>

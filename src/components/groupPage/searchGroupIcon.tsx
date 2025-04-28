@@ -25,11 +25,13 @@ function GroupRequest({
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
                 onClick={async () => {
+                    // if user is the admin, then dont send a request
                     if ((await verifyUser()) === group.groupAdmin) {
                         alert('You are admin');
                         conditionalFunction(false);
                         return;
                     }
+                    // otherwise, send request
                     await requestToJoinGroup(await verifyUser(), group.groupId);
                     alert('Request sent');
                     conditionalFunction(false);
