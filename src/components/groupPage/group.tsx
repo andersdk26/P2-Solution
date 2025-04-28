@@ -4,7 +4,7 @@ import getUserById from '@/actions/friends/getUserById';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { groupsTable } from '@/db/schema';
 import { db } from 'db';
-import { eq, like, ne, and, ilike } from 'drizzle-orm';
+import { eq, like, ne, and, or } from 'drizzle-orm';
 
 export type group = {
     groupId: number;
@@ -30,7 +30,12 @@ export async function getGroupById(id: string): Promise<group[]> {
             settings: groupsTable.settings,
         })
         .from(groupsTable)
-        .where(like(groupsTable.groupId, `${id}%`));
+        .where(
+            or(
+                like(groupsTable.groupId, `${id}%`),
+                like(groupsTable.groupName, `${id}%`)
+            )
+        );
 
     return result;
 }
