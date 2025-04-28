@@ -94,16 +94,12 @@ export default function GroupSettings(): JSX.Element {
                     <h2 className="ml-4">Requests...</h2>
                     <p className="text-2xl ml-4">
                         <i>
-                            Requests from other users to join one of your group
+                            Here you can accept or decline incoming requests
+                            from other users that want to join one of your
+                            groups
                         </i>
                     </p>
-                    {/* <RequestGroupIcon
-                        groupId={tempGroup.groupId}
-                        groupName={tempGroup.groupName}
-                        groupAdmin={tempGroup.groupAdmin}
-                        groupMembers={tempGroup.groupMembers}
-                        settings={tempGroup.settings}
-                    /> */}
+                    <div></div>
                 </section>
             </div>
         </>

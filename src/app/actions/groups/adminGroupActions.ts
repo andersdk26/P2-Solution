@@ -1,9 +1,7 @@
 'use server';
 
-import { changeSettingsProps } from '@/components/groupPage/changeGroupSettings';
 import { db } from '@/db/index';
 import { groupsTable } from '@/db/schema';
-import { group } from 'console';
 import { and, eq, like, not } from 'drizzle-orm';
 
 // Add user to group
@@ -64,4 +62,3 @@ export async function RemoveMemberFromDb(
         .set({ members: newMemberString })
         .where(eq(groupsTable.groupId, groupId));
 }
-

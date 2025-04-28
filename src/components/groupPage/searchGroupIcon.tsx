@@ -3,6 +3,8 @@ import { JSX } from 'react';
 import { useState, useEffect } from 'react';
 import { getGroupById, group } from './group';
 import getUserById from '@/actions/friends/getUserById';
+import { requestToJoinGroup } from '@/actions/groups/groupRequests';
+import verifyUser from '@/actions/logIn/authenticateUser';
 
 interface GroupRequestProps {
     group: group;
@@ -22,7 +24,13 @@ function GroupRequest({
             {/* send request button */}
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
-                onClick={() => {
+                onClick={async () => {
+                    if ((await verifyUser()) === group.groupAdmin) {
+                        alert('You are admin');
+                        conditionalFunction(false);
+                        return;
+                    }
+                    await requestToJoinGroup(await verifyUser(), group.groupId);
                     alert('Request sent');
                     conditionalFunction(false);
                 }}
@@ -47,21 +55,6 @@ export default function SearchGroupIcon(): JSX.Element {
     const [isGroupRequestIconOpen, setGroupRequestIconOpen] = useState(false);
     // sets the selected group for the pop-up
     const [SelectedGroup, setSelectedGroup] = useState<group>();
-
-    // //the username of the admin
-    // const [AdminUsername, setAdminUsername] = useState('');
-    // const [AdminId, setAdminId] = useState<number>();
-
-    // //set username of the admin
-    // useEffect(() => {
-    //     const getAdminName = async (): Promise<void> => {
-    //         if (!AdminId) {
-    //             return;
-    //         }
-    //         setAdminUsername(await getUserById(AdminId));
-    //     };
-    //     getAdminName();
-    // }, [AdminId]);
 
     return (
         <>
