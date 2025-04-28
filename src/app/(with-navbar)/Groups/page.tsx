@@ -2,7 +2,7 @@
 import React, { JSX, useEffect, useState } from 'react';
 import AdminGroupIcon from '@/components/groupPage/adminGroupIcon';
 import GroupIcon from '@/components/groupPage/groupIcon';
-import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
+// import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
 
