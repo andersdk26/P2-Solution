@@ -1,9 +1,10 @@
+'use server';
 import { db } from '@/db/index';
 import { groupRequestsTable, groupsTable } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { AddUserToGroup } from './adminGroupActions';
 
-type request = {
+export type request = {
     userId: number;
     groupId: number;
 };
@@ -23,8 +24,14 @@ export async function requestToJoinGroup(
             )
         );
 
+    // check if user is admin
+    const checkAdmin = await db
+        .select()
+        .from(groupsTable)
+        .where(eq(groupsTable.adminId, userId));
+
     // If not, make request.
-    if (!verify.length) {
+    if (!verify.length && !checkAdmin.length) {
         await db.insert(groupRequestsTable).values({ userId, groupId });
     }
 }
@@ -69,6 +76,21 @@ export async function acceptGroupRequest(
     // Call function to add member to group.
     AddUserToGroup(groupId, existingMembers[0].members, userId);
 
+    // Delete request from db.
+    await db
+        .delete(groupRequestsTable)
+        .where(
+            and(
+                eq(groupRequestsTable.userId, userId),
+                eq(groupRequestsTable.groupId, groupId)
+            )
+        );
+}
+
+export async function rejectGroupRequest(
+    userId: number,
+    groupId: number
+): Promise<void> {
     // Delete request from db.
     await db
         .delete(groupRequestsTable)

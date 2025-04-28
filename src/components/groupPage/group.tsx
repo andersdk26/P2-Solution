@@ -40,6 +40,18 @@ export async function getGroupById(id: string): Promise<group[]> {
     return result;
 }
 
+export async function getGroupNameById(id: number): Promise<string> {
+    // search db for id
+    const result = await db
+        .select({
+            groupName: groupsTable.groupName,
+        })
+        .from(groupsTable)
+        .where(eq(groupsTable.groupId, id));
+
+    return result[0].groupName;
+}
+
 export async function getGroupsByAdminId(id: number): Promise<group[]> {
     // search db for id, admin id and current user id is the same
     const result = await db

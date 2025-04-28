@@ -4,11 +4,11 @@ import { JSX, useState, useRef, useEffect, use } from 'react';
 import { movie, getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
-import {
-    getMovieRating,
-    rateMovie,
-    removeMovieRating,
-} from '@/actions/movie/movieRating';
+// import {
+//     getMovieRating,
+//     rateMovie,
+//     removeMovieRating,
+// } from '@/actions/movie/movieRating';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 
 export default function SideBar(id: number): JSX.Element {
@@ -42,7 +42,6 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     useEffect(() => {
-
         (async (): Promise<void> => {
             if (selectedMovieId === null) return; // If no movie is selected, do nothing
             setSelectedRating(await getMovieRating(selectedMovieId));
@@ -86,7 +85,7 @@ export default function SideBar(id: number): JSX.Element {
                     }}
                 ></div>
             )}
-        
+
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">

@@ -1,9 +1,7 @@
 'use server';
 
-import { changeSettingsProps } from '@/components/groupPage/changeGroupSettings';
 import { db } from '@/db/index';
 import { groupsTable } from '@/db/schema';
-import { group } from 'console';
 import { and, eq, like, not } from 'drizzle-orm';
 
 // Add user to group
@@ -53,16 +51,9 @@ export async function ChangeDbGroupName(
 
 export async function RemoveMemberFromDb(
     userId: string,
-    groupAdmin: number,
     groupMembers: string,
     groupId: number
 ): Promise<void> {
-    // if admin is the user
-    if (parseInt(userId) === groupAdmin) {
-        alert('You cannot remove admin from the group.');
-        return;
-    }
-
     //Remove the string with user id from string
     const newMemberString = groupMembers.replace(`|${userId}`, '');
 

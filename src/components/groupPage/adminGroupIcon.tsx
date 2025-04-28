@@ -69,12 +69,14 @@ export default function AdminGroupIcon({
         getAdminName();
     });
 
-    const handleAddUserToGroup = (addedUser: user) => {
-        AddUserToGroup(groupId, groupMembers, addedUser.userId);
+    const handleAddUserToGroup = async (addedUser: user) => {
+        await AddUserToGroup(groupId, groupMembers, addedUser.userId);
         // notify that there has been a success
         alert(`${addedUser} has been added to your group!`);
         // close the pop up for the add friend
         setAddMembersOpen(false);
+        // reload page
+        location.reload();
     };
 
     // map remove friend
@@ -86,25 +88,28 @@ export default function AdminGroupIcon({
 
             const resolvedMembers = await Promise.all(
                 membersId.map(async (id) => (
-                    <div
-                        className="w-1/4 flex items-start rounded-lg ml-4 space-x-2 my-2 bg-black/15"
-                        key={id}
-                    >
-                        <p className="ml-4 my-auto w-64 py-4 hover:brightness-120 hover:text-bold">
+                    <div className="w-1/4" key={id}>
+                        <p className="content-center items-center py-2 hover:brightness-120 hover:text-bold">
                             {await getUserById(parseInt(id))}
-                            <span
-                                className="cursor-pointer text-xl hover:brightness-100"
-                                onClick={() => {
-                                    RemoveMemberFromDb(
-                                        id,
-                                        groupAdmin,
-                                        groupMembers,
-                                        groupId
-                                    );
-                                }}
-                            >
-                                ❌
-                            </span>
+                            {/* if id is not admin, make X to delete, */}
+                            {parseInt(id) !== groupAdmin && (
+                                <span
+                                    className="cursor-pointer text-xl hover:brightness-100"
+                                    onClick={async () => {
+                                        await RemoveMemberFromDb(
+                                            id,
+                                            groupMembers,
+                                            groupId
+                                        );
+                                        alert(
+                                            `${await getUserById(parseInt(id))} has been removed from the group`
+                                        );
+                                        location.reload();
+                                    }}
+                                >
+                                    ❌
+                                </span>
+                            )}
                         </p>
                     </div>
                 ))
@@ -322,8 +327,8 @@ export default function AdminGroupIcon({
                             <u>Close</u>
                         </button>
 
-                        <div className="content-center text-center items-center mt-10">
-                            <p className="text-3xl">
+                        <div className="align-center items-center content-center text-center  mt-10 ml-10">
+                            <p className="text-3xl text-center">
                                 Click ❌ to remove members
                             </p>
                             {MembersListObject}
