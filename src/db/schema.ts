@@ -55,6 +55,15 @@ export const groupsTable = sqliteTable('groups', {
 export type InsertGroup = typeof groupsTable.$inferInsert;
 export type SelectGroup = typeof groupsTable.$inferSelect;
 
+export const groupRequestsTable = sqliteTable('groupRequests', {
+    id: integer('id').primaryKey(),
+    userId: integer('userId').notNull(),
+    groupId: integer('groupId').notNull(),
+});
+
+export type InsertGroupRequestsTable = typeof groupRequestsTable.$inferInsert;
+export type SelectGroupRequestsTable = typeof groupRequestsTable.$inferSelect;
+
 export const movieLinkIdTable = sqliteTable('movie_link_id', {
     id: integer('id').primaryKey(),
     imdbId: integer('imdbId').notNull(),
