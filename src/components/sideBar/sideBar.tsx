@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useState, useRef, useEffect } from 'react';
+import { JSX, useState, useRef, useEffect, use } from 'react';
 import { movie, getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
@@ -9,11 +9,17 @@ import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { OutgoingMessage } from 'http';
 import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
+import {
+    getMovieRating,
+    rateMovie,
+    removeMovieRating,
+} from '@/actions/movie/movieRating';
+import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+    const [selectedRating, setSelectedRating] = useState<number>(0);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [toast, setToast] = useState<{
         message: string;
@@ -92,7 +98,7 @@ export default function SideBar(id: number): JSX.Element {
             }
             setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
             setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-            setSelectedRating(null); // This part needs some more work
+            setSelectedRating(0); // This part needs some more work
             setSelectedMovieId(movieId); // set the rating to the selected movie ID
             if (backgroundDivRef.current) {
                 backgroundDivRef.current.style.display = 'block';
@@ -104,6 +110,14 @@ export default function SideBar(id: number): JSX.Element {
 
     useEffect(() => {
         const fetchMovie = async (): Promise<void> => {
+        (async (): Promise<void> => {
+            if (selectedMovieId === null) return; // If no movie is selected, do nothing
+            setSelectedRating(await getMovieRating(selectedMovieId));
+        })();
+    }, [selectedMovieId]); // Get the rating when a movie is selected
+
+    useEffect(() => {
+        const fetchMovie = async () => {
             await handleImageClick(id);
         };
         fetchMovie();
@@ -116,9 +130,11 @@ export default function SideBar(id: number): JSX.Element {
         if (newRating === selectedRating) {
             //undo rating
             setSelectedRating(0);
+            removeMovieRating(selectedMovieId as number); // Remove rating from the database
         } else {
             // To change rating
             setSelectedRating(Number(event.target.value));
+            rateMovie(selectedMovieId as number, newRating); // Update rating in the database
         }
     };
 
@@ -461,6 +477,8 @@ export default function SideBar(id: number): JSX.Element {
                                           ? cross
                                           : spinner}
                         </button>
+                        {/* Rating Buttons */}
+                        <RatingPopcorn movieId={selectedMovieId || 0} />
                     </div>
                 </section>
             )}
