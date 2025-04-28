@@ -1,7 +1,7 @@
 'use client';
 
 import { JSX, useState, useRef, useEffect } from 'react';
-import { movie, getMovieById } from '@/actions/movie/movie';
+import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
@@ -23,7 +23,7 @@ export default function SideBar(id: number): JSX.Element {
                 }
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-                setSelectedRating(null); // This part needs some more work
+                setSelectedRating(null); // ??? set the selected rating to null???
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
@@ -34,6 +34,7 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
+    // fetching the specific movieId, when clicking on a movieposter
     useEffect(() => {
         const fetchMovie = async () => {
             await handleImageClick(id);
@@ -41,16 +42,20 @@ export default function SideBar(id: number): JSX.Element {
         fetchMovie();
     }, [id]);
 
+    // entire const is basically the same as in ratingPopcorn
     const handleRatingChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        const newRating = Number(event.target.value);
+        const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
+
         if (newRating === selectedRating) {
-            //undo rating
-            setSelectedRating(0);
-        } else {
-            // To change rating
-            setSelectedRating(Number(event.target.value));
+            // if the previously new rating is equal to the newly selected rating,
+            setSelectedRating(0); // then delete the raitng
+            console.log('deletus'); // console log to visualise the deletion
+        } else if (newRating !== selectedRating) {
+            // else if the previously new rating does not equal to the current selected rating,
+            setSelectedRating(Number(event.currentTarget.value)); // then the current selected rating will become the new rating
+            console.log(newRating); // console log to visualise the current rating
         }
     };
 
@@ -59,12 +64,14 @@ export default function SideBar(id: number): JSX.Element {
             {/* Div for deselecting sidebar */}
             {sidebarImage && (
                 <div
-                    className="absolute w-full h-full z-3"
+                    className="fixed top-0 w-full h-full cursor-pointer bg-gray-500/40"
                     id="backgroundDiv"
                     onClick={() => {
+                        // on click, make the image dissapear
                         setSidebarImage(null);
                         if (backgroundDivRef.current) {
-                            backgroundDivRef.current.style.display = 'none';
+                            // if the background div is active,
+                            backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
                         }
                     }}
                 ></div>
@@ -72,22 +79,17 @@ export default function SideBar(id: number): JSX.Element {
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
-                <section className="z-3">
+                <section>
                     <div className="sideBar">
                         <button
                             className="basicBtn cursor-pointer mb-5"
-                            // onClick={() => {
-                            //     setSelectedMovieId(null);
-                            //     if (backgroundDivRef.current) {
-                            //         backgroundDivRef.current.style.display =
-                            //             'none';
-                            //     }
-                            // }}
                             onClick={() => {
+                                // on click, make the image dissapear
                                 setSidebarImage(null);
                                 if (backgroundDivRef.current) {
+                                    // if the background div is active,
                                     backgroundDivRef.current.style.display =
-                                        'none';
+                                        'none'; // then make the background div dissapear
                                 }
                             }}
                         >

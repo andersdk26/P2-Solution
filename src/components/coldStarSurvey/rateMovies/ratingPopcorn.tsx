@@ -21,8 +21,6 @@ export default function RatingPopcorn(): JSX.Element {
             setSelectedRating(Number(event.currentTarget.value)); // then the current selected rating will become the new rating
             console.log(newRating); // console log to visualise the current rating
 
-            //want it to save the rating to the db
-
             // } else {
             //     // To change rating
             //     setSelectedRating(Number(event.currentTarget.value));

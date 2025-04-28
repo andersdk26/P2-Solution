@@ -3,13 +3,20 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 
 import SideBar from '@/components/sideBar/sideBar';
+import getMovieGenres from '@/actions/movie/getMovieGenres';
+
+interface genreObject {
+    [key: string]: number;
+}
 
 export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [movieGenreCount, setMovieGenreCount] = useState({});
+    const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
 
     useEffect(() => {
         const fetchSeenMovies = async () => {
@@ -18,13 +25,55 @@ export default function UserStats() {
         fetchSeenMovies();
     }, []);
 
+    useEffect(() => {
+        const fetchMovieGenre = async () => {
+            const genreCount: genreObject = {};
+            for (const movieId of seenMovies) {
+                const genres = (await getMovieGenres(movieId)).split('|');
+                for (const genre of genres) {
+                    genreCount[genre] = genreCount[genre]
+                        ? genreCount[genre] + 1
+                        : 1;
+                }
+            }
+            setMovieGenreCount(genreCount);
+        };
+        fetchMovieGenre();
+    }, [seenMovies]);
+
+    useEffect(() => {
+        const generateGenreObjects = async () => {
+            let list: JSX.Element[] = [];
+
+            for (const genre in movieGenreCount) {
+                if (
+                    Object.prototype.hasOwnProperty.call(movieGenreCount, genre)
+                ) {
+                    const amount = movieGenreCount[genre] as number;
+                    list.push(
+                        <p>
+                            Amount of {genre} movies rated: {amount}
+                        </p>
+                    );
+                }
+            }
+
+            setGenreCountList(list);
+        };
+        generateGenreObjects();
+    }, [movieGenreCount]);
+
     return (
         <>
             <section className="p-8">
                 <section className="mt-10 ml-65 mr-65 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
                     <h1>User Statistics</h1>
                     <div className="m-5 bg-[#babdde] rounded-sm">
-                        Amount of movies: `${}´;
+                        <p>
+                            Overall amount of movies rated:{' '}
+                            {seenMovies.length}{' '}
+                        </p>
+                        {genreCountList}
                     </div>
 
                     <div className="bg-[#babdde] m-5 p-4 rounded-sm">

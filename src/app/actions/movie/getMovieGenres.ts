@@ -4,16 +4,16 @@ import { db } from '@/db/index';
 import { moviesTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export default async function getMovieTitle(movieId: number): Promise<string> {
+export default async function getMovieGenres(movieId: number): Promise<string> {
     const result = await db
-        .select({ title: moviesTable.title })
+        .select({ genres: moviesTable.genres })
         .from(moviesTable)
         .where(eq(moviesTable.id, movieId));
 
     if (!result || !result.length) {
-        console.log("couldn't find title :(");
+        console.log("couldn't find genre :(");
         return '';
     }
 
-    return result[0].title;
+    return result[0].genres;
 }
