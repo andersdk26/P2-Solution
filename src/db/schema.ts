@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm';
+import { bigint } from 'drizzle-orm/mysql-core';
 import {
     int,
     mysqlTable,
@@ -51,7 +52,10 @@ export type SelectmovieImageCache = typeof movieImageCacheTable.$inferSelect;
 
 // *** User ***
 export const usersTable = mysqlTable('users', {
-    id: int('id', { unsigned: true }).primaryKey(),
+    id: bigint('id', {
+        unsigned: true,
+        mode: 'number',
+    }).primaryKey(),
     username: varchar('username', { length: 30 }).notNull(),
     email: varchar('email', { length: 255 }).unique().notNull(),
     password: varchar('password', { length: 255 }).notNull(),
@@ -63,6 +67,15 @@ export const usersTable = mysqlTable('users', {
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+// *** Ratings ***
+export const ratingsTable = mysqlTable('ratings', {
+    id: serial('id').primaryKey(),
+    userId: int('userId').notNull(),
+    movieId: int('movieId').notNull(),
+    rating: int('rating').notNull(),
+    timestamp: timestamp('last_login').default(sql`(CURRENT_TIMESTAMP)`),
+});
 
 // // *** SQLite ***
 // import { sql } from 'drizzle-orm';
