@@ -51,7 +51,7 @@ export default function UserStats() {
                     </div>
                 </section>
             </section>
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId || 0} />
         </>
     );
 }
