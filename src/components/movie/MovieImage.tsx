@@ -38,6 +38,8 @@ export default function MovieImage({
 
     useEffect(() => {
         const getImage = async (): Promise<void> => {
+            if (!movieId) return; // If no movieId is provided, do nothing
+
             // Get external movie image URL
             const newImage = await getMovieImageURL(movieId);
 

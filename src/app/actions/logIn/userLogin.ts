@@ -49,6 +49,7 @@ export async function handleSignup(formData: {
     username: string;
     email: string;
     password: string;
+    profileIcon: string;
 }): Promise<string> {
     // Set username and email to lower case
     //formData.username = formData.username.toLowerCase();

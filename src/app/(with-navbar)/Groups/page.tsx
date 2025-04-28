@@ -23,7 +23,7 @@ export type groupId = {
 const groupIdTemp: groupId = {
     Id: 123,
     Name: 'Group1',
-    Members: ['me', 'you', 'tom'],
+    Members: ['me', 'you', 'the cat'],
     Admin: 'me',
     Settings: {
         BackgroundColor: '#ffffff',
@@ -47,7 +47,16 @@ const groupIdTemp2: groupId = {
 const groupIdTemp3: groupId = {
     Id: 125,
     Name: 'Group5',
-    Members: ['sara', 'you', 'me', 'tom', 'mom', 'child', 'burger', 'bob'],
+    Members: [
+        'sara',
+        'you',
+        'anders',
+        'tobias',
+        'mia',
+        'emil',
+        'frederik',
+        'jacob',
+    ],
     Admin: 'sara',
     Settings: {
         BackgroundColor: '#000000',

@@ -7,6 +7,7 @@ import {
     text,
     blob,
     real,
+    unique,
 } from 'drizzle-orm/sqlite-core';
 /*
 export const usersTable = sqliteTable('users', {
@@ -63,13 +64,21 @@ export const movieLinkIdTable = sqliteTable('movie_link_id', {
 export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
-export const testRatings = sqliteTable('testRatings', {
-    id: integer('id').primaryKey(),
-    userId: integer('userId').notNull(),
-    movieId: integer('movieId').notNull(),
-    rating: integer('rating').notNull(),
-    timestamp: integer('timestamp').notNull(),
-});
+export const testRatings = sqliteTable(
+    'testRatings',
+    {
+        id: integer('id').primaryKey(),
+        userId: integer('userId').notNull(),
+        movieId: integer('movieId').notNull(),
+        rating: integer('rating').notNull(),
+        timestamp: text('timestamp')
+            .default(sql`(CURRENT_TIMESTAMP)`)
+            .notNull(),
+    },
+    (table) => ({
+        uniqueUserMovie: unique().on(table.userId, table.movieId), // Add UNIQUE constraint
+    })
+);
 
 export type InsertTestRatings = typeof testRatings.$inferInsert;
 export type SelectTestRatings = typeof testRatings.$inferSelect;
