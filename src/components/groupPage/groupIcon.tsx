@@ -3,6 +3,8 @@ import { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import { group } from './group';
 import getUserById from '@/actions/friends/getUserById';
+import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
+import useRedirect from '@/components/redirect';
 
 export default function GroupIcon({
     groupId,
@@ -20,6 +22,8 @@ export default function GroupIcon({
 
     // make array with the settings
     const settingsList = settings.split('|');
+
+    const redirect = useRedirect(); // Custom hook for redirection
 
     // get the members id's to usernames
     //first make into array
@@ -123,8 +127,17 @@ export default function GroupIcon({
                             </p>
 
                             {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80">
-                                Get New Recommendation!
+                            <button
+                                onClick={() => {
+                                    goToGroupRecommendations(
+                                        groupId,
+                                        groupName
+                                    );
+                                    redirect('/Groups/Recommendations');
+                                }}
+                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
+                            >
+                                Go to group recommendations
                             </button>
 
                             <br />

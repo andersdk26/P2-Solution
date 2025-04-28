@@ -5,6 +5,7 @@ import GroupIcon from '@/components/groupPage/groupIcon';
 import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
 import CreateGroupIcon from '@/components/groupPage/createGroupIcon';
 import SearchGroupIcon from '@/components/groupPage/searchGroupIcon';
+
 import {
     getGroupsByAdminId,
     getRegularGroupsByMemberId,
