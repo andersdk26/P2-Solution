@@ -13,8 +13,6 @@ type movieProps = { movieId: movie[] };
 export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
 
-    console.log('I run');
-
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
             {/* Carousel layer */}
@@ -22,8 +20,7 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 {/* Current image (center, front) */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={movieId[imageIndex]?.movieId} />
-                    {/* <RatingPopcorn /> */}
-                    <form className="scale-200">
+                    {/* <form className="scale-200">
                         <input
                             type="radio"
                             value="1"
@@ -65,12 +62,11 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                                 ratedMovies.set(movieId[imageIndex]?.movieId, 5)
                             }
                         />
-                    </form>
+                    </form> */}
 
-                    <h4 className="w-[294px]">
+                    <h4 className="w-[294px] mt-3">
                         <MovieTitle movieId={movieId[imageIndex]?.movieId} />
                     </h4>
-
                     <RatingPopcorn />
                 </div>
             </div>

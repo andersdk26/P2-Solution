@@ -87,7 +87,7 @@ h4 {
     font-weight: bolder;
     font-size: 20px;
     margin-left: 4px;
-    text-shadow: 2px 2px #9fa3d1;
+    /* text-shadow: 2px 2px #9fa3d1; */
 }
 
 .basicBtn {

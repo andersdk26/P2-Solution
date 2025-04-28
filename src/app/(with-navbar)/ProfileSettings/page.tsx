@@ -347,7 +347,7 @@ export default function ProfileSettings() {
                                     maxLength={15}
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-                                <button //submit button
+                                <button
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
                                 >
@@ -481,7 +481,7 @@ export default function ProfileSettings() {
                         )}
                     </section>
                     <button
-                        className="basicBtn"
+                        className="basicBtn mt-10"
                         onClick={() => redirect('/userStats')}
                     >
                         User Statistics
