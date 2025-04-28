@@ -53,7 +53,6 @@ export async function ChangeDbGroupName(
 
 export async function RemoveMemberFromDb(
     userId: string,
-    groupAdmin: number,
     groupMembers: string,
     groupId: number
 ): Promise<void> {
@@ -65,3 +64,4 @@ export async function RemoveMemberFromDb(
         .set({ members: newMemberString })
         .where(eq(groupsTable.groupId, groupId));
 }
+

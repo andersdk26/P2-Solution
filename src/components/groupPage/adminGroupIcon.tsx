@@ -98,7 +98,6 @@ export default function AdminGroupIcon({
                                     onClick={async () => {
                                         await RemoveMemberFromDb(
                                             id,
-                                            groupAdmin,
                                             groupMembers,
                                             groupId
                                         );
@@ -328,7 +327,7 @@ export default function AdminGroupIcon({
                             <u>Close</u>
                         </button>
 
-                        <div className="relative content-center align-center items-center mt-10 ml-10">
+                        <div className="align-center items-center content-center text-center  mt-10 ml-10">
                             <p className="text-3xl text-center">
                                 Click ❌ to remove members
                             </p>

@@ -3,6 +3,11 @@ import { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import { group } from './group';
 import getUserById from '@/actions/friends/getUserById';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import {
+    LeaveGroup,
+    RemoveMemberFromDb,
+} from '@/actions/groups/adminGroupActions';
 
 export default function GroupIcon({
     groupId,
@@ -17,6 +22,8 @@ export default function GroupIcon({
     const [MemberUsernames, setMemberUsernames] = useState<string[]>([]);
     //the username of the admin
     const [AdminUsername, setAdminUsername] = useState('');
+    // Pop up for leave group
+    const [LeaveGroupOpen, setLeaveGroupOpen] = useState(false);
 
     // make array with the settings
     const settingsList = settings.split('|');
@@ -133,7 +140,7 @@ export default function GroupIcon({
                             <button
                                 className="bg-red-500 text-black m-4 ml-0 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
                                 onClick={() => {
-                                    alert('You have left the group');
+                                    setLeaveGroupOpen(true);
                                 }}
                             >
                                 Leave group
@@ -141,6 +148,52 @@ export default function GroupIcon({
                         </div>
                     </div>
                 </section>
+            )}
+            {/* the information about groups in the box */}
+            {LeaveGroupOpen && (
+                <aside
+                    className={`fixed top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                >
+                    {/* the box container */}
+                    <div
+                        className={`z-50 w-2/3 h-1/2 border-2 border-solid border-[#282F72] bg-[#9fa3d1] rounded-3xl m-4 overflow-scroll`}
+                    >
+                        {/* the close button */}
+                        <button
+                            className="cursor-pointer float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 "
+                            onClick={() => {
+                                setLeaveGroupOpen(false);
+                            }}
+                        >
+                            <u>Close</u>
+                        </button>
+
+                        <div className="align-center items-center content-center text-center mt-4">
+                            <p className="text-3xl text-center">
+                                Are you sure you want to leave {groupName}?
+                            </p>
+                            <button
+                                className="bg-red-500 text-4xl text-black m-12 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                                onClick={async () => {
+                                    const currentUser = `${await verifyUser()}`;
+                                    await RemoveMemberFromDb(
+                                        currentUser,
+                                        groupMembers,
+                                        groupId
+                                    );
+                                    alert(`You have left ${groupName}`);
+                                    setLeaveGroupOpen(false);
+                                    setAboutGroupOpen(false);
+                                    location.reload();
+                                }}
+                            >
+                                Leave
+                            </button>
+                        </div>
+
+                        <div className="align-center items-center content-center text-center mt-10"></div>
+                    </div>
+                </aside>
             )}
         </>
     );
