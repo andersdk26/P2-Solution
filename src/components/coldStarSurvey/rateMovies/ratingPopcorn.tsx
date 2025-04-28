@@ -17,8 +17,8 @@ export default function RatingPopcorn(): JSX.Element {
             setSelectedRating(0); // then delete the raitng
             console.log('deletus'); // console log to visualise the deletion
         } else if (newRating !== selectedRating) {
-            // else if the previously new rating does not equal to the selected rating,
-            setSelectedRating(Number(event.currentTarget.value)); // then the newly selected rating will become the new rating
+            // else if the previously new rating does not equal to the current selected rating,
+            setSelectedRating(Number(event.currentTarget.value)); // then the current selected rating will become the new rating
             console.log(newRating); // console log to visualise the current rating
 
             //want it to save the rating to the db
