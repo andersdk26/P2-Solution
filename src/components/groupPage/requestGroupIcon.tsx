@@ -4,6 +4,7 @@ import { useState } from 'react';
 import getUserById from '@/actions/friends/getUserById';
 import { group } from './group';
 
+
 export default function RequestGroupIcon({
     groupId,
     groupName,

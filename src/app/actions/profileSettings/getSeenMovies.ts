@@ -8,5 +8,6 @@ export default async function getSeenMovies(userId: number): Promise<number[]> {
         .select({ id: testRatings.movieId })
         .from(testRatings)
         .where(eq(testRatings.userId, userId));
+
     return result.map((ratings) => ratings.id);
 }
