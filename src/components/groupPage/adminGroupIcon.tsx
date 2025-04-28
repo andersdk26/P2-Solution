@@ -92,19 +92,26 @@ export default function AdminGroupIcon({
                     >
                         <p className="ml-4 my-auto w-64 py-4 hover:brightness-120 hover:text-bold">
                             {await getUserById(parseInt(id))}
-                            <span
-                                className="cursor-pointer text-xl hover:brightness-100"
-                                onClick={() => {
-                                    RemoveMemberFromDb(
-                                        id,
-                                        groupAdmin,
-                                        groupMembers,
-                                        groupId
-                                    );
-                                }}
-                            >
-                                ❌
-                            </span>
+                            {/* if id is not admin, make X to delete, */}
+                            {parseInt(id) !== groupAdmin && (
+                                <span
+                                    className="cursor-pointer text-xl hover:brightness-100"
+                                    onClick={async () => {
+                                        await RemoveMemberFromDb(
+                                            id,
+                                            groupAdmin,
+                                            groupMembers,
+                                            groupId
+                                        );
+                                        alert(
+                                            `${await getUserById(parseInt(id))} has been removed from the group`
+                                        );
+                                        location.reload();
+                                    }}
+                                >
+                                    ❌
+                                </span>
+                            )}
                         </p>
                     </div>
                 ))

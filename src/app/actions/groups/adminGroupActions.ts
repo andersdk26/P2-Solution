@@ -57,12 +57,6 @@ export async function RemoveMemberFromDb(
     groupMembers: string,
     groupId: number
 ): Promise<void> {
-    // if admin is the user
-    if (parseInt(userId) === groupAdmin) {
-        alert('You cannot remove admin from the group.');
-        return;
-    }
-
     //Remove the string with user id from string
     const newMemberString = groupMembers.replace(`|${userId}`, '');
 
