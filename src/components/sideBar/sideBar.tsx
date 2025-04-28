@@ -8,44 +8,18 @@ import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
 import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { OutgoingMessage } from 'http';
-
-type WatchlistStatus =
-    | 'set'
-    | 'unset'
-    | 'setReq'
-    | 'unsetReq'
-    | 'setCheck'
-    | 'unsetCheck'
-    | 'setCross'
-    | 'unsetCross';
-
-const spinner = (
-    <svg
-        aria-hidden="true"
-        className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 mx-auto"
-        viewBox="0 0 100 101"
-        width="35"
-        height="35"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <path
-            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-            fill="currentColor"
-        />
-        <path
-            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-            fill="currentFill"
-        />
-    </svg>
-);
-
+import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
     const [watchlistStatus, setWatchlistStatus] =
         useState<WatchlistStatus>('unset');
@@ -109,7 +83,6 @@ export default function SideBar(id: number): JSX.Element {
         </svg>
     );
 
-
     const handleImageClick = async (movieId: number): Promise<void> => {
         try {
             const movie = await getMovieById(movieId); // Fetch movie by ID
@@ -150,51 +123,50 @@ export default function SideBar(id: number): JSX.Element {
     };
 
     const handleAddToWatchlist = async (): Promise<void> => {
-        if (selectedMovieId !== null) {
-            try {
-                const userId = await verifyUser();
-                const message = await saveMovieToWatchlist(
-                    userId,
-                    selectedMovieId
-                );
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const message = await saveMovieToWatchlist(userId, selectedMovieId);
 
-                if (message === 'Movie added to the watchlist successfully.') {
-                    handleLoadingCompleation('setReq');
-                } else if (message === 'Movie is already in the watchlist.') {
-                    handleLoadingMalfunction('set');
-                } else {
-                    handleLoadingMalfunction('unset');
-                }
-
-            } catch (error) {
-                console.error('Failed to add movie to watchlist:', error);
+            if (message === 'Successfully added the Movie to the watchlist.') {
+                handleLoadingCompleation('setReq');
+                setToast({ message, type: 'success' });
+            } else {
+                handleLoadingMalfunction('set');
+                setToast({ message, type: 'error' });
             }
+        } catch {
+            setToast({
+                message: 'Failed to add movie to watchlist.',
+                type: 'error',
+            });
         }
     };
 
     const handleRemovefromWatchlist = async (): Promise<void> => {
-        if (selectedMovieId !== null) {
-            try {
-                const userId = await verifyUser();
-                const message = await removeMovieToWatchlist(
-                    userId,
-                    selectedMovieId
-                );
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const message = await removeMovieToWatchlist(
+                userId,
+                selectedMovieId
+            );
 
-                if (
-                    message ===
-                    'successfully removed the Movie from the watchlist.'
-                ) {
-                    handleLoadingCompleation('unsetReq');
-                } else if (message === 'Movie is not in the watchlist.') {
-                    handleLoadingMalfunction('unset');
-                } else {
-                    handleLoadingMalfunction('set');
-                }
-
-            } catch (error) {
-                console.error('Failed to remove movie from watchlist:', error);
+            if (message === 'Successfully removed the Movie from watchlist.') {
+                handleLoadingCompleation('unsetReq');
+                setToast({
+                    message: 'Successfully removed the Movie from watchlist.',
+                    type: 'success',
+                });
+            } else {
+                handleLoadingMalfunction('unset');
+                setToast({ message, type: 'error' });
             }
+        } catch {
+            setToast({
+                message: 'Failed to remove movie from watchlist.',
+                type: 'error',
+            });
         }
     };
 
@@ -238,8 +210,47 @@ export default function SideBar(id: number): JSX.Element {
         return (): void => observer.disconnect();
     }, [watchlistStatus]);
 
+    type WatchlistStatus =
+        | 'set'
+        | 'unset'
+        | 'setReq'
+        | 'unsetReq'
+        | 'setCheck'
+        | 'unsetCheck'
+        | 'setCross'
+        | 'unsetCross';
+
+    const spinner = (
+        <svg
+            aria-hidden="true"
+            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 mx-auto"
+            viewBox="0 0 100 101"
+            width="35"
+            height="35"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+            />
+            <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+            />
+        </svg>
+    );
+
     return (
         <>
+            {/* Toast Notification */}
+            {toast && (
+                <AddingWatchlistToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* Div for deselecting sidebar */}
             {sidebarImage && (
                 <div
@@ -449,7 +460,6 @@ export default function SideBar(id: number): JSX.Element {
                                         : watchlistStatus === 'unsetCross'
                                           ? cross
                                           : spinner}
-
                         </button>
                     </div>
                 </section>

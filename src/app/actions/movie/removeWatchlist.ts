@@ -28,9 +28,9 @@ export default async function removeMovieToWatchlist(
         if (result.length === 0) {
             throw new Error('Failed to remove movie from the watchlist.');
         }
-        return 'successfully removed the Movie from the watchlist.';
+        return 'Successfully removed the Movie from watchlist.';
     } catch (error) {
-        console.error('Error removing movie from the watchlist: ', error);
+        console.error('Error removing movie from watchlist: ', error);
         throw new Error('An error occurred while removing the movie.');
     }
 }
