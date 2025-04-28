@@ -28,26 +28,31 @@ export default function Home(): JSX.Element {
     const [groupId, setGroupId] = useState<number>();
 
     useEffect(() => {
-        const gn = JSON.parse(localStorage.getItem('groupName') || '');
+        const gn = localStorage.getItem('groupName') || '';
         setGroupName(gn);
 
-        const gi = JSON.parse(localStorage.getItem('groupId') || '');
-        setGroupId(gi);
+        const gi = localStorage.getItem('groupId') || '';
+        setGroupId(parseInt(gi));
+        console.log(gi, gn);
 
-        // Fetch the JSON file when the page loads
-        fetch('Movie.json')
-            .then((response) => response.json())
-            .then((data) => setMovies(data))
-            .catch((error) => console.error('Error loading movies:', error));
+        // // Fetch the JSON file when the page loads
+        // fetch('Movie.json')
+        //     .then((response) => response.json())
+        //     .then((data) => setMovies(data))
+        //     .catch((error) => console.error('Error loading movies:', error));
 
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
-            // setRecommendedMovies();
-            // Use "await verifyUser()" or a group ID as input parameter.
-            //await collaborativeFiltering(groupId!, 'group')
-            // await contentBasedFiltering(12345, 'group')
-
-            getRecommendedMovies();
+            setRecommendedMovies(
+                // Use "await verifyUser()" or a group ID as input parameter.
+                // await contentBasedFiltering(12345, 'group')
+                await collaborativeFiltering(groupId!, 'group')
+                // TODO: Fix: funktionen bliver ikke kaldt. Aner ikke hvorfor. groupId er
+                // hentet inden funktionen bliver kaldt, samt konverteret til integer,
+                // men det virker stadig ikke.
+            );
+        getRecommendedMovies();
+        console.log(recommendedMovies);
     }, []);
 
     const moviesPerPage = 3;
@@ -115,7 +120,7 @@ export default function Home(): JSX.Element {
                     <div className="midTopPannel">
                         {/* Title and description of carousel*/}
                         <h1 className="text-center">
-                            Recommendations for ${groupName}
+                            Recommendations for {groupName}
                         </h1>
                     </div>
 
