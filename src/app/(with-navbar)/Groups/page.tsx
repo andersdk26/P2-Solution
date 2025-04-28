@@ -1,5 +1,5 @@
 'use client';
-import React, { JSX, useEffect, useState } from 'react';
+import React, { JSX, use, useEffect, useState } from 'react';
 import AdminGroupIcon from '@/components/groupPage/adminGroupIcon';
 import GroupIcon from '@/components/groupPage/groupIcon';
 // import RequestGroupIcon from '@/components/groupPage/requestGroupIcon';
@@ -26,6 +26,8 @@ export default function GroupSettings(): JSX.Element {
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
     // array for groups current user is a part of but NOT admin
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
+    // array for group requests.
+    const [groupRequests, setGroupRequests] = useState<request[]>([]);
 
     // Array for requests
     // const [RequestsList, setRequestsList] = useState<request[]>([]);
@@ -35,10 +37,10 @@ export default function GroupSettings(): JSX.Element {
     // ]);
 
     // get the groups user is admin of
+    const getAdminGroups = async (): Promise<void> => {
+        setAdminGroups(await getGroupsByAdminId(await verifyUser()));
+    };
     useEffect(() => {
-        const getAdminGroups = async (): Promise<void> => {
-            setAdminGroups(await getGroupsByAdminId(await verifyUser()));
-        };
         getAdminGroups();
     }, []);
 
@@ -50,6 +52,13 @@ export default function GroupSettings(): JSX.Element {
             );
         };
         getRegularGroups();
+    }, []);
+
+    const getGroupRequestsA = async (): Promise<void> => {
+        setGroupRequests(await getGroupRequests(await verifyUser()));
+    };
+    useEffect(() => {
+        getGroupRequestsA();
     }, []);
 
     // // get the requests list
@@ -161,6 +170,41 @@ export default function GroupSettings(): JSX.Element {
                         </i>
                     </p>
                     {/* <div>{DisplayRequestsList}</div> */}
+                    {groupRequests.map((request) => (
+                        <div
+                            className="flex items-start space-x-2"
+                            key={request.id}
+                        >
+                            <p>
+                                {request.userId} wants to join {request.groupId}
+                            </p>
+                            <button
+                                className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                                onClick={async () => {
+                                    acceptGroupRequest(
+                                        request.userId,
+                                        request.groupId
+                                    );
+                                    getGroupRequestsA();
+                                    getAdminGroups();
+                                }}
+                            >
+                                Accept
+                            </button>
+                            <button
+                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
+                                onClick={async () => {
+                                    rejectGroupRequest(
+                                        request.userId,
+                                        request.groupId
+                                    );
+                                    getGroupRequestsA();
+                                }}
+                            >
+                                Decline
+                            </button>
+                        </div>
+                    ))}
                 </section>
             </div>
         </>
