@@ -21,7 +21,8 @@ export default function RatingPopcorn({
     const handleRatingChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        const newRating = Number(event.target.value);
+        const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
+
         if (newRating === selectedRating) {
             //undo rating
             setSelectedRating(0);

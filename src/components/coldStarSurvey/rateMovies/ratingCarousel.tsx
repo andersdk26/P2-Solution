@@ -20,7 +20,7 @@ export default function RatingCarousel({ movieId }: movieProps): JSX.Element {
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={movieId[imageIndex]?.movieId} />
 
-                    <h4 className="w-[294px]">
+                    <h4 className="w-[294px] mt-3">
                         <MovieTitle movieId={movieId[imageIndex]?.movieId} />
                     </h4>
 

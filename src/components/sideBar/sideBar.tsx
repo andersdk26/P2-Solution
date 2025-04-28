@@ -4,6 +4,7 @@ import { JSX, useState, useRef, useEffect, use } from 'react';
 import { movie, getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
+import '@/styles/mainPage.css'; // Import my CSS file
 import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
 import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
@@ -89,21 +90,23 @@ export default function SideBar(id: number): JSX.Element {
     );
 
     const handleImageClick = async (movieId: number): Promise<void> => {
-        try {
-            const movie = await getMovieById(movieId); // Fetch movie by ID
-            if (!movie) {
-                console.log(`Movie with ID ${movieId} not found.`);
-                return;
+        if (movieId !== 0) {
+            try {
+                const movie = await getMovieById(movieId); // Fetch movie by ID
+                if (!movie) {
+                    console.error(`Movie with ID ${movieId} not found.`);
+                    return;
+                }
+                setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
+                setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
+                setSelectedRating(null); // This part needs some more work
+                setSelectedMovieId(movieId); // set the rating to the selected movie ID
+                if (backgroundDivRef.current) {
+                    backgroundDivRef.current.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Failed to fetch movie by ID:', error);
             }
-            setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
-            setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-            setSelectedRating(0); // This part needs some more work
-            setSelectedMovieId(movieId); // set the rating to the selected movie ID
-            if (backgroundDivRef.current) {
-                backgroundDivRef.current.style.display = 'block';
-            }
-        } catch (error) {
-            console.error('Failed to fetch movie by ID:', error);
         }
     };
 
@@ -283,7 +286,7 @@ export default function SideBar(id: number): JSX.Element {
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section className="z-3">
-                    <div className="sideBar ">
+                    <div className="sideBar">
                         <button
                             className="basicBtn cursor-pointer mb-5"
                             // onClick={() => {
@@ -306,7 +309,9 @@ export default function SideBar(id: number): JSX.Element {
                         {selectedMovieId !== null && (
                             <MovieImage movieId={selectedMovieId} />
                         )}
-                        <h2>{sidebarAlt}</h2>
+                        <h4 className="text-center mt-100 fixed">
+                            {sidebarAlt}
+                        </h4>
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 
