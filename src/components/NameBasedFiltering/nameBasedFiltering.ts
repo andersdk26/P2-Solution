@@ -3,7 +3,7 @@
 import { getMovieById, movie } from '@/actions/movie/movie';
 import { moviesTable, testRatings } from '@/db/schema';
 import { db } from 'db';
-import { eq, ne } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import levenshtein from 'fast-levenshtein';
 
 export default async function nameBasedFiltering(
@@ -24,23 +24,42 @@ export default async function nameBasedFiltering(
 
     // Initialise name score map.
     const nameScoreMap = new Map<string, number>();
+    const wordFrequencyMap = new Map<string, number>();
 
     // Iterate through each rating made by the target user.
     for (const rating of targetUserRatings) {
-        // Fetch the movie in question.
         const movie = await getMovieById(rating.movieId);
-
-        // Check that the movie exists.
         if (movie !== null) {
             const movieTitle = movie.movieTitle;
-
-            // Store the rated movie's title and weight by its rating.
             nameScoreMap.set(movieTitle, rating.movieRating);
+
+            // Extract words from the title
+            const words = movieTitle.toLowerCase().split(/\s+/);
+            for (const word of words) {
+                if (
+                    word.length > 2 ||
+                    [
+                        'and',
+                        'the',
+                        'for',
+                        'but',
+                        'yet',
+                        'not',
+                        'can',
+                        'has',
+                        'was',
+                    ].includes(word)
+                ) {
+                    wordFrequencyMap.set(
+                        word,
+                        (wordFrequencyMap.get(word) || 0) + rating.movieRating
+                    );
+                }
+            }
         }
     }
 
-    console.log('Names have been scored.');
-    console.log(nameScoreMap);
+    console.log('Word frequency map:', wordFrequencyMap);
 
     // Fetch all movies from the database.
     const movies = await db
@@ -55,27 +74,16 @@ export default async function nameBasedFiltering(
     // Create map for storing scores for each movie.
     const movieScoreMap = new Map<number, number>();
 
-    // For every movie in the dataset.
     for (const movie of movies) {
-        // Check if movie has already been rated by the target user.
-        let movieHasBeenRated = false;
-
-        for (const rating of targetUserRatings) {
-            if (rating.movieId === movie.movieId) {
-                movieHasBeenRated = true;
-                break;
-            }
-        }
-
-        // Continue to next movie if already rated.
-        if (movieHasBeenRated) {
+        if (
+            targetUserRatings.some((rating) => rating.movieId === movie.movieId)
+        ) {
             continue;
         }
 
-        // Initialise movie score.
         let score = 0;
 
-        // Compare this movie's title with each rated movie's title.
+        // Name similarity scoring
         for (const [ratedTitle, ratedScore] of nameScoreMap) {
             score +=
                 ratedScore /
@@ -86,29 +94,28 @@ export default async function nameBasedFiltering(
                     1);
         }
 
-        // Set movie score.
+        // Word-based scoring
+        for (const [word, wordScore] of wordFrequencyMap) {
+            if (movie.movieTitle.toLowerCase().includes(word)) {
+                score += wordScore;
+            }
+        }
+
         movieScoreMap.set(movie.movieId, score);
     }
 
-    // Turn map into array.
-    const scoredMovieIds = Array.from(movieScoreMap);
-
-    // Sort by name similarity score (descending) and get top 30 recommendations.
-    const sortedMovies = scoredMovieIds
+    // Sort and select top recommendations
+    const sortedMovies = Array.from(movieScoreMap)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 30);
 
-    console.log('Sorted movies by name similarity and got top 30.');
+    console.log('Sorted movies by enhanced scoring and got top 30.');
 
-    // Create array for storing recommended movies.
+    // Create final recommendations list
     const recommendedMovies: movie[] = [];
 
-    // Iterate through all movies in the sorted array.
     for (const movie of sortedMovies) {
-        // Fetch movie from database.
         const m = await getMovieById(movie[0]);
-
-        // If the movie exists, add it to the recommended movies array.
         if (m !== null) {
             recommendedMovies.push(m);
         }
@@ -116,6 +123,5 @@ export default async function nameBasedFiltering(
 
     console.log('Fetched all recommended movies');
 
-    // Return recommended movies.
     return recommendedMovies;
 }
