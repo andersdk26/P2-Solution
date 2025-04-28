@@ -40,6 +40,7 @@ const spinner = (
     </svg>
 );
 
+
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
@@ -108,6 +109,7 @@ export default function SideBar(id: number): JSX.Element {
         </svg>
     );
 
+
     const handleImageClick = async (movieId: number): Promise<void> => {
         try {
             const movie = await getMovieById(movieId); // Fetch movie by ID
@@ -163,6 +165,7 @@ export default function SideBar(id: number): JSX.Element {
                 } else {
                     handleLoadingMalfunction('unset');
                 }
+
             } catch (error) {
                 console.error('Failed to add movie to watchlist:', error);
             }
@@ -188,6 +191,7 @@ export default function SideBar(id: number): JSX.Element {
                 } else {
                     handleLoadingMalfunction('set');
                 }
+
             } catch (error) {
                 console.error('Failed to remove movie from watchlist:', error);
             }
@@ -445,6 +449,7 @@ export default function SideBar(id: number): JSX.Element {
                                         : watchlistStatus === 'unsetCross'
                                           ? cross
                                           : spinner}
+
                         </button>
                     </div>
                 </section>

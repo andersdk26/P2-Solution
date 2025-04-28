@@ -3,12 +3,16 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
-// import { Home } from
 
-export default function userStats() {
+import SideBar from '@/components/sideBar/sideBar';
+
+export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
+    const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
+    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchSeenMovies = async () => {
@@ -16,6 +20,10 @@ export default function userStats() {
         };
         fetchSeenMovies();
     }, []);
+
+    const hej = (id: number) => {
+        SideBar(id);
+    };
 
     return (
         <section className="p-8">
@@ -27,15 +35,22 @@ export default function userStats() {
 
                 <div className="bg-[#babdde] m-5 p-4 rounded-sm">
                     <h2>Your Seen and Rated Movies</h2>
-                    {/* needs a for-loop to iterate through all rated movies */}
-                    {/* every element is mapped to having an id
-                     * every MovieImage is getting an id number */}
-                    {seenMovies.map((id) => (
-                        <MovieImage
-                            movieId={id}
-                            className="w-50 inline m-2 rounded-sm"
-                        />
-                    ))}
+                    <button>
+                        {/* every element is mapped to having an id
+                         * every MovieImage is getting an id number */}
+                        {seenMovies.map((id) => (
+                            <MovieImage
+                                key={id}
+                                movieId={id}
+                                className="w-50 inline m-2 rounded-sm cursor-pointer"
+                                onClick={() => {
+                                    {
+                                        hej(id);
+                                    }
+                                }}
+                            />
+                        ))}
+                    </button>
                 </div>
             </section>
         </section>

@@ -43,7 +43,7 @@ export default function Home(): JSX.Element {
                 // Use "await verifyUser()" or a group ID as input parameter.
                 // await collaborativeFiltering(12345, 'group') //group
                 // await contentBasedFiltering(12345, 'group') //group
-                await collaborativeFiltering(await verifyUser(), 'individual') //individual user
+                 await collaborativeFiltering(await verifyUser(), 'individual') //individual user
                 //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
             );
 
@@ -211,3 +211,4 @@ export default function Home(): JSX.Element {
         </>
     );
 }
+
