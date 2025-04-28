@@ -6,6 +6,8 @@ import MovieImage from '@/components/movie/MovieImage';
 import { JSX, useEffect, useState, useRef } from 'react';
 import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
+import ChartGenres from '@/components/Profile/ProfileSettings/chartGenres';
+
 import SideBar from '@/components/sideBar/sideBar';
 import getMovieGenres from '@/actions/movie/getMovieGenres';
 
@@ -60,7 +62,6 @@ export default function UserStats() {
                     );
                 }
             }
-
             setGenreCountList(list);
         };
         generateGenreObjects();
@@ -71,16 +72,17 @@ export default function UserStats() {
             <section className="p-8">
                 <section className="mt-10 ml-65 mr-65 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
                     <h1>User Statistics</h1>
+                    <ChartGenres />
                     <div className="m-5 bg-[#babdde] rounded-sm">
                         <p>
-                            Overall amount of movies rated:{' '}
+                            Overall amount of movies rated:
                             {seenMovies.length}{' '}
                         </p>
                         {genreCountList}
                     </div>
 
                     <div className="bg-[#babdde] m-5 p-4 rounded-sm">
-                        <h2>Your Seen and Rated Movies</h2>
+                        <h2>Your Rated Movies</h2>
                         <button>
                             {/* every element is mapped to having an id
                              * every MovieImage is getting an id number */}

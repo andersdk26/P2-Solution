@@ -127,21 +127,21 @@ export default function SideBar(id: number): JSX.Element {
     }, [id]);
 
     // entire const is basically the same as in ratingPopcorn
-    const handleRatingChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
+    // const handleRatingChange = (
+    //     event: React.ChangeEvent<HTMLInputElement>
+    // ): void => {
+    //     const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
 
-        if (newRating === selectedRating) {
-            //undo rating
-            setSelectedRating(0);
-            removeMovieRating(selectedMovieId as number); // Remove rating from the database
-        } else {
-            // To change rating
-            setSelectedRating(Number(event.target.value));
-            rateMovie(selectedMovieId as number, newRating); // Update rating in the database
-        }
-    };
+    //     if (newRating === selectedRating) {
+    //         //undo rating
+    //         setSelectedRating(0);
+    //         removeMovieRating(selectedMovieId as number); // Remove rating from the database
+    //     } else {
+    //         // To change rating
+    //         setSelectedRating(Number(event.target.value));
+    //         rateMovie(selectedMovieId as number, newRating); // Update rating in the database
+    //     }
+    // };
 
     const handleAddToWatchlist = async (): Promise<void> => {
         if (selectedMovieId === null) return;
@@ -317,7 +317,7 @@ export default function SideBar(id: number): JSX.Element {
 
                         {/* buttoonsssssss */}
                         <button
-                            className="basicBtn mt-4 w-60 h-12"
+                            className="basicBtn w-60 h-12 fixed mt-150"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':
