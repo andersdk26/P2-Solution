@@ -14,6 +14,10 @@ import changeEmail from '@/actions/profileSettings/changeEmail';
 import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
+import formData from '@/components/signUp/SignUpForm';
+import handleChange from '@/components/signUp/SignUpForm';
+import passwordError from '@/components/signUp/SignUpForm';
+import confirmPassword from '@/components/signUp/SignUpForm';
 
 // import of movies to user stats - seenlist
 import { movie, getMovieById } from '@/actions/movie/movie';
@@ -156,9 +160,11 @@ export default function ProfileSettings() {
         }
     };
 
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
-        if (!currentPassword || !newPassword) {
-            alert('Please fill in both fields.');
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert('Please fill all the fields.');
             return;
         }
 
@@ -176,6 +182,7 @@ export default function ProfileSettings() {
                 setIsEditing(null);
                 setCurrentPassword('');
                 setNewPassword('');
+                setConfirmPassword('');
             } else {
                 alert(response.message);
             }
@@ -228,7 +235,7 @@ export default function ProfileSettings() {
                 {/* Profile icon container */}
                 <section className="flex flex-col items-center mb-8">
                     <Image
-                        src={profileIcon}
+                        src={profileIcon} //you can change this to profileIcon if you want to use the one from the database
                         alt="Profile Icon"
                         width={100}
                         height={100}
@@ -339,9 +346,7 @@ export default function ProfileSettings() {
                                     maxLength={15}
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-
                                 <button
-
                                     onClick={handleUsernameChange}
                                     className="basicBtn"
                                 >
@@ -377,7 +382,7 @@ export default function ProfileSettings() {
                         {isEditing === 'password' && (
                             // Input boxes
                             <div className="flex flex-col items-center mt-4">
-                                {/* Input box 1 */}
+                                {/* Input box 1: Enter current password */}
                                 <input
                                     type="password"
                                     placeholder="Enter current password"
@@ -388,7 +393,7 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
-                                {/* Input box 2 */}
+                                {/* Input box 2: Enter new password */}
                                 <input
                                     type="password"
                                     placeholder="Enter new password"
@@ -398,6 +403,27 @@ export default function ProfileSettings() {
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
+                                {/* Input box 3: Confirm new password */}
+                                <input
+                                    type="password"
+                                    placeholder="Confirm new password"
+                                    value={confirmPassword}
+                                    onChange={(e) => {
+                                        setConfirmPassword(e.target.value); // Updates the state with the value entered in the "Confirm new password" input field
+                                        setPasswordError(
+                                            e.target.value !== newPassword
+                                        ); //checks if the passwords matches
+                                    }}
+                                    className={`border p-2 rounded-md w-60 mb-2 ${
+                                        passwordError ? 'border-red-500' : ''
+                                    }`}
+                                    required
+                                />
+                                {passwordError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Passwords do not match!
+                                    </p>
+                                )}
                                 <button // Submit button
                                     onClick={handlePasswordChange}
                                     className="basicBtn"
@@ -453,51 +479,13 @@ export default function ProfileSettings() {
                         )}
                     </section>
                     <button
-                        className="basicBtn"
+                        className="basicBtn mt-10"
                         onClick={() => redirect('/userStats')}
                     >
                         User Statistics
                     </button>
                 </section>
             </section>
-            {/* User stats container and content */}
-            <div className="mt-10 ml-100 mr-100 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
-                <h2>User stats</h2>
-                <div className="bg-[#282f72] m-5">
-                    Visualisering af stats, evt. m. graffer
-                </div>
-
-                {/* <div className="bg-[#282f72] m-5">
-                    Seenlist - under seen movies, we have change movie ratings
-                    <MovieImage movieId={seenMovies[40]} />
-                    <MovieImage movieId={seenMovies[41]} />
-                    <MovieImage movieId={seenMovies[42]} />
-                    <MovieImage movieId={seenMovies[50]} />
-                </div> */}
-                {/* <div className="bg-[#282f72] m-5">Movie ratings</div> */}
-
-                {/* <ul className="list-disc list-inside ml-4">
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Histogrammer/grafferne
-                        </span>
-                    </li>
-                   
-                    <li>
-                        <span className="underline text-blue-800 cursor-pointer">
-                            Seen movies
-                        </span>
-                        <ul className="ml-6 list-disc">
-                            <li>
-                                <span className="underline text-black-900 cursor-pointer">
-                                    under seen movies we have change movie
-                                    ratings
-                                </span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul> */}
-            </div>
         </section>
     );
 }

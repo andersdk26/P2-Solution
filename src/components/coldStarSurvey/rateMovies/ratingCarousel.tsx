@@ -6,7 +6,6 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
-import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
 
 export default function RatingCarousel(): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
@@ -62,7 +61,6 @@ export default function RatingCarousel(): JSX.Element {
     const clearSelection = (): void => {
         setSelectedRating(null);
     };
-
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
             {/* Carousel layer */}
@@ -104,6 +102,13 @@ export default function RatingCarousel(): JSX.Element {
                     >
                         Remove movie
                     </button>
+                   // <MovieImage movieId={movieId[imageIndex]?.movieId} />
+
+                   // <h4 className="w-[294px] mt-3">
+                   //    <MovieTitle movieId={movieId[imageIndex]?.movieId} />
+                   // </h4>
+
+                   // <RatingPopcorn movieId={movieId[imageIndex]?.movieId} />
                 </div>
             </div>
 
