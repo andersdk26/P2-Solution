@@ -13,6 +13,7 @@ import '@/styles/mainPage.css'; // Import my CSS file
 import { movie, getMovieById } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
+import nameBasedFiltering from '@/components/NameBasedFiltering/nameBasedFiltering';
 
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
@@ -39,6 +40,8 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
+                // await nameBasedFiltering(await verifyUser())
+                // await contentBasedFiltering(await verifyUser())
                 // Use "await verifyUser()" or a group ID as input parameter.
                 // await collaborativeFiltering(12345, 'group')
                 await contentBasedFiltering(5928906644, 'group')
