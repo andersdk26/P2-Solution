@@ -4,14 +4,11 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import getWatchlist from '@/actions/profileSettings/getWatchlist';
 import MovieImage from '@/components/movie/MovieImage';
 import { useEffect, useState, useRef } from 'react';
-import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
-
 import SideBar from '@/components/sideBar/sideBar';
 
 export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -20,10 +17,6 @@ export default function UserStats() {
         };
         fetchSeenMovies();
     }, []);
-
-    const hej = (id: number) => {
-        SideBar(id);
-    };
 
     return (
         <section className="p-8">
@@ -45,7 +38,7 @@ export default function UserStats() {
                                 className="w-50 inline m-2 rounded-sm cursor-pointer"
                                 onClick={() => {
                                     {
-                                        hej(id);
+                                        setSelectedMovieId(id);
                                     }
                                 }}
                             />
@@ -53,6 +46,7 @@ export default function UserStats() {
                     </button>
                 </div>
             </section>
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
         </section>
     );
 }
@@ -102,4 +96,3 @@ export default function UserStats() {
 //         console.error('Failed to fetch movie by ID:', error);
 //     }
 // };
-
