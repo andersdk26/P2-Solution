@@ -17,6 +17,7 @@ import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBas
 import MovieImage from '@/components/movie/MovieImage';
 
 import SideBar from '@/components/sideBar/sideBar';
+import { group } from 'console';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -25,7 +26,7 @@ export default function Home(): JSX.Element {
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
     const [groupName, setGroupName] = useState<string>();
-    const [groupId, setGroupId] = useState<number>();
+    const [groupId, setGroupId] = useState<number>(0);
 
     useEffect(() => {
         const gn = localStorage.getItem('groupName') || '';
@@ -40,20 +41,23 @@ export default function Home(): JSX.Element {
         //     .then((response) => response.json())
         //     .then((data) => setMovies(data))
         //     .catch((error) => console.error('Error loading movies:', error));
+    }, []);
 
+    useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
                 // Use "await verifyUser()" or a group ID as input parameter.
                 // await contentBasedFiltering(12345, 'group')
-                await collaborativeFiltering(groupId!, 'group')
+                await collaborativeFiltering(groupId, 'group')
                 // TODO: Fix: funktionen bliver ikke kaldt. Aner ikke hvorfor. groupId er
                 // hentet inden funktionen bliver kaldt, samt konverteret til integer,
                 // men det virker stadig ikke.
             );
+            console.log(recommendedMovies);
+        };
         getRecommendedMovies();
-        console.log(recommendedMovies);
-    }, []);
+    }, [groupId]);
 
     const moviesPerPage = 3;
     const totalMovies = 30;
