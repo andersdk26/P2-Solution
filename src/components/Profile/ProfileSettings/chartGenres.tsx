@@ -5,6 +5,7 @@
 // install chart.js react-chartjs-2
 
 import React, { JSX, useEffect, useState } from 'react';
+
 // import of the specific components used in the chart
 import {
     Chart as ChartJS,
@@ -37,8 +38,11 @@ interface genreObject {
 
 export default function ChartGenres(): JSX.Element {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
-    const [movieGenreCount, setMovieGenreCount] = useState<genreObject>({});
-    const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
+    const [movieGenreCount, setMovieGenreCount] = useState({});
+    const [genreCountList, setGenreCountList] = useState({
+        labels: [''],
+        data: [0],
+    });
 
     // copied from "/profileSettings/page.tsx"
     // used to get amount of movies to the chart
@@ -62,37 +66,31 @@ export default function ChartGenres(): JSX.Element {
                         : 1;
                 }
             }
+
             setMovieGenreCount(genreCount);
         };
         fetchMovieGenre();
     }, [seenMovies]);
 
-    // from Oliver
-    // const [chartData, setChartData] = useState<{
-    //     labels: string[];
-    //     dataPoints: number[];
-    // }>({ labels: [], dataPoints: [] });
-    //==//
-
     // copied from "/profileSettings/page.tsx"
     // used to get movie genres to the chart
     useEffect(() => {
         const generateGenreObjects = async () => {
-            let list: JSX.Element[] = [];
+            const genreCountObject = {
+                labels: ['Amount of rated movies'],
+                data: [seenMovies.length],
+            };
 
             for (const genre in movieGenreCount) {
                 if (
                     Object.prototype.hasOwnProperty.call(movieGenreCount, genre)
                 ) {
-                    const amount = movieGenreCount[genre] as number;
-                    list.push(
-                        <p>
-                            Amount of {genre} movies rated: {amount}
-                        </p>
-                    );
+                    const amount = parseInt(movieGenreCount[genre]);
+                    genreCountObject.labels.push(genre);
+                    genreCountObject.data.push(amount);
                 }
             }
-            setGenreCountList(list);
+            setGenreCountList(genreCountObject);
         };
         generateGenreObjects();
     }, [movieGenreCount]);
@@ -101,18 +99,19 @@ export default function ChartGenres(): JSX.Element {
         <>
             <div className="bg-[#babdde] m-5">
                 <h2>Movie genre overview</h2>
+                <p className="text-[#282f72]">
+                    Overview of your rated movies, and their genres
+                </p>
+                <p className="text-[#282f72]">
+                    A movie can have multiple genres
+                </p>
                 <Bar
                     data={{
-                        labels: [
-                            'All-time rated movies',
-                            'Genre1',
-                            'Genre2',
-                            'Genre3',
-                        ], // the x-axis values
+                        labels: genreCountList.labels, // the x-axis values
                         datasets: [
                             {
-                                label: 'Your rated movies', // the value that's being measured
-                                data: [seenMovies.length, 1, 2, 3], // the y-axis values
+                                label: 'Rated movies', // the value that's being measured
+                                data: genreCountList.data, // the y-axis values
                                 backgroundColor: ['rgba(40, 47, 114, 1)'],
                             },
                         ],
