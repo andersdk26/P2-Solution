@@ -100,7 +100,7 @@ export function ChangeGroupSettings({
             />
             <br />
             <button
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] text-xl font-bold py-2 px-4 mt-2 rounded-sm"
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] text-xl font-bold py-2 px-4 mt-2 rounded-sm"
                 type="submit"
                 onClick={(e) => {
                     e.preventDefault();
@@ -159,7 +159,7 @@ export function ChangeGroupSettings({
             />
             <br />
             <button
-                className=" mb-4 bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] text-xl font-bold py-2 px-4 rounded-sm"
+                className=" mb-4 bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] text-xl font-bold py-2 px-4 rounded-sm"
                 type="submit"
                 onClick={(e) => {
                     e.preventDefault();
