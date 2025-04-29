@@ -64,7 +64,7 @@ export default function Home(): JSX.Element {
 
             <button
                 onClick={() => redirect('coldStartSurvey')}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm ml-10"
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm ml-10"
             >
                 Back
             </button>
@@ -81,7 +81,7 @@ export default function Home(): JSX.Element {
                     localStorage.removeItem('selectedMovies');
                     redirect('');
                 }}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute cursor-pointer"
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute cursor-pointer"
             >
                 Submit
             </button>
