@@ -17,11 +17,13 @@ export default function Friends(): JSX.Element {
         []
     );
     const [friendRequestList, setFriendRequestList] = useState([
-        <p key={0}>You have no pending friend requests.</p>,
+        <p className="text-[#282f72]" key={0}>
+            You have no pending friend requests.
+        </p>,
     ]);
     const [FriendsList, setFriendsList] = useState<number[]>([]);
     const [friendsListObject, setFriendsListObject] = useState([
-        <p className="ml-4" key={0}>
+        <p className="ml-4 text-[#282f72]" key={0}>
             No friends to show.
         </p>,
     ]);
@@ -39,7 +41,7 @@ export default function Friends(): JSX.Element {
             const resolvedRequests = await Promise.all(
                 FriendRequests.map(async (request) => (
                     <div
-                        className="flex items-start space-x-2"
+                        className="flex items-center space-x-2 bg-[#9fa3d1] mb-4 p-4 rounded-sm"
                         key={request.from}
                     >
                         <p className="my-auto w-64 py-4">
@@ -95,14 +97,14 @@ export default function Friends(): JSX.Element {
             const resolvedFriends = await Promise.all(
                 FriendsList.map(async (id) => (
                     <div
-                        className="w-1/4 flex items-start rounded-lg ml-4 space-x-2 my-2 bg-black/15"
+                        className="flex items-center space-x-2 bg-[#9fa3d1] mr-25 mb-4 p-4 rounded-sm" //HERRRRRRR
                         key={id}
                     >
                         <p className="ml-4 my-auto w-64 py-4">
                             {await getUserById(id)}
                         </p>
                         <button
-                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 mr-4 ml-auto relative rounded-sm cursor-pointer"
+                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 mr-2 ml-auto relative rounded-sm cursor-pointer"
                             onClick={async () => {
                                 RemoveFriend(await verifyUser(), id);
                                 alert(
@@ -113,7 +115,6 @@ export default function Friends(): JSX.Element {
                         >
                             Remove friend
                         </button>
-                        {/* TODO: Gør så man kan fjerne venner. */}
                     </div>
                 ))
             );
@@ -124,34 +125,44 @@ export default function Friends(): JSX.Element {
 
     return (
         <>
-            {/* your friends section */}
-            <section className="ml-4">
-                <h2>Your friends</h2>
-                <p className="ml-4">
-                    Here you can view and manage your friends.
-                </p>
-                {friendsListObject}
-            </section>
+            {/* entire page section */}
+            <section className="p-8">
+                <section className="ml-100 mr-100 p-1 rounded-sm bg-[#9fa3d1]">
+                    {/* your friends section */}
+                    <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
+                        <h2>Your friends</h2>
+                        <p className="ml-4 text-[#282f72]">
+                            Here you can view and manage your friends.
+                        </p>
+                        <div className="pl-4 pt-4 text-[#282f72]">
+                            {friendsListObject}
+                        </div>
+                    </section>
 
-            {/* searching for users section */}
-            <section className="h-80 ml-4">
-                <h2>Search for users</h2>
-                <p className="ml-4">
-                    Search for users by their user ID or their username to send
-                    them a friend request.
-                </p>
-                <aside className="align-left content-left justify-left text-left table ml-4">
-                    <SearchFriends />
-                </aside>
-            </section>
+                    {/* searching for users section */}
+                    <section className="h-80 p-4 m-4 bg-[#babdde] rounded-sm">
+                        <h2>Search for users</h2>
+                        <p className="ml-4 text-[#282f72]">
+                            Search for users by their user ID or their username
+                            to send them a friend request.
+                        </p>
+                        <aside className="align-left content-left justify-left text-left table ml-4 rounded-sm">
+                            <SearchFriends />
+                        </aside>
+                    </section>
 
-            {/* friend requests section */}
-            <section className="h-80 ml-4">
-                <h2>Friend requests</h2>
-                <p className="ml-4">
-                    Here you can accept or decline incoming friend requests.
-                </p>
-                <div className="ml-4">{friendRequestList}</div>
+                    {/* friend requests section */}
+                    <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
+                        <h2>Friend requests</h2>
+                        <p className="ml-4 text-[#282f72]">
+                            Here you can accept or decline incoming friend
+                            requests.
+                        </p>
+                        <div className="mr-25 pl-4 pt-4 text-[#282f72]">
+                            {friendRequestList}
+                        </div>
+                    </section>
+                </section>
             </section>
         </>
     );
