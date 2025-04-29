@@ -74,7 +74,7 @@ export const ratingsTable = mysqlTable('ratings', {
     userId: int('userId').notNull(),
     movieId: int('movieId').notNull(),
     rating: int('rating').notNull(),
-    timestamp: timestamp('last_login').default(sql`(CURRENT_TIMESTAMP)`),
+    timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // // *** SQLite ***
