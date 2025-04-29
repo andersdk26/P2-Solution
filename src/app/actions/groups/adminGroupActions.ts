@@ -10,6 +10,11 @@ export async function AddUserToGroup(
     groupMembers: string,
     addedUserId: number
 ): Promise<void> {
+    // count members in the string. if more than 8, do not add more
+    const memberCount = groupMembers.split('|').length;
+    if (memberCount >= 8) {
+        return;
+    }
     await db
         .update(groupsTable)
         .set({ members: `${groupMembers}|${addedUserId}` })
@@ -17,7 +22,7 @@ export async function AddUserToGroup(
             // the group id and that the user id does not already exist in group members
             and(
                 eq(groupsTable.groupId, groupId),
-                not(like(groupsTable.groupName, `${addedUserId}`))
+                not(like(groupsTable.groupName, `$${addedUserId}$`))
             )
         );
 

@@ -10,6 +10,8 @@ import {
     RemoveMemberFromDb,
 } from '@/actions/groups/adminGroupActions';
 import { ChangeGroupSettings } from './changeGroupSettings';
+import { redirect } from 'next/navigation';
+import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
 
 export default function AdminGroupIcon({
     groupId,
@@ -70,9 +72,17 @@ export default function AdminGroupIcon({
     });
 
     const handleAddUserToGroup = async (addedUser: user) => {
+        if (groupMembers.includes(addedUser.userId.toString())) {
+            alert(`${addedUser.userName} is already in the group`);
+            return;
+        }
+        if (memberCount >= 8) {
+            alert('Cannot add more than 8 members');
+            return;
+        }
         await AddUserToGroup(groupId, groupMembers, addedUser.userId);
         // notify that there has been a success
-        alert(`${addedUser} has been added to your group!`);
+        alert(`${addedUser.userName} has been added to your group!`);
         // close the pop up for the add friend
         setAddMembersOpen(false);
         // reload page
@@ -197,8 +207,17 @@ export default function AdminGroupIcon({
                             </p>
 
                             {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer hover:brightness-80">
-                                Get New Recommendation!
+                            <button
+                                onClick={() => {
+                                    goToGroupRecommendations(
+                                        groupId,
+                                        groupName
+                                    );
+                                    redirect('/Groups/Recommendations');
+                                }}
+                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
+                            >
+                                Go to group recommendations
                             </button>
 
                             <br />
