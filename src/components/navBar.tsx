@@ -9,10 +9,12 @@ import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
 import useRedirect from '@/components/redirect';
 import Notification from './notification/notification';
+import SideBar from './sideBar/sideBar'; // Import SideBar component
 
 export default function NavBar(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
     const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null); // State for selected movie ID
 
     return (
         <nav className="fixed overflow:hidden w-full h-24 shadow-x1 -mt-24 z-99">
@@ -93,7 +95,9 @@ export default function NavBar(): JSX.Element {
                             {searchResult.map((movie) => (
                                 <p
                                     key={movie.movieId} // movieId is used as identifier as it ensures that each item has a unique key.
-                                    // onClick={/* does something when click on movie */}
+                                    onClick={() =>
+                                        setSelectedMovieId(movie.movieId)
+                                    } // Set selected movie ID
                                     className={`py-2 px-4 flex justify-between hover:bg-blue-500 hover:text-white rounded-3xl cursor-pointer`}
                                 >
                                     <span className="text-left text-black prevent-select">
@@ -112,6 +116,8 @@ export default function NavBar(): JSX.Element {
                 </div>
                 {/* Video showed how to add div for mobile phone */}
             </div>
+            {/* Render SideBar and pass the selected movie ID */}
+            {selectedMovieId !== null && <SideBar id={selectedMovieId} />}
         </nav>
     );
 }
