@@ -1,7 +1,7 @@
 'use client';
 
-import { JSX, useState, useRef, useEffect, use } from 'react';
-import { movie, getMovieById } from '@/actions/movie/movie';
+import { JSX, useState, useRef, useEffect } from 'react';
+import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
 
@@ -101,6 +101,7 @@ export default function SideBar(id: number): JSX.Element {
                 }
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
+
                 setSelectedRating(0); // This part needs some more work
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
@@ -112,6 +113,7 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
+    // fetching the specific movieId, when clicking on a movieposter
     useEffect(() => {
         const fetchMovie = async (): Promise<void> => {
             if (selectedMovieId === null) return; // If no movie is selected, do nothing
@@ -127,20 +129,22 @@ export default function SideBar(id: number): JSX.Element {
         fetchMovie();
     }, [id]);
 
-    const handleRatingChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const newRating = Number(event.target.value);
-        if (newRating === selectedRating) {
-            //undo rating
-            setSelectedRating(0);
-            removeMovieRating(selectedMovieId as number); // Remove rating from the database
-        } else {
-            // To change rating
-            setSelectedRating(Number(event.target.value));
-            rateMovie(selectedMovieId as number, newRating); // Update rating in the database
-        }
-    };
+    // entire const is basically the same as in ratingPopcorn
+    // const handleRatingChange = (
+    //     event: React.ChangeEvent<HTMLInputElement>
+    // ): void => {
+    //     const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
+
+    //     if (newRating === selectedRating) {
+    //         //undo rating
+    //         setSelectedRating(0);
+    //         removeMovieRating(selectedMovieId as number); // Remove rating from the database
+    //     } else {
+    //         // To change rating
+    //         setSelectedRating(Number(event.target.value));
+    //         rateMovie(selectedMovieId as number, newRating); // Update rating in the database
+    //     }
+    // };
 
     const handleAddToWatchlist = async (): Promise<void> => {
         if (selectedMovieId === null) return;
@@ -274,12 +278,14 @@ export default function SideBar(id: number): JSX.Element {
             {/* Div for deselecting sidebar */}
             {sidebarImage && (
                 <div
-                    className="absolute w-full h-full z-3"
+                    className="fixed top-0 w-full h-full cursor-pointer bg-gray-500/40"
                     id="backgroundDiv"
                     onClick={() => {
+                        // on click, make the image dissapear
                         setSidebarImage(null);
                         if (backgroundDivRef.current) {
-                            backgroundDivRef.current.style.display = 'none';
+                            // if the background div is active,
+                            backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
                         }
                     }}
                 ></div>
@@ -287,22 +293,17 @@ export default function SideBar(id: number): JSX.Element {
 
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
-                <section className="z-3">
+                <section>
                     <div className="sideBar">
                         <button
                             className="basicBtn cursor-pointer mb-5"
-                            // onClick={() => {
-                            //     setSelectedMovieId(null);
-                            //     if (backgroundDivRef.current) {
-                            //         backgroundDivRef.current.style.display =
-                            //             'none';
-                            //     }
-                            // }}
                             onClick={() => {
+                                // on click, make the image dissapear
                                 setSidebarImage(null);
                                 if (backgroundDivRef.current) {
+                                    // if the background div is active,
                                     backgroundDivRef.current.style.display =
-                                        'none';
+                                        'none'; // then make the background div dissapear
                                 }
                             }}
                         >
@@ -318,7 +319,7 @@ export default function SideBar(id: number): JSX.Element {
 
                         {/* buttoonsssssss */}
                         <button
-                            className="basicBtn mt-4 w-60 h-12"
+                            className="basicBtn w-60 h-12 fixed mt-150"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':
