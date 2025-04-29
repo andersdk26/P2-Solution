@@ -327,8 +327,8 @@ export default function AdminGroupIcon({
                             <u>Close</u>
                         </button>
 
-                        <div className="align-center items-center content-center text-center  mt-10 ml-10">
-                            <p className="text-3xl text-center">
+                        <div className=" mt-2 ml-10">
+                            <p className="mt-10 text-3xl text-center align-center items-center content-center text-center ">
                                 Click ❌ to remove members
                             </p>
                             {MembersListObject}

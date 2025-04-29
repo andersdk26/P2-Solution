@@ -7,6 +7,7 @@ import { AddUserToGroup } from './adminGroupActions';
 export type request = {
     userId: number;
     groupId: number;
+    id: number;
 };
 
 export async function requestToJoinGroup(
@@ -44,15 +45,16 @@ export async function getGroupRequests(adminId: number): Promise<request[]> {
         .where(eq(groupsTable.adminId, adminId));
 
     // Declare array for storing requests.
-    const requests: request[] = [];
+    let requests: request[] = [];
 
     // Fetch requests for each group.
     for (const group of groupsOwnedByAdmin) {
-        requests.concat(
+        requests = requests.concat(
             await db
                 .select({
                     userId: groupRequestsTable.userId,
                     groupId: groupRequestsTable.groupId,
+                    id: groupRequestsTable.id,
                 })
                 .from(groupRequestsTable)
                 .where(eq(groupRequestsTable.groupId, group.groupId))
