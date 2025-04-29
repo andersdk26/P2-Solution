@@ -76,7 +76,7 @@ export default function RatingCarousel(): JSX.Element {
                             removeMovie(selectedMovies[imageIndex]?.movieId);
                             handleNext();
                         }}
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
                     >
                         Remove movie
                     </button>
