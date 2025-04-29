@@ -19,7 +19,7 @@ export default function NavBar(): JSX.Element {
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
                 {/* right side div for bar thingies*/}
                 <div className="w-48 h-24 flex justify-between items-center h-full">
-                    <div className="ml-4 text-xl ">
+                    <div className="ml-4 text-xl cursor-pointer">
                         <Image
                             src={'/img/Jamfest logo.png'}
                             alt={'Jamfest Logo'}

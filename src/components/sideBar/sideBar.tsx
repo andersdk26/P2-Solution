@@ -17,10 +17,13 @@ import {
 } from '@/actions/movie/movieRating';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 
-export default function SideBar(id: number): JSX.Element {
+interface SideBarProps {
+    id: number;
+}
+
+export default function SideBar({ id }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
-    const [selectedRating, setSelectedRating] = useState<number>(0);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [toast, setToast] = useState<{
         message: string;
@@ -30,6 +33,8 @@ export default function SideBar(id: number): JSX.Element {
         useState<WatchlistStatus>('unset');
     const svgRef = useRef<SVGSVGElement>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => alert(selectedMovieId), [selectedMovieId]);
 
     const checkmark = (
         <svg
@@ -99,7 +104,7 @@ export default function SideBar(id: number): JSX.Element {
                 }
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-                setSelectedRating(null); // ??? set the selected rating to null???
+
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
@@ -110,38 +115,12 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
-    // fetching the specific movieId, when clicking on a movieposter
-    useEffect(() => {
-        const fetchMovie = async (): Promise<void> => {
-            if (selectedMovieId === null) return; // If no movie is selected, do nothing
-            setSelectedRating(await getMovieRating(selectedMovieId));
-        };
-        fetchMovie();
-    }, [selectedMovieId]); // Get the rating when a movie is selected
-
     useEffect(() => {
         const fetchMovie = async () => {
             await handleImageClick(id);
         };
         fetchMovie();
     }, [id]);
-
-    // entire const is basically the same as in ratingPopcorn
-    // const handleRatingChange = (
-    //     event: React.ChangeEvent<HTMLInputElement>
-    // ): void => {
-    //     const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
-
-    //     if (newRating === selectedRating) {
-    //         //undo rating
-    //         setSelectedRating(0);
-    //         removeMovieRating(selectedMovieId as number); // Remove rating from the database
-    //     } else {
-    //         // To change rating
-    //         setSelectedRating(Number(event.target.value));
-    //         rateMovie(selectedMovieId as number, newRating); // Update rating in the database
-    //     }
-    // };
 
     const handleAddToWatchlist = async (): Promise<void> => {
         if (selectedMovieId === null) return;
@@ -280,6 +259,7 @@ export default function SideBar(id: number): JSX.Element {
                     onClick={() => {
                         // on click, make the image dissapear
                         setSidebarImage(null);
+                        setSelectedMovieId(null);
                         if (backgroundDivRef.current) {
                             // if the background div is active,
                             backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
@@ -297,6 +277,7 @@ export default function SideBar(id: number): JSX.Element {
                             onClick={() => {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
+                                setSelectedMovieId(null);
                                 if (backgroundDivRef.current) {
                                     // if the background div is active,
                                     backgroundDivRef.current.style.display =
@@ -309,9 +290,8 @@ export default function SideBar(id: number): JSX.Element {
                         {selectedMovieId !== null && (
                             <MovieImage movieId={selectedMovieId} />
                         )}
-                        <h4 className="text-center mt-100 fixed">
-                            {sidebarAlt}
-                        </h4>
+
+                        <h4 className="text-center">{sidebarAlt}</h4>
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 

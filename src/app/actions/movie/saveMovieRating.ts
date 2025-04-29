@@ -40,7 +40,6 @@ export default async function saveMovieRatings(
                 userId,
                 movieId,
                 rating,
-                timestamp: 0,
             })
             .returning();
 
@@ -58,3 +57,4 @@ export default async function saveMovieRatings(
         console.error('Error saving user rating: ', error);
     }
 }
+
