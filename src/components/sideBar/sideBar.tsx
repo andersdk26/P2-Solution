@@ -16,6 +16,7 @@ import {
     removeMovieRating,
 } from '@/actions/movie/movieRating';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
+import { getImdbId } from '@/actions/movie/movieImageUrl';
 
 interface SideBarProps {
     id: number;
@@ -25,6 +26,9 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [selectedMovieImdbId, setSelectedMovieImdbId] = useState<
+        number | null
+    >(null);
     const [toast, setToast] = useState<{
         message: string;
         type: 'success' | 'error';
@@ -109,6 +113,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
                 }
+                setSelectedMovieImdbId(await getImdbId(movieId));
             } catch (error) {
                 console.error('Failed to fetch movie by ID:', error);
             }
@@ -294,6 +299,16 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                         <h4 className="text-center">{sidebarAlt}</h4>
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
+
+                        {/* IMDb link */}
+                        <section>
+                            <a
+                                target="_blank"
+                                href={`https://www.imdb.com/title/tt${selectedMovieImdbId}/`}
+                            >
+                                IMDb page
+                            </a>
+                        </section>
 
                         {/* buttoonsssssss */}
                         <button
