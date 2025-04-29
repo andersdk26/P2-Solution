@@ -29,12 +29,10 @@ export default function GroupSettings(): JSX.Element {
     // array for group requests.
     const [groupRequests, setGroupRequests] = useState<request[]>([]);
 
-    // Array for requests
-    // const [RequestsList, setRequestsList] = useState<request[]>([]);
-    // // state for displaying requests
-    // const [DisplayRequestsList, setDisplayRequestsList] = useState([
-    //     <p key={0}>You have no pending requests.</p>,
-    // ]);
+    // // state for displaying requests. this is for useEffect so that it can return JSX element
+    const [DisplayRequestsList, setDisplayRequestsList] = useState([
+        <p key={0}>You have no pending requests.</p>,
+    ]);
 
     // get the groups user is admin of
     const getAdminGroups = async (): Promise<void> => {
@@ -61,58 +59,53 @@ export default function GroupSettings(): JSX.Element {
         getGroupRequestsA();
     }, []);
 
-    // // get the requests list
-    // const getRequestList = async (): Promise<void> => {
-    //     alert(JSON.stringify(await getGroupRequests(await verifyUser())));
-    //     setRequestsList(await getGroupRequests(await verifyUser()));
-    // };
-    // useEffect(() => {
-    //     getRequestList();
-    // }, []);
-
-    // useEffect(() => {
-    //     const updateRequestsList = async (): Promise<void> => {
-    //         const resolvedRequests = await Promise.all(
-    //             RequestsList.map(async (request) => (
-    //                 <div
-    //                     className="flex items-start space-x-2"
-    //                     key={`${request.groupId}${request.userId}`}
-    //                 >
-    //                     <p className="my-auto w-64 py-4">
-    //                         {await getUserById(request.userId)} wants to join{' '}
-    //                         {await getGroupNameById(request.groupId)}
-    //                     </p>
-    //                     <button
-    //                         className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
-    //                         onClick={async () => {
-    //                             acceptGroupRequest(
-    //                                 request.userId,
-    //                                 request.groupId
-    //                             );
-    //                             getRequestList();
-    //                         }}
-    //                     >
-    //                         Accept
-    //                     </button>
-    //                     <button
-    //                         className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
-    //                         onClick={async () => {
-    //                             rejectGroupRequest(
-    //                                 request.userId,
-    //                                 request.groupId
-    //                             );
-    //                             getRequestList();
-    //                         }}
-    //                     >
-    //                         Decline
-    //                     </button>
-    //                 </div>
-    //             ))
-    //         );
-    //         setDisplayRequestsList(resolvedRequests);
-    //     };
-    //     updateRequestsList();
-    // }, [RequestsList]);
+    useEffect(() => {
+        const updateRequestsList = async (): Promise<void> => {
+            const resolvedRequests = await Promise.all(
+                groupRequests.map(async (request) => (
+                    <div
+                        className="flex items-start align-center my-2 ml-4 space-x-2"
+                        key={request.id}
+                    >
+                        <p className="text-xl my-auto">
+                            <i>{await getUserById(request.userId)}</i> wants to
+                            join{' '}
+                            <b>{await getGroupNameById(request.groupId)}</b>
+                        </p>
+                        <button
+                            className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
+                            onClick={async () => {
+                                acceptGroupRequest(
+                                    request.userId,
+                                    request.groupId
+                                );
+                                getGroupRequestsA();
+                                getAdminGroups();
+                                alert(`You accepted the request`);
+                            }}
+                        >
+                            Accept
+                        </button>
+                        <button
+                            className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
+                            onClick={async () => {
+                                rejectGroupRequest(
+                                    request.userId,
+                                    request.groupId
+                                );
+                                getGroupRequestsA();
+                                alert('You declined the request');
+                            }}
+                        >
+                            Decline
+                        </button>
+                    </div>
+                ))
+            );
+            setDisplayRequestsList(resolvedRequests);
+        };
+        updateRequestsList();
+    }, [groupRequests]);
 
     return (
         <>
@@ -169,42 +162,7 @@ export default function GroupSettings(): JSX.Element {
                             groups
                         </i>
                     </p>
-                    {/* <div>{DisplayRequestsList}</div> */}
-                    {groupRequests.map((request) => (
-                        <div
-                            className="flex items-start space-x-2"
-                            key={request.id}
-                        >
-                            <p>
-                                {request.userId} wants to join {request.groupId}
-                            </p>
-                            <button
-                                className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
-                                onClick={async () => {
-                                    acceptGroupRequest(
-                                        request.userId,
-                                        request.groupId
-                                    );
-                                    getGroupRequestsA();
-                                    getAdminGroups();
-                                }}
-                            >
-                                Accept
-                            </button>
-                            <button
-                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
-                                onClick={async () => {
-                                    rejectGroupRequest(
-                                        request.userId,
-                                        request.groupId
-                                    );
-                                    getGroupRequestsA();
-                                }}
-                            >
-                                Decline
-                            </button>
-                        </div>
-                    ))}
+                    <div>{DisplayRequestsList}</div>
                 </section>
             </div>
         </>
