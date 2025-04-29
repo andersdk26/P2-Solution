@@ -264,6 +264,7 @@ export default async function collaborativeFiltering(
     // ################################
 
     console.log(recommendedMovies);
+    console.log('hej fra cf');
 
     // Return the sorted array of recommended movies.
     return arrayOfRecommendedMovies;

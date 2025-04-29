@@ -70,7 +70,7 @@ export default function Home(): JSX.Element {
             </button>
 
             <section className="m-auto text-center content-center justify-center">
-                <RatingCarousel movieId={selectedMovies} />
+                <RatingCarousel />
             </section>
 
             <button
@@ -81,7 +81,7 @@ export default function Home(): JSX.Element {
                     localStorage.removeItem('selectedMovies');
                     redirect('');
                 }}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute cursor-pointer"
             >
                 Submit
             </button>
