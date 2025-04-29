@@ -1,30 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { JSX } from 'react';
+import Image from 'next/image';
+import '@/styles/mainPage.css'; // Import my CSS file
+import { movie } from '@/actions/movie/movie';
+import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+import MovieImage from '@/components/movie/MovieImage';
+import SideBar from '@/components/sideBar/sideBar';
+
 interface Movie {
     title: string;
     image: string;
 }
 
-import { useState, useEffect, useRef } from 'react';
-import { JSX } from 'react';
-import Image from 'next/image';
-import '@/styles/mainPage.css'; // Import my CSS file
-
-import { movie, getMovieById } from '@/actions/movie/movie';
-import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
-import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
-
-import MovieImage from '@/components/movie/MovieImage';
-
-import SideBar from '@/components/sideBar/sideBar';
-import { group } from 'console';
-
 export default function Home(): JSX.Element {
-    const [movies, setMovies] = useState<Movie[]>([]);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-
     const [groupName, setGroupName] = useState<string>();
     const [groupId, setGroupId] = useState<number>(0);
 
@@ -159,7 +152,7 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Here, the sideBar would appear */}
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
         </>
     );
 }

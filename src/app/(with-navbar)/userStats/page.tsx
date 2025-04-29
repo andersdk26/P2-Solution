@@ -3,69 +3,22 @@
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
-import { JSX, useEffect, useState, useRef } from 'react';
-import ratedMovies from '@/components/coldStarSurvey/rateMovies/ratingUtils';
+import { JSX, useEffect, useState } from 'react';
 
 import ChartGenres from '@/components/Profile/ProfileSettings/chartGenres';
 
 import SideBar from '@/components/sideBar/sideBar';
-import getMovieGenres from '@/actions/movie/getMovieGenres';
 
-interface genreObject {
-    [key: string]: number;
-}
-
-export default function UserStats() {
+export default function UserStats(): JSX.Element {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-    const [movieGenreCount, setMovieGenreCount] = useState<genreObject>({});
-    const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
-    const [sidebarImage, setSidebarImage] = useState<string | null>(null);
-    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        const fetchSeenMovies = async () => {
+        const fetchSeenMovies = async (): Promise<void> => {
             setSeenMovies(await getSeenMovies(await verifyUser()));
         };
         fetchSeenMovies();
     }, []);
-
-    useEffect(() => {
-        const fetchMovieGenre = async () => {
-            const genreCount: genreObject = {};
-            for (const movieId of seenMovies) {
-                const genres = (await getMovieGenres(movieId)).split('|');
-                for (const genre of genres) {
-                    genreCount[genre] = genreCount[genre]
-                        ? genreCount[genre] + 1
-                        : 1;
-                }
-            }
-            setMovieGenreCount(genreCount);
-        };
-        fetchMovieGenre();
-    }, [seenMovies]);
-
-    useEffect(() => {
-        const generateGenreObjects = async () => {
-            let list: JSX.Element[] = [];
-
-            for (const genre in movieGenreCount) {
-                if (
-                    Object.prototype.hasOwnProperty.call(movieGenreCount, genre)
-                ) {
-                    const amount = movieGenreCount[genre] as number;
-                    list.push(
-                        <p>
-                            Amount of {genre} movies rated: {amount}
-                        </p>
-                    );
-                }
-            }
-            setGenreCountList(list);
-        };
-        generateGenreObjects();
-    }, [movieGenreCount]);
 
     return (
         <>
@@ -92,7 +45,7 @@ export default function UserStats() {
                     </div>
                 </section>
             </section>
-            <SideBar id={selectedMovieId || 0} />
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
         </>
     );
 }
