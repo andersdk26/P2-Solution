@@ -4,7 +4,6 @@ import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import Image from 'next/image';
-
 import '@/styles/mainPage.css'; // Import my CSS file
 import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
 import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
@@ -21,7 +20,6 @@ import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 export default function SideBar(id: number): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
-
     const [selectedRating, setSelectedRating] = useState<number>(0);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [toast, setToast] = useState<{

@@ -76,10 +76,10 @@ export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
 export const watchlistTable = sqliteTable('watchlist', {
     id: integer('id').primaryKey(),
-    movieId: integer('movieId')
+    movieid: integer('movieId')
         .notNull()
         .references(() => moviesTable.id),
-    userId: integer('userId')
+    userid: integer('userId')
         .notNull()
         .references(() => usersTable.id),
 });
