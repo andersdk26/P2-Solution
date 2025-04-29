@@ -18,7 +18,7 @@ interface genreObject {
 export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-    const [movieGenreCount, setMovieGenreCount] = useState({});
+    const [movieGenreCount, setMovieGenreCount] = useState<genreObject>({});
     const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
