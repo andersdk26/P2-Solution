@@ -37,8 +37,8 @@ export default async function nameBasedFiltering(
             const words = movieTitle.toLowerCase().split(/\s+/);
             for (const word of words) {
                 if (
-                    word.length > 2 ||
-                    [
+                    word.length > 2 &&
+                    ![
                         'and',
                         'the',
                         'for',
