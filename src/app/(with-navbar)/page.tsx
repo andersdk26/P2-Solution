@@ -47,17 +47,17 @@ export default function Home(): JSX.Element {
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
-          //  setRecommendedMovies(
-                // await nameBasedFiltering(await verifyUser())
-                // await contentBasedFiltering(await verifyUser())
-                // Use "await verifyUser()" or a group ID as input parameter.
-                // await collaborativeFiltering(12345, 'group') //group
-                // await contentBasedFiltering(12345, 'group') //group
-               // await collaborativeFiltering(await verifyUser(), 'individual') //individual user
-                //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
-                // await collaborativeFiltering(12345, 'group')
-                // await contentBasedFiltering(5928906644, 'group')
-           // );
+        //  setRecommendedMovies(
+        // await nameBasedFiltering(await verifyUser())
+        // await contentBasedFiltering(await verifyUser())
+        // Use "await verifyUser()" or a group ID as input parameter.
+        // await collaborativeFiltering(12345, 'group') //group
+        // await contentBasedFiltering(12345, 'group') //group
+        // await collaborativeFiltering(await verifyUser(), 'individual') //individual user
+        //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
+        // await collaborativeFiltering(12345, 'group')
+        // await contentBasedFiltering(5928906644, 'group')
+        // );
     }, []);
 
     const moviesPerPage = 3;
@@ -183,7 +183,7 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Here, the sideBar would appear */}
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId || 0} />
 
             {/* The group seats, redirects to groups page */}
             <GroupSeats />
