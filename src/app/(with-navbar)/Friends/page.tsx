@@ -43,7 +43,8 @@ export default function Friends(): JSX.Element {
                         key={request.from}
                     >
                         <p className="my-auto w-64 py-4">
-                            {await getUserById(request.from)}
+                            {await getUserById(request.from)} wants to be your
+                            friend!
                         </p>
                         <button
                             className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
