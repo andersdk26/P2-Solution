@@ -24,6 +24,8 @@ import getUserById from '@/actions/friends/getUserById';
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
+    // count for how many admin groups
+    const [AdminGroupCount, setAdminGroupCount] = useState<number>(0);
     // array for groups current user is a part of but NOT admin
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
     // array for group requests.
@@ -41,6 +43,10 @@ export default function GroupSettings(): JSX.Element {
     useEffect(() => {
         getAdminGroups();
     }, []);
+
+    useEffect(() => {
+        setAdminGroupCount(AdminGroups.length);
+    }, [AdminGroups]);
 
     // set the groups user is not admin of
     useEffect(() => {
@@ -118,6 +124,7 @@ export default function GroupSettings(): JSX.Element {
                             You are the admin. Only you can add or remove
                             members.{' '}
                         </i>
+                        ({AdminGroupCount}/5)
                     </p>
                     <div className="inline-flex overflow-scroll">
                         {AdminGroups.map((Group) => (
@@ -131,7 +138,7 @@ export default function GroupSettings(): JSX.Element {
                                 />
                             </div>
                         ))}
-                        <CreateGroupIcon />
+                        <CreateGroupIcon adminGroupNumber={AdminGroupCount} />
                     </div>
                 </section>
 
