@@ -5,38 +5,25 @@ interface Movie {
     image: string;
 }
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 
-import { movie, getMovieById } from '@/actions/movie/movie';
+import { movie } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
-import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
-import nameBasedFiltering from '@/components/NameBasedFiltering/nameBasedFiltering';
-
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
-import { useRouter } from 'next/router';
-import groupAggregation from '@/components/GroupAggregation/groupAggregation';
-// import { getMoviesByIds } from '@/actions/movie/movie';
 
 import SideBar from '@/components/sideBar/sideBar';
 
 export default function Home(): JSX.Element {
-    const [movies, setMovies] = useState<Movie[]>([]);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
     useEffect(() => {
-        // Fetch the JSON file when the page loads
-        fetch('Movie.json')
-            .then((response) => response.json())
-            .then((data) => setMovies(data))
-            .catch((error) => console.error('Error loading movies:', error));
-
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
@@ -183,7 +170,7 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Here, the sideBar would appear */}
-            <SideBar id={selectedMovieId || 0} />
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
 
             {/* The group seats, redirects to groups page */}
             <GroupSeats />

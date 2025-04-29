@@ -3,25 +3,20 @@
 import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
-import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
 import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { OutgoingMessage } from 'http';
 import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
-import {
-    getMovieRating,
-    rateMovie,
-    removeMovieRating,
-} from '@/actions/movie/movieRating';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 
 interface SideBarProps {
-    id: number;
+    id: number | null;
+    // eslint-disable-next-line no-unused-vars
+    setIdFunc: (id: number | null) => void;
 }
 
-export default function SideBar({ id }: SideBarProps): JSX.Element {
+export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
@@ -33,8 +28,6 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
         useState<WatchlistStatus>('unset');
     const svgRef = useRef<SVGSVGElement>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => alert(selectedMovieId), [selectedMovieId]);
 
     const checkmark = (
         <svg
@@ -116,8 +109,8 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
     };
 
     useEffect(() => {
-        const fetchMovie = async () => {
-            await handleImageClick(id);
+        const fetchMovie = async (): Promise<void> => {
+            await handleImageClick(id || 0);
         };
         fetchMovie();
     }, [id]);
@@ -260,6 +253,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                         // on click, make the image dissapear
                         setSidebarImage(null);
                         setSelectedMovieId(null);
+                        setIdFunc(null);
                         if (backgroundDivRef.current) {
                             // if the background div is active,
                             backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
@@ -278,6 +272,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
                                 setSelectedMovieId(null);
+                                setIdFunc(null);
                                 if (backgroundDivRef.current) {
                                     // if the background div is active,
                                     backgroundDivRef.current.style.display =
