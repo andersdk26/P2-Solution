@@ -37,7 +37,7 @@ interface genreObject {
 
 export default function ChartGenres(): JSX.Element {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
-    const [movieGenreCount, setMovieGenreCount] = useState({});
+    const [movieGenreCount, setMovieGenreCount] = useState<genreObject>({});
     const [genreCountList, setGenreCountList] = useState([<p key={0}></p>]);
 
     // copied from "/profileSettings/page.tsx"
