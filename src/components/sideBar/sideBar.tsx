@@ -288,7 +288,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 <section>
                     <div className="sideBar">
                         <button
-                            className="basicBtn cursor-pointer mb-5"
+                            className="basicBtn cursor-pointer mb-5 select-none"
                             onClick={() => {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
@@ -313,7 +313,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
 
                         {/* watchlist buttons */}
                         <button
-                            className="basicBtn w-60 h-12 fixed mt-150"
+                            className="basicBtn w-60 h-12 fixed mt-150 select-none"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':

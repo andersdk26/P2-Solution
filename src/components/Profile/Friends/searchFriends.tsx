@@ -49,7 +49,7 @@ function FriendRequest({
             </button>
             {/* close button */}
             <button
-                className="bg-[#282F72] m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80"
+                className="bg-[#282F72] m-4 p-2 rounded-sm bottom-4 cursor-pointer hover:brightness-80 select-none"
                 onClick={() => conditionalFunction(false)}
             >
                 Close

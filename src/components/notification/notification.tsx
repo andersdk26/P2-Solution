@@ -43,6 +43,7 @@ const Notification = (): JSX.Element => {
                     height={30}
                     alt={'Notification tab'}
                     title="Notification"
+                    draggable="false"
                 />
             </button>
             {/* the notification dropdown */}
