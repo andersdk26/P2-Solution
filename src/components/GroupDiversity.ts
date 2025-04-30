@@ -22,20 +22,9 @@ export default async function similarityscore(
         groupGenreScoreMap.set(userId, genreScoreMap);
     }
     // aggregate genre difference for each genre (MISSING)
-        groupGenreScoreMap.forEach((userGenreScoreMap, userId) => {
-             // Compare genreScores for the users in the group. 
-            userGenreScoreMap.forEach((score, genre) => {
-                const otherUserScore = genreScoreMap.get(genre);
-                if (otherUserScore !== undefined) {
-                    // Calculate the difference between the scores
-                    const difference = score % otherUserScore;
-                    // Add the difference to the similarity score
-                    similarityScore += difference;
-                }
-            });
-        });
-        return similarityScore;
-        }
+        groupGenreScoreMap.forEach(userGenreScoreMap, userId) => {
+            // Compare logic - previus commit didnt work as intended
+        }}
 
 
     type averageRating = {
