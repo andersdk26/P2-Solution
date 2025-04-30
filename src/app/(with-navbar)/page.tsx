@@ -41,8 +41,8 @@ export default function Home(): JSX.Element {
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
                 // Use "await verifyUser()" or a group ID as input parameter.
-                await collaborativeFiltering(await verifyUser(), 'individual')
-                // await contentBasedFiltering(12345, 'group')
+                // await collaborativeFiltering(await verifyUser(), 'individual')
+                await contentBasedFiltering(await verifyUser(), 'individual')
             );
         getRecommendedMovies();
         //this is for group
