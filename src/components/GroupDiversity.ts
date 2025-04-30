@@ -14,7 +14,7 @@ export default async function similarityscore(
 ): Promise<number> {
     // fetch groupId and users from group table. (MISSING)
     let similarityScore: number = 0;
-    let userId: number = targetUserRatings;
+    let userId: number = targetUserRatings = 0;
     // new map with userId as key and genre score map as value
     const groupGenreScoreMap = new Map<number, Map<string, number>>();
     for (const userId of group) {
@@ -23,12 +23,13 @@ export default async function similarityscore(
     }
     // aggregate genre difference for each genre (MISSING)
     for (const [userId, genreScoreMap] of groupGenreScoreMap) {
-        for (const genre of genreScoreMap) {
-        }}
-        /*  maybe sort the map first so we have the highest genre score first in the genreScoreMap. 
-    (we cant only compare genrescore: since we aggregate the scores which means someones favorite genre can be the same as someone else, but if one has rated many more movies
-    then it would indicate a low similarity score, which is not what we want)
-    */
+        // compare each score for a genre with the other users score for the same genre
+        for (const [genre, score] of genreScoreMap) {
+            
+        }
+
+
+        }
         return similarityScore;
     }
 
