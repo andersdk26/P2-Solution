@@ -10,6 +10,8 @@ import {
     RemoveMemberFromDb,
 } from '@/actions/groups/adminGroupActions';
 import { ChangeGroupSettings } from './changeGroupSettings';
+import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
+import useRedirect from '../redirect';
 
 export default function AdminGroupIcon({
     groupId,
@@ -33,6 +35,8 @@ export default function AdminGroupIcon({
     const [AdminUsername, setAdminUsername] = useState('');
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
+
+    const redirect = useRedirect(); // Custom hook for redirection
 
     // Keeps track of members in group object
     const [MembersListObject, setMembersListObject] = useState([
@@ -196,9 +200,18 @@ export default function AdminGroupIcon({
                                 <span className="font-normal ml-6">?</span>
                             </p>
 
-                            {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer hover:brightness-80">
-                                Get New Recommendation!
+                            {/* Go to group recommendations. */}
+                            <button
+                                onClick={() => {
+                                    goToGroupRecommendations(
+                                        groupId,
+                                        groupName
+                                    );
+                                    redirect('/Groups/Recommendations');
+                                }}
+                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
+                            >
+                                Go to group recommendations
                             </button>
 
                             <br />

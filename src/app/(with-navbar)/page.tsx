@@ -17,6 +17,7 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 import SideBar from '@/components/sideBar/sideBar';
+import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
 
 export default function Home(): JSX.Element {
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
@@ -27,9 +28,7 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
-                // Use "await verifyUser()" or a group ID as input parameter.
-                await collaborativeFiltering(await verifyUser(), 'individual')
-                // await contentBasedFiltering(12345, 'group')
+                await hybridAlgorithm(await verifyUser(), 'individual')
             );
         getRecommendedMovies();
         //this is for group
