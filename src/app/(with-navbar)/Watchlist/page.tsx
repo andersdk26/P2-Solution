@@ -5,18 +5,23 @@ import getWatchlist from '@/actions/profileSettings/getWatchlist';
 import MovieImage from '@/components/movie/MovieImage';
 import { useEffect, useState, useRef } from 'react';
 import SideBar from '@/components/sideBar/sideBar';
+import LoadingPage from '@/components/loading';
 
 export default function UserStats() {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchSeenMovies = async () => {
             setSeenMovies(await getWatchlist(await verifyUser()));
+            setIsLoading(false);
         };
         fetchSeenMovies();
     }, []);
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <section className="p-8">

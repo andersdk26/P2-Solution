@@ -8,7 +8,7 @@ export default function LoadingPage(): JSX.Element {
         <>
             {/* left div, About group information */}
             <div
-                className={`absolute top-4 left-0 z-40 w-screen h-screen flex items-center justify-center`}
+                className={`absolute top-4 left-0 z-40 w-screen h-screen bg-[#babdde] flex items-center justify-center`}
             >
                 <Image
                     src={'/loadingIcon.gif'}
