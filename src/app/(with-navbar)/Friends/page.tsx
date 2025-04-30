@@ -180,7 +180,7 @@ export default function Friends(): JSX.Element {
                     <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
                         <h2>Friend requests</h2>
                         <p className="ml-4 text-[#282f72]">
-                            Here you can accept or decline incoming friend
+                            Here, you can accept or decline incoming friend
                             requests.
                         </p>
                         <div className="mr-25 pl-4 pt-4 text-[#282f72]">
