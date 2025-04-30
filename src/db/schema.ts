@@ -77,6 +77,9 @@ export const ratingsTable = mysqlTable('ratings', {
     timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+export type InsertRatings = typeof ratingsTable.$inferInsert;
+export type SelectRatings = typeof ratingsTable.$inferSelect;
+
 // // *** SQLite ***
 // import { sql } from 'drizzle-orm';
 // import { timestamp } from 'drizzle-orm/gel-core';
@@ -126,7 +129,7 @@ export const ratingsTable = mysqlTable('ratings', {
 // export type InsertMovieLinkId = typeof movieLinkIdTable.$inferInsert;
 // export type SelectMovieLinkId = typeof movieLinkIdTable.$inferSelect;
 
-// export const testRatings = sqliteTable('testRatings', {
+// export const ratingsTable = sqliteTable('ratingsTable', {
 //     id: integer('id').primaryKey(),
 //     userId: integer('userId').notNull(),
 //     movieId: integer('movieId').notNull(),
@@ -134,8 +137,8 @@ export const ratingsTable = mysqlTable('ratings', {
 //     timestamp: integer('timestamp').notNull(),
 // });
 
-// export type InsertTestRatings = typeof testRatings.$inferInsert;
-// export type SelectTestRatings = typeof testRatings.$inferSelect;
+// export type InsertratingsTable = typeof ratingsTable.$inferInsert;
+// export type SelectratingsTable = typeof ratingsTable.$inferSelect;
 
 // /* Skippers tables */
 // // export const moviesTable = sqliteTable('movies', {

@@ -1,7 +1,7 @@
 'use server';
 
 import { getMovieById, movie } from '@/actions/movie/movie';
-import { testRatings } from '@/db/schema';
+import { ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
@@ -31,15 +31,15 @@ export default async function collaborativeFiltering(
 
     // Check whether the input ID represents a group or an individual.
     if (type === 'individual') {
-        // Fetch all ratings from the table testRatings that have only been made by the target user.
+        // Fetch all ratings from the table ratingsTable that have only been made by the target user.
         targetUserRatings = await db
             .select({
-                userId: testRatings.userId,
-                movieId: testRatings.movieId,
-                movieRating: testRatings.rating,
+                userId: ratingsTable.userId,
+                movieId: ratingsTable.movieId,
+                movieRating: ratingsTable.rating,
             })
-            .from(testRatings)
-            .where(eq(testRatings.userId, targetId));
+            .from(ratingsTable)
+            .where(eq(ratingsTable.userId, targetId));
 
         console.log('Target user ratings have been fetched.');
 
@@ -49,15 +49,15 @@ export default async function collaborativeFiltering(
             return [];
         }
 
-        // Fetch all user ratings from the table testRatings, except those from the target user.
+        // Fetch all user ratings from the table ratingsTable, except those from the target user.
         userRatingsFromDataset = await db
             .select({
-                userId: testRatings.userId,
-                movieId: testRatings.movieId,
-                movieRating: testRatings.rating,
+                userId: ratingsTable.userId,
+                movieId: ratingsTable.movieId,
+                movieRating: ratingsTable.rating,
             })
-            .from(testRatings)
-            .where(ne(testRatings.userId, targetId));
+            .from(ratingsTable)
+            .where(ne(ratingsTable.userId, targetId));
 
         console.log('Other user ratings have been fetched.');
     } else if (type === 'group') {
@@ -74,15 +74,15 @@ export default async function collaborativeFiltering(
         const memberIdStrings = targetUserRatings[0].memberIds.split('|');
         const memberIdNumbers = memberIdStrings.map((id) => parseInt(id, 10));
 
-        // Fetch all user ratings from the table testRatings, except those from the target user.
+        // Fetch all user ratings from the table ratingsTable, except those from the target user.
         userRatingsFromDataset = await db
             .select({
-                userId: testRatings.userId,
-                movieId: testRatings.movieId,
-                movieRating: testRatings.rating,
+                userId: ratingsTable.userId,
+                movieId: ratingsTable.movieId,
+                movieRating: ratingsTable.rating,
             })
-            .from(testRatings)
-            .where(notInArray(testRatings.userId, memberIdNumbers));
+            .from(ratingsTable)
+            .where(notInArray(ratingsTable.userId, memberIdNumbers));
 
         console.log('Other user ratings have been fetched.');
     }

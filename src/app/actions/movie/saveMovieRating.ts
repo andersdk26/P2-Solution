@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db/index';
-import { testRatings } from '@/db/schema';
+import { ratingsTable } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 
 export default async function saveMovieRatings(
@@ -11,15 +11,15 @@ export default async function saveMovieRatings(
 ): Promise<void> {
     const doesRatingAlreadyExist = await db
         .select({
-            id: testRatings.id,
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
+            id: ratingsTable.id,
+            userId: ratingsTable.userId,
+            movieId: ratingsTable.movieId,
         })
-        .from(testRatings)
+        .from(ratingsTable)
         .where(
             and(
-                eq(testRatings.userId, userId),
-                eq(testRatings.movieId, movieId)
+                eq(ratingsTable.userId, userId),
+                eq(ratingsTable.movieId, movieId)
             )
         );
 
@@ -29,13 +29,13 @@ export default async function saveMovieRatings(
             doesRatingAlreadyExist[0]
         );
         await db
-            .delete(testRatings)
-            .where(eq(testRatings.id, doesRatingAlreadyExist[0].id));
+            .delete(ratingsTable)
+            .where(eq(ratingsTable.id, doesRatingAlreadyExist[0].id));
     }
 
     try {
         const result = await db
-            .insert(testRatings)
+            .insert(ratingsTable)
             .values({
                 userId,
                 movieId,

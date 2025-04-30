@@ -1,7 +1,7 @@
 'use server';
 
 import { getMovieById, movie } from '@/actions/movie/movie';
-import { moviesTable, testRatings } from '@/db/schema';
+import { moviesTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
@@ -23,12 +23,12 @@ export default async function contentBasedFiltering(
         // Fetch the target user's ratings.
         targetUserRatings = await db
             .select({
-                userId: testRatings.userId,
-                movieId: testRatings.movieId,
-                movieRating: testRatings.rating,
+                userId: ratingsTable.userId,
+                movieId: ratingsTable.movieId,
+                movieRating: ratingsTable.rating,
             })
-            .from(testRatings)
-            .where(eq(testRatings.userId, targetId));
+            .from(ratingsTable)
+            .where(eq(ratingsTable.userId, targetId));
 
         console.log('Got target user ratings.');
         console.log(targetUserRatings);
