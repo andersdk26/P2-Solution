@@ -282,7 +282,10 @@ export default function AdminGroupIcon({
                             <u>Close</u>
                         </button>
 
-                        <div className="fixed mt-10 left-2/5 content-center align-center items-center">
+                        <p className="mt-10 text-3xl text-[#282f72] text-center align-center items-center content-center text-center ">
+                            Add more members to your group
+                        </p>
+                        <div className="fixed mt-2 left-2/5 content-center align-center items-center">
                             {/* the search form */}
                             <form
                                 className="w-80 justify-stretch py-2 text-black "
@@ -347,7 +350,7 @@ export default function AdminGroupIcon({
                         </button>
 
                         <div className=" mt-2 ml-10">
-                            <p className="mt-10 text-3xl text-center align-center items-center content-center text-center ">
+                            <p className="mt-10 text-3xl text-[#282f72] text-center align-center items-center content-center text-center ">
                                 Click ❌ to remove members
                             </p>
                             {MembersListObject}

@@ -176,9 +176,9 @@ export function FormCreateGroup(): JSX.Element {
                             // When the user types something, call function to fetch movies with matching search query.
                             onChange={async (e) => {
                                 setSearchResult(
-                                    await searchFriendById(
-                                        e.target.value,
-                                        await verifyUser()
+                                    await searchUserById(
+                                        e.target.value
+                                        // await verifyUser()
                                     )
                                 );
                             }}
