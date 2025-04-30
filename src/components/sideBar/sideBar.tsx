@@ -4,8 +4,11 @@ import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import '@/styles/mainPage.css'; // Import my CSS file
-import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
-import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
+import {
+    saveMovieToWatchlist,
+    removeMovieToWatchlist,
+    checkWatchlistStatus,
+} from '@/actions/movie/watchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
@@ -163,6 +166,24 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
         }
     };
 
+    useEffect(() => {
+        handleWatchlistStatus();
+    }, [selectedMovieId]);
+
+    const handleWatchlistStatus = async (): Promise<void> => {
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const isInWatchlist = await checkWatchlistStatus(
+                userId,
+                selectedMovieId
+            );
+            setWatchlistStatus(isInWatchlist ? 'set' : 'unset');
+        } catch (error) {
+            console.error('Error checking movie in watchlist:', error);
+        }
+    };
+
     const handleLoadingCompleation = (state: 'setReq' | 'unsetReq'): void => {
         setWatchlistStatus(state === 'setReq' ? 'setCheck' : 'unsetCheck');
 
@@ -290,7 +311,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 
-                        {/* buttoonsssssss */}
+                        {/* watchlist buttons */}
                         <button
                             className="basicBtn w-60 h-12 fixed mt-150"
                             onClick={() => {
