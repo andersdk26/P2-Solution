@@ -18,6 +18,7 @@ import MovieImage from '@/components/movie/MovieImage';
 
 import SideBar from '@/components/sideBar/sideBar';
 import { group } from 'console';
+import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -46,14 +47,7 @@ export default function Home(): JSX.Element {
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> => {
-            setRecommendedMovies(
-                // Use "await verifyUser()" or a group ID as input parameter.
-                // await contentBasedFiltering(12345, 'group')
-                await collaborativeFiltering(groupId, 'group')
-                // TODO: Fix: funktionen bliver ikke kaldt. Aner ikke hvorfor. groupId er
-                // hentet inden funktionen bliver kaldt, samt konverteret til integer,
-                // men det virker stadig ikke.
-            );
+            setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
             console.log(recommendedMovies);
         };
         getRecommendedMovies();

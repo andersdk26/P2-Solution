@@ -23,6 +23,7 @@ import groupAggregation from '@/components/GroupAggregation/groupAggregation';
 // import { getMoviesByIds } from '@/actions/movie/movie';
 
 import SideBar from '@/components/sideBar/sideBar';
+import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
 
 export default function Home(): JSX.Element {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -40,9 +41,7 @@ export default function Home(): JSX.Element {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> =>
             setRecommendedMovies(
-                // Use "await verifyUser()" or a group ID as input parameter.
-                // await collaborativeFiltering(await verifyUser(), 'individual')
-                await contentBasedFiltering(await verifyUser(), 'individual')
+                await hybridAlgorithm(await verifyUser(), 'individual')
             );
         getRecommendedMovies();
         //this is for group
