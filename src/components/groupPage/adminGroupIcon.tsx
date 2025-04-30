@@ -12,6 +12,7 @@ import {
 import { ChangeGroupSettings } from './changeGroupSettings';
 import { redirect } from 'next/navigation';
 import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
+import LoadingPage from '../loading';
 
 export default function AdminGroupIcon({
     groupId,
@@ -36,6 +37,9 @@ export default function AdminGroupIcon({
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
 
+    // set loading when waiting for group members
+    const [isLoadingMembers, setIsLoadingMembers] = useState(true);
+
     // Keeps track of members in group object
     const [MembersListObject, setMembersListObject] = useState([
         <p className="ml-4" key={0}>
@@ -59,6 +63,7 @@ export default function AdminGroupIcon({
                 array.push(await getUserById(parseInt(id)));
             }
             setMemberUsernames(array);
+            setIsLoadingMembers(false);
         };
         getMemberUsernames();
     }, []);
@@ -128,6 +133,8 @@ export default function AdminGroupIcon({
         };
         updateMembersList();
     }, []);
+
+    if (isLoadingMembers) return <LoadingPage />;
 
     return (
         <>
