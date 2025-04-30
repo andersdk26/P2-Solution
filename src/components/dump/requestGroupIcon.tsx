@@ -2,7 +2,7 @@
 import { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import getUserById from '@/actions/friends/getUserById';
-import { group } from './group';
+import { group } from 'components/groupPage/group';
 
 export default function RequestGroupIcon({
     groupId,
