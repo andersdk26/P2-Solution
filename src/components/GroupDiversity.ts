@@ -22,16 +22,21 @@ export default async function similarityscore(
         groupGenreScoreMap.set(userId, genreScoreMap);
     }
     // aggregate genre difference for each genre (MISSING)
-    for (const [userId, genreScoreMap] of groupGenreScoreMap) {
-        // compare each score for a genre with the other users score for the same genre
-        for (const [genre, score] of genreScoreMap) {
-            
-        }
-
-
-        }
+        groupGenreScoreMap.forEach((userGenreScoreMap, userId) => {
+             // Compare genreScores for the users in the group. 
+            userGenreScoreMap.forEach((score, genre) => {
+                const otherUserScore = genreScoreMap.get(genre);
+                if (otherUserScore !== undefined) {
+                    // Calculate the difference between the scores
+                    const difference = score % otherUserScore;
+                    // Add the difference to the similarity score
+                    similarityScore += difference;
+                }
+            });
+        });
         return similarityScore;
-    }
+        }
+
 
     type averageRating = {
         runningTotal: number;
