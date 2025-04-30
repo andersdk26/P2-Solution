@@ -3,24 +3,25 @@
 import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
-import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
-import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
-import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
-import verifyUser from '@/actions/logIn/authenticateUser';
-import { OutgoingMessage } from 'http';
-import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import {
-    getMovieRating,
-    rateMovie,
-    removeMovieRating,
-} from '@/actions/movie/movieRating';
+    saveMovieToWatchlist,
+    removeMovieToWatchlist,
+    checkWatchlistStatus,
+} from '@/actions/movie/watchlist';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 
-export default function SideBar(id: number): JSX.Element {
+interface SideBarProps {
+    id: number | null;
+    // eslint-disable-next-line no-unused-vars
+    setIdFunc: (id: number | null) => void;
+}
+
+export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
-    const [selectedRating, setSelectedRating] = useState<number>(0);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [toast, setToast] = useState<{
         message: string;
@@ -100,7 +101,6 @@ export default function SideBar(id: number): JSX.Element {
                 setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
                 setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
 
-                setSelectedRating(0); // This part needs some more work
                 setSelectedMovieId(movieId); // set the rating to the selected movie ID
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
@@ -111,38 +111,12 @@ export default function SideBar(id: number): JSX.Element {
         }
     };
 
-    // fetching the specific movieId, when clicking on a movieposter
     useEffect(() => {
         const fetchMovie = async (): Promise<void> => {
-            if (selectedMovieId === null) return; // If no movie is selected, do nothing
-            setSelectedRating(await getMovieRating(selectedMovieId));
-        };
-        fetchMovie();
-    }, [selectedMovieId]); // Get the rating when a movie is selected
-
-    useEffect(() => {
-        const fetchMovie = async () => {
-            await handleImageClick(id);
+            await handleImageClick(id || 0);
         };
         fetchMovie();
     }, [id]);
-
-    // entire const is basically the same as in ratingPopcorn
-    // const handleRatingChange = (
-    //     event: React.ChangeEvent<HTMLInputElement>
-    // ): void => {
-    //     const newRating = Number(event.target.value); // initialising of newRating to a number of the current value selected
-
-    //     if (newRating === selectedRating) {
-    //         //undo rating
-    //         setSelectedRating(0);
-    //         removeMovieRating(selectedMovieId as number); // Remove rating from the database
-    //     } else {
-    //         // To change rating
-    //         setSelectedRating(Number(event.target.value));
-    //         rateMovie(selectedMovieId as number, newRating); // Update rating in the database
-    //     }
-    // };
 
     const handleAddToWatchlist = async (): Promise<void> => {
         if (selectedMovieId === null) return;
@@ -189,6 +163,24 @@ export default function SideBar(id: number): JSX.Element {
                 message: 'Failed to remove movie from watchlist.',
                 type: 'error',
             });
+        }
+    };
+
+    useEffect(() => {
+        handleWatchlistStatus();
+    }, [selectedMovieId]);
+
+    const handleWatchlistStatus = async (): Promise<void> => {
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const isInWatchlist = await checkWatchlistStatus(
+                userId,
+                selectedMovieId
+            );
+            setWatchlistStatus(isInWatchlist ? 'set' : 'unset');
+        } catch (error) {
+            console.error('Error checking movie in watchlist:', error);
         }
     };
 
@@ -281,6 +273,8 @@ export default function SideBar(id: number): JSX.Element {
                     onClick={() => {
                         // on click, make the image dissapear
                         setSidebarImage(null);
+                        setSelectedMovieId(null);
+                        setIdFunc(null);
                         if (backgroundDivRef.current) {
                             // if the background div is active,
                             backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
@@ -294,10 +288,12 @@ export default function SideBar(id: number): JSX.Element {
                 <section>
                     <div className="sideBar">
                         <button
-                            className="basicBtn cursor-pointer mb-5"
+                            className="basicBtn cursor-pointer mb-5 select-none"
                             onClick={() => {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
+                                setSelectedMovieId(null);
+                                setIdFunc(null);
                                 if (backgroundDivRef.current) {
                                     // if the background div is active,
                                     backgroundDivRef.current.style.display =
@@ -315,9 +311,9 @@ export default function SideBar(id: number): JSX.Element {
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 
-                        {/* buttoonsssssss */}
+                        {/* watchlist buttons */}
                         <button
-                            className="basicBtn w-60 h-12 fixed mt-150"
+                            className="basicBtn w-60 h-12 fixed mt-150 select-none"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':

@@ -73,7 +73,8 @@ export default function MovieImage({
                     blurDataURL={
                         placeholderDataURL ? placeholderDataURL : blurDataURL
                     }
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} select-none`}
+                    draggable="false"
                 />
             ) : (
                 <Image
@@ -89,7 +90,8 @@ export default function MovieImage({
                     blurDataURL={
                         placeholderDataURL ? placeholderDataURL : blurDataURL
                     }
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} select-none`}
+                    draggable="false"
                 />
             )}
         </>

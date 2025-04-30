@@ -77,7 +77,7 @@ export default function ChartGenres(): JSX.Element {
     useEffect(() => {
         const generateGenreObjects = async () => {
             const genreCountObject = {
-                labels: ['Amount of rated movies'],
+                labels: ['All rated movies'],
                 data: [seenMovies.length],
             };
 
@@ -105,7 +105,7 @@ export default function ChartGenres(): JSX.Element {
                 <p className="text-[#282f72]">
                     A movie can have multiple genres
                 </p>
-                <Bar
+                <Bar //chart starts here
                     data={{
                         labels: genreCountList.labels, // the x-axis values
                         datasets: [

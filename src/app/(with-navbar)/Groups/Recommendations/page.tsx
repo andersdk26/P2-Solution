@@ -1,31 +1,25 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { JSX } from 'react';
+import Image from 'next/image';
+import '@/styles/mainPage.css'; // Import my CSS file
+import { movie } from '@/actions/movie/movie';
+import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
+import MovieImage from '@/components/movie/MovieImage';
+import SideBar from '@/components/sideBar/sideBar';
+
 interface Movie {
     title: string;
     image: string;
 }
 
-import { useState, useEffect, useRef } from 'react';
-import { JSX } from 'react';
-import Image from 'next/image';
-import '@/styles/mainPage.css'; // Import my CSS file
-
-import { movie, getMovieById } from '@/actions/movie/movie';
-import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
-import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
-
-import MovieImage from '@/components/movie/MovieImage';
-
-import SideBar from '@/components/sideBar/sideBar';
-
 export default function Home(): JSX.Element {
-    const [movies, setMovies] = useState<Movie[]>([]);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-
     const [groupName, setGroupName] = useState<string>();
-    const [groupId, setGroupId] = useState<number>();
+    const [groupId, setGroupId] = useState<number>(0);
 
     useEffect(() => {
         const gn = localStorage.getItem('groupName') || '';
@@ -40,20 +34,23 @@ export default function Home(): JSX.Element {
         //     .then((response) => response.json())
         //     .then((data) => setMovies(data))
         //     .catch((error) => console.error('Error loading movies:', error));
+    }, []);
 
+    useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
                 // Use "await verifyUser()" or a group ID as input parameter.
                 // await contentBasedFiltering(12345, 'group')
-                await collaborativeFiltering(groupId!, 'group')
+                await collaborativeFiltering(groupId, 'group')
                 // TODO: Fix: funktionen bliver ikke kaldt. Aner ikke hvorfor. groupId er
                 // hentet inden funktionen bliver kaldt, samt konverteret til integer,
                 // men det virker stadig ikke.
             );
+            console.log(recommendedMovies);
+        };
         getRecommendedMovies();
-        console.log(recommendedMovies);
-    }, []);
+    }, [groupId]);
 
     const moviesPerPage = 3;
     const totalMovies = 30;
@@ -155,7 +152,7 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Here, the sideBar would appear */}
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
         </>
     );
 }
