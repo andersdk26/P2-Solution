@@ -8,6 +8,7 @@ import { movie } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import MovieImage from '@/components/movie/MovieImage';
 import SideBar from '@/components/sideBar/sideBar';
+import GroupSeats from '@/components/mainPage/groupSeats';
 
 interface Movie {
     title: string;
@@ -148,6 +149,7 @@ export default function Home(): JSX.Element {
                         <button onClick={handlePreviousPage}>⇦</button>
                         <button onClick={handleNextPage}>⇨</button>
                     </div>
+                    <GroupSeats />
                 </div>
             </div>
 

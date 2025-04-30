@@ -1,5 +1,9 @@
 import { JSX, useState } from 'react';
-import { searchUserById, user } from '../Profile/Friends/friends';
+import {
+    searchFriendById,
+    searchUserById,
+    user,
+} from '../Profile/Friends/friends';
 import { group } from './group';
 
 import { FetchGroupId } from '@/actions/groups/fetchGroupId';
@@ -23,7 +27,11 @@ export function FormCreateGroup(): JSX.Element {
     const [ErrorExplain, setErrorExplain] = useState('');
 
     // Function for handling selection of users.
-    const handleSelectUser = (user: user): void => {
+    const handleSelectUser = async (user: user): Promise<void> => {
+        if (user.userId === (await verifyUser())) {
+            alert('You are already in the group');
+            return;
+        }
         setSelectedUsers((prevSelectedUsers) => {
             const isAlreadySelected = prevSelectedUsers.some(
                 (id) => id.userId === user.userId
@@ -168,7 +176,10 @@ export function FormCreateGroup(): JSX.Element {
                             // When the user types something, call function to fetch movies with matching search query.
                             onChange={async (e) => {
                                 setSearchResult(
-                                    await searchUserById(e.target.value)
+                                    await searchFriendById(
+                                        e.target.value,
+                                        await verifyUser()
+                                    )
                                 );
                             }}
                         />
