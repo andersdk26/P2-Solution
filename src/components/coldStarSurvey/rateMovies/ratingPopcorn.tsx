@@ -59,8 +59,9 @@ export default function RatingPopcorn({
                             alt={'Popcorn Rating 1'}
                             width={40}
                             height={40}
-                            className="popcorn1"
+                            className="popcorn1 select-none"
                             id="popcorn_img1"
+                            draggable="false"
                         ></Image>
                     </label>
                 </li>
@@ -79,8 +80,9 @@ export default function RatingPopcorn({
                             alt={'Popcorn Rating 2'}
                             width={40}
                             height={40}
-                            className="popcorn2"
+                            className="popcorn2 select-none"
                             id="popcorn_img2"
+                            draggable="false"
                         ></Image>
                     </label>
                 </li>
@@ -99,8 +101,9 @@ export default function RatingPopcorn({
                             alt={'Popcorn Rating 3'}
                             width={40}
                             height={40}
-                            className="popcorn3"
+                            className="popcorn3 select-none"
                             id="popcorn_img3"
+                            draggable="false"
                         ></Image>
                     </label>
                 </li>
@@ -119,8 +122,9 @@ export default function RatingPopcorn({
                             alt={'Popcorn Rating 4'}
                             width={40}
                             height={40}
-                            className="popcorn4"
+                            className="popcorn4 select-none"
                             id="popcorn_img4"
+                            draggable="false"
                         ></Image>
                     </label>
                 </li>
@@ -139,8 +143,9 @@ export default function RatingPopcorn({
                             alt={'Popcorn Rating 5'}
                             width={40}
                             height={40}
-                            className="popcorn5"
+                            className="popcorn5 select-none"
                             id="popcorn_img5"
+                            draggable="false"
                         ></Image>
                     </label>
                 </li>

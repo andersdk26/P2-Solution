@@ -3,26 +3,24 @@
 import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
-import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
-import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
-import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
-import verifyUser from '@/actions/logIn/authenticateUser';
-import { OutgoingMessage } from 'http';
-import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import {
-    getMovieRating,
-    rateMovie,
-    removeMovieRating,
-} from '@/actions/movie/movieRating';
+    saveMovieToWatchlist,
+    removeMovieToWatchlist,
+    checkWatchlistStatus,
+} from '@/actions/movie/watchlist';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 import { getImdbId } from '@/actions/movie/movieImageUrl';
 
 interface SideBarProps {
-    id: number;
+    id: number | null;
+    // eslint-disable-next-line no-unused-vars
+    setIdFunc: (id: number | null) => void;
 }
 
-export default function SideBar({ id }: SideBarProps): JSX.Element {
+export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
@@ -37,8 +35,6 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
         useState<WatchlistStatus>('unset');
     const svgRef = useRef<SVGSVGElement>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => alert(selectedMovieId), [selectedMovieId]);
 
     const checkmark = (
         <svg
@@ -121,8 +117,8 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
     };
 
     useEffect(() => {
-        const fetchMovie = async () => {
-            await handleImageClick(id);
+        const fetchMovie = async (): Promise<void> => {
+            await handleImageClick(id || 0);
         };
         fetchMovie();
     }, [id]);
@@ -172,6 +168,24 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                 message: 'Failed to remove movie from watchlist.',
                 type: 'error',
             });
+        }
+    };
+
+    useEffect(() => {
+        handleWatchlistStatus();
+    }, [selectedMovieId]);
+
+    const handleWatchlistStatus = async (): Promise<void> => {
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const isInWatchlist = await checkWatchlistStatus(
+                userId,
+                selectedMovieId
+            );
+            setWatchlistStatus(isInWatchlist ? 'set' : 'unset');
+        } catch (error) {
+            console.error('Error checking movie in watchlist:', error);
         }
     };
 
@@ -265,6 +279,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                         // on click, make the image dissapear
                         setSidebarImage(null);
                         setSelectedMovieId(null);
+                        setIdFunc(null);
                         if (backgroundDivRef.current) {
                             // if the background div is active,
                             backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
@@ -278,11 +293,12 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                 <section>
                     <div className="sideBar">
                         <button
-                            className="basicBtn cursor-pointer mb-5"
+                            className="basicBtn cursor-pointer mb-5 select-none"
                             onClick={() => {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
                                 setSelectedMovieId(null);
+                                setIdFunc(null);
                                 if (backgroundDivRef.current) {
                                     // if the background div is active,
                                     backgroundDivRef.current.style.display =
@@ -309,10 +325,9 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                                 IMDb page
                             </a>
                         </section>
-
-                        {/* buttoonsssssss */}
+                        {/* watchlist buttons */}
                         <button
-                            className="basicBtn w-60 h-12 fixed mt-150"
+                            className="basicBtn w-60 h-12 fixed mt-150 select-none"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':
