@@ -9,6 +9,7 @@ import collaborativeFiltering from '@/components/CollaborativeFiltering/collabor
 import MovieImage from '@/components/movie/MovieImage';
 import SideBar from '@/components/sideBar/sideBar';
 import GroupSeats from '@/components/mainPage/groupSeats';
+import LoadingPage from '@/components/loading';
 
 interface Movie {
     title: string;

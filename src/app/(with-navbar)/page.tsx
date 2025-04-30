@@ -17,11 +17,14 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
 
 import SideBar from '@/components/sideBar/sideBar';
+import LoadingPage from '@/components/loading';
 
 export default function Home(): JSX.Element {
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
@@ -31,6 +34,7 @@ export default function Home(): JSX.Element {
                 await collaborativeFiltering(await verifyUser(), 'individual')
                 // await contentBasedFiltering(12345, 'group')
             );
+        setIsLoading(false);
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
@@ -80,6 +84,8 @@ export default function Home(): JSX.Element {
             );
         }
     };
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <>
