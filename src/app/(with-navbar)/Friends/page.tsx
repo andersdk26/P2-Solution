@@ -194,7 +194,6 @@ export default function Friends(): JSX.Element {
             {unfriendOpen && (
                 <aside
                     className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center`}
-                    onLoad={() => alert(unfriendOpen)}
                 >
                     {/* the box container */}
                     <div
