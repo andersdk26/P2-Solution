@@ -24,6 +24,7 @@ export default function Home(): JSX.Element {
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    // for the loading page
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

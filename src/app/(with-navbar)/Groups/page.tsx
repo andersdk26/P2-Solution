@@ -20,6 +20,7 @@ import {
     request,
 } from '@/actions/groups/groupRequests';
 import getUserById from '@/actions/friends/getUserById';
+import LoadingPage from '@/components/loading';
 
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
@@ -30,6 +31,9 @@ export default function GroupSettings(): JSX.Element {
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
     // array for group requests.
     const [groupRequests, setGroupRequests] = useState<request[]>([]);
+
+    // for the loading page
+    const [isLoading, setIsLoading] = useState(true);
 
     // // state for displaying requests. this is for useEffect so that it can return JSX element
     const [DisplayRequestsList, setDisplayRequestsList] = useState([
@@ -110,8 +114,11 @@ export default function GroupSettings(): JSX.Element {
             );
             setDisplayRequestsList(resolvedRequests);
         };
+        setIsLoading(false);
         updateRequestsList();
     }, [groupRequests]);
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <>
