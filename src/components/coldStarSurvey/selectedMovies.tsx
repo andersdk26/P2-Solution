@@ -5,6 +5,7 @@ import { movie, getMovieById } from '@/actions/movie/movie';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import MovieImage from '@/components/movie/MovieImage';
+import LoadingPage from '../loading';
 
 export function DisplaySelectedMovies(
     selectedMovies: movie[],
@@ -49,6 +50,9 @@ export function DisplayPopularMovies(
 ): JSX.Element {
     const [popularMovies, setPopularMovies] = useState<movie[]>([]);
 
+    // loading
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         // Array of ids of popular movies.
         const popularMovieIds = [
@@ -64,12 +68,15 @@ export function DisplayPopularMovies(
                 (movie): movie is movie => movie !== null
             );
             setPopularMovies(validMovies);
+            setIsLoading(false);
         };
 
         fetchAllMovies();
 
         console.log(popularMovies);
     }, []);
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <section
