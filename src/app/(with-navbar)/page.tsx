@@ -29,13 +29,15 @@ export default function Home(): JSX.Element {
 
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
                 // Use "await verifyUser()" or a group ID as input parameter.
                 await collaborativeFiltering(await verifyUser(), 'individual')
                 // await contentBasedFiltering(12345, 'group')
             );
-        setIsLoading(false);
+            setIsLoading(false);
+        };
+
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
