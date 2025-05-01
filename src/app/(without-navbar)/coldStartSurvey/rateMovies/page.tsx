@@ -86,13 +86,13 @@ export default function Home(): JSX.Element {
                 Submit
             </button>
 
-            <section>
+            {/* <section>
                 {selectedMovies.map((movie) => (
                     <div key={movie.movieId}>
                         <p>{movie.movieTitle}</p>
                     </div>
                 ))}
-            </section>
+            </section> */}
         </main>
     );
 }

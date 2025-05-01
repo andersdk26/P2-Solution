@@ -45,6 +45,9 @@ export default function AdminGroupIcon({
         </p>,
     ]);
 
+    // loading page
+    const [isLoadingMembers, setIsLoadingMembers] = useState(true);
+
     // make array with the settings
     const settingsList = settings.split('|');
 

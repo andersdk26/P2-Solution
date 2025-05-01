@@ -11,6 +11,7 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
 import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
+import LoadingPage from '@/components/loading';
 
 export default function Friends(): JSX.Element {
     // Pop up for unfriending someone
@@ -33,6 +34,10 @@ export default function Friends(): JSX.Element {
         </p>,
     ]);
     const [unfriendName, setUnfriendName] = useState('');
+
+    // loading page
+    const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
+    const [isLoadingRequest, setIsLoadingRequest] = useState(true);
 
     // fetching of your own userId to show the user
     useEffect(() => {
@@ -103,12 +108,14 @@ export default function Friends(): JSX.Element {
                 ))
             );
             setFriendRequestList(resolvedRequests);
+            setIsLoadingRequest(false);
         };
         updateFriendRequestList();
     }, [FriendRequests]);
 
     const getFriendsList = async (): Promise<void> => {
         setFriendsList(await GetFriends(await verifyUser()));
+        setIsLoadingFriendsList(false);
     };
 
     useEffect(() => {
@@ -145,6 +152,8 @@ export default function Friends(): JSX.Element {
         };
         updateFriendList();
     }, [FriendsList]);
+
+    if (isLoadingFriendsList || isLoadingRequest) return <LoadingPage />;
 
     return (
         <>
