@@ -8,6 +8,8 @@ import { movie } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 import MovieImage from '@/components/movie/MovieImage';
 import SideBar from '@/components/sideBar/sideBar';
+import { group } from 'console';
+import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
 import GroupSeats from '@/components/mainPage/groupSeats';
 import LoadingPage from '@/components/loading';
 
@@ -41,14 +43,7 @@ export default function Home(): JSX.Element {
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> => {
-            setRecommendedMovies(
-                // Use "await verifyUser()" or a group ID as input parameter.
-                // await contentBasedFiltering(12345, 'group')
-                await collaborativeFiltering(groupId, 'group')
-                // TODO: Fix: funktionen bliver ikke kaldt. Aner ikke hvorfor. groupId er
-                // hentet inden funktionen bliver kaldt, samt konverteret til integer,
-                // men det virker stadig ikke.
-            );
+            setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
             console.log(recommendedMovies);
         };
         getRecommendedMovies();

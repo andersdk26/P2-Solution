@@ -4,11 +4,15 @@ import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
 import '@/styles/mainPage.css'; // Import my CSS file
-import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
-import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
+import {
+    saveMovieToWatchlist,
+    removeMovieToWatchlist,
+    checkWatchlistStatus,
+} from '@/actions/movie/watchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
+import { getImdbId } from '@/actions/movie/movieImageUrl';
 
 interface SideBarProps {
     id: number | null;
@@ -20,6 +24,9 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [selectedMovieImdbId, setSelectedMovieImdbId] = useState<
+        number | null
+    >(null);
     const [toast, setToast] = useState<{
         message: string;
         type: 'success' | 'error';
@@ -102,6 +109,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
                 }
+                setSelectedMovieImdbId(parseInt(await getImdbId(movieId)));
             } catch (error) {
                 console.error('Failed to fetch movie by ID:', error);
             }
@@ -160,6 +168,24 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 message: 'Failed to remove movie from watchlist.',
                 type: 'error',
             });
+        }
+    };
+
+    useEffect(() => {
+        handleWatchlistStatus();
+    }, [selectedMovieId]);
+
+    const handleWatchlistStatus = async (): Promise<void> => {
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const isInWatchlist = await checkWatchlistStatus(
+                userId,
+                selectedMovieId
+            );
+            setWatchlistStatus(isInWatchlist ? 'set' : 'unset');
+        } catch (error) {
+            console.error('Error checking movie in watchlist:', error);
         }
     };
 
@@ -267,7 +293,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 <section>
                     <div className="sideBar">
                         <button
-                            className="basicBtn cursor-pointer mb-5"
+                            className="basicBtn cursor-pointer mb-5 select-none"
                             onClick={() => {
                                 // on click, make the image dissapear
                                 setSidebarImage(null);
@@ -290,9 +316,18 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                         {/* Rating Buttons */}
                         <RatingPopcorn movieId={selectedMovieId || 0} />
 
-                        {/* buttoonsssssss */}
+                        {/* IMDb link */}
+                        <section>
+                            <a
+                                target="_blank"
+                                href={`https://www.imdb.com/title/tt${selectedMovieImdbId}/`}
+                            >
+                                IMDb page
+                            </a>
+                        </section>
+                        {/* watchlist buttons */}
                         <button
-                            className="basicBtn w-60 h-12 fixed mt-150"
+                            className="basicBtn w-60 h-12 fixed mt-150 select-none"
                             onClick={() => {
                                 switch (watchlistStatus) {
                                     case 'unset':

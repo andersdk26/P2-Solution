@@ -10,8 +10,9 @@ import {
     RemoveMemberFromDb,
 } from '@/actions/groups/adminGroupActions';
 import { ChangeGroupSettings } from './changeGroupSettings';
-import { redirect } from 'next/navigation';
 import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
+import useRedirect from '../redirect';
+import { redirect } from 'next/navigation';
 import LoadingPage from '../loading';
 
 export default function AdminGroupIcon({
@@ -36,9 +37,6 @@ export default function AdminGroupIcon({
     const [AdminUsername, setAdminUsername] = useState('');
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
-
-    // set loading when waiting for group members
-    const [isLoadingMembers, setIsLoadingMembers] = useState(true);
 
     // Keeps track of members in group object
     const [MembersListObject, setMembersListObject] = useState([
@@ -214,17 +212,8 @@ export default function AdminGroupIcon({
                             </p>
 
                             {/* Get new recommendation */}
-                            <button
-                                onClick={() => {
-                                    goToGroupRecommendations(
-                                        groupId,
-                                        groupName
-                                    );
-                                    redirect('/Groups/Recommendations');
-                                }}
-                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
-                            >
-                                Go to group recommendations
+                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer hover:brightness-80">
+                                Get New Recommendation!
                             </button>
 
                             <br />

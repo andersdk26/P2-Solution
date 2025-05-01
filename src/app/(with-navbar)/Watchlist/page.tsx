@@ -26,13 +26,10 @@ export default function UserStats() {
     return (
         <section className="p-8">
             <section className="mt-10 ml-65 mr-65 pt-10 pb-10 rounded-sm bg-[#9fa3d1] text-center">
-                <h1>User Statistics</h1>
-                <div className="m-5 bg-[#babdde] rounded-sm">
-                    Visualisering af stats, evt. m. graffer
-                </div>
+                <h1>Your Watchlist</h1>
+                <h2>List of movies you would like to watch</h2>
 
                 <div className="bg-[#babdde] m-5 p-4 rounded-sm">
-                    <h2>List of movies you would like to watch</h2>
                     <button>
                         {/* every element is mapped to having an id
                          * every MovieImage is getting an id number */}

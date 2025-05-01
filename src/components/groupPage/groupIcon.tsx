@@ -137,7 +137,7 @@ export default function GroupIcon({
                                 <span className="font-normal ml-6">?</span>
                             </p>
 
-                            {/* Get new recommendation */}
+                            {/* Go to group recommendations. */}
                             <button
                                 onClick={() => {
                                     goToGroupRecommendations(

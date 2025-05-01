@@ -262,7 +262,7 @@ export function FormCreateGroup(): JSX.Element {
                         </select>
                         <br />
                         <button
-                            className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm"
+                            className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm"
                             type="submit"
                             onClick={(e) => {
                                 e.preventDefault();
