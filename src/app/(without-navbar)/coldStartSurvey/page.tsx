@@ -157,11 +157,11 @@ export default function SelectMovies(): JSX.Element {
                 <section className="w-1/5 pr-16 flex justify-center">
                     <button
                         onClick={() => {
-                            if (selectedMovies.length >= 5) {
+                            if (selectedMovies.length >= 15) {
                                 redirect('coldStartSurvey/rateMovies');
                             }
                         }}
-                        className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdee7] font-bold py-4 px-8 rounded-full`}
+                        className={`${selectedMovies.length >= 15 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdee7] font-bold py-4 px-8 rounded-full`}
                     >
                         Next step
                     </button>
@@ -170,4 +170,3 @@ export default function SelectMovies(): JSX.Element {
         </main>
     );
 }
-
