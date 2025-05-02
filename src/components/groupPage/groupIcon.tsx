@@ -132,10 +132,6 @@ export default function GroupIcon({
                                     {member}
                                 </p>
                             ))}
-                            <p className="text-xl m-2 font-bold">
-                                Last movie seen in group:
-                                <span className="font-normal ml-6">?</span>
-                            </p>
 
                             {/* Go to group recommendations. */}
                             <button

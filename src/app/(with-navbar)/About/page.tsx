@@ -80,17 +80,11 @@ const About = (): JSX.Element => (
             scrolling over all the endless opportunities.
             <br />
             <br />
-            Lastly, it can be hard to keep track of all the movies you watch.
-            Not only for yourself, but which movies you have seen with who and
-            when. For example, if you started a series with someone and do not
-            remember what part you made it to. Therefore, this web-application
-            is also a platform where you can keep an overview of the movies seen
-            in that group, as well as find recommendations for movies none of
-            you have watched before. <br />
+            <br />
             We are aware the movies you watch with your family can be vastly
             different from what you watch with friends. The interest can even
-            vary greatly between friend groups. Therefore, the group
-            organisation will help you get an overview.
+            vary greatly between friend groups. Therefore, our web-application
+            will help group organisation.
         </p>
     </div>
 );
