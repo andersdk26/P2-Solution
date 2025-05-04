@@ -229,7 +229,7 @@ export default function ProfileSettings() {
         // Entire page container
         <section className="p-8">
             {/* Profile Settings container and content*/}
-            <section className="ml-120 mr-120 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+            <section className="ml-120 mr-120 pt-10 pb-10 rounded-sm bg-[#9fa3d1] h-1/2 w-1/3">
                 {/* Title */}
                 <h2 className="mb-6 text-center">Profile Settings</h2>
                 {/* Profile icon container */}

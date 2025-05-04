@@ -47,17 +47,17 @@ export default function Home(): JSX.Element {
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
-          //  setRecommendedMovies(
-                // await nameBasedFiltering(await verifyUser())
-                // await contentBasedFiltering(await verifyUser())
-                // Use "await verifyUser()" or a group ID as input parameter.
-                // await collaborativeFiltering(12345, 'group') //group
-                // await contentBasedFiltering(12345, 'group') //group
-               // await collaborativeFiltering(await verifyUser(), 'individual') //individual user
-                //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
-                // await collaborativeFiltering(12345, 'group')
-                // await contentBasedFiltering(5928906644, 'group')
-           // );
+        //  setRecommendedMovies(
+        // await nameBasedFiltering(await verifyUser())
+        // await contentBasedFiltering(await verifyUser())
+        // Use "await verifyUser()" or a group ID as input parameter.
+        // await collaborativeFiltering(12345, 'group') //group
+        // await contentBasedFiltering(12345, 'group') //group
+        // await collaborativeFiltering(await verifyUser(), 'individual') //individual user
+        //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
+        // await collaborativeFiltering(12345, 'group')
+        // await contentBasedFiltering(5928906644, 'group')
+        // );
     }, []);
 
     const moviesPerPage = 3;
@@ -123,11 +123,11 @@ export default function Home(): JSX.Element {
                 </div>
 
                 {/* Container for the two divs in the center (title, description, and carousel)*/}
-                <div className="content-center text-center">
+                <div className="content-center text-center h-1/2">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
-                    <div className="midTopPannel">
+                    <div className="midTopPannel h-1/2">
                         {/* Title and description of carousel*/}
-                        <h1 className="text-center select-none">
+                        <h1 className="text-center select-none h-1/2">
                             🎥Daily Recommendations🎥
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] select-none ">
@@ -160,7 +160,7 @@ export default function Home(): JSX.Element {
                         </div>
                     </div>
                     {/* Navigation buttons */}
-                    <div className="buttonWrapper">
+                    <div className="buttonWrapper h-1/2">
                         <button
                             onClick={handlePreviousPage}
                             //disabled={currentPage === 0}

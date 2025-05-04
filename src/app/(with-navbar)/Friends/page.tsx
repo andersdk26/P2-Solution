@@ -149,7 +149,7 @@ export default function Friends(): JSX.Element {
         <>
             {/* entire page section */}
             <section className="p-8">
-                <section className="ml-100 mr-100 p-1 rounded-sm bg-[#9fa3d1]">
+                <section className="ml-100 mr-100 h-1/2 w-1/2 p-1 rounded-sm bg-[#9fa3d1]">
                     {/* your friends section */}
                     <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
                         <h2>Your friends</h2>
