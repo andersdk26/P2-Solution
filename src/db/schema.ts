@@ -79,7 +79,7 @@ export const usersTable = mysqlTable('users', {
 });
 
 export const friendsTable = mysqlTable('friends', {
-    id: int('id').primaryKey(),
+    id: int('id').primaryKey().autoincrement(),
     userIdA: int('userIdA').notNull(),
     userIdB: int('userIdB').notNull(),
     status: int('status').notNull(),
@@ -105,7 +105,7 @@ export type SelectWatchlist = typeof watchlistTable.$inferSelect;
 
 // *** Groups ***
 export const groupsTable = mysqlTable('groups', {
-    groupId: int('groupId').notNull(),
+    groupId: int('groupId').primaryKey(),
     groupName: varchar('groupName', { length: 16 }).notNull(),
     adminId: int('adminId').notNull(),
     members: varchar('members', { length: 100 }).notNull(),
