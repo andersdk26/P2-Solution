@@ -18,18 +18,25 @@ import GroupSeats from '@/components/mainPage/groupSeats'; //group seats compone
 
 import SideBar from '@/components/sideBar/sideBar';
 import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
+import LoadingPage from '@/components/loading';
 
 export default function Home(): JSX.Element {
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    // for the loading page
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
                 await hybridAlgorithm(await verifyUser(), 'individual')
             );
+            setIsLoading(false);
+        };
+
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
@@ -79,6 +86,8 @@ export default function Home(): JSX.Element {
             );
         }
     };
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <>

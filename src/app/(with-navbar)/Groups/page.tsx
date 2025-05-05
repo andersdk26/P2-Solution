@@ -20,14 +20,26 @@ import {
     request,
 } from '@/actions/groups/groupRequests';
 import getUserById from '@/actions/friends/getUserById';
+import LoadingPage from '@/components/loading';
 
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
     const [AdminGroups, setAdminGroups] = useState<group[]>([]);
+    // count for how many admin groups
+    const [AdminGroupCount, setAdminGroupCount] = useState<number>(0);
     // array for groups current user is a part of but NOT admin
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
     // array for group requests.
     const [groupRequests, setGroupRequests] = useState<request[]>([]);
+
+    // states to keep track of the 4 types of states.
+    // at end of each call, set loading state to false.
+    // show the page
+    const [isLoadingAdmin, setIsLoadingAdmin] = useState(true);
+    const [isLoadingCount, setIsLoadingCount] = useState(true);
+    const [isLoadingRegular, setIsLoadingRegular] = useState(true);
+    const [isLoadingRequest, setIsLoadingRequest] = useState(true);
+    const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
 
     // // state for displaying requests. this is for useEffect so that it can return JSX element
     const [DisplayRequestsList, setDisplayRequestsList] = useState([
@@ -37,23 +49,36 @@ export default function GroupSettings(): JSX.Element {
     // get the groups user is admin of
     const getAdminGroups = async (): Promise<void> => {
         setAdminGroups(await getGroupsByAdminId(await verifyUser()));
+        // set the loading to false
+        setIsLoadingAdmin(false);
     };
+
     useEffect(() => {
         getAdminGroups();
     }, []);
 
-    // set the groups user is not admin of
     useEffect(() => {
-        const getRegularGroups = async (): Promise<void> => {
-            setRegularGroups(
-                await getRegularGroupsByMemberId(await verifyUser())
-            );
-        };
+        // set the loading to true, so only final iteration sets to false
+        setIsLoadingCount(true);
+        setAdminGroupCount(AdminGroups.length);
+        // set the loading to false
+        setIsLoadingCount(false);
+    }, [AdminGroups]);
+
+    // set the groups user is not admin of
+    const getRegularGroups = async (): Promise<void> => {
+        setRegularGroups(await getRegularGroupsByMemberId(await verifyUser()));
+    };
+    useEffect(() => {
         getRegularGroups();
+        // set the loading to false
+        setIsLoadingRegular(false);
     }, []);
 
     const getGroupRequestsA = async (): Promise<void> => {
         setGroupRequests(await getGroupRequests(await verifyUser()));
+        // set the loading to false
+        setIsLoadingRequest(false);
     };
     useEffect(() => {
         getGroupRequestsA();
@@ -61,6 +86,8 @@ export default function GroupSettings(): JSX.Element {
 
     useEffect(() => {
         const updateRequestsList = async (): Promise<void> => {
+            // set to true at east iteration, so it ends with false by the final
+            setIsLoadingDisplay(true);
             const resolvedRequests = await Promise.all(
                 groupRequests.map(async (request) => (
                     <div
@@ -89,7 +116,7 @@ export default function GroupSettings(): JSX.Element {
                         <button
                             className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
                             onClick={async () => {
-                                rejectGroupRequest(
+                                await rejectGroupRequest(
                                     request.userId,
                                     request.groupId
                                 );
@@ -102,10 +129,23 @@ export default function GroupSettings(): JSX.Element {
                     </div>
                 ))
             );
+
             setDisplayRequestsList(resolvedRequests);
+            // set the loading to false
+            setIsLoadingDisplay(false);
         };
+
         updateRequestsList();
     }, [groupRequests]);
+
+    if (
+        isLoadingAdmin ||
+        isLoadingCount ||
+        isLoadingDisplay ||
+        isLoadingRegular ||
+        isLoadingRequest
+    )
+        return <LoadingPage />;
 
     return (
         <>
@@ -118,6 +158,7 @@ export default function GroupSettings(): JSX.Element {
                             You are the admin. Only you can add or remove
                             members.{' '}
                         </i>
+                        ({AdminGroupCount}/5)
                     </p>
                     <div className="inline-flex overflow-scroll">
                         {AdminGroups.map((Group) => (
@@ -131,7 +172,7 @@ export default function GroupSettings(): JSX.Element {
                                 />
                             </div>
                         ))}
-                        <CreateGroupIcon />
+                        <CreateGroupIcon adminGroupNumber={AdminGroupCount} />
                     </div>
                 </section>
 
