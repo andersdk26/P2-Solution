@@ -83,7 +83,7 @@ export default function SelectMovies(): JSX.Element {
             <p className="max-w-1/3 mx-auto text-justify text-xl py-4 text-neutral-600">
                 Before we can start recommending movies that match your taste,
                 we need to know a bit about the type of movies you like. Please
-                select at least five movies that you have watched and have an
+                select at least 15 movies that you have watched and have an
                 opinion about. The more movies you rate, the more accurate your
                 recommendations will be. You can always edit your list of movie
                 ratings under account settings. If the movie you are looking for
@@ -137,7 +137,7 @@ export default function SelectMovies(): JSX.Element {
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                {DisplayPopularMovies(handleSelectMovie)}
+                {DisplayPopularMovies(selectedMovies, handleSelectMovie)}
             </section>
 
             <section className="fixed bottom-0 pl-16 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
@@ -147,7 +147,7 @@ export default function SelectMovies(): JSX.Element {
                         <section
                             className="bg-[#282F72] rounded-full h-full transition-all duration-500"
                             style={{
-                                width: `${Math.min((selectedMovies.length / 5) * 100, 100)}%`,
+                                width: `${Math.min((selectedMovies.length / 15) * 100, 100)}%`,
                             }}
                         ></section>
                     </section>
@@ -157,11 +157,11 @@ export default function SelectMovies(): JSX.Element {
                 <section className="w-1/5 pr-16 flex justify-center">
                     <button
                         onClick={() => {
-                            if (selectedMovies.length >= 5) {
+                            if (selectedMovies.length >= 15) {
                                 redirect('coldStartSurvey/rateMovies');
                             }
                         }}
-                        className={`${selectedMovies.length >= 5 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdeef] font-bold py-4 px-8 rounded-full`}
+                        className={`${selectedMovies.length >= 15 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-center text-xl text-[#dcdee7] font-bold py-4 px-8 rounded-full`}
                     >
                         Next step
                     </button>

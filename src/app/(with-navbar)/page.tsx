@@ -5,45 +5,38 @@ interface Movie {
     image: string;
 }
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { JSX } from 'react';
 import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
 
-import { movie, getMovieById } from '@/actions/movie/movie';
+import { movie } from '@/actions/movie/movie';
 import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
-import contentBasedFiltering from '@/components/ContentBasedFiltering/contentBasedFiltering';
-import nameBasedFiltering from '@/components/NameBasedFiltering/nameBasedFiltering';
-
 import MovieImage from '@/components/movie/MovieImage';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import GroupSeats from '@/components/mainPage/groupSeats'; //group seats component
-import { useRouter } from 'next/router';
-import groupAggregation from '@/components/GroupAggregation/groupAggregation';
-// import { getMoviesByIds } from '@/actions/movie/movie';
 
 import SideBar from '@/components/sideBar/sideBar';
+import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
+import LoadingPage from '@/components/loading';
 
 export default function Home(): JSX.Element {
-    const [movies, setMovies] = useState<Movie[]>([]);
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
-    useEffect(() => {
-        // Fetch the JSON file when the page loads
-        fetch('Movie.json')
-            .then((response) => response.json())
-            .then((data) => setMovies(data))
-            .catch((error) => console.error('Error loading movies:', error));
+    // for the loading page
+    const [isLoading, setIsLoading] = useState(true);
 
+    useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
-                // Use "await verifyUser()" or a group ID as input parameter.
-                await collaborativeFiltering(await verifyUser(), 'individual')
-                // await contentBasedFiltering(12345, 'group')
+                await hybridAlgorithm(await verifyUser(), 'individual')
             );
+            setIsLoading(false);
+        };
+
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
@@ -94,6 +87,8 @@ export default function Home(): JSX.Element {
         }
     };
 
+    if (isLoading) return <LoadingPage />;
+
     return (
         <>
             {/* Deselecting sideBar was here */}
@@ -101,24 +96,26 @@ export default function Home(): JSX.Element {
             {/*Container for everything in main page below header and above footer*/}
             <div>
                 {/*Left Panel to Curtain Left Image*/}
-                <div className="float-left h-auto w-auto z-2">
+                <div className="float-left h-auto w-auto z-2 select-none">
                     <Image
                         src="/img/left curtain.png"
                         alt="Curtain Left"
                         quality={100}
                         width={350}
                         height={800}
+                        draggable="false"
                     />
                 </div>
 
                 {/*Right Panel to Curtain Right Image*/}
-                <div className="float-right h-auto w-auto z-2">
+                <div className="float-right h-auto w-auto z-2 select-none">
                     <Image
                         src="/img/right curtain.png"
                         alt="Curtain Right"
                         quality={100}
                         width={350}
                         height={800}
+                        draggable="false"
                     />
                 </div>
 
@@ -138,7 +135,7 @@ export default function Home(): JSX.Element {
                     </div>
 
                     {/* Movie Posters */}
-                    <div className="carouselWrapper">
+                    <div className="carouselWrapper" draggable="false">
                         <div
                             className="posterRow"
                             style={{
@@ -165,6 +162,7 @@ export default function Home(): JSX.Element {
                             onClick={handlePreviousPage}
                             //disabled={currentPage === 0}
                             // className="absolute left-2 z-30 bg-white/80 hover:bg-purple-200 text-black px-2 py-45 rounded-full shadow transition duration-200"
+                            className="select-none"
                         >
                             ⇦
                         </button>
@@ -174,7 +172,8 @@ export default function Home(): JSX.Element {
                             //     (currentPage + 1) * moviesPerPage >=
                             //     movies.length
                             // }
-                            // className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                            //className="absolute right-2 z-30 bg-white/80 hover:bg-pink-200 text-black px-2 py-45 rounded-full  shadow transition duration-200"
+                            className="select-none"
                         >
                             ⇨
                         </button>
@@ -183,7 +182,7 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Here, the sideBar would appear */}
-            {SideBar(selectedMovieId || 0)}
+            <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
 
             {/* The group seats, redirects to groups page */}
             <GroupSeats />

@@ -1,14 +1,23 @@
 @import 'tailwindcss';
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #babdde;
+    --text-color: #dcdee7;
+    --primary-color: #282f72;
+    --secondary-color: #dcdee7;
+    --hover-color: #424ebd;
+    --foreground: #000000;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #babdde;
-        --foreground: #ededed;
+        --text-color: #dcdee7;
+        --primary-color: #282f72;
+        --secondary-color: #dcdee7;
+        --hover-color: #424ebd;
+        --foreground: #000000;
+
     }
 }
 
@@ -56,7 +65,7 @@ h1 {
     font-weight: bolder;
     font-size: 50px;
     margin-left: 4px;
-    text-shadow: 3px 3px #9fa3d1;
+    /* text-shadow: 3px 3px #9fa3d1; */
 }
 
 h2 {
@@ -64,7 +73,7 @@ h2 {
     font-weight: bolder;
     font-size: 30px;
     margin-left: 4px;
-    text-shadow: 2px 2px #9fa3d1;
+    /* text-shadow: 2px 2px #9fa3d1; */
 }
 
 h3 {
@@ -92,7 +101,7 @@ h4 {
 
 .basicBtn {
     background-color: #282f72;
-    color: #dcdeef;
+    color: #dcdee7;
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
@@ -107,7 +116,7 @@ h4 {
 
 .settingBtn {
     background-color: #424ebd;
-    color: #dcdeef;
+    color: #dcdee7;
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;

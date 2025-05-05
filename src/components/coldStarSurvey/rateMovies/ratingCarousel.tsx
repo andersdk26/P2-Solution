@@ -6,11 +6,14 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
+import LoadingPage from '@/components/loading';
 
 export default function RatingCarousel(): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // loading page
+    const [isLoading, setIsLoading] = useState(true);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -18,6 +21,7 @@ export default function RatingCarousel(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+        setIsLoading(false);
     }, []);
 
     const hasMounted = useRef(false);
@@ -38,29 +42,20 @@ export default function RatingCarousel(): JSX.Element {
         );
     };
 
-    const handleRatingChange = (rating: number): void => {
-        const id = selectedMovies[imageIndex]?.movieId;
-        ratedMovies.set(id, rating);
-        setSelectedRating(rating);
-    };
-
     const handlePrevious = (): void => {
         setImageIndex((index) =>
             index === 0 ? selectedMovies.length - 1 : index - 1
         );
-        clearSelection();
     };
 
     const handleNext = (): void => {
         setImageIndex((index) =>
             index === selectedMovies.length - 1 ? 0 : index + 1
         );
-        clearSelection();
     };
 
-    const clearSelection = (): void => {
-        setSelectedRating(null);
-    };
+    if (isLoading) return <LoadingPage />;
+
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
             {/* Carousel layer */}
@@ -68,19 +63,6 @@ export default function RatingCarousel(): JSX.Element {
                 {/* Current image (center, front) */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 scale-100 z-20 transition-all duration-500">
                     <MovieImage movieId={selectedMovies[imageIndex]?.movieId} />
-                    {/* <RatingPopcorn /> */}
-                    <form className="scale-200">
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                            <input
-                                key={rating}
-                                type="radio"
-                                value={rating}
-                                name="poprating"
-                                checked={selectedRating === rating}
-                                onChange={() => handleRatingChange(rating)}
-                            />
-                        ))}
-                    </form>
 
                     <h4 className="w-[294px]">
                         <MovieTitle
@@ -88,27 +70,30 @@ export default function RatingCarousel(): JSX.Element {
                         />
                     </h4>
 
-                    <RatingPopcorn />
+                    {/* <RatingPopcorn /> */}
+                    <RatingPopcorn
+                        movieId={selectedMovies[imageIndex]?.movieId}
+                    />
 
                     <button
                         onClick={() => {
-                            ratedMovies.delete(
-                                selectedMovies[imageIndex]?.movieId
-                            );
+                            // ratedMovies.delete(
+                            //     selectedMovies[imageIndex]?.movieId
+                            // );
                             removeMovie(selectedMovies[imageIndex]?.movieId);
                             handleNext();
                         }}
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
                     >
                         Remove movie
                     </button>
-                   // <MovieImage movieId={movieId[imageIndex]?.movieId} />
+                    {/* <MovieImage movieId={movieId[imageIndex]?.movieId} />
 
-                   // <h4 className="w-[294px] mt-3">
-                   //    <MovieTitle movieId={movieId[imageIndex]?.movieId} />
-                   // </h4>
+                   <h4 className="w-[294px] mt-3">
+                      <MovieTitle movieId={movieId[imageIndex]?.movieId} />
+                   </h4>
 
-                   // <RatingPopcorn movieId={movieId[imageIndex]?.movieId} />
+                   <RatingPopcorn movieId={movieId[imageIndex]?.movieId} /> */}
                 </div>
             </div>
 

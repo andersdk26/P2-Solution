@@ -314,7 +314,7 @@ export default function ProfileSettings() {
                         Username
                     </p>
                     {/* Your own username */}
-                    <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
+                    <p className="mb-0 flex flex-col items-center bg-[#dcdee7] text-[#282f72] px-6 py-2 rounded w-60">
                         {username}
                     </p>
                     {/* Change Username container */}
@@ -361,7 +361,7 @@ export default function ProfileSettings() {
                         <p className="font-bold mb-0 mr-38 text-lg text-[#282f72]">
                             Password
                         </p>
-                        <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
+                        <p className="mb-0 flex flex-col items-center bg-[#dcdee7] text-[#282f72] px-6 py-2 rounded w-60">
                             *********
                         </p>
 
@@ -441,7 +441,7 @@ export default function ProfileSettings() {
                         </p>
 
                         {/* Your current email */}
-                        <p className="mb-0 flex flex-col items-center bg-[#dcdeef] text-[#282f72] px-6 py-2 rounded w-60">
+                        <p className="mb-0 flex flex-col items-center bg-[#dcdee7] text-[#282f72] px-6 py-2 rounded w-60">
                             {email}
                         </p>
 

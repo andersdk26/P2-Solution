@@ -2,8 +2,7 @@
 import { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import getUserById from '@/actions/friends/getUserById';
-import { group } from './group';
-
+import { group } from 'components/groupPage/group';
 
 export default function RequestGroupIcon({
     groupId,
@@ -84,7 +83,7 @@ export default function RequestGroupIcon({
                     >
                         {/* close button */}
                         <button
-                            className={`float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85`}
+                            className={`float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 select-none`}
                             onClick={() => setAboutGroupOpen(!isAboutGroupOpen)}
                         >
                             <u>Close</u>

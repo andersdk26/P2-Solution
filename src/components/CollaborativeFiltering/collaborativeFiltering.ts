@@ -25,6 +25,11 @@ export default async function collaborativeFiltering(
     targetId: number,
     type: string
 ): Promise<movie[]> {
+    // Abort algorithm if targetId is 0.
+    if (targetId === 0) {
+        return [];
+    }
+
     // Declare variables used for storing movie ratings.
     let targetUserRatings;
     let userRatingsFromDataset;
@@ -264,7 +269,6 @@ export default async function collaborativeFiltering(
     // ################################
 
     console.log(recommendedMovies);
-    console.log('hej fra cf');
 
     // Return the sorted array of recommended movies.
     return arrayOfRecommendedMovies;

@@ -11,6 +11,7 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
 import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
+import LoadingPage from '@/components/loading';
 
 export default function Friends(): JSX.Element {
     // Pop up for unfriending someone
@@ -33,6 +34,10 @@ export default function Friends(): JSX.Element {
         </p>,
     ]);
     const [unfriendName, setUnfriendName] = useState('');
+
+    // loading page
+    const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
+    const [isLoadingRequest, setIsLoadingRequest] = useState(true);
 
     // fetching of your own userId to show the user
     useEffect(() => {
@@ -71,7 +76,8 @@ export default function Friends(): JSX.Element {
                         key={request.from}
                     >
                         <p className="my-auto w-64 py-4">
-                            {await getUserById(request.from)}
+                            {await getUserById(request.from)} wants to be your
+                            friend!
                         </p>
                         <button
                             className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
@@ -102,12 +108,14 @@ export default function Friends(): JSX.Element {
                 ))
             );
             setFriendRequestList(resolvedRequests);
+            setIsLoadingRequest(false);
         };
         updateFriendRequestList();
     }, [FriendRequests]);
 
     const getFriendsList = async (): Promise<void> => {
         setFriendsList(await GetFriends(await verifyUser()));
+        setIsLoadingFriendsList(false);
     };
 
     useEffect(() => {
@@ -144,6 +152,8 @@ export default function Friends(): JSX.Element {
         };
         updateFriendList();
     }, [FriendsList]);
+
+    if (isLoadingFriendsList || isLoadingRequest) return <LoadingPage />;
 
     return (
         <>
@@ -194,6 +204,7 @@ export default function Friends(): JSX.Element {
                 <aside
                     className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center ml-72`}
                     onLoad={() => alert(unfriendOpen)}
+
                 >
                     {/* the box container */}
                     <div

@@ -11,7 +11,7 @@ interface ToastProps {
 const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
     useEffect(() => {
         const timer = window.setTimeout(onClose, 10000);
-        return () => window.clearTimeout(timer);
+        return (): void => window.clearTimeout(timer);
     }, [onClose]);
 
     // Base styling for the toast container
