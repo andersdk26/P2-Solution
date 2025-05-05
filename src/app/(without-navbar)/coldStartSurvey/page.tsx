@@ -137,7 +137,7 @@ export default function SelectMovies(): JSX.Element {
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                {DisplayPopularMovies(handleSelectMovie)}
+                {DisplayPopularMovies(selectedMovies, handleSelectMovie)}
             </section>
 
             <section className="fixed bottom-0 pl-16 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
@@ -170,4 +170,3 @@ export default function SelectMovies(): JSX.Element {
         </main>
     );
 }
-
