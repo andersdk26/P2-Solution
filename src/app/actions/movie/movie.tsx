@@ -51,12 +51,23 @@ export async function searchForMovie(
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
+    // MySQL
+    const sql = `SELECT id, title, genres FROM movies WHERE MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN NATURAL LANGUAGE MODE) LIMIT ${amount};`;
+    // // SQLite
+    // const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
 
     // Fetch results.
-    const result = await db.all<{ id: number; title: string; genres: string }>(
-        sql
-    );
+    // MySQL
+    const queryResult = await db.execute(sql);
+    const result = queryResult as unknown as {
+        id: number;
+        title: string;
+        genres: string;
+    }[];
+    // // SQLite
+    // const result = await db.all<{ id: number; title: string; genres: string }>(
+    //     sql
+    // );
 
     // Return string array of movie titles.
     return result.map((row) => ({
