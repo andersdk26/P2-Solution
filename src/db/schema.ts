@@ -6,7 +6,6 @@ import {
     serial,
     timestamp,
     varchar,
-    bigint,
     uniqueIndex,
 } from 'drizzle-orm/mysql-core';
 
@@ -66,9 +65,8 @@ export type SelectmovieImageCache = typeof movieImageCacheTable.$inferSelect;
 
 // *** User ***
 export const usersTable = mysqlTable('users', {
-    id: bigint('id', {
+    id: int('id', {
         unsigned: true,
-        mode: 'number',
     }).primaryKey(),
     username: varchar('username', { length: 30 }).notNull(),
     email: varchar('email', { length: 255 }).unique().notNull(),
@@ -95,9 +93,8 @@ export const watchlistTable = mysqlTable('watchlist', {
     movieid: int('movieId')
         .notNull()
         .references(() => moviesTable.id),
-    userid: bigint('userId', {
+    userid: int('userId', {
         unsigned: true,
-        mode: 'number',
     })
         .notNull()
         .references(() => usersTable.id),
@@ -119,9 +116,8 @@ export type SelectGroup = typeof groupsTable.$inferSelect;
 
 export const groupInfoTable = mysqlTable('group_info', {
     groupId: int('group_id').primaryKey(),
-    groupAdmin: bigint('group_admin', {
+    groupAdmin: int('group_admin', {
         unsigned: true,
-        mode: 'number',
     })
         .notNull()
         .references(() => usersTable.id), // foreign key to users table
@@ -135,9 +131,8 @@ export const groupMembersTable = mysqlTable('group_members', {
     groupId: int('group_id')
         .notNull()
         .references(() => groupInfoTable.groupId), // foreign key to group_info table
-    userId: bigint('user_id', {
+    userId: int('user_id', {
         unsigned: true,
-        mode: 'number',
     })
         .notNull()
         .references(() => usersTable.id), // foreign key to users table
@@ -160,9 +155,8 @@ export const ratingsTable = mysqlTable(
     'ratings',
     {
         id: serial('id').primaryKey(),
-        userId: bigint('userId', {
+        userId: int('userId', {
             unsigned: true,
-            mode: 'number',
         }).notNull(),
         movieId: int('movieId')
             .notNull()

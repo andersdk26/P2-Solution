@@ -85,7 +85,7 @@ export async function register_user({
     try {
         let i = 0;
         while (true) {
-            userId = randomInt(1000000000, 10000000000);
+            userId = randomInt(1000000000, 4000000000);
 
             const userExists = await db
                 .select({ id: usersTable.id })
