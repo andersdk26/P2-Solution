@@ -21,7 +21,8 @@ type similarity = {
     similarity: number;
 };
 
-const rowLimit = 10000000;
+const rowLimit = 16000000;
+let rowOffset = 17000000;
 
 export default async function collaborativeFiltering(
     targetId: number,
@@ -31,6 +32,8 @@ export default async function collaborativeFiltering(
     if (targetId === 0) {
         return [];
     }
+
+    rowOffset = Math.floor(Math.random() * 16000000);
 
     // Declare variables used for storing movie ratings.
     let targetUserRatings;
@@ -65,6 +68,7 @@ export default async function collaborativeFiltering(
             })
             .from(ratingsTable)
             .where(ne(ratingsTable.userId, targetId))
+            .offset(rowOffset)
             .limit(rowLimit);
 
         console.log('Other user ratings have been fetched.');
