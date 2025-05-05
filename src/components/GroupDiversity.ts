@@ -54,8 +54,19 @@ async function getAllGenreScore(userId: number): Promise<Map<string, number>> {
         // Get movie object.
         const m = await getMovieById(movie.movieId);
 
-        // Get array of genres.
-        const genres = m?.movieGenres.split('|');
+        // Check if the movie exists.
+        if (m !== null) {
+            // Skip movie if it has no genres.
+            if (m.movieGenres === '(no genres listed)') {
+                continue;
+            }
+
+            // Get array of genres.
+            const genres = m.movieGenres.split('|');
+
+            for (const genre of genres) {
+            }
+        }
     }
     // Get all genres for those movies, and find genre score.
     // Set the corresponding map entry to the score.
