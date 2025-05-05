@@ -14,16 +14,6 @@ import changeEmail from '@/actions/profileSettings/changeEmail';
 import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
-import formData from '@/components/signUp/SignUpForm';
-import handleChange from '@/components/signUp/SignUpForm';
-import passwordError from '@/components/signUp/SignUpForm';
-import confirmPassword from '@/components/signUp/SignUpForm';
-
-// import of movies to user stats - seenlist
-import { movie, getMovieById } from '@/actions/movie/movie';
-import MovieImage from '@/components/movie/MovieImage';
-import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarousel';
-import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 
 export default function ProfileSettings() {
     const redirect = useRedirect(); // Custom hook for redirection
