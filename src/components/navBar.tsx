@@ -35,8 +35,8 @@ export default function NavBar(): JSX.Element {
                         </button> */}
                     </div>
                 </div>
-                <section className="flex-col items-center justify-center z-auto overflow-visible w-120">
-                    <form className="w-full justify-start mx-auto py-4 text-black overflow-hidden">
+                <section className="flex-col items-center justify-center z-auto overflow-visible w-110">
+                    <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
                         <input
                             type="search"
                             id="coldStartMovieSearch"
@@ -53,7 +53,7 @@ export default function NavBar(): JSX.Element {
 
                     <section
                         id="searchResults"
-                        className="absolute w-120 mx-auto bg-gray-100 rounded-3xl"
+                        className="absolute w-110 mx-auto bg-gray-100 rounded-3xl"
                     >
                         {searchResult.map((movie) => (
                             <p
