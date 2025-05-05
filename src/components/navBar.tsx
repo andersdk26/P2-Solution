@@ -15,6 +15,11 @@ export default function NavBar(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
     const [searchResult, setSearchResult] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null); // State for selected movie ID
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = (): void => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
     return (
         <nav className="fixed w-full h-24 shadow-x1 -mt-24 z-99">
@@ -36,7 +41,10 @@ export default function NavBar(): JSX.Element {
                     </div>
                 </div>
                 <section className="flex-col items-center justify-center z-auto overflow-visible w-110">
-                    <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
+                    <form
+                        className="w-full justify-start mx-auto py-4 text-black overflow-visible"
+                        onClick={toggleDropdown}
+                    >
                         <input
                             type="search"
                             id="coldStartMovieSearch"
