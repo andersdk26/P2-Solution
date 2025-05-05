@@ -14,7 +14,6 @@ export default function GroupIcon({
     groupName,
     groupAdmin,
     groupMembers,
-    settings,
 }: group): JSX.Element {
     //keeps track of the pop up
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
@@ -26,7 +25,7 @@ export default function GroupIcon({
     const [LeaveGroupOpen, setLeaveGroupOpen] = useState(false);
 
     // make array with the settings
-    const settingsList = settings.split('|');
+    const settingsList = '';
 
     // set loading page when waiting for group members
     const [isLoadingMembers, setIsLoadingMembers] = useState(true);
