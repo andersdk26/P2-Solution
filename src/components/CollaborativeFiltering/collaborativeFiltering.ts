@@ -1,9 +1,10 @@
 'use server';
 
-import { movieWithRating, getMovieById, movie } from '@/actions/movie/movie';
+import { getMovieById, movie } from '@/actions/movie/movie';
 import { testRatings } from '@/db/schema';
 import { db } from 'db';
-import { eq, ne } from 'drizzle-orm';
+import { eq, ne, notInArray } from 'drizzle-orm';
+import groupAggregation from '../GroupAggregation/groupAggregation';
 
 type rating = {
     movieId: number;
@@ -21,43 +22,81 @@ type similarity = {
 };
 
 export default async function collaborativeFiltering(
-    targetUserId: number
+    targetId: number,
+    type: string
 ): Promise<movie[]> {
-    // Fetch all ratings from the table testRatings that have only been made by the target user.
-    const targetUserRatings = await db
-        .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
-        })
-        .from(testRatings)
-        .where(eq(testRatings.userId, targetUserId));
-
-    console.log('Target user ratings have been fetched.');
-
-    // Abort recommendation algorithm if user has not rated enough movies.
-    if (targetUserRatings.length < 10) {
-        console.log('Target user has not rated enough movies.');
+    // Abort algorithm if targetId is 0.
+    if (targetId === 0) {
         return [];
     }
 
-    // Fetch all user ratings from the table testRatings, except those from the target user.
-    const userRatingsFromDataset = await db
-        .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
-        })
-        .from(testRatings)
-        .where(ne(testRatings.userId, targetUserId));
+    // Declare variables used for storing movie ratings.
+    let targetUserRatings;
+    let userRatingsFromDataset;
 
-    console.log('Other user ratings have been fetched.');
+    // Check whether the input ID represents a group or an individual.
+    if (type === 'individual') {
+        // Fetch all ratings from the table testRatings that have only been made by the target user.
+        targetUserRatings = await db
+            .select({
+                userId: testRatings.userId,
+                movieId: testRatings.movieId,
+                movieRating: testRatings.rating,
+            })
+            .from(testRatings)
+            .where(eq(testRatings.userId, targetId));
+
+        console.log('Target user ratings have been fetched.');
+
+        // Abort recommendation algorithm if user has not rated enough movies.
+        if (targetUserRatings.length < 10) {
+            console.log('Target user has not rated enough movies.');
+            return [];
+        }
+
+        // Fetch all user ratings from the table testRatings, except those from the target user.
+        userRatingsFromDataset = await db
+            .select({
+                userId: testRatings.userId,
+                movieId: testRatings.movieId,
+                movieRating: testRatings.rating,
+            })
+            .from(testRatings)
+            .where(ne(testRatings.userId, targetId));
+
+        console.log('Other user ratings have been fetched.');
+    } else if (type === 'group') {
+        // Get average group ratings.
+        targetUserRatings = await groupAggregation(targetId);
+
+        // Abort recommendation algorithm if the group has not rated enough movies.
+        if (targetUserRatings.length < 10) {
+            console.log('Target group has not rated enough movies.');
+            return [];
+        }
+
+        // Convert member IDs to an array of numbers.
+        const memberIdStrings = targetUserRatings[0].memberIds.split('|');
+        const memberIdNumbers = memberIdStrings.map((id) => parseInt(id, 10));
+
+        // Fetch all user ratings from the table testRatings, except those from the target user.
+        userRatingsFromDataset = await db
+            .select({
+                userId: testRatings.userId,
+                movieId: testRatings.movieId,
+                movieRating: testRatings.rating,
+            })
+            .from(testRatings)
+            .where(notInArray(testRatings.userId, memberIdNumbers));
+
+        console.log('Other user ratings have been fetched.');
+    }
 
     // Create a map for all the other users and their ratings: (userId, { rating(movieId, rating) }).
     const otherUserRatingsMap = new Map<number, rating[]>();
 
     // Populate the map.
-    for (const row of userRatingsFromDataset) {
+    for (const row of userRatingsFromDataset!) {
         // Check if map already has a user entry for the current row being checked.
         if (!otherUserRatingsMap.has(row.userId)) {
             // If the map does not contain an entry for the user ID, create one and initialise it with an empty array.
@@ -88,7 +127,7 @@ export default async function collaborativeFiltering(
     const targetRatingMap = new Map<number, number>();
 
     // Populate the map with the ratings fetched from earlier.
-    for (const rating of targetUserRatings) {
+    for (const rating of targetUserRatings!) {
         targetRatingMap.set(rating.movieId, rating.movieRating);
     }
 

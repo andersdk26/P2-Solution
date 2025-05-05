@@ -119,3 +119,23 @@ export default async function getMovieImageURL(
 
     return { id: 0, url: '', blurHash: null };
 }
+
+export async function getImdbId(movieId: number): Promise<string> {
+    const result = await db
+        .select({
+            imdbId: movieLinkIdTable.imdbId,
+        })
+        .from(movieLinkIdTable)
+        .where(eq(movieLinkIdTable.id, movieId));
+
+    if (result.length > 0) {
+        // Add leading zeros to imdb ID
+        const imdbId = '0000000'
+            .substring(result[0].imdbId.toString().length)
+            .concat(result[0].imdbId.toString());
+
+        return imdbId;
+    }
+
+    return '';
+}

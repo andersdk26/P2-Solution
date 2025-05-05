@@ -137,7 +137,7 @@ export default function SelectMovies(): JSX.Element {
                 {DisplaySelectedMovies(selectedMovies, handleSelectMovie)}
                 {/* Define a 5x3 grid layout for popular movies. */}
                 <p className="text-center text-xl">Popular movies</p>
-                {DisplayPopularMovies(handleSelectMovie)}
+                {DisplayPopularMovies(selectedMovies, handleSelectMovie)}
             </section>
 
             <section className="fixed bottom-0 pl-16 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
@@ -147,7 +147,7 @@ export default function SelectMovies(): JSX.Element {
                         <section
                             className="bg-[#282F72] rounded-full h-full transition-all duration-500"
                             style={{
-                                width: `${Math.min((selectedMovies.length / 5) * 100, 100)}%`,
+                                width: `${Math.min((selectedMovies.length / 15) * 100, 100)}%`,
                             }}
                         ></section>
                     </section>

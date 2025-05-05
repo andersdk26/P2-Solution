@@ -4,7 +4,7 @@ import { db } from '@/db/index';
 import { moviesTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export default async function getMovieTitle(movieId: number) {
+export default async function getMovieTitle(movieId: number): Promise<string> {
     const result = await db
         .select({ title: moviesTable.title })
         .from(moviesTable)

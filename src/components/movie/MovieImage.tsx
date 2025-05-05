@@ -38,6 +38,8 @@ export default function MovieImage({
 
     useEffect(() => {
         const getImage = async (): Promise<void> => {
+            if (!movieId) return; // If no movieId is provided, do nothing
+
             // Get external movie image URL
             const newImage = await getMovieImageURL(movieId);
 
@@ -71,7 +73,8 @@ export default function MovieImage({
                     blurDataURL={
                         placeholderDataURL ? placeholderDataURL : blurDataURL
                     }
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} select-none`}
+                    draggable="false"
                 />
             ) : (
                 <Image
@@ -87,7 +90,8 @@ export default function MovieImage({
                     blurDataURL={
                         placeholderDataURL ? placeholderDataURL : blurDataURL
                     }
-                    className={`${className} ${loadingImage && 'animate-pulse'}`}
+                    className={`${className} ${loadingImage && 'animate-pulse'} select-none`}
+                    draggable="false"
                 />
             )}
         </>
