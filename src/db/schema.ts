@@ -160,8 +160,13 @@ export const ratingsTable = mysqlTable(
     'ratings',
     {
         id: serial('id').primaryKey(),
-        userId: int('userId').notNull(),
-        movieId: int('movieId').notNull(),
+        userId: bigint('userId', {
+            unsigned: true,
+            mode: 'number',
+        }).notNull(),
+        movieId: int('movieId')
+            .notNull()
+            .references(() => moviesTable.id), // foreign key to movies table,
         rating: int('rating').notNull(),
         timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
     },
@@ -177,55 +182,6 @@ export const ratingsTable = mysqlTable(
 export type InsertRatings = typeof ratingsTable.$inferInsert;
 export type SelectRatings = typeof ratingsTable.$inferSelect;
 
-function fullTextIndex(
-    arg0: string,
-    arg1: (
-        | import('drizzle-orm/mysql-core').MySqlColumn<
-              {
-                  name: 'title';
-                  tableName: 'movies';
-                  dataType: 'string';
-                  columnType: 'MySqlVarChar';
-                  data: string;
-                  driverParam: string | number;
-                  notNull: true;
-                  hasDefault: false;
-                  isPrimaryKey: false;
-                  isAutoincrement: false;
-                  hasRuntimeDefault: false;
-                  enumValues: [string, ...string[]];
-                  baseColumn: never;
-                  identity: undefined;
-                  generated: undefined;
-              },
-              {},
-              {}
-          >
-        | import('drizzle-orm/mysql-core').MySqlColumn<
-              {
-                  name: 'genres';
-                  tableName: 'movies';
-                  dataType: 'string';
-                  columnType: 'MySqlVarChar';
-                  data: string;
-                  driverParam: string | number;
-                  notNull: true;
-                  hasDefault: false;
-                  isPrimaryKey: false;
-                  isAutoincrement: false;
-                  hasRuntimeDefault: false;
-                  enumValues: [string, ...string[]];
-                  baseColumn: never;
-                  identity: undefined;
-                  generated: undefined;
-              },
-              {},
-              {}
-          >
-    )[]
-): import('drizzle-orm/mysql-core').MySqlTableExtraConfigValue {
-    throw new Error('Function not implemented.');
-}
 // // *** SQLite ***
 // import { sql } from 'drizzle-orm';
 // import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
