@@ -88,9 +88,50 @@ export default async function contentBasedFiltering(
         }
     }
 
-    // Convert running total and times rated to a score for each genre.
-    const genreScoreMap = new Map<string, number>();
+    // Initialise word score map.
+    const averageWordRating = new Map<string, averageRating>();
 
+    // List of words to ignore/not rate.
+    const ignoreWords = ['the', 'and', 'a', 'an', 'or', 'of', '', 'aka', 'ii'];
+
+    // Iterate through each rating made by the target user.
+    for (const rating of targetUserRatings!) {
+        // Fetch the movie in question.
+        const movie = await getMovieById(rating.movieId);
+
+        // Check that the movie exists.
+        if (movie !== null) {
+            // Split title into words and remove special characters and numbers.
+            let title = movie.movieTitle.toLowerCase();
+            title = title.replace(/[^a-z ]+/g, '');
+            const titleWords = title.split(' ');
+
+            // Iterate through each word.
+            for (const word of titleWords) {
+                // Skip words from ignore list.
+                if (!ignoreWords.includes(word)) {
+                    // If the word score map does not contain an entry for the specified genre, initialise it.
+                    if (!averageWordRating.has(word)) {
+                        averageWordRating.set(word, {
+                            runningTotal: 0,
+                            timesRated: 0,
+                        });
+                    }
+
+                    // Update the score for the current genre.
+                    averageWordRating.set(word, {
+                        runningTotal:
+                            averageWordRating.get(word)!.runningTotal +
+                            rating.movieRating,
+                        timesRated: averageWordRating.get(word)!.timesRated + 1,
+                    });
+                }
+            }
+        }
+    }
+
+    // Convert running total and times rated to a score for each genre and each word.
+    const genreScoreMap = new Map<string, number>();
     for (const genre of averageGenreRating) {
         genreScoreMap.set(
             genre[0],
@@ -98,6 +139,14 @@ export default async function contentBasedFiltering(
                 (genre[1].timesRated / totalMoviesRated)
         );
     }
+
+    const wordScoreMap = new Map<string, number>();
+    for (const word of averageWordRating) {
+        wordScoreMap.set(word[0], word[1].runningTotal / word[1].timesRated);
+    }
+
+    console.log(wordScoreMap);
+    console.log(genreScoreMap);
 
     // Fetch all movies from the database.
     const movies = await db
@@ -111,7 +160,7 @@ export default async function contentBasedFiltering(
 
     console.log('Movies have been fetched.');
 
-    // Create map for storing scores for each movie.
+    // Create map for storing genre and word scores for each movie.
     const movieScoreMap = new Map<number, number>();
 
     // For every movie in the dataset.
@@ -134,16 +183,29 @@ export default async function contentBasedFiltering(
         // Split genre string into individual genres.
         const genres = movie.movieGenre.split('|');
 
-        // Initialise movie score.
-        let score = 0;
+        // Split title into words and remove special characters and numbers.
+        let title = movie.movieTitle.toLowerCase();
+        title = title.replace(/[^a-z ]+/g, '');
+        const titleWords = title.split(' ');
+
+        // Initialise genre score.
+        let genreScore = 0;
 
         // Iterate through each genre and accumulate the score.
         for (const genre of genres) {
-            score += genreScoreMap.get(genre) || 0;
+            genreScore += genreScoreMap.get(genre) || 0;
         }
 
-        // Set movie score.
-        movieScoreMap.set(movie.movieId, score / genres.length);
+        // Initialise word score.
+        let wordScore = 0;
+
+        // Iterate through each word.
+        for (const word of titleWords) {
+            wordScore += wordScoreMap.get(word) || 0;
+        }
+
+        // Set movie score to average genre score + average word score.
+        movieScoreMap.set(movie.movieId, genreScore + wordScore);
     }
 
     // Turn map into array.

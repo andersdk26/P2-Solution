@@ -1,6 +1,7 @@
 'use server';
 
-import { groupsTable, ratingsTable } from '@/db/schema';
+import { groupsTable, testRatings } from '@/db/schema';
+import { group } from 'console';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 

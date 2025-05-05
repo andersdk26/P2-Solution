@@ -19,7 +19,7 @@ export default function NavBar(): JSX.Element {
             <div className="flex justify-between items-center h-full w-full bg-[#9FA3D1]">
                 {/* right side div for bar thingies*/}
                 <div className="w-48 h-24 flex justify-between items-center h-full">
-                    <div className="ml-4 text-xl ">
+                    <div className="ml-4 text-xl cursor-pointer select-none">
                         <Image
                             src={'/img/Jamfest logo.png'}
                             alt={'Jamfest Logo'}
@@ -27,6 +27,7 @@ export default function NavBar(): JSX.Element {
                             height={100}
                             onClick={() => redirect('')}
                             title="Home page"
+                            draggable="false"
                         ></Image>
                         {/* <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
                             Home
@@ -42,7 +43,7 @@ export default function NavBar(): JSX.Element {
                             {/* <a hr"></a> */}
 
                             <button
-                                className="basicBtn"
+                                className="basicBtn select-none"
                                 onClick={() => redirect('')}
                                 title="Home"
                             >
@@ -51,7 +52,7 @@ export default function NavBar(): JSX.Element {
                         </li>
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="basicBtn"
+                                className="basicBtn select-none"
                                 onClick={() => redirect('/Groups')}
                                 title="Groups"
                             >
@@ -61,7 +62,7 @@ export default function NavBar(): JSX.Element {
 
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
-                                className="basicBtn"
+                                className="basicBtn select-none"
                                 onClick={() => redirect('/About')}
                                 title="About"
                             >
@@ -75,7 +76,7 @@ export default function NavBar(): JSX.Element {
                             <input
                                 type="search"
                                 id="coldStartMovieSearch"
-                                className="block w-full p-4 rounded-full bg-gray-100"
+                                className="block w-full p-4 rounded-full bg-gray-100 select-none"
                                 placeholder="Search for movies..."
                                 // When the user types something, call function to fetch movies with matching search query.
                                 onChange={async (e) => {
@@ -88,7 +89,7 @@ export default function NavBar(): JSX.Element {
 
                         <section
                             id="searchResults"
-                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl"
+                            className="absolute w-120 mx-auto bg-gray-100 rounded-3xl select-none"
                         >
                             {searchResult.map((movie) => (
                                 <p
@@ -103,9 +104,10 @@ export default function NavBar(): JSX.Element {
                             ))}
                         </section>
                     </section>
-                    <div className="pl-10 block">
+                    <div className="pl-10 block select-none">
                         <Notification />
                     </div>
+
                     <div className="px-10">
                         <Profile />
                     </div>

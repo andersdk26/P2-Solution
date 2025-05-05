@@ -2,14 +2,14 @@
 
 import { usersTable } from '@/db/schema';
 import { db } from 'db';
-import { like } from 'drizzle-orm';
+import { or, like } from 'drizzle-orm';
 
 export type user = {
     userId: number;
     userName: string;
 };
 
-export async function getUserById(id: string): Promise<user[]> {
+export async function searchUserById(id: string): Promise<user[]> {
     // only show if written more than 1 character
     if (id.length < 1) {
         return [];
@@ -22,9 +22,14 @@ export async function getUserById(id: string): Promise<user[]> {
             userName: usersTable.username,
         })
         .from(usersTable)
-        .where(like(usersTable.id, `${id}%`));
+        .where(
+            or(
+                like(usersTable.id, `${id}%`),
+                like(usersTable.username, `${id}%`)
+            )
+        );
 
-    return result;
+    return result.slice(0, 5);
 }
 
 // export async function searchForUsers(
