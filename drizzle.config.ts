@@ -3,6 +3,7 @@ import { defineConfig } from 'drizzle-kit';
 
 config({ path: '.env' });
 
+// MySQL
 export default defineConfig({
     schema: './src/db/schema.ts',
     out: './migrations',
@@ -12,6 +13,7 @@ export default defineConfig({
     },
 });
 
+// // SQLite
 // export default defineConfig({
 //     schema: './src/db/schema.ts',
 //     out: './migrations',
