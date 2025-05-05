@@ -38,19 +38,6 @@ export default function Home(): JSX.Element {
         };
 
         getRecommendedMovies();
-        //this is for group
-        //const getRecommendedMovies = async (): Promise<void> =>
-        //  setRecommendedMovies(
-        // await nameBasedFiltering(await verifyUser())
-        // await contentBasedFiltering(await verifyUser())
-        // Use "await verifyUser()" or a group ID as input parameter.
-        // await collaborativeFiltering(12345, 'group') //group
-        // await contentBasedFiltering(12345, 'group') //group
-        // await collaborativeFiltering(await verifyUser(), 'individual') //individual user
-        //await contentBasedFiltering(await verifyUser(), 'individual') //individual user
-        // await collaborativeFiltering(12345, 'group')
-        // await contentBasedFiltering(5928906644, 'group')
-        // );
     }, []);
 
     const moviesPerPage = 3;
@@ -64,12 +51,6 @@ export default function Home(): JSX.Element {
     );
 
     const handleNextPage = (): void => {
-        // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
-        //     setCurrentPage((prev) => prev + 1);
-        // } else {
-        //     // Loop back to the first set of movies
-        //     setCurrentPage(0); // Start from the first set (page 0)
-        // }
         setCurrentPage(
             (prev) =>
                 (prev + 1) % Math.ceil(displayedMovies.length / moviesPerPage)
@@ -91,8 +72,6 @@ export default function Home(): JSX.Element {
 
     return (
         <>
-            {/* Deselecting sideBar was here */}
-
             {/*Container for everything in main page below header and above footer*/}
             <div>
                 {/*Left Panel to Curtain Left Image*/}
@@ -181,29 +160,11 @@ export default function Home(): JSX.Element {
                 </div>
             </div>
 
-            {/* Here, the sideBar would appear */}
+            {/* Here, the sideBar appears */}
             <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
 
             {/* The group seats, redirects to groups page */}
             <GroupSeats />
-
-            {/* Pagination Controls
-            <div className="pagination">
-                <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={handleNextPage}
-                    disabled={
-                        (currentPage + 1) * moviesPerPage >= movies.length
-                    }
-                >
-                    Next
-                </button>
-            </div> */}
         </>
     );
 }

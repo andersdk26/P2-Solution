@@ -14,14 +14,20 @@ import { GetFriends } from '@/actions/friends/friendsList';
 import LoadingPage from '@/components/loading';
 
 export default function Friends(): JSX.Element {
-    // Pop up for unfriending someone
+    // Pop up for unfriending someone - when zero, the pop-up is closed
     const [unfriendOpen, setUnfriendOpen] = useState(0);
 
+    const [unfriendName, setUnfriendName] = useState('');
+
+    // To visualise your own userId - is also in profile settings
     const [userId, setUserId] = useState('User ID#');
 
+    //
     const [FriendRequests, setFriendRequests] = useState<{ from: number }[]>(
         []
     );
+
+    // Key is zero, because it has to have a value
     const [friendRequestList, setFriendRequestList] = useState([
         <p className="text-[#282f72]" key={0}>
             You have no pending friend requests.
@@ -33,16 +39,15 @@ export default function Friends(): JSX.Element {
             No friends to show.
         </p>,
     ]);
-    const [unfriendName, setUnfriendName] = useState('');
 
-    // loading page
+    // loading page - is true when loading, when not, becomes false
     const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
     const [isLoadingRequest, setIsLoadingRequest] = useState(true);
 
     // fetching of your own userId to show the user
     useEffect(() => {
         const fetchUserId = async (): Promise<void> => {
-            setUserId(String(await getUserID(verifyUser()))); // setUserId recieves the functions of getUserID(verifyuser)
+            setUserId(String(await verifyUser())); // setUserId fetches the current userId - makes number into string
         };
         fetchUserId();
     }, []);
@@ -50,42 +55,58 @@ export default function Friends(): JSX.Element {
     useEffect(() => {
         const getName = async () => {
             if (unfriendOpen === 0) {
+                // if pop-up is closed, then no name
                 setUnfriendName('');
                 return;
             }
 
-            setUnfriendName(await getUserById(unfriendOpen));
+            setUnfriendName(await getUserById(unfriendOpen)); // else, finds the users name
         };
         getName();
     }, [unfriendOpen]);
 
     const getFriendRequests = async (): Promise<void> => {
+        // takes current users id, returns a list of numbers of the ID's,
+        // where the receiver is curent user and status is 0 (meaning, not accepted)
         setFriendRequests(await GetFriendRequest(await verifyUser()));
     };
 
     useEffect(() => {
-        getFriendRequests();
+        getFriendRequests(); // function gets called
+    }, []);
+
+    const getFriendsList = async (): Promise<void> => {
+        setFriendsList(await GetFriends(await verifyUser())); // takes the current user, sees whether or not it is the sender or receiver, and updates number to 1 (accepted)
+        setIsLoadingFriendsList(false);
+    };
+
+    useEffect(() => {
+        getFriendsList();
     }, []);
 
     useEffect(() => {
         const updateFriendRequestList = async (): Promise<void> => {
             const resolvedRequests = await Promise.all(
+                // a constant that waits until everything is done
                 FriendRequests.map(async (request) => (
                     <div
                         className="flex items-center space-x-2 bg-[#9fa3d1] mb-4 p-4 rounded-sm"
                         key={request.from}
                     >
                         <p className="my-auto w-64 py-4">
+                            {/* prints out the specific user name */}
                             {await getUserById(request.from)} wants to be your
                             friend!
                         </p>
                         <button
                             className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
                             onClick={async () => {
+                                // takes the sender's ID and Receiver (current user) Id and changed status from 0 (pending) to 1 (accepted)
                                 AcceptFriendRequest(
                                     request.from,
                                     await verifyUser()
                                 );
+                                // calls the function that update the friends list and friend request list
                                 getFriendRequests();
                                 getFriendsList();
                             }}
@@ -95,11 +116,12 @@ export default function Friends(): JSX.Element {
                         <button
                             className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
                             onClick={async () => {
+                                // takes the sender's ID and Receiver (current user) Id and deletes from table
                                 DeclineFriendRequest(
                                     request.from,
                                     await verifyUser()
                                 );
-                                getFriendRequests();
+                                getFriendRequests(); // calls the function that updates the friends list
                             }}
                         >
                             Decline
@@ -113,18 +135,10 @@ export default function Friends(): JSX.Element {
         updateFriendRequestList();
     }, [FriendRequests]);
 
-    const getFriendsList = async (): Promise<void> => {
-        setFriendsList(await GetFriends(await verifyUser()));
-        setIsLoadingFriendsList(false);
-    };
-
-    useEffect(() => {
-        getFriendsList();
-    }, []);
-
     useEffect(() => {
         const updateFriendList = async (): Promise<void> => {
             if (!FriendsList.length) {
+                // if friendslist is zero, return nothings
                 return;
             }
 
@@ -135,12 +149,13 @@ export default function Friends(): JSX.Element {
                         key={id}
                     >
                         <p className="ml-4 my-auto w-64 py-4">
-                            {await getUserById(id)}
+                            {await getUserById(id)}{' '}
+                            {/* finds the specific userId */}
                         </p>
                         <button
                             className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 mr-2 ml-auto relative rounded-sm cursor-pointer"
                             onClick={() => {
-                                setUnfriendOpen(id);
+                                setUnfriendOpen(id); // pop-up to remove friend
                             }}
                         >
                             Remove friend
@@ -203,8 +218,6 @@ export default function Friends(): JSX.Element {
             {unfriendOpen && (
                 <aside
                     className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center ml-72`}
-                    onLoad={() => alert(unfriendOpen)}
-
                 >
                     {/* the box container */}
                     <div
@@ -214,7 +227,7 @@ export default function Friends(): JSX.Element {
                         <button
                             className="cursor-pointer float-right right-4 top-3 mr-4 mt-2 mb-0 z-50 cursor-pointer text-2xl hover:opacity-85 "
                             onClick={() => {
-                                setUnfriendOpen(0);
+                                setUnfriendOpen(0); // pop-up closes
                             }}
                         >
                             <u>Close</u>
@@ -228,7 +241,7 @@ export default function Friends(): JSX.Element {
                             <button
                                 className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 p-5 mt-10 rounded-sm cursor-pointer"
                                 onClick={async () => {
-                                    // removes the specific friend, when clicked
+                                    // removes the specific friend from table, when clicked
                                     RemoveFriend(
                                         await verifyUser(),
                                         unfriendOpen

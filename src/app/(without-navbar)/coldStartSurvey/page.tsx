@@ -2,7 +2,7 @@
 
 import { JSX } from 'react';
 import { useState, useEffect } from 'react';
-import { movie, movieWithRating, searchForMovie } from '@/actions/movie/movie';
+import { movie, searchForMovie } from '@/actions/movie/movie';
 import {
     DisplaySelectedMovies,
     DisplayPopularMovies,
@@ -10,40 +10,35 @@ import {
 import useRedirect from '@/components/redirect';
 import getUsername from '@/actions/logIn/username';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import collaborativeFiltering from '@/components/CollaborativeFiltering/collaborativeFiltering';
 
 export default function SelectMovies(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
     // useState array for selected movies.
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+    // username for displaying
+    const [username, setUsername] = useState('Username');
+    // Create useState array for storing search results.
+    const [searchResult, setSearchResult] = useState<movie[]>([]);
 
-    // const [recommendedMovies, setRecommendedMovies] = useState<
-    //     movieWithRating[]
-    // >([]);
-
-    // Retrieve data from local storage.
+    // Retrieves data from local storage.
     useEffect(() => {
         const savedMovies = JSON.parse(
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
 
-        // const getRecommendedMovies = async () =>
-        //     setRecommendedMovies(await collaborativeFiltering(200911));
-        // getRecommendedMovies();
-
+        // fetches username
         const fetchUsername = async (): Promise<void> => {
             setUsername(await getUsername(verifyUser()));
         };
         fetchUsername();
     }, []);
 
-    const [username, setUsername] = useState('Username');
-
     // Function for handling selection of movies.
     const handleSelectMovie = (movie: movie): void => {
         setSelectedMovies((prevSelectedMovies) => {
             const isAlreadySelected = prevSelectedMovies.some(
+                // Checks if the newly selected movie is one of the already-selected movies
                 (m) => m.movieId === movie.movieId
             );
 
@@ -52,6 +47,7 @@ export default function SelectMovies(): JSX.Element {
             if (isAlreadySelected) {
                 // Remove movie if already selected.
                 newSelection = prevSelectedMovies.filter(
+                    //filters the movies that was already in selected movies
                     (m) => m.movieId !== movie.movieId
                 );
             } else {
@@ -69,11 +65,8 @@ export default function SelectMovies(): JSX.Element {
         });
     };
 
-    // Create useState array for storing search results.
-    const [searchResult, setSearchResult] = useState<movie[]>([]);
-
     return (
-        <main>
+        <>
             {/* Page header. */}
             <p className="text-center pt-8 text-4xl font-bold">
                 Welcome, {username}!
@@ -104,7 +97,7 @@ export default function SelectMovies(): JSX.Element {
                     // When the user types something, call function to fetch movies with matching search query.
                     onChange={async (e) => {
                         setSearchResult(
-                            await searchForMovie(e.target.value, 10)
+                            await searchForMovie(e.target.value, 10) // max amount of movies search for = 10
                         );
                     }}
                 />
@@ -142,21 +135,22 @@ export default function SelectMovies(): JSX.Element {
 
             <section className="fixed bottom-0 pl-16 left-0 w-full bg-gray-100 py-4 flex justify-between items-center">
                 {/* Progress bar section. */}
-                <section className="w-4/5 flex justify-center px-8">
-                    <section className="w-full bg-gray-200 rounded-full h-5">
-                        <section
+                <aside className="w-4/5 flex justify-center px-8">
+                    <div className="w-full bg-gray-200 rounded-full h-5">
+                        <div
                             className="bg-[#282F72] rounded-full h-full transition-all duration-500"
                             style={{
-                                width: `${Math.min((selectedMovies.length / 15) * 100, 100)}%`,
+                                width: `${Math.min((selectedMovies.length / 15) * 100, 100)}%`, // progress bar style math
                             }}
-                        ></section>
-                    </section>
-                </section>
+                        ></div>
+                    </div>
+                </aside>
 
                 {/* "Next step" button section. */}
                 <section className="w-1/5 pr-16 flex justify-center">
                     <button
                         onClick={() => {
+                            // if selected 15 or more movies, then redirects to rating page
                             if (selectedMovies.length >= 15) {
                                 redirect('coldStartSurvey/rateMovies');
                             }
@@ -167,6 +161,6 @@ export default function SelectMovies(): JSX.Element {
                     </button>
                 </section>
             </section>
-        </main>
+        </>
     );
 }

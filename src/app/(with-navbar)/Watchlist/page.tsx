@@ -7,18 +7,20 @@ import { useEffect, useState, useRef } from 'react';
 import SideBar from '@/components/sideBar/sideBar';
 import LoadingPage from '@/components/loading';
 
-export default function UserStats() {
-    const [seenMovies, setSeenMovies] = useState<number[]>([]);
+export default function Watchlist() {
+    // info on seen movies
+    const [addToWatchlistMovies, setToWatchlist] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
-    const backgroundDivRef = useRef<HTMLDivElement | null>(null);
+
+    // loading page states
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSeenMovies = async () => {
-            setSeenMovies(await getWatchlist(await verifyUser()));
+        const fetchAddToWatchlistMovies = async () => {
+            setToWatchlist(await getWatchlist(await verifyUser()));
             setIsLoading(false);
         };
-        fetchSeenMovies();
+        fetchAddToWatchlistMovies();
     }, []);
 
     if (isLoading) return <LoadingPage />;
@@ -33,7 +35,7 @@ export default function UserStats() {
                     <button>
                         {/* every element is mapped to having an id
                          * every MovieImage is getting an id number */}
-                        {seenMovies.map((id) => (
+                        {addToWatchlistMovies.map((id) => (
                             <MovieImage
                                 key={id}
                                 movieId={id}
@@ -52,49 +54,3 @@ export default function UserStats() {
         </section>
     );
 }
-
-// {
-//     recommendedMovies.map((movie, index) => (
-//         <div key={index} className="posterItem">
-//             <MovieImage
-//                 movieId={movie.movieId}
-//                 title={movie.movieTitle}
-//                 onClick={() => handleImageClick(movie.movieId)}
-//             />
-//         </div>
-//     ));
-// }
-
-// {
-//     sidebarImage && (
-//         <div
-//             className="absolute w-full h-full z-3"
-//             id="backgroundDiv"
-//             onClick={() => {
-//                 setSidebarImage(null);
-//                 if (backgroundDivRef.current) {
-//                     backgroundDivRef.current.style.display = 'none';
-//                 }
-//             }}
-//         ></div>
-//     );
-// }
-
-// const handleImageClick = async (movieId: number): Promise<void> => {
-//     try {
-//         const movie = await getMovieById(movieId); // Fetch movie by ID
-//         if (!movie) {
-//             console.error(`Movie with ID ${movieId} not found.`);
-//             return;
-//         }
-//         setSidebarImage(`/img/movies/movie${movieId}.png`); // It sets the chosen Poster to the sidebar
-//         setSidebarAlt(movie.movieTitle); // Set the chosen movie title to the sidebar
-//         setSelectedRating(null); // This part needs some more work
-//         setSelectedMovieId(movieId); // set the rating to the selected movie ID
-//         if (backgroundDivRef.current) {
-//             backgroundDivRef.current.style.display = 'block';
-//         }
-//     } catch (error) {
-//         console.error('Failed to fetch movie by ID:', error);
-//     }
-// };

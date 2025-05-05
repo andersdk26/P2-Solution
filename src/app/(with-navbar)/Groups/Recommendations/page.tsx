@@ -26,25 +26,18 @@ export default function Home(): JSX.Element {
     const [groupId, setGroupId] = useState<number>(0);
 
     useEffect(() => {
-        const gn = localStorage.getItem('groupName') || '';
+        const gn = localStorage.getItem('groupName') || ''; // gets the group name from local storage
         setGroupName(gn);
 
-        const gi = localStorage.getItem('groupId') || '';
+        const gi = localStorage.getItem('groupId') || ''; // gets the group id from local storage
         setGroupId(parseInt(gi));
         console.log(gi, gn);
-
-        // // Fetch the JSON file when the page loads
-        // fetch('Movie.json')
-        //     .then((response) => response.json())
-        //     .then((data) => setMovies(data))
-        //     .catch((error) => console.error('Error loading movies:', error));
     }, []);
 
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> => {
-            setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
-            console.log(recommendedMovies);
+            setRecommendedMovies(await hybridAlgorithm(groupId, 'group')); // returns an array of movies
         };
         if (groupId !== 0) {
             getRecommendedMovies();
@@ -62,12 +55,6 @@ export default function Home(): JSX.Element {
     );
 
     const handleNextPage = (): void => {
-        // if ((currentPage + 1) * moviesPerPage < displayedMovies.length) {
-        //     setCurrentPage((prev) => prev + 1);
-        // } else {
-        //     // Loop back to the first set of movies
-        //     setCurrentPage(0); // Start from the first set (page 0)
-        // }
         setCurrentPage(
             (prev) =>
                 (prev + 1) % Math.ceil(displayedMovies.length / moviesPerPage)
@@ -134,8 +121,11 @@ export default function Home(): JSX.Element {
                                     <MovieImage
                                         movieId={movie.movieId}
                                         title={movie.movieTitle}
-                                        onClick={() =>
-                                            setSelectedMovieId(movie.movieId)
+                                        onClick={
+                                            () =>
+                                                setSelectedMovieId(
+                                                    movie.movieId
+                                                ) // gets the posters movieId
                                         }
                                     />
                                 </div>

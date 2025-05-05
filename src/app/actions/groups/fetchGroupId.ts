@@ -2,6 +2,7 @@
 
 import { CreateGroupId } from '@/components/db/groupAuth';
 
+// type for group response
 interface groupIdResponse {
     status: number;
     message?: string;
@@ -9,7 +10,7 @@ interface groupIdResponse {
 }
 
 export async function FetchGroupId(): Promise<number> {
-    // Register the user
+    // Register the user by creating group id
     const response: Promise<groupIdResponse> = CreateGroupId();
 
     // Check if the user was registered
@@ -26,5 +27,6 @@ export async function FetchGroupId(): Promise<number> {
         return -1;
     }
 
+    // returns group id if there is one. otherwise return -1
     return (await response).object?.groupId || -1;
 }

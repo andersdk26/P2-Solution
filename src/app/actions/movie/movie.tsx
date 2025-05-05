@@ -4,12 +4,14 @@ import { moviesTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 
+// the movie type
 export type movie = {
     movieId: number;
     movieTitle: string;
     movieGenres: string;
 };
 
+// additional info on movie type
 export type movieWithRating = {
     movieId: number;
     title: string;
@@ -18,6 +20,7 @@ export type movieWithRating = {
     timesRated: number;
 };
 
+// search db for movie based on id. returns the object
 export async function getMovieById(id: number): Promise<movie | null> {
     const result = await db
         .select({
@@ -35,6 +38,7 @@ export async function getMovieById(id: number): Promise<movie | null> {
     return result[0];
 }
 
+// searches for string and if that is in the title.
 export async function searchForMovie(
     searchQuery: string,
     amount: number
@@ -42,7 +46,7 @@ export async function searchForMovie(
     // Trim search query.
     searchQuery = searchQuery.trim();
 
-    // Sanitise search query.
+    // Sanitise search query. for only a to z, A to Z and 0-9
     searchQuery = searchQuery.replace(/[^a-zA-Z0-9 ]/g, ' ');
 
     // Only search if query is at least 1 letter long.
@@ -66,6 +70,7 @@ export async function searchForMovie(
     }));
 }
 
+// auxiliary function for splitting the string.
 function splitQuery(searchQuery: string): string {
     // Initialise return string.
     let result = '';

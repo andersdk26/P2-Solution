@@ -8,13 +8,15 @@ import { JSX, useEffect, useState } from 'react'; // Importing React state hook
 
 export default function SignUpPage(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
-    const [message, setMessage] = useState(''); // State to store feedback messages hvilket er error beskeder til users
-    const [isError, setIsError] = useState(false); // State to track hvis message har en error
+    const [message, setMessage] = useState(''); // State to store feedback messages which are the error messeges to users
+
+    const [isError, setIsError] = useState(false); // State to track if the message has an error
 
     useEffect(() => {
         const checkLoginStatus = async (): Promise<void> => {
             if ((await verifyUser()) > 1) {
-                redirect('coldStartSurvey');
+                // if the user has an id number higher than one
+                redirect('coldStartSurvey'); // then redirect to cold start survey
             }
         };
         checkLoginStatus();
@@ -27,7 +29,7 @@ export default function SignUpPage(): JSX.Element {
         password: string;
         profileIcon: string;
     }): Promise<void> => {
-        // validation: sikkere at email contains "@" and password er 6 characters long
+        // validation: makes sure email contains "@" and password is 6 characters long
         if (!formData.email.includes('@')) {
             setMessage('Invalid email format!'); // Display error message
             setIsError(true);
@@ -48,18 +50,18 @@ export default function SignUpPage(): JSX.Element {
             setIsError(true);
             return;
         }
-        // Redirect
+        // if everything is successful, then redirect
         redirect('coldStartSurvey');
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            {/* Page titlens navn */}
+            {/* Page to titles name */}
             <h1 className="text-3xl font-bold mb-4">Sign Up to JamFest</h1>
 
             <SignUpForm onSignUp={handleSignUp} />
 
-            {/* udskriver feedback message hvis der er en */}
+            {/* prints feedback message if there is one */}
             {message && (
                 <p
                     className={`mt-2 ${isError ? 'text-red-500' : 'text-green-500'}`}

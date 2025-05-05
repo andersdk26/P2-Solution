@@ -31,6 +31,10 @@ export default function GroupSettings(): JSX.Element {
     const [RegularGroups, setRegularGroups] = useState<group[]>([]);
     // array for group requests.
     const [groupRequests, setGroupRequests] = useState<request[]>([]);
+    // state for displaying requests. this is for useEffect so that it can return JSX element
+    const [DisplayRequestsList, setDisplayRequestsList] = useState([
+        <p key={0}>You have no pending requests.</p>,
+    ]);
 
     // states to keep track of the 4 types of states.
     // at end of each call, set loading state to false.
@@ -40,11 +44,6 @@ export default function GroupSettings(): JSX.Element {
     const [isLoadingRegular, setIsLoadingRegular] = useState(true);
     const [isLoadingRequest, setIsLoadingRequest] = useState(true);
     const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
-
-    // // state for displaying requests. this is for useEffect so that it can return JSX element
-    const [DisplayRequestsList, setDisplayRequestsList] = useState([
-        <p key={0}>You have no pending requests.</p>,
-    ]);
 
     // get the groups user is admin of
     const getAdminGroups = async (): Promise<void> => {
@@ -76,6 +75,8 @@ export default function GroupSettings(): JSX.Element {
     }, []);
 
     const getGroupRequestsA = async (): Promise<void> => {
+        // returns an array of the object "request", which is group ID and the requester's ID
+        // groupID is from groups where current user is Admin
         setGroupRequests(await getGroupRequests(await verifyUser()));
         // set the loading to false
         setIsLoadingRequest(false);
@@ -86,7 +87,7 @@ export default function GroupSettings(): JSX.Element {
 
     useEffect(() => {
         const updateRequestsList = async (): Promise<void> => {
-            // set to true at east iteration, so it ends with false by the final
+            // set to true at each iteration, so it ends with false by the final
             setIsLoadingDisplay(true);
             const resolvedRequests = await Promise.all(
                 groupRequests.map(async (request) => (
@@ -95,17 +96,20 @@ export default function GroupSettings(): JSX.Element {
                         key={request.id}
                     >
                         <p className="text-xl my-auto">
+                            {/* prints the specific user Id */}
                             <i>{await getUserById(request.userId)}</i> wants to
-                            join{' '}
+                            join {/* prints the specific group name */}
                             <b>{await getGroupNameById(request.groupId)}</b>
                         </p>
                         <button
                             className="bg-[#2ec400] hover:bg-[#259e00] text-[#ffffff] font-bold py-2 px-4 rounded-sm cursor-pointer"
                             onClick={async () => {
-                                acceptGroupRequest(
+                                await acceptGroupRequest(
+                                    //
                                     request.userId,
                                     request.groupId
                                 );
+                                // calls the functions that updates the array of requests, and the admin groups
                                 getGroupRequestsA();
                                 getAdminGroups();
                                 alert(`You accepted the request`);
@@ -117,10 +121,11 @@ export default function GroupSettings(): JSX.Element {
                             className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold py-2 px-4 relative rounded-sm cursor-pointer"
                             onClick={async () => {
                                 await rejectGroupRequest(
+                                    // finds the specific group, and deletes it from db
                                     request.userId,
                                     request.groupId
                                 );
-                                getGroupRequestsA();
+                                getGroupRequestsA(); // calls the functions that update the array of requests
                                 alert('You declined the request');
                             }}
                         >
@@ -161,17 +166,21 @@ export default function GroupSettings(): JSX.Element {
                         ({AdminGroupCount}/5)
                     </p>
                     <div className="inline-flex overflow-scroll">
-                        {AdminGroups.map((Group) => (
-                            <div key={Group.groupId}>
-                                <AdminGroupIcon
-                                    groupId={Group.groupId}
-                                    groupName={Group.groupName}
-                                    groupAdmin={Group.groupAdmin}
-                                    groupMembers={Group.groupMembers}
-                                    settings={Group.settings}
-                                />
-                            </div>
-                        ))}
+                        {AdminGroups.map(
+                            (
+                                Group // maps through all the groups where you are admin
+                            ) => (
+                                <div key={Group.groupId}>
+                                    <AdminGroupIcon
+                                        groupId={Group.groupId}
+                                        groupName={Group.groupName}
+                                        groupAdmin={Group.groupAdmin}
+                                        groupMembers={Group.groupMembers}
+                                        settings={Group.settings}
+                                    />
+                                </div>
+                            )
+                        )}
                         <CreateGroupIcon adminGroupNumber={AdminGroupCount} />
                     </div>
                 </section>
@@ -179,17 +188,21 @@ export default function GroupSettings(): JSX.Element {
                 <section>
                     <h2 className="ml-4">Groups you have joined</h2>
                     <div className="inline-flex">
-                        {RegularGroups.map((Group) => (
-                            <div key={Group.groupId}>
-                                <GroupIcon
-                                    groupId={Group.groupId}
-                                    groupName={Group.groupName}
-                                    groupAdmin={Group.groupAdmin}
-                                    groupMembers={Group.groupMembers}
-                                    settings={Group.settings}
-                                />
-                            </div>
-                        ))}
+                        {RegularGroups.map(
+                            (
+                                Group // maps through all the groups you are NOT admin of, but member
+                            ) => (
+                                <div key={Group.groupId}>
+                                    <GroupIcon
+                                        groupId={Group.groupId}
+                                        groupName={Group.groupName}
+                                        groupAdmin={Group.groupAdmin}
+                                        groupMembers={Group.groupMembers}
+                                        settings={Group.settings}
+                                    />
+                                </div>
+                            )
+                        )}
                         <SearchGroupIcon />
                     </div>
                 </section>
