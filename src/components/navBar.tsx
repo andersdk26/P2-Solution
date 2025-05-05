@@ -47,10 +47,6 @@ export default function NavBar(): JSX.Element {
                             height={100}
                             onClick={() => redirect('')}
                             title="Home page"
-                        ></Image>
-                        {/* <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
-                            Home
-                        </button> */}
                         />
                     </div>
                 </div>
