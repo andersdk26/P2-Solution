@@ -109,7 +109,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
                 }
-                setSelectedMovieImdbId(await getImdbId(movieId));
+                setSelectedMovieImdbId(parseInt(await getImdbId(movieId)));
             } catch (error) {
                 console.error('Failed to fetch movie by ID:', error);
             }

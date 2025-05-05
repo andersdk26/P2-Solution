@@ -44,7 +44,9 @@ export default function Home(): JSX.Element {
             setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
             console.log(recommendedMovies);
         };
-        getRecommendedMovies();
+        if (groupId !== 0) {
+            getRecommendedMovies();
+        }
     }, [groupId]);
 
     const moviesPerPage = 3;
