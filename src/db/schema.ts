@@ -286,7 +286,7 @@ export type SelectRatings = typeof ratingsTable.$inferSelect;
 
 // // *** Ratings ***
 // export const ratingsTable = sqliteTable(
-//     'testRatings',
+//     'ratingsTable',
 //     {
 //         id: integer('id').primaryKey(),
 //         userId: integer('userId').notNull(),

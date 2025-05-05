@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db/index';
-import { testRatings } from '@/db/schema';
+import { ratingsTable } from '@/db/schema';
 import verifyUser from '../logIn/authenticateUser';
 import { and, eq, sql } from 'drizzle-orm';
 
@@ -14,10 +14,10 @@ export async function rateMovie(
 
     try {
         response = await db
-            .insert(testRatings)
+            .insert(ratingsTable)
             .values({ userId, movieId, rating })
             .onConflictDoUpdate({
-                target: [testRatings.userId, testRatings.movieId], // composite primary key
+                target: [ratingsTable.userId, ratingsTable.movieId], // composite primary key
                 set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
             })
             .returning();
@@ -38,11 +38,11 @@ export async function removeMovieRating(movieId: number): Promise<void> {
 
     try {
         const response = await db
-            .delete(testRatings)
+            .delete(ratingsTable)
             .where(
                 and(
-                    eq(testRatings.userId, userId),
-                    eq(testRatings.movieId, movieId)
+                    eq(ratingsTable.userId, userId),
+                    eq(ratingsTable.movieId, movieId)
                 )
             )
             .returning();
@@ -65,11 +65,11 @@ export async function getMovieRating(movieId: number): Promise<number> {
     try {
         const response = await db
             .select()
-            .from(testRatings)
+            .from(ratingsTable)
             .where(
                 and(
-                    eq(testRatings.userId, userId),
-                    eq(testRatings.movieId, movieId)
+                    eq(ratingsTable.userId, userId),
+                    eq(ratingsTable.movieId, movieId)
                 )
             )
             .limit(1); // Limit to 1 result
