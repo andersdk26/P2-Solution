@@ -3,28 +3,30 @@
 import { JSX, useState, useRef, useEffect } from 'react';
 import { getMovieById } from '@/actions/movie/movie';
 import MovieImage from '../movie/MovieImage';
-import Image from 'next/image';
 import '@/styles/mainPage.css'; // Import my CSS file
-import saveMovieToWatchlist from '@/actions/movie/saveWatchlist';
-import removeMovieToWatchlist from '@/actions/movie/removeWatchlist';
-import verifyUser from '@/actions/logIn/authenticateUser';
-import { OutgoingMessage } from 'http';
-import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import {
-    getMovieRating,
-    rateMovie,
-    removeMovieRating,
-} from '@/actions/movie/movieRating';
+    saveMovieToWatchlist,
+    removeMovieToWatchlist,
+    checkWatchlistStatus,
+} from '@/actions/movie/watchlist';
+import verifyUser from '@/actions/logIn/authenticateUser';
+import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
+import { getImdbId } from '@/actions/movie/movieImageUrl';
 
 interface SideBarProps {
-    id: number;
+    id: number | null;
+    // eslint-disable-next-line no-unused-vars
+    setIdFunc: (id: number | null) => void;
 }
 
-export default function SideBar({ id }: SideBarProps): JSX.Element {
+export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarImage, setSidebarImage] = useState<string | null>(null);
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+    const [selectedMovieImdbId, setSelectedMovieImdbId] = useState<
+        string | null
+    >(null);
     const [toast, setToast] = useState<{
         message: string;
         type: 'success' | 'error';
@@ -33,8 +35,6 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
         useState<WatchlistStatus>('unset');
     const svgRef = useRef<SVGSVGElement>(null);
     const backgroundDivRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => alert(selectedMovieId), [selectedMovieId]);
 
     const checkmark = (
         <svg
@@ -109,6 +109,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
                 }
+                setSelectedMovieImdbId(await getImdbId(movieId));
             } catch (error) {
                 console.error('Failed to fetch movie by ID:', error);
             }
@@ -116,8 +117,8 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
     };
 
     useEffect(() => {
-        const fetchMovie = async () => {
-            await handleImageClick(id);
+        const fetchMovie = async (): Promise<void> => {
+            await handleImageClick(id || 0);
         };
         fetchMovie();
     }, [id]);
@@ -167,6 +168,24 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                 message: 'Failed to remove movie from watchlist.',
                 type: 'error',
             });
+        }
+    };
+
+    useEffect(() => {
+        handleWatchlistStatus();
+    }, [selectedMovieId]);
+
+    const handleWatchlistStatus = async (): Promise<void> => {
+        if (selectedMovieId === null) return;
+        try {
+            const userId = await verifyUser();
+            const isInWatchlist = await checkWatchlistStatus(
+                userId,
+                selectedMovieId
+            );
+            setWatchlistStatus(isInWatchlist ? 'set' : 'unset');
+        } catch (error) {
+            console.error('Error checking movie in watchlist:', error);
         }
     };
 
@@ -260,6 +279,7 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
                         // on click, make the image dissapear
                         setSidebarImage(null);
                         setSelectedMovieId(null);
+                        setIdFunc(null);
                         if (backgroundDivRef.current) {
                             // if the background div is active,
                             backgroundDivRef.current.style.display = 'none'; // then make the background div dissapear
@@ -271,66 +291,79 @@ export default function SideBar({ id }: SideBarProps): JSX.Element {
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section>
-                    <div className="sideBar">
-                        <button
-                            className="basicBtn cursor-pointer mb-5"
-                            onClick={() => {
-                                // on click, make the image dissapear
-                                setSidebarImage(null);
-                                setSelectedMovieId(null);
-                                if (backgroundDivRef.current) {
-                                    // if the background div is active,
-                                    backgroundDivRef.current.style.display =
-                                        'none'; // then make the background div dissapear
-                                }
-                            }}
-                        >
-                            Close
-                        </button>
-                        {selectedMovieId !== null && (
-                            <MovieImage movieId={selectedMovieId} />
-                        )}
+                    <div className="sideBar flex flex-col justify-between h-full max-h-screen p-4 overflow-y-auto">
+                        <div className="flex flex-col items-center text-center">
+                            <button
+                                className="basicBtn cursor-pointer mb-5 select-none"
+                                onClick={() => {
+                                    setSidebarImage(null);
+                                    setSelectedMovieId(null);
+                                    setIdFunc(null);
+                                    if (backgroundDivRef.current) {
+                                        backgroundDivRef.current.style.display =
+                                            'none';
+                                    }
+                                }}
+                            >
+                                Close
+                            </button>
 
-                        <h4 className="text-center">{sidebarAlt}</h4>
-                        {/* Rating Buttons */}
-                        <RatingPopcorn movieId={selectedMovieId || 0} />
+                            {selectedMovieId !== null && (
+                                <MovieImage movieId={selectedMovieId} />
+                            )}
+                            <h4 className="text-center break-words">
+                                {sidebarAlt}
+                            </h4>
+                            <RatingPopcorn movieId={selectedMovieId || 0} />
 
-                        {/* buttoonsssssss */}
-                        <button
-                            className="basicBtn w-60 h-12 fixed mt-150"
-                            onClick={() => {
-                                switch (watchlistStatus) {
-                                    case 'unset':
-                                        setWatchlistStatus('setReq');
-                                        handleAddToWatchlist();
-                                        break;
-                                    case 'set':
-                                        setWatchlistStatus('unsetReq');
-                                        handleRemovefromWatchlist();
-                                        break;
-                                    default:
-                                        break;
+                            <section className="mt-4 ">
+                                <a
+                                    target="_blank"
+                                    href={`https://www.imdb.com/title/tt${selectedMovieImdbId}/`}
+                                >
+                                    IMDb page
+                                </a>
+                            </section>
+                        </div>
+
+                        {/* Button at the bottom of sidebar */}
+                        <div className="mt-6">
+                            <button
+                                className="basicBtn w-full h-12 select-none"
+                                onClick={() => {
+                                    switch (watchlistStatus) {
+                                        case 'unset':
+                                            setWatchlistStatus('setReq');
+                                            handleAddToWatchlist();
+                                            break;
+                                        case 'set':
+                                            setWatchlistStatus('unsetReq');
+                                            handleRemovefromWatchlist();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }}
+                                disabled={
+                                    watchlistStatus !== 'set' &&
+                                    watchlistStatus !== 'unset'
                                 }
-                            }}
-                            disabled={
-                                watchlistStatus !== 'set' &&
-                                watchlistStatus !== 'unset'
-                            }
-                        >
-                            {watchlistStatus === 'unset'
-                                ? 'Add to Watchlist'
-                                : watchlistStatus === 'set'
-                                  ? 'Remove from Watchlist'
-                                  : watchlistStatus === 'setCheck'
-                                    ? checkmark
-                                    : watchlistStatus === 'unsetCheck'
-                                      ? checkmark
-                                      : watchlistStatus === 'setCross'
-                                        ? cross
-                                        : watchlistStatus === 'unsetCross'
-                                          ? cross
-                                          : spinner}
-                        </button>
+                            >
+                                {watchlistStatus === 'unset'
+                                    ? 'Add to Watchlist'
+                                    : watchlistStatus === 'set'
+                                      ? 'Remove from Watchlist'
+                                      : watchlistStatus === 'setCheck'
+                                        ? checkmark
+                                        : watchlistStatus === 'unsetCheck'
+                                          ? checkmark
+                                          : watchlistStatus === 'setCross'
+                                            ? cross
+                                            : watchlistStatus === 'unsetCross'
+                                              ? cross
+                                              : spinner}
+                            </button>
+                        </div>
                     </div>
                 </section>
             )}

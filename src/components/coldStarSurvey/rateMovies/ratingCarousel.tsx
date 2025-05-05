@@ -6,10 +6,14 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
+import LoadingPage from '@/components/loading';
 
 export default function RatingCarousel(): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // loading page
+    const [isLoading, setIsLoading] = useState(true);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -17,6 +21,7 @@ export default function RatingCarousel(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+        setIsLoading(false);
     }, []);
 
     const hasMounted = useRef(false);
@@ -49,6 +54,8 @@ export default function RatingCarousel(): JSX.Element {
         );
     };
 
+    if (isLoading) return <LoadingPage />;
+
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">
             {/* Carousel layer */}
@@ -76,7 +83,7 @@ export default function RatingCarousel(): JSX.Element {
                             removeMovie(selectedMovies[imageIndex]?.movieId);
                             handleNext();
                         }}
-                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
+                        className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 cursor-pointer"
                     >
                         Remove movie
                     </button>

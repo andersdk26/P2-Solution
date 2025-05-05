@@ -64,7 +64,7 @@ export default function Home(): JSX.Element {
 
             <button
                 onClick={() => redirect('coldStartSurvey')}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm ml-10"
+                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm ml-10"
             >
                 Back
             </button>
@@ -72,6 +72,21 @@ export default function Home(): JSX.Element {
             <section className="m-auto text-center content-center justify-center">
                 <RatingCarousel />
             </section>
+
+            {/* <button
+                onClick={() => {
+                    if (selectedMovies.length >= 15) {
+                        // for (const rating of ratedMovies) {
+                        //     saveMovieRatings(userId, rating[0], rating[1]);
+                        // }
+                        localStorage.removeItem('selectedMovies');
+                        redirect('');
+                    }
+                }}
+                className={`${selectedMovies.length >= 15 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute`}
+            >
+                Submit
+            </button> */}
 
             <button
                 onClick={() => {
@@ -81,18 +96,18 @@ export default function Home(): JSX.Element {
                     localStorage.removeItem('selectedMovies');
                     redirect('');
                 }}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute cursor-pointer"
+                className="bg-[#282F72] hover:bg-[#424ebd] cursor-pointer text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
             >
                 Submit
             </button>
 
-            <section>
+            {/* <section>
                 {selectedMovies.map((movie) => (
                     <div key={movie.movieId}>
                         <p>{movie.movieTitle}</p>
                     </div>
                 ))}
-            </section>
+            </section> */}
         </main>
     );
 }

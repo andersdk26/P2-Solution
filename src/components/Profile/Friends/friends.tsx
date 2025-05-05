@@ -1,8 +1,8 @@
 'use server';
 
-import { usersTable } from '@/db/schema';
+import { friendsTable, usersTable } from '@/db/schema';
 import { db } from 'db';
-import { or, like } from 'drizzle-orm';
+import { or, like, and, eq } from 'drizzle-orm';
 
 export type user = {
     userId: number;
@@ -28,6 +28,69 @@ export async function searchUserById(id: string): Promise<user[]> {
                 like(usersTable.username, `${id}%`)
             )
         );
+
+    return result.slice(0, 5);
+}
+
+export async function searchFriendById(
+    userId: string,
+    currentUserId: number
+): Promise<user[]> {
+    // only show if written more than 1 character
+    if (userId.length < 1) {
+        return [];
+    }
+
+    // dont show if the id is the current users id
+    // if (userId === `${currentUserId}`) {
+    //     return [];
+    // }
+
+    // search db for id
+    const userResults = await db
+        .select({
+            userId: usersTable.id,
+            userName: usersTable.username,
+        })
+        .from(usersTable)
+        .where(
+            or(
+                like(usersTable.id, `${userId}%`),
+                like(usersTable.username, `${userId}%`)
+            )
+        );
+
+    // search db for id
+    // select the users in the table
+    const friendResults = await db
+        .select({
+            userIdA: friendsTable.userIdA,
+            userIdB: friendsTable.userIdB,
+        })
+        .from(friendsTable)
+        .where(
+            and(
+                or(
+                    like(friendsTable.userIdA, `${userId}%`),
+                    like(friendsTable.userIdB, `${userId}%`)
+                ),
+                eq(friendsTable.status, 1),
+                or(
+                    eq(friendsTable.userIdA, currentUserId),
+                    eq(friendsTable.userIdB, currentUserId)
+                )
+            )
+        );
+
+    const resultId = [];
+
+    for (const result of userResults) {
+        if (result.userId === currentUserId) {
+            resultId.push(result.userIdB);
+        } else {
+            resultId.push(result.userIdA);
+        }
+    }
 
     return result.slice(0, 5);
 }
