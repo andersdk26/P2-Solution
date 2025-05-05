@@ -133,6 +133,7 @@ export function FormCreateGroup(): JSX.Element {
             groupName: GroupName,
             groupAdmin: currentUser,
             groupMembers: memberString,
+            settings: settingsString,
         };
         //--- ADD to db ---
         await GroupCreateDb(tempGroup);
