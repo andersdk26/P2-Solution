@@ -1,12 +1,13 @@
 // MySQL
 import { sql } from 'drizzle-orm';
-import { bigint } from 'drizzle-orm/mysql-core';
 import {
     int,
     mysqlTable,
     serial,
     timestamp,
     varchar,
+    bigint,
+    uniqueIndex,
 } from 'drizzle-orm/mysql-core';
 
 // *** Movie ***
@@ -143,13 +144,23 @@ export type InsertGroupRequestsTable = typeof groupRequestsTable.$inferInsert;
 export type SelectGroupRequestsTable = typeof groupRequestsTable.$inferSelect;
 
 // *** Ratings ***
-export const ratingsTable = mysqlTable('ratings', {
-    id: serial('id').primaryKey(),
-    userId: int('userId').notNull(),
-    movieId: int('movieId').notNull(),
-    rating: int('rating').notNull(),
-    timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
-});
+export const ratingsTable = mysqlTable(
+    'ratings',
+    {
+        id: serial('id').primaryKey(),
+        userId: int('userId').notNull(),
+        movieId: int('movieId').notNull(),
+        rating: int('rating').notNull(),
+        timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
+    },
+    (table) => ({
+        // 👇 Definerer en unik constraint på (user_id, movie_id)
+        userMovieUnique: uniqueIndex('user_movie_unique').on(
+            table.userId,
+            table.movieId
+        ),
+    })
+);
 
 export type InsertRatings = typeof ratingsTable.$inferInsert;
 export type SelectRatings = typeof ratingsTable.$inferSelect;

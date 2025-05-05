@@ -13,14 +13,23 @@ export async function rateMovie(
     const userId = await verifyUser(); // Get the logged-in user's ID
 
     try {
+        // MySQL
         response = await db
             .insert(ratingsTable)
             .values({ userId, movieId, rating })
-            .onConflictDoUpdate({
-                target: [ratingsTable.userId, ratingsTable.movieId], // composite primary key
+            .onDuplicateKeyUpdate({
                 set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
             })
-            .returning();
+            .execute();
+        // // SQLite
+        // response = await db
+        // .insert(ratingsTable)
+        // .values({ userId, movieId, rating })
+        // .onConflictDoUpdate({
+        //     target: [ratingsTable.userId, ratingsTable.movieId], // composite primary key
+        //     set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
+        // })
+        // .returning();
 
         if (!response || !response.length) {
             throw new Error('Failed to insert or update rating.');
@@ -45,7 +54,7 @@ export async function removeMovieRating(movieId: number): Promise<void> {
                     eq(ratingsTable.movieId, movieId)
                 )
             )
-            .returning();
+            .execute();
         console.log(response);
 
         if (!response || !response.length) {
