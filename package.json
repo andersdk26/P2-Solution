@@ -24,6 +24,7 @@
     "jsdom": "^26.0.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "mysql2": "^3.14.0",
     "next": "15.2.4",
     "next.js": "^1.0.3",
     "plaiceholder": "^3.0.0",

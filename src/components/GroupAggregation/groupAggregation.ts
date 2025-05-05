@@ -38,12 +38,12 @@ export default async function groupAggregation(
         // Get their respective ratings.
         const memberRatings = await db
             .select({
-                userId: testRatings.userId,
-                movieId: testRatings.movieId,
-                movieRating: testRatings.rating,
+                userId: ratingsTable.userId,
+                movieId: ratingsTable.movieId,
+                movieRating: ratingsTable.rating,
             })
-            .from(testRatings)
-            .where(eq(testRatings.userId, parseInt(id)));
+            .from(ratingsTable)
+            .where(eq(ratingsTable.userId, parseInt(id)));
 
         // Add each rating to 'averageGroupRatings'.
         for (const rating of memberRatings) {
