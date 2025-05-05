@@ -11,7 +11,6 @@ export type group = {
     groupName: string;
     groupAdmin: number;
     groupMembers: string;
-    settings: string;
 };
 
 export async function getGroupById(id: string): Promise<group[]> {
@@ -27,7 +26,6 @@ export async function getGroupById(id: string): Promise<group[]> {
             groupName: groupsTable.groupName,
             groupAdmin: groupsTable.adminId,
             groupMembers: groupsTable.members,
-            settings: groupsTable.settings,
         })
         .from(groupsTable)
         .where(
@@ -60,7 +58,6 @@ export async function getGroupsByAdminId(id: number): Promise<group[]> {
             groupName: groupsTable.groupName,
             groupAdmin: groupsTable.adminId,
             groupMembers: groupsTable.members,
-            settings: groupsTable.settings,
         })
         .from(groupsTable)
         .where(eq(groupsTable.adminId, id));
@@ -77,7 +74,6 @@ export async function getRegularGroupsByMemberId(id: number): Promise<group[]> {
             groupName: groupsTable.groupName,
             groupAdmin: groupsTable.adminId,
             groupMembers: groupsTable.members,
-            settings: groupsTable.settings,
         })
         .from(groupsTable)
         .where(

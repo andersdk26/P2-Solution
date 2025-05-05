@@ -20,7 +20,6 @@ export default function AdminGroupIcon({
     groupName,
     groupAdmin,
     groupMembers,
-    settings,
 }: group): JSX.Element {
     //keeps track of the pop up
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
@@ -49,7 +48,6 @@ export default function AdminGroupIcon({
     const [isLoadingMembers, setIsLoadingMembers] = useState(true);
 
     // make array with the settings
-    const settingsList = settings.split('|');
 
     // get the members id's to usernames
     //first make into array
@@ -142,15 +140,11 @@ export default function AdminGroupIcon({
             {/* The div for the entire box, onclick: open the about group */}
             <div
                 // style inline because tailwind doesnt like dynamic colorchanges
-                style={{
-                    backgroundColor: settingsList[1],
-                    color: settingsList[2],
-                }}
+
                 className={`size-60 border-2 border-solid border-[#282F72] hover:brightness-80 inline-block rounded-3xl m-4 text-center align-center content-center justify-center cursor-pointer`}
                 onClick={() => setAboutGroupOpen(!isAboutGroupOpen)}
             >
                 <p className={`text-xl m-2 font-bold`}>{groupName}</p>
-                <p className="text-9xl m-0 select-none">{settingsList[0]}</p>
                 <p className={`text-l m-2`}>
                     Members:
                     <span className="font-bold">{memberCount}</span>
@@ -166,10 +160,7 @@ export default function AdminGroupIcon({
                     {/* left div, About group information */}
                     <div
                         // style inline because tailwind doesnt like dynamic colorchanges
-                        style={{
-                            backgroundColor: settingsList[1],
-                            color: settingsList[2],
-                        }}
+
                         className={`float z-30 w-5/6 h-2/3 border-2 border-solid border-[#282F72] rounded-3xl m-4 align-center items-center overflow-scroll`}
                     >
                         {/* close button */}
@@ -250,7 +241,7 @@ export default function AdminGroupIcon({
                         <div className="right-8 mr-4 text-right float-right text-xl">
                             <ChangeGroupSettings
                                 groupId={groupId}
-                                settings={settingsList}
+                                settings={[]}
                                 groupName={groupName}
                             />
                         </div>

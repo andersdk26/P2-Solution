@@ -84,15 +84,16 @@ export async function searchFriendById(
 
     const resultId = [];
 
-    for (const result of userResults) {
-        if (result.userId === currentUserId) {
-            resultId.push(result.userIdB);
-        } else {
-            resultId.push(result.userIdA);
-        }
-    }
+    // for (const result of userResults) {
+    //     if (result.userId === currentUserId) {
+    //         resultId.push(result.userIdB);
+    //     } else {
+    //         resultId.push(result.userIdA);
+    //     }
+    // }
 
-    return result.slice(0, 5);
+    // return result.slice(0, 5);
+    return [];
 }
 
 // export async function searchForUsers(
