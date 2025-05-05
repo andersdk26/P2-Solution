@@ -6,22 +6,11 @@ import Image from 'next/image';
 export default function LoadingPage(): JSX.Element {
     const [LoadingGif, setLoadingGif] = useState('/loadingIcon.gif');
 
-    // array of gifs
-    const gifs = [
-        '/img/loading gifs/entire bee movie in 10 seconds gif.gif',
-        '/img/loading gifs/Snake_can_be_completed.gif',
-        '/img/loading gifs/spongebob episode gif.gif',
-        '/img/loading gifs/subway surfers.gif',
-    ];
-
     //https://www.freecodecamp.org/news/how-to-use-settimeout-in-react-using-hooks/
     useEffect(() => {
-        // randomly pick one of the 4 gifs to display after 30 seconds
-        const randomNumber = Math.floor(Math.random() * 4);
-
         // Use setTimeout to update the message after 30 seconds
         const timeoutId = setTimeout(() => {
-            setLoadingGif(gifs[randomNumber]);
+            setLoadingGif('/img/loading gifs/Snake_can_be_completed.gif');
         }, 30000);
 
         // Cleanup function to clear the timeout if the component unmounts
