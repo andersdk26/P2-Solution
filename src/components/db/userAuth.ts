@@ -109,7 +109,7 @@ export async function register_user({
 
     // Insert the user into the database
     try {
-        const result: drizzleReturn = await db
+        const result = await db // drizzleReturn
             .insert(usersTable)
             .values({
                 id: userId,
@@ -118,14 +118,15 @@ export async function register_user({
                 password: passwordHash,
                 profileIcon,
             })
-            .execute();
+            .returning();
+        // .execute();
 
-        if (result[0].affectedRows !== 1) {
-            throw new Error('No user inserted');
-        }
-        // if (result.length === 0) {
+        // if (result[0].affectedRows !== 1) {
         //     throw new Error('No user inserted');
         // }
+        if (result.length === 0) {
+            throw new Error('No user inserted');
+        }
     } catch (error) {
         console.error('Error inserting user:', error);
         return { status: 500, message: 'Internal server error' };

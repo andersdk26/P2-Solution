@@ -13,31 +13,32 @@ export async function rateMovie(
     const userId = await verifyUser(); // Get the logged-in user's ID
 
     try {
-        // MySQL
+        // // MySQL
+        // response = await db
+        //     .insert(ratingsTable)
+        //     .values({ userId, movieId, rating })
+        //     .onDuplicateKeyUpdate({
+        //         set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
+        //     })
+        //     .execute();
+
+        // if (response[0].affectedRows !== 1) {
+        //     throw new Error('Failed to insert or update rating.');
+        // }
+
+        // SQLite
         response = await db
             .insert(ratingsTable)
             .values({ userId, movieId, rating })
-            .onDuplicateKeyUpdate({
+            .onConflictDoUpdate({
+                target: [ratingsTable.userId, ratingsTable.movieId], // composite primary key
                 set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
             })
-            .execute();
+            .returning();
 
-        if (response[0].affectedRows !== 1) {
+        if (!response || !response.length) {
             throw new Error('Failed to insert or update rating.');
         }
-        // // SQLite
-        // response = await db
-        // .insert(ratingsTable)
-        // .values({ userId, movieId, rating })
-        // .onConflictDoUpdate({
-        //     target: [ratingsTable.userId, ratingsTable.movieId], // composite primary key
-        //     set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
-        // })
-        // .returning();
-
-        // if (!response || !response.length) {
-        //     throw new Error('Failed to insert or update rating.');
-        // }
     } catch (error) {
         console.error(
             `Error inserting or updating rating for movieId: ${movieId}.`,
@@ -58,14 +59,15 @@ export async function removeMovieRating(movieId: number): Promise<void> {
                     eq(ratingsTable.movieId, movieId)
                 )
             )
-            .execute();
+            .returning();
+        // .execute();
 
-        if (response[0].affectedRows !== 1) {
-            throw new Error('Failed to insert or update rating.');
-        }
-        // if (!response || !response.length) {
+        // if (response[0].affectedRows !== 1) {
         //     throw new Error('Failed to insert or update rating.');
         // }
+        if (!response || !response.length) {
+            throw new Error('Failed to insert or update rating.');
+        }
     } catch (error) {
         console.error(
             `Error inserting or updating rating for movieId: ${movieId}.`,
