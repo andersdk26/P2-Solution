@@ -6,7 +6,7 @@ import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
 
-type averageRating = {
+export type averageRating = {
     runningTotal: number;
     timesRated: number;
 };

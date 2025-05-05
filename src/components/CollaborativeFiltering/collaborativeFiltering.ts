@@ -274,7 +274,7 @@ export default async function collaborativeFiltering(
     return arrayOfRecommendedMovies;
 }
 
-function cosineSimilarity(userA: number[], userB: number[]): number {
+export function cosineSimilarity(userA: number[], userB: number[]): number {
     // Find dot product between the common ratings of user A and B.
     let dotProduct = 0;
 
