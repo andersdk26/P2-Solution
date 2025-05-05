@@ -308,7 +308,7 @@ export type SelectGroupRequestsTable = typeof groupRequestsTable.$inferSelect;
 
 // *** Ratings ***
 export const ratingsTable = sqliteTable(
-    'ratingsTable',
+    'testRatings',
     {
         id: integer('id').primaryKey(),
         userId: integer('userId').notNull(),
