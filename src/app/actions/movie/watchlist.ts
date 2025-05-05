@@ -47,7 +47,7 @@ export async function saveMovieToWatchlist(
         return 'Successfully added the Movie to the watchlist.';
     } catch (error) {
         console.error('Error adding movie to the watchlist: ', error);
-        throw new Error('An error occurred while adding the movie.');
+        throw new Error(`An error occurred while adding the movie. ${error}`);
     }
 }
 
