@@ -93,7 +93,7 @@ export default function ChartGenres(): JSX.Element {
                     Object.prototype.hasOwnProperty.call(movieGenreCount, genre)
                 ) {
                     // @ts-expect-error Always a string
-                    const amount = parseInt(movieGenreCount[genre]);
+                    const amount = parseInt(movieGenreCount[genre] as string);
                     genreCountObject.labels.push(genre);
                     genreCountObject.data.push(amount);
                 }
