@@ -192,7 +192,7 @@ export default function Friends(): JSX.Element {
             {/* pop-up to confirm to unfriend*/}
             {unfriendOpen && (
                 <aside
-                    className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center`}
+                    className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center ml-72`}
                     onLoad={() => alert(unfriendOpen)}
                 >
                     {/* the box container */}
@@ -209,13 +209,13 @@ export default function Friends(): JSX.Element {
                             <u>Close</u>
                         </button>
                         {/* Affirmation of unfriending-part */}
-                        <div className="align-center items-center content-center text-center mt-4">
+                        <div className="align-center items-center content-center text-center mt-15">
                             <p className="text-3xl text-center">
                                 Are you sure you want to unfriend {unfriendName}
                                 ?
                             </p>
                             <button
-                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 p-5 mt-20 rounded-sm cursor-pointer"
+                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 p-5 mt-10 rounded-sm cursor-pointer"
                                 onClick={async () => {
                                     // removes the specific friend, when clicked
                                     RemoveFriend(
