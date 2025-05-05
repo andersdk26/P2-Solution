@@ -21,6 +21,8 @@ type similarity = {
     similarity: number;
 };
 
+const rowLimit = 10000000;
+
 export default async function collaborativeFiltering(
     targetId: number,
     type: string
@@ -62,7 +64,8 @@ export default async function collaborativeFiltering(
                 movieRating: ratingsTable.rating,
             })
             .from(ratingsTable)
-            .where(ne(ratingsTable.userId, targetId));
+            .where(ne(ratingsTable.userId, targetId))
+            .limit(rowLimit);
 
         console.log('Other user ratings have been fetched.');
     } else if (type === 'group') {
