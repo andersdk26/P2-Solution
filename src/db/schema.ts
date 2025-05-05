@@ -82,7 +82,10 @@ export const watchlistTable = mysqlTable('watchlist', {
     movieid: int('movieId')
         .notNull()
         .references(() => moviesTable.id),
-    userid: int('userId')
+    userid: bigint('userId', {
+        unsigned: true,
+        mode: 'number',
+    })
         .notNull()
         .references(() => usersTable.id),
 });
@@ -103,7 +106,10 @@ export type SelectGroup = typeof groupsTable.$inferSelect;
 
 export const groupInfoTable = mysqlTable('group_info', {
     groupId: int('group_id').primaryKey(),
-    groupAdmin: varchar('group_admin', { length: 20 })
+    groupAdmin: bigint('group_admin', {
+        unsigned: true,
+        mode: 'number',
+    })
         .notNull()
         .references(() => usersTable.id), // foreign key to users table
 });
@@ -116,7 +122,10 @@ export const groupMembersTable = mysqlTable('group_members', {
     groupId: int('group_id')
         .notNull()
         .references(() => groupInfoTable.groupId), // foreign key to group_info table
-    userId: int('user_id')
+    userId: bigint('user_id', {
+        unsigned: true,
+        mode: 'number',
+    })
         .notNull()
         .references(() => usersTable.id), // foreign key to users table
 });
@@ -124,7 +133,7 @@ export const groupMembersTable = mysqlTable('group_members', {
 export type InsertGroupMember = typeof groupMembersTable.$inferInsert;
 export type SelectGroupMembers = typeof groupMembersTable.$inferSelect;
 
-export const groupRequestsTable = mysqlTable('groupRequests', {
+export const groupRequestsTable = mysqlTable('group_requests', {
     id: int('id').primaryKey(),
     userId: int('userId').notNull(),
     groupId: int('groupId').notNull(),
