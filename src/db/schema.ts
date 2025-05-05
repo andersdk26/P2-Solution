@@ -142,7 +142,7 @@ export type InsertGroupMember = typeof groupMembersTable.$inferInsert;
 export type SelectGroupMembers = typeof groupMembersTable.$inferSelect;
 
 export const groupRequestsTable = mysqlTable('group_requests', {
-    id: int('id').primaryKey(),
+    id: int('id').primaryKey().autoincrement(),
     userId: int('userId').notNull(),
     groupId: int('groupId').notNull(),
 });
