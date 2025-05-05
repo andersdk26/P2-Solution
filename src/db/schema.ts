@@ -89,7 +89,7 @@ export type InserFriend = typeof friendsTable.$inferInsert;
 export type SelectFriend = typeof friendsTable.$inferSelect;
 
 export const watchlistTable = mysqlTable('watchlist', {
-    id: int('id').primaryKey(),
+    id: int('id').primaryKey().autoincrement(),
     movieid: int('movieId')
         .notNull()
         .references(() => moviesTable.id),

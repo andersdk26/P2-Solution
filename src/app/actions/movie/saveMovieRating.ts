@@ -41,9 +41,9 @@ export default async function saveMovieRatings(
                 movieId,
                 rating,
             })
-            .returning();
+            .execute();
 
-        if (result.length === 0) {
+        if (/*result.length === 0*/ result[0].affectedRows !== 1) {
             throw new Error('No rating saved.');
         } else {
             console.log(
@@ -57,4 +57,3 @@ export default async function saveMovieRatings(
         console.error('Error saving user rating: ', error);
     }
 }
-

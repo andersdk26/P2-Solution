@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import argon2 from 'argon2';
 import defaultResponse from '@/components/defaultResponse';
 import { randomInt } from 'crypto';
+import { drizzleReturn } from '@/db/drizzleReturn';
 
 interface loginCheckProps {
     username: string;
@@ -108,7 +109,7 @@ export async function register_user({
 
     // Insert the user into the database
     try {
-        const result = await db
+        const result: drizzleReturn = await db
             .insert(usersTable)
             .values({
                 id: userId,
@@ -117,11 +118,14 @@ export async function register_user({
                 password: passwordHash,
                 profileIcon,
             })
-            .returning();
+            .execute();
 
-        if (result.length === 0) {
+        if (result[0].affectedRows !== 1) {
             throw new Error('No user inserted');
         }
+        // if (result.length === 0) {
+        //     throw new Error('No user inserted');
+        // }
     } catch (error) {
         console.error('Error inserting user:', error);
         return { status: 500, message: 'Internal server error' };

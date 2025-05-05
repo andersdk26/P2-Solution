@@ -21,6 +21,10 @@ export async function rateMovie(
                 set: { rating, timestamp: sql`CURRENT_TIMESTAMP` }, // update rating at existing row
             })
             .execute();
+
+        if (response[0].affectedRows !== 1) {
+            throw new Error('Failed to insert or update rating.');
+        }
         // // SQLite
         // response = await db
         // .insert(ratingsTable)
@@ -31,9 +35,9 @@ export async function rateMovie(
         // })
         // .returning();
 
-        if (!response || !response.length) {
-            throw new Error('Failed to insert or update rating.');
-        }
+        // if (!response || !response.length) {
+        //     throw new Error('Failed to insert or update rating.');
+        // }
     } catch (error) {
         console.error(
             `Error inserting or updating rating for movieId: ${movieId}.`,
@@ -55,11 +59,13 @@ export async function removeMovieRating(movieId: number): Promise<void> {
                 )
             )
             .execute();
-        console.log(response);
 
-        if (!response || !response.length) {
+        if (response[0].affectedRows !== 1) {
             throw new Error('Failed to insert or update rating.');
         }
+        // if (!response || !response.length) {
+        //     throw new Error('Failed to insert or update rating.');
+        // }
     } catch (error) {
         console.error(
             `Error inserting or updating rating for movieId: ${movieId}.`,
