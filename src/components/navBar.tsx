@@ -116,7 +116,9 @@ export default function NavBar(): JSX.Element {
                 {/* Video showed how to add div for mobile phone */}
             </div>
             {/* Render SideBar and pass the selected movie ID */}
-            {selectedMovieId !== null && <SideBar id={selectedMovieId} />}
+            {selectedMovieId !== null && (
+                <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
+            )}
         </nav>
     );
 }
