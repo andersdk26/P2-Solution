@@ -11,6 +11,7 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
 import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
+import LoadingPage from '@/components/loading';
 
 export default function Friends(): JSX.Element {
     // Pop up for unfriending someone
@@ -33,6 +34,10 @@ export default function Friends(): JSX.Element {
         </p>,
     ]);
     const [unfriendName, setUnfriendName] = useState('');
+
+    // loading page
+    const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
+    const [isLoadingRequest, setIsLoadingRequest] = useState(true);
 
     // fetching of your own userId to show the user
     useEffect(() => {
@@ -103,12 +108,14 @@ export default function Friends(): JSX.Element {
                 ))
             );
             setFriendRequestList(resolvedRequests);
+            setIsLoadingRequest(false);
         };
         updateFriendRequestList();
     }, [FriendRequests]);
 
     const getFriendsList = async (): Promise<void> => {
         setFriendsList(await GetFriends(await verifyUser()));
+        setIsLoadingFriendsList(false);
     };
 
     useEffect(() => {
@@ -146,11 +153,13 @@ export default function Friends(): JSX.Element {
         updateFriendList();
     }, [FriendsList]);
 
+    if (isLoadingFriendsList || isLoadingRequest) return <LoadingPage />;
+
     return (
         <>
             {/* entire page section */}
             <section className="p-8">
-                <section className="ml-100 mr-100 p-1 rounded-sm bg-[#9fa3d1]">
+                <section className="ml-100 mr-100 h-1/2 w-1/2 p-1 rounded-sm bg-[#9fa3d1]">
                     {/* your friends section */}
                     <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
                         <h2>Your friends</h2>
@@ -181,7 +190,7 @@ export default function Friends(): JSX.Element {
                     <section className="h-auto m-4 p-4 bg-[#babdde] rounded-sm">
                         <h2>Friend requests</h2>
                         <p className="ml-4 text-[#282f72]">
-                            Here you can accept or decline incoming friend
+                            Here, you can accept or decline incoming friend
                             requests.
                         </p>
                         <div className="mr-25 pl-4 pt-4 text-[#282f72]">
@@ -193,7 +202,9 @@ export default function Friends(): JSX.Element {
             {/* pop-up to confirm to unfriend*/}
             {unfriendOpen && (
                 <aside
-                    className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center`}
+                    className={`fixed top-4 left-0 z-40 w-2/3 h-2/3 flex items-center justify-center ml-72`}
+                    onLoad={() => alert(unfriendOpen)}
+
                 >
                     {/* the box container */}
                     <div
@@ -209,13 +220,13 @@ export default function Friends(): JSX.Element {
                             <u>Close</u>
                         </button>
                         {/* Affirmation of unfriending-part */}
-                        <div className="align-center items-center content-center text-center mt-4">
+                        <div className="align-center items-center content-center text-center mt-15">
                             <p className="text-3xl text-center">
                                 Are you sure you want to unfriend {unfriendName}
                                 ?
                             </p>
                             <button
-                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 p-5 mt-20 rounded-sm cursor-pointer"
+                                className="bg-[#db0000] hover:bg-[#b00000] text-[#ffffff] font-bold my-auto py-2 px-4 p-5 mt-10 rounded-sm cursor-pointer"
                                 onClick={async () => {
                                     // removes the specific friend, when clicked
                                     RemoveFriend(

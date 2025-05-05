@@ -6,17 +6,18 @@
     --primary-color: #282f72;
     --secondary-color: #dcdee7;
     --hover-color: #424ebd;
-    --foreground: #dcdee7;
+    --foreground: #000000;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --background: #debadd;
+        --background: #babdde;
         --text-color: #dcdee7;
         --primary-color: #282f72;
         --secondary-color: #dcdee7;
         --hover-color: #424ebd;
-        --foreground: #dcdee7;
+        --foreground: #000000;
+
     }
 }
 
@@ -64,7 +65,7 @@ h1 {
     font-weight: bolder;
     font-size: 50px;
     margin-left: 4px;
-    text-shadow: 3px 3px #9fa3d1;
+    /* text-shadow: 3px 3px #9fa3d1; */
 }
 
 h2 {
@@ -72,7 +73,7 @@ h2 {
     font-weight: bolder;
     font-size: 30px;
     margin-left: 4px;
-    text-shadow: 2px 2px #9fa3d1;
+    /* text-shadow: 2px 2px #9fa3d1; */
 }
 
 h3 {

@@ -6,10 +6,14 @@ import { getMovieById, movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
+import LoadingPage from '@/components/loading';
 
 export default function RatingCarousel(): JSX.Element {
     const [imageIndex, setImageIndex] = useState(0);
     const [selectedMovies, setSelectedMovies] = useState<movie[]>([]);
+
+    // loading page
+    const [isLoading, setIsLoading] = useState(true);
 
     // Retrieve data from local storage.
     useEffect(() => {
@@ -17,6 +21,7 @@ export default function RatingCarousel(): JSX.Element {
             localStorage.getItem('selectedMovies') || '[]'
         );
         setSelectedMovies(savedMovies);
+        setIsLoading(false);
     }, []);
 
     const hasMounted = useRef(false);
@@ -48,6 +53,8 @@ export default function RatingCarousel(): JSX.Element {
             index === selectedMovies.length - 1 ? 0 : index + 1
         );
     };
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <div className="relative w-full max-w-[800px] h-[500px] mx-auto flex items-center justify-center overflow-visible">

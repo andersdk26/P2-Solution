@@ -12,6 +12,8 @@ import {
 import { ChangeGroupSettings } from './changeGroupSettings';
 import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
 import useRedirect from '../redirect';
+import { redirect } from 'next/navigation';
+import LoadingPage from '../loading';
 
 export default function AdminGroupIcon({
     groupId,
@@ -36,14 +38,15 @@ export default function AdminGroupIcon({
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
 
-    const redirect = useRedirect(); // Custom hook for redirection
-
     // Keeps track of members in group object
     const [MembersListObject, setMembersListObject] = useState([
         <p className="ml-4" key={0}>
             No members to show.
         </p>,
     ]);
+
+    // loading page
+    const [isLoadingMembers, setIsLoadingMembers] = useState(true);
 
     // make array with the settings
     const settingsList = settings.split('|');
@@ -61,6 +64,7 @@ export default function AdminGroupIcon({
                 array.push(await getUserById(parseInt(id)));
             }
             setMemberUsernames(array);
+            setIsLoadingMembers(false);
         };
         getMemberUsernames();
     }, []);
@@ -74,9 +78,17 @@ export default function AdminGroupIcon({
     });
 
     const handleAddUserToGroup = async (addedUser: user) => {
+        if (groupMembers.includes(addedUser.userId.toString())) {
+            alert(`${addedUser.userName} is already in the group`);
+            return;
+        }
+        if (memberCount >= 8) {
+            alert('Cannot add more than 8 members');
+            return;
+        }
         await AddUserToGroup(groupId, groupMembers, addedUser.userId);
         // notify that there has been a success
-        alert(`${addedUser} has been added to your group!`);
+        alert(`${addedUser.userName} has been added to your group!`);
         // close the pop up for the add friend
         setAddMembersOpen(false);
         // reload page
@@ -122,6 +134,8 @@ export default function AdminGroupIcon({
         };
         updateMembersList();
     }, []);
+
+    if (isLoadingMembers) return <LoadingPage />;
 
     return (
         <>
@@ -195,23 +209,9 @@ export default function AdminGroupIcon({
                                 </p>
                             ))}
 
-                            <p className="text-xl m-2 font-bold">
-                                Last movie seen in group:
-                                <span className="font-normal ml-6">?</span>
-                            </p>
-
-                            {/* Go to group recommendations. */}
-                            <button
-                                onClick={() => {
-                                    goToGroupRecommendations(
-                                        groupId,
-                                        groupName
-                                    );
-                                    redirect('/Groups/Recommendations');
-                                }}
-                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
-                            >
-                                Go to group recommendations
+                            {/* Get new recommendation */}
+                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer hover:brightness-80">
+                                Get New Recommendation!
                             </button>
 
                             <br />
@@ -276,7 +276,10 @@ export default function AdminGroupIcon({
                             <u>Close</u>
                         </button>
 
-                        <div className="fixed mt-10 left-2/5 content-center align-center items-center">
+                        <p className="mt-10 text-3xl text-[#282f72] text-center align-center items-center content-center text-center ">
+                            Add more members to your group
+                        </p>
+                        <div className="fixed mt-2 left-2/5 content-center align-center items-center">
                             {/* the search form */}
                             <form
                                 className="w-80 justify-stretch py-2 text-black "
@@ -341,7 +344,7 @@ export default function AdminGroupIcon({
                         </button>
 
                         <div className=" mt-2 ml-10">
-                            <p className="mt-10 text-3xl text-center align-center items-center content-center text-center ">
+                            <p className="mt-10 text-3xl text-[#282f72] text-center align-center items-center content-center text-center ">
                                 Click ❌ to remove members
                             </p>
                             {MembersListObject}

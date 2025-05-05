@@ -18,18 +18,25 @@ import GroupSeats from '@/components/mainPage/groupSeats'; //group seats compone
 
 import SideBar from '@/components/sideBar/sideBar';
 import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
+import LoadingPage from '@/components/loading';
 
 export default function Home(): JSX.Element {
     const [currentPage, setCurrentPage] = useState(0); // Track the current page
     const [recommendedMovies, setRecommendedMovies] = useState<movie[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    // for the loading page
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
-        const getRecommendedMovies = async (): Promise<void> =>
+        const getRecommendedMovies = async (): Promise<void> => {
             setRecommendedMovies(
                 await hybridAlgorithm(await verifyUser(), 'individual')
             );
+            setIsLoading(false);
+        };
+
         getRecommendedMovies();
         //this is for group
         //const getRecommendedMovies = async (): Promise<void> =>
@@ -80,6 +87,8 @@ export default function Home(): JSX.Element {
         }
     };
 
+    if (isLoading) return <LoadingPage />;
+
     return (
         <>
             {/* Deselecting sideBar was here */}
@@ -111,11 +120,11 @@ export default function Home(): JSX.Element {
                 </div>
 
                 {/* Container for the two divs in the center (title, description, and carousel)*/}
-                <div className="content-center text-center">
+                <div className="content-center text-center h-1/2">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
-                    <div className="midTopPannel">
+                    <div className="midTopPannel h-1/2">
                         {/* Title and description of carousel*/}
-                        <h1 className="text-center select-none">
+                        <h1 className="text-center select-none h-1/2">
                             🎥Daily Recommendations🎥
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] select-none ">
@@ -148,7 +157,7 @@ export default function Home(): JSX.Element {
                         </div>
                     </div>
                     {/* Navigation buttons */}
-                    <div className="buttonWrapper">
+                    <div className="buttonWrapper h-1/2">
                         <button
                             onClick={handlePreviousPage}
                             //disabled={currentPage === 0}

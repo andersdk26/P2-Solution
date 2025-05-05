@@ -10,6 +10,8 @@ import MovieImage from '@/components/movie/MovieImage';
 import SideBar from '@/components/sideBar/sideBar';
 import { group } from 'console';
 import hybridAlgorithm from '@/components/HybridAlgorithm/hybridAlgorithm';
+import GroupSeats from '@/components/mainPage/groupSeats';
+import LoadingPage from '@/components/loading';
 
 interface Movie {
     title: string;
@@ -145,6 +147,7 @@ export default function Home(): JSX.Element {
                         <button onClick={handlePreviousPage}>⇦</button>
                         <button onClick={handleNextPage}>⇨</button>
                     </div>
+                    <GroupSeats />
                 </div>
             </div>
 

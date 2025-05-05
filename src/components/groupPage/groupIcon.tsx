@@ -7,6 +7,7 @@ import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations'
 import useRedirect from '@/components/redirect';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { RemoveMemberFromDb } from '@/actions/groups/adminGroupActions';
+import LoadingPage from '../loading';
 
 export default function GroupIcon({
     groupId,
@@ -27,6 +28,9 @@ export default function GroupIcon({
     // make array with the settings
     const settingsList = settings.split('|');
 
+    // set loading page when waiting for group members
+    const [isLoadingMembers, setIsLoadingMembers] = useState(true);
+
     const redirect = useRedirect(); // Custom hook for redirection
 
     // get the members id's to usernames
@@ -42,6 +46,7 @@ export default function GroupIcon({
                 array.push(await getUserById(parseInt(id)));
             }
             setMemberUsernames(array);
+            setIsLoadingMembers(false);
         };
         getMemberUsernames();
     }, []);
@@ -53,6 +58,8 @@ export default function GroupIcon({
         };
         getAdminName();
     }, []);
+
+    if (isLoadingMembers) return <LoadingPage />;
 
     return (
         <>
@@ -125,10 +132,6 @@ export default function GroupIcon({
                                     {member}
                                 </p>
                             ))}
-                            <p className="text-xl m-2 font-bold">
-                                Last movie seen in group:
-                                <span className="font-normal ml-6">?</span>
-                            </p>
 
                             {/* Go to group recommendations. */}
                             <button

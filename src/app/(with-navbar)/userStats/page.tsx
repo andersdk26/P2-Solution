@@ -8,17 +8,23 @@ import { JSX, useEffect, useState } from 'react';
 import ChartGenres from '@/components/Profile/ProfileSettings/chartGenres';
 
 import SideBar from '@/components/sideBar/sideBar';
+import LoadingPage from '@/components/loading';
 
 export default function UserStats(): JSX.Element {
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const fetchSeenMovies = async (): Promise<void> => {
             setSeenMovies(await getSeenMovies(await verifyUser()));
+            setIsLoading(false);
         };
         fetchSeenMovies();
     }, []);
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <>

@@ -25,7 +25,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
     const [sidebarAlt, setSidebarAlt] = useState('');
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
     const [selectedMovieImdbId, setSelectedMovieImdbId] = useState<
-        number | null
+        string | null
     >(null);
     const [toast, setToast] = useState<{
         message: string;
@@ -109,7 +109,7 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
                 if (backgroundDivRef.current) {
                     backgroundDivRef.current.style.display = 'block';
                 }
-                setSelectedMovieImdbId(parseInt(await getImdbId(movieId)));
+                setSelectedMovieImdbId(await getImdbId(movieId));
             } catch (error) {
                 console.error('Failed to fetch movie by ID:', error);
             }

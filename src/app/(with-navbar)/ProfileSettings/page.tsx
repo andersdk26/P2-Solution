@@ -14,16 +14,6 @@ import changeEmail from '@/actions/profileSettings/changeEmail';
 import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
-import formData from '@/components/signUp/SignUpForm';
-import handleChange from '@/components/signUp/SignUpForm';
-import passwordError from '@/components/signUp/SignUpForm';
-import confirmPassword from '@/components/signUp/SignUpForm';
-
-// import of movies to user stats - seenlist
-import { movie, getMovieById } from '@/actions/movie/movie';
-import MovieImage from '@/components/movie/MovieImage';
-import RatingCarousel from '@/components/coldStarSurvey/rateMovies/ratingCarousel';
-import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 
 export default function ProfileSettings() {
     const redirect = useRedirect(); // Custom hook for redirection
@@ -229,7 +219,7 @@ export default function ProfileSettings() {
         // Entire page container
         <section className="p-8">
             {/* Profile Settings container and content*/}
-            <section className="ml-120 mr-120 pt-10 pb-10 rounded-sm bg-[#9fa3d1]">
+            <section className="ml-120 mr-120 pt-10 pb-10 rounded-sm bg-[#9fa3d1] h-1/2 w-1/3">
                 {/* Title */}
                 <h2 className="mb-6 text-center">Profile Settings</h2>
                 {/* Profile icon container */}
