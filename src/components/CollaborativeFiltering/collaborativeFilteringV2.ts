@@ -1,7 +1,7 @@
 'use server';
 
 import { getMovieById, movie } from '@/actions/movie/movie';
-import { testRatings, moviesTable } from '@/db/schema';
+import { ratingsTable, moviesTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
 
@@ -23,15 +23,15 @@ type similarity = {
 export default async function collaborativeFiltering(
     targetUserId: number
 ): Promise<movie[]> {
-    // Fetch all ratings from the table testRatings that have only been made by the target user.
+    // Fetch all ratings from the table ratingsTable that have only been made by the target user.
     const targetUserRatings = await db
         .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
+            userId: ratingsTable.userId,
+            movieId: ratingsTable.movieId,
+            movieRating: ratingsTable.rating,
         })
-        .from(testRatings)
-        .where(eq(testRatings.userId, targetUserId));
+        .from(ratingsTable)
+        .where(eq(ratingsTable.userId, targetUserId));
 
     console.log('Target user ratings have been fetched.');
 
@@ -41,15 +41,15 @@ export default async function collaborativeFiltering(
         return [];
     }
 
-    // Fetch all user ratings from the table testRatings, except those from the target user.
+    // Fetch all user ratings from the table ratingsTable, except those from the target user.
     const userRatingsFromDataset = await db
         .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
+            userId: ratingsTable.userId,
+            movieId: ratingsTable.movieId,
+            movieRating: ratingsTable.rating,
         })
-        .from(testRatings)
-        .where(ne(testRatings.userId, targetUserId));
+        .from(ratingsTable)
+        .where(ne(ratingsTable.userId, targetUserId));
 
     console.log('Other user ratings have been fetched.');
 
