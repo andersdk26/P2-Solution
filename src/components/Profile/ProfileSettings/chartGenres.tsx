@@ -31,6 +31,7 @@ ChartJS.register(
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getMovieGenres from '@/actions/movie/getMovieGenres';
+import LoadingPage from '@/components/loading';
 
 interface genreObject {
     [key: string]: number;
@@ -44,11 +45,16 @@ export default function ChartGenres(): JSX.Element {
         data: [0],
     });
 
+    const [isLoadingMovies, setIsLoadingMovie] = useState(true);
+    const [isLoadingGenre, setIsLoadingGenre] = useState(true);
+    const [isLoadingObject, setIsLoadingObject] = useState(true);
+
     // copied from "/profileSettings/page.tsx"
     // used to get amount of movies to the chart
     useEffect(() => {
         const fetchSeenMovies = async () => {
             setSeenMovies(await getSeenMovies(await verifyUser()));
+            setIsLoadingMovie(false);
         };
         fetchSeenMovies();
     }, []);
@@ -68,6 +74,7 @@ export default function ChartGenres(): JSX.Element {
             }
 
             setMovieGenreCount(genreCount);
+            setIsLoadingGenre(false);
         };
         fetchMovieGenre();
     }, [seenMovies]);
@@ -91,9 +98,13 @@ export default function ChartGenres(): JSX.Element {
                 }
             }
             setGenreCountList(genreCountObject);
+            setIsLoadingObject(false);
         };
         generateGenreObjects();
     }, [movieGenreCount]);
+
+    if (isLoadingMovies || isLoadingGenre || isLoadingObject)
+        return <LoadingPage />;
 
     return (
         <>

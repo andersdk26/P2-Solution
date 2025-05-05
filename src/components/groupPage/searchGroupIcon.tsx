@@ -27,7 +27,7 @@ function GroupRequest({
                 onClick={async () => {
                     // if user is the admin, then dont send a request
                     if ((await verifyUser()) === group.groupAdmin) {
-                        alert('You are the admin');
+                        alert('You own the group');
                         conditionalFunction(false);
                         return;
                     }
