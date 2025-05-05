@@ -73,6 +73,21 @@ export default function Home(): JSX.Element {
                 <RatingCarousel />
             </section>
 
+            {/* <button
+                onClick={() => {
+                    if (selectedMovies.length >= 15) {
+                        // for (const rating of ratedMovies) {
+                        //     saveMovieRatings(userId, rating[0], rating[1]);
+                        // }
+                        localStorage.removeItem('selectedMovies');
+                        redirect('');
+                    }
+                }}
+                className={`${selectedMovies.length >= 15 ? 'bg-[#282F72] hover:bg-[#424ebd] cursor-pointer' : 'disabled bg-neutral-500 cursor-auto'} text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute`}
+            >
+                Submit
+            </button> */}
+
             <button
                 onClick={() => {
                     // for (const rating of ratedMovies) {
@@ -81,7 +96,7 @@ export default function Home(): JSX.Element {
                     localStorage.removeItem('selectedMovies');
                     redirect('');
                 }}
-                className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute cursor-pointer"
+                className="bg-[#282F72] hover:bg-[#424ebd] cursor-pointer text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
             >
                 Submit
             </button>

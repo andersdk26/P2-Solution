@@ -291,76 +291,79 @@ export default function SideBar({ id, setIdFunc }: SideBarProps): JSX.Element {
             {/* Sidebar should only appear if an image is selected */}
             {sidebarImage && (
                 <section>
-                    <div className="sideBar">
-                        <button
-                            className="basicBtn cursor-pointer mb-5 select-none"
-                            onClick={() => {
-                                // on click, make the image dissapear
-                                setSidebarImage(null);
-                                setSelectedMovieId(null);
-                                setIdFunc(null);
-                                if (backgroundDivRef.current) {
-                                    // if the background div is active,
-                                    backgroundDivRef.current.style.display =
-                                        'none'; // then make the background div dissapear
-                                }
-                            }}
-                        >
-                            Close
-                        </button>
-                        {selectedMovieId !== null && (
-                            <MovieImage movieId={selectedMovieId} />
-                        )}
-
-                        <h4 className="text-center">{sidebarAlt}</h4>
-                        {/* Rating Buttons */}
-                        <RatingPopcorn movieId={selectedMovieId || 0} />
-
-                        {/* IMDb link */}
-                        <section>
-                            <a
-                                target="_blank"
-                                href={`https://www.imdb.com/title/tt${selectedMovieImdbId}/`}
+                    <div className="sideBar flex flex-col justify-between h-full max-h-screen p-4 overflow-y-auto">
+                        <div className="flex flex-col items-center text-center">
+                            <button
+                                className="basicBtn cursor-pointer mb-5 select-none"
+                                onClick={() => {
+                                    setSidebarImage(null);
+                                    setSelectedMovieId(null);
+                                    setIdFunc(null);
+                                    if (backgroundDivRef.current) {
+                                        backgroundDivRef.current.style.display =
+                                            'none';
+                                    }
+                                }}
                             >
-                                IMDb page
-                            </a>
-                        </section>
-                        {/* watchlist buttons */}
-                        <button
-                            className="basicBtn w-60 h-12 fixed mt-150 select-none"
-                            onClick={() => {
-                                switch (watchlistStatus) {
-                                    case 'unset':
-                                        setWatchlistStatus('setReq');
-                                        handleAddToWatchlist();
-                                        break;
-                                    case 'set':
-                                        setWatchlistStatus('unsetReq');
-                                        handleRemovefromWatchlist();
-                                        break;
-                                    default:
-                                        break;
+                                Close
+                            </button>
+
+                            {selectedMovieId !== null && (
+                                <MovieImage movieId={selectedMovieId} />
+                            )}
+                            <h4 className="text-center break-words">
+                                {sidebarAlt}
+                            </h4>
+                            <RatingPopcorn movieId={selectedMovieId || 0} />
+
+                            <section className="mt-4 ">
+                                <a
+                                    target="_blank"
+                                    href={`https://www.imdb.com/title/tt${selectedMovieImdbId}/`}
+                                >
+                                    IMDb page
+                                </a>
+                            </section>
+                        </div>
+
+                        {/* Button at the bottom of sidebar */}
+                        <div className="mt-6">
+                            <button
+                                className="basicBtn w-full h-12 select-none"
+                                onClick={() => {
+                                    switch (watchlistStatus) {
+                                        case 'unset':
+                                            setWatchlistStatus('setReq');
+                                            handleAddToWatchlist();
+                                            break;
+                                        case 'set':
+                                            setWatchlistStatus('unsetReq');
+                                            handleRemovefromWatchlist();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }}
+                                disabled={
+                                    watchlistStatus !== 'set' &&
+                                    watchlistStatus !== 'unset'
                                 }
-                            }}
-                            disabled={
-                                watchlistStatus !== 'set' &&
-                                watchlistStatus !== 'unset'
-                            }
-                        >
-                            {watchlistStatus === 'unset'
-                                ? 'Add to Watchlist'
-                                : watchlistStatus === 'set'
-                                  ? 'Remove from Watchlist'
-                                  : watchlistStatus === 'setCheck'
-                                    ? checkmark
-                                    : watchlistStatus === 'unsetCheck'
-                                      ? checkmark
-                                      : watchlistStatus === 'setCross'
-                                        ? cross
-                                        : watchlistStatus === 'unsetCross'
-                                          ? cross
-                                          : spinner}
-                        </button>
+                            >
+                                {watchlistStatus === 'unset'
+                                    ? 'Add to Watchlist'
+                                    : watchlistStatus === 'set'
+                                      ? 'Remove from Watchlist'
+                                      : watchlistStatus === 'setCheck'
+                                        ? checkmark
+                                        : watchlistStatus === 'unsetCheck'
+                                          ? checkmark
+                                          : watchlistStatus === 'setCross'
+                                            ? cross
+                                            : watchlistStatus === 'unsetCross'
+                                              ? cross
+                                              : spinner}
+                            </button>
+                        </div>
                     </div>
                 </section>
             )}

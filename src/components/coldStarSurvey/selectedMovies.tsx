@@ -45,9 +45,11 @@ export function DisplaySelectedMovies(
 }
 
 export function DisplayPopularMovies(
+    selectedMovies: movie[],
     handleSelectMovie: (movie: movie) => void
 ): JSX.Element {
     const [popularMovies, setPopularMovies] = useState<movie[]>([]);
+    const selectedMovieIds = new Set(selectedMovies.map((m) => m.movieId));
 
     useEffect(() => {
         // Array of ids of popular movies.
@@ -77,16 +79,28 @@ export function DisplayPopularMovies(
             className="w-[928px] min-h-[304px] [grid-template-columns:repeat(5,160px)] justify-start mx-auto grid gap-4 p-8 bg-gray-100 rounded-3xl transition-all duration-300 prevent-select"
         >
             {popularMovies.map((m) => (
-                <div key={m.movieId} className="relative w-[160px] h-[240px]">
+                <div
+                    key={m.movieId}
+                    className="relative group w-[160px] h-[240px]"
+                >
                     <MovieImage
                         movieId={m.movieId}
                         fill={true}
                         alt={`${m.movieTitle} poster`}
                         blur="blur"
-                        className="fill rounded-2xl transition-all shadow-lg hover:cursor-pointer hover:scale-105 hover:brightness-120"
+                        className={`${selectedMovieIds.has(m.movieId) ? 'brightness-25' : 'group-hover:brightness-120'} fill rounded-2xl transition-all shadow-lg group-hover:cursor-pointer group-hover:scale-105`}
                         title={`${m.movieTitle}`}
                         onClick={() => handleSelectMovie(m)}
                     />
+                    {selectedMovieIds.has(m.movieId) && (
+                        <Image
+                            width={64}
+                            height={64}
+                            src="/icons/checkmark-white.svg"
+                            alt="Movie has been selected."
+                            className="absolute top-1/2 left-1/2 w-10 h-10 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-md group-hover:scale-105 transition-all duration-300"
+                        />
+                    )}
                 </div>
             ))}
         </section>
