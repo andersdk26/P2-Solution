@@ -11,11 +11,23 @@ import {
 } from 'drizzle-orm/mysql-core';
 
 // *** Movie ***
-export const moviesTable = mysqlTable('movies', {
-    id: int('id').primaryKey(),
-    title: varchar('title', { length: 255 }).notNull(),
-    genres: varchar('genres', { length: 255 }).notNull(),
-});
+export const moviesTable = mysqlTable(
+    'movies',
+    {
+        id: int('id').primaryKey(),
+        title: varchar('title', { length: 255 }).notNull(),
+        genres: varchar('genres', { length: 255 }).notNull(),
+    }
+    // (table) => ({
+    //     // Fulltext index på title og genres
+    //     fulltextIndex: fullTextIndex('fulltext_idx', [
+    //         table.title,
+    //         table.genres,
+    //     ]),
+    // })
+);
+
+// run ALTER TABLE movies ADD FULLTEXT INDEX fulltext_idx (title);
 
 export type InsertMovie = typeof moviesTable.$inferInsert;
 export type SelectMovie = typeof moviesTable.$inferSelect;
@@ -154,7 +166,7 @@ export const ratingsTable = mysqlTable(
         timestamp: timestamp('timestamp').default(sql`(CURRENT_TIMESTAMP)`),
     },
     (table) => ({
-        // 👇 Definerer en unik constraint på (user_id, movie_id)
+        // Definerer en unik constraint på (user_id, movie_id)
         userMovieUnique: uniqueIndex('user_movie_unique').on(
             table.userId,
             table.movieId
@@ -165,6 +177,55 @@ export const ratingsTable = mysqlTable(
 export type InsertRatings = typeof ratingsTable.$inferInsert;
 export type SelectRatings = typeof ratingsTable.$inferSelect;
 
+function fullTextIndex(
+    arg0: string,
+    arg1: (
+        | import('drizzle-orm/mysql-core').MySqlColumn<
+              {
+                  name: 'title';
+                  tableName: 'movies';
+                  dataType: 'string';
+                  columnType: 'MySqlVarChar';
+                  data: string;
+                  driverParam: string | number;
+                  notNull: true;
+                  hasDefault: false;
+                  isPrimaryKey: false;
+                  isAutoincrement: false;
+                  hasRuntimeDefault: false;
+                  enumValues: [string, ...string[]];
+                  baseColumn: never;
+                  identity: undefined;
+                  generated: undefined;
+              },
+              {},
+              {}
+          >
+        | import('drizzle-orm/mysql-core').MySqlColumn<
+              {
+                  name: 'genres';
+                  tableName: 'movies';
+                  dataType: 'string';
+                  columnType: 'MySqlVarChar';
+                  data: string;
+                  driverParam: string | number;
+                  notNull: true;
+                  hasDefault: false;
+                  isPrimaryKey: false;
+                  isAutoincrement: false;
+                  hasRuntimeDefault: false;
+                  enumValues: [string, ...string[]];
+                  baseColumn: never;
+                  identity: undefined;
+                  generated: undefined;
+              },
+              {},
+              {}
+          >
+    )[]
+): import('drizzle-orm/mysql-core').MySqlTableExtraConfigValue {
+    throw new Error('Function not implemented.');
+}
 // // *** SQLite ***
 // import { sql } from 'drizzle-orm';
 // import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
