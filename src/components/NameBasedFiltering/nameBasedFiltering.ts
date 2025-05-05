@@ -36,7 +36,7 @@ export default async function nameBasedFiltering(
             // Extract words from the title
             const words = movieTitle.toLowerCase().split(/\s+/);
             for (const word of words) {
-                // removes 2 letter words and some three letter words that aren't helpfull
+                // removes 2 letter words and some three letter words that aren't helpful
                 if (
                     word.length > 2 ||
                     [
