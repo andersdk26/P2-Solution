@@ -7,7 +7,7 @@ import { requestToJoinGroup } from '@/actions/groups/groupRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
 
 interface GroupRequestProps {
-    group: group;
+    group?: group;
     conditionalFunction: (value: boolean) => void;
 }
 
@@ -16,6 +16,9 @@ function GroupRequest({
     group,
     conditionalFunction,
 }: GroupRequestProps): JSX.Element {
+    if (!group) {
+        return <p>Group error</p>;
+    }
     //returns the pop-up to send friend request
     return (
         <div className="border-[#282F72] text-[#282F72] bg-[#babdde] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-84">

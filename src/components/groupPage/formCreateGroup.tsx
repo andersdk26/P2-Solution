@@ -1,9 +1,5 @@
 import { JSX, useState } from 'react';
-import {
-    searchFriendById,
-    searchUserById,
-    user,
-} from '../Profile/Friends/friends';
+import { searchUserById, user } from '../Profile/Friends/friends';
 import { group } from './group';
 
 import { FetchGroupId } from '@/actions/groups/fetchGroupId';
