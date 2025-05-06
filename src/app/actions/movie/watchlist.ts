@@ -37,14 +37,18 @@ export async function saveMovieToWatchlist(
                 movieid: movieId,
             })
             .returning();
+        // .execute();
 
+        // if (result[0].affectedRows !== 1) {
+        //     throw new Error('Failed to add movie to the watchlist.');
+        // }
         if (result.length === 0) {
             throw new Error('Failed to add movie to the watchlist.');
         }
         return 'Successfully added the Movie to the watchlist.';
     } catch (error) {
         console.error('Error adding movie to the watchlist: ', error);
-        throw new Error('An error occurred while adding the movie.');
+        throw new Error(`An error occurred while adding the movie. ${error}`);
     }
 }
 
@@ -64,12 +68,16 @@ export async function removeMovieToWatchlist(
                 )
             )
             .returning();
+        // .execute();
 
         // Check if the movie is not in the user's watchlist
         if (result[0] === undefined) {
             return 'Movie is not in the watchlist.';
         }
 
+        // if (result[0].affectedRows !== 1) {
+        //     throw new Error('Failed to remove movie from the watchlist.');
+        // }
         if (result.length === 0) {
             throw new Error('Failed to remove movie from the watchlist.');
         }

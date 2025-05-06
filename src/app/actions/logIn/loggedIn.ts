@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 
+// checks if has token. returns boolean
 export default async function checkLoggedIn(): Promise<boolean> {
     const cookieStore = await cookies();
 

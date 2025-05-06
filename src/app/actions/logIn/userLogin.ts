@@ -13,6 +13,7 @@ interface LoginResponse {
     object?: { id?: number };
 }
 
+// handles username and password. logs in if no error occurs
 export async function handleLogin(formData: FormData): Promise<string> {
     // Verify the user's login credentials
     const response: Promise<LoginResponse> = login_check({
@@ -45,14 +46,14 @@ export async function handleLogin(formData: FormData): Promise<string> {
     return 'Login successful';
 }
 
+// adds data to table, if no errors
 export async function handleSignup(formData: {
     username: string;
     email: string;
     password: string;
     profileIcon: string;
 }): Promise<string> {
-    // Set username and email to lower case
-    //formData.username = formData.username.toLowerCase();
+    // Set email to lower case
     formData.email = formData.email.toLowerCase();
 
     // Register the user
@@ -83,6 +84,7 @@ export async function handleSignup(formData: {
     return 'Signup successful';
 }
 
+// sets a cookie that is at most 1 day old
 export async function setCookie(data: string): Promise<boolean> {
     const cookieStore = await cookies();
 
@@ -90,7 +92,7 @@ export async function setCookie(data: string): Promise<boolean> {
     cookieStore.set('token', data, {
         secure: true,
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 1, // 1 days
+        maxAge: 60 * 60 * 24 * 1, // 1 days (seconds * minutes * hours * day)
         path: process.env.NEXT_PUBLIC_URL_PATH || '/',
     });
 

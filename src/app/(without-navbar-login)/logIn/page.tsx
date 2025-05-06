@@ -8,8 +8,11 @@ import useRedirect from '@/components/redirect';
 
 export default function Page(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
+
+    // the states for successful login or signup
     const [loginResponse, setLoginResponse] = useState('');
     const [signupResponse, setSignupResponse] = useState('');
+
     const [userId, setUserId] = useState(0);
     const router = useRouter(); // Use the useRouter hook
 
@@ -23,7 +26,7 @@ export default function Page(): JSX.Element {
         checkLoginStatus();
     }, []);
 
-    // Check if the user is logged in
+    //logs in the user. by checking the Db and if user has a token (cookie)
     useEffect(() => {
         const checkAuthStatus = async (): Promise<void> => {
             const response = await verifyUser();
@@ -31,11 +34,6 @@ export default function Page(): JSX.Element {
         };
         checkAuthStatus();
     }, [loginResponse, signupResponse]); // trigger when login or signup response changes
-
-    //reloads page efter login for at få brugermnavnet til at vise den rigtige bruger
-    if (loginResponse === 'Login successful') {
-        //window.location.reload(); // Reload the page after successful login
-    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -101,12 +99,12 @@ export default function Page(): JSX.Element {
                 )}
                 <p className="mt-4 text-sm text-center text-gray-600">
                     Do you not have an account?{' '}
-                    <a
-                        href="/signUp"
+                    <span
+                        onClick={() => redirect('/signUp')}
                         className="text-blue-600 hover:underline cursor-pointer"
                     >
                         Sign Up
-                    </a>
+                    </span>
                 </p>
             </div>
         </div>

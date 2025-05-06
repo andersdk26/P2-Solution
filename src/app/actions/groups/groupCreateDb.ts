@@ -4,6 +4,7 @@ import { group } from '@/components/groupPage/group';
 import { db } from '@/db/index';
 import { groupsTable } from '@/db/schema';
 
+//creates a row in the groupstable with all the group values
 export async function GroupCreateDb(group: group): Promise<void> {
     if (group.groupId === -1) {
         throw new Error('Group Id is -1');
