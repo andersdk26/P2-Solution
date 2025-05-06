@@ -1,3 +1,4 @@
+// stores the group id and groupname in local storage for redirection
 export default function goToGroupRecommendations(
     groupId: number,
     groupName: string

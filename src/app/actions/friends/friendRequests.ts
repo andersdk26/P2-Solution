@@ -3,6 +3,7 @@ import { db } from '@/db/index';
 import { friendsTable } from '@/db/schema';
 import { and, eq, or } from 'drizzle-orm';
 
+// gets user id number, and checks if receiver is user and the friendstable status is 0: pending
 export async function GetFriendRequest(userID: number): Promise<
     {
         from: number;
@@ -14,11 +15,12 @@ export async function GetFriendRequest(userID: number): Promise<
         .where(
             and(eq(friendsTable.userIdB, userID), eq(friendsTable.status, 0))
         );
-    console.log(friendRequests);
 
+    // returns array with all user id's that has sent request to input user id
     return friendRequests;
 }
 
+// creates a row in the db, where userIDA is sender, userIDB is receiver. set status to 0 for "pending"
 export async function SendFriendRequest(
     userIDSender: number,
     userIDReceiver: number
@@ -58,6 +60,7 @@ export async function SendFriendRequest(
     return 1;
 }
 
+// change the status to 1 for "accepted". user A is sender, user B is receiver
 export async function AcceptFriendRequest(
     userIDSender: number,
     userIDReceiver: number
@@ -73,6 +76,7 @@ export async function AcceptFriendRequest(
         );
 }
 
+// deletes row where the sender is user A and receiver is user B
 export async function DeclineFriendRequest(
     userIDSender: number,
     userIDReceiver: number
@@ -87,6 +91,7 @@ export async function DeclineFriendRequest(
         );
 }
 
+// delete row where user A or B is either current user (remover ID) or the other user (friend to be removed id)
 export async function RemoveFriend(
     removerId: number,
     friendToBeRemovedId: number

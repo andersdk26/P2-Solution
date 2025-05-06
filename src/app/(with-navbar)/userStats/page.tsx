@@ -4,21 +4,21 @@ import verifyUser from '@/actions/logIn/authenticateUser';
 import getSeenMovies from '@/actions/profileSettings/getSeenMovies';
 import MovieImage from '@/components/movie/MovieImage';
 import { JSX, useEffect, useState } from 'react';
-
 import ChartGenres from '@/components/Profile/ProfileSettings/chartGenres';
-
 import SideBar from '@/components/sideBar/sideBar';
 import LoadingPage from '@/components/loading';
 
 export default function UserStats(): JSX.Element {
+    // info on seen movies and their IDs
     const [seenMovies, setSeenMovies] = useState<number[]>([]);
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
+    // loading page states
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchSeenMovies = async (): Promise<void> => {
-            setSeenMovies(await getSeenMovies(await verifyUser()));
+            setSeenMovies(await getSeenMovies(await verifyUser())); // finds the specific users seen movies from the db, and fetches them
             setIsLoading(false);
         };
         fetchSeenMovies();
@@ -51,6 +51,7 @@ export default function UserStats(): JSX.Element {
                     </div>
                 </section>
             </section>
+
             <SideBar id={selectedMovieId} setIdFunc={setSelectedMovieId} />
         </>
     );

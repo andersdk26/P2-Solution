@@ -3,6 +3,7 @@
 import { verifyToken } from '@/components/authentication/cookieAuthentication';
 import { cookies } from 'next/headers';
 
+// checks if user has token and returns current users id
 export default async function verifyUser(): Promise<number> {
     const cookieStore = await cookies();
     // Get the token cookie
@@ -10,7 +11,6 @@ export default async function verifyUser(): Promise<number> {
 
     // Check if the token cookie is defined
     if (response === undefined) {
-        // todo: add more validation
         return 0;
     }
 
