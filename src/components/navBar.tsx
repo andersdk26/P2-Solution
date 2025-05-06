@@ -7,7 +7,6 @@ import { movie, searchForMovie } from '@/actions/movie/movie';
 import useRedirect from '@/components/redirect';
 import Notification from './notification/notification';
 import SideBar from './sideBar/sideBar'; // Import SideBar component
-import Image from 'next/image';
 
 export default function NavBar(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
@@ -55,7 +54,7 @@ export default function NavBar(): JSX.Element {
                     ref={dropdownRef}
                     className="flex-col items-center justify-center z-auto overflow-visible w-110"
                 >
-                {/* search bar input form */}
+                    {/* search bar input form */}
                     <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
                         <input
                             type="search"
