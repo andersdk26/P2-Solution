@@ -209,9 +209,18 @@ export default function AdminGroupIcon({
                                 </p>
                             ))}
 
-                            {/* Get new recommendation */}
-                            <button className="bg-black text-white m-4 p-2 rounded-sm bottom-4 border-2 border-white mb-0 ml-0 cursor-pointer hover:brightness-80">
-                                Get New Recommendation!
+                            {/* Go to group recommendations. */}
+                            <button
+                                onClick={() => {
+                                    goToGroupRecommendations(
+                                        groupId,
+                                        groupName
+                                    );
+                                    redirect('/Groups/Recommendations');
+                                }}
+                                className="bg-black text-white m-4 ml-0 p-2 rounded-sm bottom-4 border-2 border-white cursor-pointer hover:brightness-80"
+                            >
+                                Go to group recommendations
                             </button>
 
                             <br />

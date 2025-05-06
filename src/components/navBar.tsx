@@ -2,6 +2,7 @@
 
 import { JSX, useState, useRef, useEffect } from 'react';
 import Profile from '@/components/Profile/profile';
+import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
 import useRedirect from '@/components/redirect';
 import Notification from './notification/notification';
@@ -10,7 +11,7 @@ import Image from 'next/image';
 
 export default function NavBar(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
-    const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const [searchResult, setSearchResult] = useState<movie[]>([]); //state for the search for movies
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null); // State for selected movie ID
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -54,6 +55,7 @@ export default function NavBar(): JSX.Element {
                     ref={dropdownRef}
                     className="flex-col items-center justify-center z-auto overflow-visible w-110"
                 >
+                {/* search bar input form */}
                     <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
                         <input
                             type="search"
@@ -72,6 +74,7 @@ export default function NavBar(): JSX.Element {
                         />
                     </form>
 
+                    {/* search bar result dropdown */}
                     {isDropdownOpen && (
                         <section
                             id="searchResults"

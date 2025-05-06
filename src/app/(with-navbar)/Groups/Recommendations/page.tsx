@@ -25,6 +25,9 @@ export default function Home(): JSX.Element {
     const [groupName, setGroupName] = useState<string>();
     const [groupId, setGroupId] = useState<number>(0);
 
+    // loading page. set to false, because the fetching of recommendations are in an if statement
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         const gn = localStorage.getItem('groupName') || ''; // gets the group name from local storage
         setGroupName(gn);
@@ -37,7 +40,12 @@ export default function Home(): JSX.Element {
     useEffect(() => {
         // Get recommended movies by passing user ID as input parameter.
         const getRecommendedMovies = async (): Promise<void> => {
-            setRecommendedMovies(await hybridAlgorithm(groupId, 'group')); // returns an array of movies
+            // if the program runs, set loading to true
+            setIsLoading(true);
+            setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
+            console.log(recommendedMovies);
+            // once done, set loading to false
+            setIsLoading(false);
         };
         if (groupId !== 0) {
             getRecommendedMovies();
@@ -71,6 +79,8 @@ export default function Home(): JSX.Element {
             );
         }
     };
+
+    if (isLoading) return <LoadingPage />;
 
     return (
         <>
