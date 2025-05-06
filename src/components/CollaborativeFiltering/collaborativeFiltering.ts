@@ -21,9 +21,6 @@ type similarity = {
     similarity: number;
 };
 
-const rowLimit = 16000000;
-let rowOffset = 17000000;
-
 export default async function collaborativeFiltering(
     targetId: number,
     type: string
@@ -33,11 +30,21 @@ export default async function collaborativeFiltering(
         return [];
     }
 
-    rowOffset = Math.floor(Math.random() * 16000000);
-
     // Declare variables used for storing movie ratings.
     let targetUserRatings;
     let userRatingsFromDataset;
+
+    // Define number of rows in ratings table.
+    const totalNumberOfRatings = 32000000; // USE THIS FOR TESTRATINGS TABLE
+    //const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
+
+    // Define size of subset of ratings to be used.
+    const subsetSampleSize = 10000000;
+
+    // Define random offset.
+    const rowOffset = Math.floor(
+        Math.random() * (totalNumberOfRatings - subsetSampleSize)
+    );
 
     // Check whether the input ID represents a group or an individual.
     if (type === 'individual') {
@@ -69,7 +76,7 @@ export default async function collaborativeFiltering(
             .from(ratingsTable)
             .where(ne(ratingsTable.userId, targetId))
             .offset(rowOffset)
-            .limit(rowLimit);
+            .limit(subsetSampleSize);
 
         console.log('Other user ratings have been fetched.');
     } else if (type === 'group') {
@@ -94,7 +101,9 @@ export default async function collaborativeFiltering(
                 movieRating: ratingsTable.rating,
             })
             .from(ratingsTable)
-            .where(notInArray(ratingsTable.userId, memberIdNumbers));
+            .where(notInArray(ratingsTable.userId, memberIdNumbers))
+            .limit(subsetSampleSize)
+            .offset(rowOffset);
 
         console.log('Other user ratings have been fetched.');
     }
