@@ -11,7 +11,7 @@ export async function CreateGroupId(): Promise<defaultResponse> {
     try {
         let i = 0;
         while (true) {
-            groupId = randomInt(1000000000, 10000000000);
+            groupId = randomInt(1000000000, 4000000000);
 
             const groupExists = await db
                 .select({ id: groupsTable.groupId })

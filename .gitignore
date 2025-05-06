@@ -40,3 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /.venv
+src/instrumentation.ts
+ratings.csv

@@ -120,11 +120,11 @@ export default function Home(): JSX.Element {
                 </div>
 
                 {/* Container for the two divs in the center (title, description, and carousel)*/}
-                <div className="content-center text-center">
+                <div className="content-center text-center h-1/2">
                     {/* Middle Top Pannel to Title and Rec. Description*/}
-                    <div className="midTopPannel">
+                    <div className="midTopPannel h-1/2">
                         {/* Title and description of carousel*/}
-                        <h1 className="text-center select-none">
+                        <h1 className="text-center select-none h-1/2">
                             🎥Daily Recommendations🎥
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] select-none ">
@@ -157,7 +157,7 @@ export default function Home(): JSX.Element {
                         </div>
                     </div>
                     {/* Navigation buttons */}
-                    <div className="buttonWrapper">
+                    <div className="buttonWrapper h-1/2">
                         <button
                             onClick={handlePreviousPage}
                             //disabled={currentPage === 0}

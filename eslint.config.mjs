@@ -53,3 +53,5 @@ const eslintConfig = [
 ];
 
 export default eslintConfig;
+
+// npx eslint .
