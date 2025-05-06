@@ -4,7 +4,6 @@
 
 import { JSX, useState } from 'react';
 import Profile from '@/components/Profile/profile';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { movie, searchForMovie } from '@/actions/movie/movie';
 import useRedirect from '@/components/redirect';
@@ -13,7 +12,7 @@ import SideBar from './sideBar/sideBar'; // Import SideBar component
 
 export default function NavBar(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
-    const [searchResult, setSearchResult] = useState<movie[]>([]);
+    const [searchResult, setSearchResult] = useState<movie[]>([]); //state for the search for movies
     const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null); // State for selected movie ID
 
     return (
@@ -30,11 +29,9 @@ export default function NavBar(): JSX.Element {
                             onClick={() => redirect('')}
                             title="Home page"
                         ></Image>
-                        {/* <button className="bg-[#282F72] hover:bg-[#424ebd] text-[#dcdeef] font-bold py-2 px-4 rounded-sm">
-                            Home
-                        </button> */}
                     </div>
                 </div>
+                {/* search bar input form */}
                 <section className="flex-col items-center justify-center z-auto overflow-visible w-110">
                     <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
                         <input
@@ -51,6 +48,7 @@ export default function NavBar(): JSX.Element {
                         />
                     </form>
 
+                    {/* search bar result dropdown */}
                     <section
                         id="searchResults"
                         className="absolute w-110 mx-auto bg-gray-100 rounded-3xl"
@@ -73,10 +71,6 @@ export default function NavBar(): JSX.Element {
                 <div className="flex justify-between items-center h-full">
                     <ul className="sm:flex">
                         <li className="p-2 text-xl centerMyDivPlease">
-                            {/* 3px 3px [#9fa3d1] */}
-
-                            {/* <a hr"></a> */}
-
                             <button
                                 className="basicBtn"
                                 onClick={() => redirect('')}
@@ -113,7 +107,6 @@ export default function NavBar(): JSX.Element {
                         <Profile />
                     </div>
                 </div>
-                {/* Video showed how to add div for mobile phone */}
             </div>
             {/* Render SideBar and pass the selected movie ID */}
             {selectedMovieId !== null && (
