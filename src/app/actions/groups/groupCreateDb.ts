@@ -14,5 +14,6 @@ export async function GroupCreateDb(group: group): Promise<void> {
         groupName: group.groupName,
         adminId: group.groupAdmin,
         members: group.groupMembers,
+        settings: group.settings,
     });
 }

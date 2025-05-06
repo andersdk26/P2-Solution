@@ -38,10 +38,10 @@ export async function ChangeDbGroupSettings(
     groupId: number,
     newSettings: string
 ): Promise<void> {
-    // await db
-    //     .update(groupsTable)
-    //     .set({ settings: newSettings })
-    //     .where(eq(groupsTable.groupId, groupId));
+    await db
+        .update(groupsTable)
+        .set({ settings: newSettings })
+        .where(eq(groupsTable.groupId, groupId));
 }
 
 export async function ChangeDbGroupName(

@@ -168,6 +168,7 @@ export default function GroupSettings(): JSX.Element {
                                     groupName={Group.groupName}
                                     groupAdmin={Group.groupAdmin}
                                     groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
                                 />
                             </div>
                         ))}
@@ -185,6 +186,7 @@ export default function GroupSettings(): JSX.Element {
                                     groupName={Group.groupName}
                                     groupAdmin={Group.groupAdmin}
                                     groupMembers={Group.groupMembers}
+                                    settings={Group.settings}
                                 />
                             </div>
                         ))}
