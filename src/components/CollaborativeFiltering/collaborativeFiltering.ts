@@ -34,6 +34,18 @@ export default async function collaborativeFiltering(
     let targetUserRatings;
     let userRatingsFromDataset;
 
+    // Define number of rows in ratings table.
+    const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
+    //const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
+
+    // Define size of subset of ratings to be used.
+    const subsetSampleSize = 50000;
+
+    // Define random offset.
+    const rowOffset = Math.floor(
+        Math.random() * (totalNumberOfRatings - subsetSampleSize)
+    );
+
     // Check whether the input ID represents a group or an individual.
     if (type === 'individual') {
         // Fetch all ratings from the table testRatings that have only been made by the target user.
@@ -62,7 +74,9 @@ export default async function collaborativeFiltering(
                 movieRating: testRatings.rating,
             })
             .from(testRatings)
-            .where(ne(testRatings.userId, targetId));
+            .where(ne(testRatings.userId, targetId))
+            .limit(subsetSampleSize)
+            .offset(rowOffset);
 
         console.log('Other user ratings have been fetched.');
     } else if (type === 'group') {
