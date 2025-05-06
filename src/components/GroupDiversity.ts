@@ -1,10 +1,10 @@
 /* Should return a similarityscore for a group
 used for weights contentbased % + collaborative % */
 import '@contentBasedFiltering-filtering/ts';
-import { getMovieById, movie } from '@/actions/movie/movie';
-import { groupsTable, moviesTable, testRatings } from '@/db/schema';
+import { getMovieById } from '@/actions/movie/movie';
+import { groupsTable, testRatings } from '@/db/schema';
 import { db } from 'db';
-import { eq, ne } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { averageRating } from './ContentBasedFiltering/contentBasedFiltering';
 import { cosineSimilarity } from './CollaborativeFiltering/collaborativeFiltering';
 
@@ -111,6 +111,7 @@ async function getAllGenreScore(userId: number): Promise<number[]> {
             // Get array of genres.
             const genres = m.movieGenres.split('|');
 
+            // For every genre.
             for (const genre of genres) {
                 // Update the score for the current genre.
                 genreScores.set(genre, {
