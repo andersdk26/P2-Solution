@@ -17,7 +17,7 @@ function GroupRequest({
     conditionalFunction,
 }: GroupRequestProps): JSX.Element {
     if (!group) {
-        return <p>Group error</p>;
+        return <p>Loading...</p>;
     }
     //returns the pop-up to send friend request
     return (
