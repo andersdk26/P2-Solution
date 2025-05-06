@@ -109,7 +109,7 @@ export async function register_user({
 
     // Insert the user into the database
     try {
-        const result: drizzleReturn = await db
+        const result = await db // drizzleReturn
             .insert(usersTable)
             .values({
                 id: userId,
@@ -118,6 +118,7 @@ export async function register_user({
                 password: passwordHash,
                 profileIcon,
             })
+            // .returning();
             .execute();
 
         if (result[0].affectedRows !== 1) {

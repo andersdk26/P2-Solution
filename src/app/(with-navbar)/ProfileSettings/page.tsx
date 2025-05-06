@@ -7,7 +7,6 @@ import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
@@ -17,20 +16,35 @@ import useRedirect from '@/components/redirect';
 
 export default function ProfileSettings() {
     const redirect = useRedirect(); // Custom hook for redirection
+
+    // current user info
     const [username, setUsername] = useState('Username');
     const [id, setUserID] = useState('User ID#');
     const [email, setUserEmail] = useState('Email');
+    const [currentPassword, setCurrentPassword] = useState('');
+
+    // when you wish to edit your current info
     const [isEditing, setIsEditing] = useState<string | null>(null);
+
+    // changing of user info
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
+
+    //
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+
+    // pop-up for selected icons
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    // select new icon
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/cornpop.png'
     ); // Default icon
     const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
 
+    // possible icon images
     const icons = [
         '/img/profileSettingIcons/cornpop.png',
         '/img/profileSettingIcons/cuteButterPopcorn.png',
@@ -48,42 +62,38 @@ export default function ProfileSettings() {
 
     useEffect(() => {
         const fetchUsername = async (): Promise<void> => {
-            setUsername(await getUsername(verifyUser()));
+            setUsername(await getUsername(verifyUser())); // finds username
         };
         fetchUsername();
     }, []);
 
     useEffect(() => {
         const fetchUserID = async (): Promise<void> => {
-            setUserID(String(await getUserID(verifyUser())));
+            setUserID(String(await getUserID(verifyUser()))); // finds userID, makes number to string
         };
         fetchUserID();
     }, []);
 
     useEffect(() => {
         const fetchUserEmail = async (): Promise<void> => {
-            setUserEmail(String(await getUserEmail(verifyUser())));
+            setUserEmail(String(await getUserEmail(verifyUser()))); // finds user email, makes number to string
         };
         fetchUserEmail();
     }, []);
 
     useEffect(() => {
-        // const fetchSeenMovies = async () => {
-        //     setSeenMovies(await getSeenMovies(await verifyUser()));
-        // };
-        // fetchSeenMovies();
         // Define an async function to fetch the user's profile icon
         const fetchProfileIcon = async (): Promise<void> => {
-            const userId = await verifyUser(); // this calls a function to verify the user and get their ID
+            const userId = await verifyUser(); // calls a function to verify the user and get their ID
             // if the user ID is valid (greater than 0), fetch their profile icon
             if (userId > 0) {
-                const icon = await getProfileIcon(userId); // here we call another function to get the actual icon URL from the database
+                const icon = await getProfileIcon(userId); // function to get the actual icon URL from the database
 
-                setProfileIcon(icon); // then we update the profileIcon state with the fetched icon
+                setProfileIcon(icon); // update the profileIcon state with the fetched icon
             }
         };
 
-        fetchProfileIcon(); //we call the call the fetchProfileIcon function
+        fetchProfileIcon(); // call the fetchProfileIcon function
     }, []);
 
     // Set selectedIcon to profileIcon when the component mounts
@@ -99,12 +109,13 @@ export default function ProfileSettings() {
             return;
         }
 
-        const userId = parseInt(id);
+        const userId = parseInt(id); // makes userId from string to int
 
         try {
             const response = await changeProfileIcon(userId, selectedIcon);
 
             if (response.status === 200) {
+                // if the status is successful, then
                 alert('Profile icon updated successfully!');
                 setProfileIcon(selectedIcon);
                 setIsPopupOpen(false); // Close the popup after saving
@@ -120,6 +131,7 @@ export default function ProfileSettings() {
 
     const handleUsernameChange = async () => {
         if (!newUsername) {
+            // if no username has been written
             alert('Please fill in the field');
             return;
         }
@@ -130,17 +142,18 @@ export default function ProfileSettings() {
             return;
         }
 
-        // Check if the new username already exists
+        // Checks if the new username already exists
         const userId = parseInt(id);
 
         try {
             const response = await changeUsername(userId, newUsername);
 
             if (response.status === 200) {
+                // if the status is successful, then
                 alert('Username updated successfully!');
-                setUsername(newUsername);
-                setIsEditing(null);
-                setNewUsername('');
+                setUsername(newUsername); // sets new username
+                setIsEditing(null); // closes the editing mode
+                setNewUsername(''); //sets the field to blank
             } else {
                 alert(response.message);
             }
@@ -150,15 +163,14 @@ export default function ProfileSettings() {
         }
     };
 
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
+        // if nothing in any of the fields
         if (!currentPassword || !newPassword || !confirmPassword) {
             alert('Please fill all the fields.');
             return;
         }
 
-        const userId = parseInt(id);
+        const userId = parseInt(id); // makes userId from string to int
 
         try {
             const response = await changePassword(
@@ -168,8 +180,10 @@ export default function ProfileSettings() {
             );
 
             if (response.status === 200) {
+                // if status is successful, then
                 alert('Password updated successfully!');
-                setIsEditing(null);
+                setIsEditing(null); // closes the editing mode
+                // set the input fields to blanks
                 setCurrentPassword('');
                 setNewPassword('');
                 setConfirmPassword('');
@@ -273,7 +287,7 @@ export default function ProfileSettings() {
                                             draggable="false"
                                             onClick={() =>
                                                 setSelectedIcon(icon)
-                                            } // needs comment
+                                            } // sets selected icon to the selected icon
                                         />
                                     )
                                 )}
@@ -317,12 +331,13 @@ export default function ProfileSettings() {
                                         isEditing === 'username'
                                             ? null
                                             : 'username'
-                                    ) // missing comment
+                                    ) // sets is editing to "username"
                             }
                         >
                             Change Username
                         </button>
                         {/* Change Username-popup */}
+                        {/* opens when isEditing is "username" */}
                         {isEditing === 'username' && (
                             // Input box
                             <div className="flex flex-col items-center mt-4">
@@ -332,7 +347,7 @@ export default function ProfileSettings() {
                                     value={newUsername}
                                     onChange={(e) =>
                                         setNewUsername(e.target.value)
-                                    } // needs comment
+                                    } // sets the new username
                                     maxLength={15}
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
@@ -363,7 +378,7 @@ export default function ProfileSettings() {
                                         isEditing === 'password'
                                             ? null
                                             : 'password'
-                                    ) // missing comment
+                                    ) // sets isediting to "password"
                             }
                         >
                             Change Password
@@ -379,7 +394,7 @@ export default function ProfileSettings() {
                                     value={currentPassword}
                                     onChange={
                                         (e) =>
-                                            setCurrentPassword(e.target.value) // missing comment
+                                            setCurrentPassword(e.target.value) // sets the current password
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />
@@ -389,7 +404,7 @@ export default function ProfileSettings() {
                                     placeholder="Enter new password"
                                     value={newPassword}
                                     onChange={
-                                        (e) => setNewPassword(e.target.value) // missing comment
+                                        (e) => setNewPassword(e.target.value) // sets the new password
                                     }
                                     className="border p-2 rounded-md w-60 mb-2"
                                 />

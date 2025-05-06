@@ -15,6 +15,7 @@ export async function AddUserToGroup(
     if (memberCount >= 8) {
         return;
     }
+
     await db
         .update(groupsTable)
         .set({ members: `${groupMembers}|${addedUserId}` })
@@ -22,18 +23,17 @@ export async function AddUserToGroup(
             // the group id and that the user id does not already exist in group members
             and(
                 eq(groupsTable.groupId, groupId),
-                not(like(groupsTable.groupName, `$${addedUserId}$`))
+                not(like(groupsTable.groupName, `%${addedUserId}%`))
             )
         );
-
-    console.log(addedUserId);
-    console.log('User added to group');
 }
 
+// delete row for that groupid
 export async function DeleteGroup(groupId: number): Promise<void> {
     await db.delete(groupsTable).where(eq(groupsTable.groupId, groupId));
 }
 
+// change the string for settings
 export async function ChangeDbGroupSettings(
     groupId: number,
     newSettings: string
@@ -44,6 +44,7 @@ export async function ChangeDbGroupSettings(
         .where(eq(groupsTable.groupId, groupId));
 }
 
+// change the groupname
 export async function ChangeDbGroupName(
     groupId: number,
     newGroupName: string
@@ -54,12 +55,14 @@ export async function ChangeDbGroupName(
         .where(eq(groupsTable.groupId, groupId));
 }
 
+// replaces the part with that user id with a blank string
 export async function RemoveMemberFromDb(
     userId: string,
     groupMembers: string,
     groupId: number
 ): Promise<void> {
     //Remove the string with user id from string
+    // this also ensures admin cannot be removed since it is the first id in the list, which is written without the '|'
     const newMemberString = groupMembers.replace(`|${userId}`, '');
 
     await db

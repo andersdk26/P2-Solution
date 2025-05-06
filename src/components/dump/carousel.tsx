@@ -1,5 +1,5 @@
-// // photo carousel
-// //source: https://www.youtube.com/watch?v=Kx8XlKRBZx8
+// photo carousel
+//source: https://www.youtube.com/watch?v=Kx8XlKRBZx8
 
 // 'use client';
 
@@ -75,20 +75,20 @@
 //         </div>
 //     );
 // }
-// /*
-//     function showNextImage(): void {
-//         setImageIndex((index) => {
-//             if (index === movieIds.length - 1) return 0;
-//             return index + 1;
-//         });
-//     }
+/*
+    function showNextImage(): void {
+        setImageIndex((index) => {
+            if (index === movieIds.length - 1) return 0;
+            return index + 1;
+        });
+    }
 
-//     function showPrevImage(): void {
-//         setImageIndex((index) => {
-//             if (index === 0) return movieIds.length - 1;
-//             return index - 1;
-//         });
-//     }
+    function showPrevImage(): void {
+        setImageIndex((index) => {
+            if (index === 0) return movieIds.length - 1;
+            return index - 1;
+        });
+    }
 
 //     return (
 //         <div className="flex top-20 items-center justify-center">

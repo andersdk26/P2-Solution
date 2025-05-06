@@ -4,6 +4,7 @@ import { db } from '@/db/index';
 import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
+// returns the user name that matches the user id
 export default async function getUsername(
     id: number | Promise<number>
 ): Promise<string> {

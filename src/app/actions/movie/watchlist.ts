@@ -36,6 +36,7 @@ export async function saveMovieToWatchlist(
                 userid: userId,
                 movieid: movieId,
             })
+            // .returning();
             .execute();
 
         if (result[0].affectedRows !== 1) {
@@ -66,6 +67,7 @@ export async function removeMovieToWatchlist(
                     eq(watchlistTable.movieid, movieId)
                 )
             )
+            // .returning();
             .execute();
 
         // Check if the movie is not in the user's watchlist

@@ -4,6 +4,7 @@ import { db } from '@/db/index';
 import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
+// gets the email from table. returns email
 export default async function getUserEmail(
     id: number | Promise<number>
 ): Promise<string> {
