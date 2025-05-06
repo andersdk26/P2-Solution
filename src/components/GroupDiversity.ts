@@ -1,7 +1,7 @@
 'use server';
 
 import { getMovieById } from '@/actions/movie/movie';
-import { groupsTable, testRatings } from '@/db/schema';
+import { groupsTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 import { averageRating } from './ContentBasedFiltering/contentBasedFiltering';
@@ -85,11 +85,11 @@ async function getAllGenreScore(userId: number): Promise<number[]> {
     // Get all movies watched by user.
     const movies = await db
         .select({
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
+            movieId: ratingsTable.movieId,
+            movieRating: ratingsTable.rating,
         })
-        .from(testRatings)
-        .where(eq(testRatings.userId, userId));
+        .from(ratingsTable)
+        .where(eq(ratingsTable.userId, userId));
 
     // Get total number of ratings.
     const totalMoviesRated = movies.length;
