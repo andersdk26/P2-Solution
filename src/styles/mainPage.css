@@ -106,7 +106,7 @@
     right: 0;
     width: 300px;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(159, 163, 209, 0.7); 
     color: white;
     display: flex;
     flex-direction: column;

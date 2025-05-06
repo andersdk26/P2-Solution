@@ -14,22 +14,21 @@ const About = (): JSX.Element => (
         </p>
         <p className="ml-8 text-xl">
             JamFest lets you create and manage your watchparty as a Group, where
-            our algorithm will then give you a recommendation based on your
-            individual preferences and watch history. The algorithm combines the
-            individual user profiles under a shared group-profile, which will
-            then be analysed to find movies with shared interests. <br /> <br />
+            our algorithm will combine the individual user profiles under a
+            shared group-profile, which will then be analysed to find movies
+            with shared interests. <br /> <br />
             For example, if you like action movies but your partner loves
             romance, then the algorithm will find romantic-action movies, such
             as <cite>Mr. &amp; Mrs. Smith</cite>. <br />
             <br />
-            The aim is to minimize time spent on discussing and agreeing on what
-            to watch, so more time can be spent on watching the movie and
-            socialising.
+            Our goal is to minimize the time you spend on discussing and
+            deciding on a movie, which can instead be spent on watching the
+            movie and being present with the company.
             <br /> <br />
         </p>
 
         <p className="ml-8 text-xl">
-            <b>So, lean back, have fun and enjoy the show!</b>
+            <b>So, lean back, relax and enjoy the show!</b>
         </p>
 
         <section className="centerMyDivPlease content-center justify-center text-center m-auto">
@@ -42,7 +41,7 @@ const About = (): JSX.Element => (
         </section>
         <h2 className="ml-8">The Creators of JamFest</h2>
         <p className="ml-8 text-xl">
-            We are a group of Software students from
+            We are a group of seven Software students from
             <cite>Aalborg University</cite> and this is our semester project.
             <br />
             The name <cite>JamFest</cite> is an anagram derived from the first
@@ -62,7 +61,7 @@ const About = (): JSX.Element => (
             people got the means to watch movies and TV shows on their personal
             televisions, so they no longer needed to venture outside the home
             for entertainment. In recent years, cinema prices have also
-            skyrocket now becoming an expensive and inaccesssible passtime for
+            skyrocket, now becoming an expensive and inaccesssible passtime for
             many. <br />
             But connecting over a common interest or shared experience is
             inherently human and watching along with others has persisted,
@@ -72,24 +71,20 @@ const About = (): JSX.Element => (
             accounts, so the watch-history and preferences are stored on a
             single user profile. This is often circumvented by creating a joint
             profile, but can be a hassle and does not cater to the individuals
-            preferences. <br />
+            overall preferences. Only the genres you watch in that specific
+            setting. <br />
             There is also the issue of having access to enourmous content
             libraries with thousands of movies and TV-shows. It is overwhelming
-            and gets confusing fast. Therefore, our interface is also aimed to
-            be minimal and straight to the point, so you do not end up scrolling
-            over all the endless opportunities.
+            and quickly gets confusing. Therefore, our interface is also aimed
+            to be minimal and straight to the point, so you do not end up
+            scrolling over all the endless opportunities.
             <br />
             <br />
-            Lastly, it can be hard to keep track of all the movies you watch.
-            Not only for yourself, but which movies you have seen with who and
-            when. If you started a series with someone and what part you made it
-            to. Therefore, this web-application is also a platform where you can
-            keep an overview of such things, as well as find recommendations for
-            movies none of you have watched before. <br />
+            <br />
             We are aware the movies you watch with your family can be vastly
             different from what you watch with friends. The interest can even
-            vary greatly between friend groups. Therefore, the group
-            organisation will help you get an overview.
+            vary greatly between friend groups. Therefore, our web-application
+            will help group organisation.
         </p>
     </div>
 );
