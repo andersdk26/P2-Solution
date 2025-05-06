@@ -51,30 +51,30 @@ export async function searchForMovie(
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    // MySQL
-    const sql = `SELECT id, title, genres
-FROM movies
-WHERE MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN BOOLEAN MODE)
-ORDER BY
-  MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN BOOLEAN MODE) DESC
-LIMIT ${amount}`;
-    // // SQLite
-    // const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
+    //     // MySQL
+    //     const sql = `SELECT id, title, genres
+    // FROM movies
+    // WHERE MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN BOOLEAN MODE)
+    // ORDER BY
+    //   MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN BOOLEAN MODE) DESC
+    // LIMIT ${amount}`;
+    // SQLite
+    const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
 
     // Fetch results.
-    // MySQL
-    const queryResult = await db.execute(sql);
-    console.log(sql);
+    // // MySQL
+    // const queryResult = await db.execute(sql);
+    // console.log(sql);
 
-    const result = queryResult[0] as unknown as {
-        id: number;
-        title: string;
-        genres: string;
-    }[];
-    // // SQLite
-    // const result = await db.all<{ id: number; title: string; genres: string }>(
-    //     sql
-    // );
+    // const result = queryResult[0] as unknown as {
+    //     id: number;
+    //     title: string;
+    //     genres: string;
+    // }[];
+    // SQLite
+    const result = await db.all<{ id: number; title: string; genres: string }>(
+        sql
+    );
 
     // Return string array of movie titles.
     return result.map((row) => ({
