@@ -109,6 +109,7 @@
 //     groupName: varchar('groupName', { length: 16 }).notNull(),
 //     adminId: int('adminId').notNull(),
 //     members: varchar('members', { length: 100 }).notNull(),
+//     settings: varchar('settings', { length: 100 }).notNull(),
 // });
 
 // export type InsertGroup = typeof groupsTable.$inferInsert;
