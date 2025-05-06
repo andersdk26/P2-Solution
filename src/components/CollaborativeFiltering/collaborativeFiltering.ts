@@ -101,7 +101,9 @@ export default async function collaborativeFiltering(
                 movieRating: testRatings.rating,
             })
             .from(testRatings)
-            .where(notInArray(testRatings.userId, memberIdNumbers));
+            .where(notInArray(testRatings.userId, memberIdNumbers))
+            .limit(subsetSampleSize)
+            .offset(rowOffset);
 
         console.log('Other user ratings have been fetched.');
     }
@@ -288,7 +290,7 @@ export default async function collaborativeFiltering(
     return arrayOfRecommendedMovies;
 }
 
-export function cosineSimilarity(userA: number[], userB: number[]): number {
+function cosineSimilarity(userA: number[], userB: number[]): number {
     // Find dot product between the common ratings of user A and B.
     let dotProduct = 0;
 

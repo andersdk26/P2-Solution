@@ -19,26 +19,44 @@ export default async function hybridAlgorithm(
         type
     );
 
-    // Get group similarity score (a number between 0 and 1).
-    const similarity = await getGroupSimilarityScore(targetId);
-
-    // Use similarity score to get number of movies from one of the two arrays.
-    // The more similar the users are, the more recommendations will be based on collaborative filtering.
-    const numberOfCollaborativeRecommendations = Math.floor(similarity * 30);
-
     // Define array for containing a mix of the results from the two algorithms.
     const result: movie[] = [];
 
-    // Define variables for interleaving the two arrays.
-    let i = 0;
-    let j = 0;
+    if (type === 'group') {
+        // Get group similarity score (a number between 0 and 1).
+        const similarity = await getGroupSimilarityScore(targetId);
 
-    // Evenly interleave the two movie arrays based on group similarity.
-    for (let n = 0; n < 30; n++) {
-        if ((i + j) * numberOfCollaborativeRecommendations < j * 30) {
-            result.push(collaborativeFilteringResults[i++]);
-        } else {
-            result.push(contentBasedFilteringResults[j++]);
+        // Use similarity score to get number of movies from one of the two arrays.
+        // The more similar the users are, the more recommendations will be based on collaborative filtering.
+        const numberOfCollaborativeRecommendations = Math.floor(
+            similarity * 30
+        );
+
+        // Define variables for interleaving the two arrays.
+        let i = 0;
+        let j = 0;
+
+        // Evenly interleave the two movie arrays based on group similarity.
+        for (let n = 0; n < 30; n++) {
+            if ((i + j) * numberOfCollaborativeRecommendations < j * 30) {
+                result.push(collaborativeFilteringResults[i++]);
+            } else {
+                result.push(contentBasedFilteringResults[j++]);
+            }
+        }
+    } else if (type === 'individual') {
+        // Add movies to the array if the array does not already contain it.
+        while (result.length < 30) {
+            if (
+                !result.includes(collaborativeFilteringResults[result.length])
+            ) {
+                result.push(collaborativeFilteringResults[result.length]);
+            }
+            if (
+                !result.includes(collaborativeFilteringResults[result.length])
+            ) {
+                result.push(contentBasedFilteringResults[result.length]);
+            }
         }
     }
 
