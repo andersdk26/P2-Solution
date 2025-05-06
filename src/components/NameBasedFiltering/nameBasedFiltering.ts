@@ -38,8 +38,8 @@ export default async function nameBasedFiltering(
             for (const word of words) {
                 // removes 2 letter words and some three letter words that aren't helpful
                 if (
-                    word.length > 2 ||
-                    [
+                    word.length > 2 &&
+                    ![
                         'and',
                         'the',
                         'for',
