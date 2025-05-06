@@ -8,7 +8,7 @@ import { JSX, useEffect, useState } from 'react'; // Importing React state hook
 
 export default function SignUpPage(): JSX.Element {
     const redirect = useRedirect(); // Custom hook for redirection
-    const [message, setMessage] = useState(''); // State to store feedback messages which are the error messeges to users
+    const [message, setMessage] = useState(''); // State to store feedback messages which are the error messages to users
 
     const [isError, setIsError] = useState(false); // State to track if the message has an error
 
