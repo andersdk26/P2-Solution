@@ -100,7 +100,7 @@ export default function ProfileSettings() {
 
     const handleIconChange = async () => {
         if (!selectedIcon) {
-            alert('Please select an icon');
+            setToast({ message: 'Please select an icon', type: 'error' });
             return;
         }
 
@@ -110,16 +110,21 @@ export default function ProfileSettings() {
             const response = await changeProfileIcon(userId, selectedIcon);
 
             if (response.status === 200) {
-                alert('Profile icon updated successfully!');
                 setProfileIcon(selectedIcon);
                 setIsPopupOpen(false); // Close the popup after saving
                 window.location.reload(); // Reload the page after successful login
             } else {
-                alert(response.message);
+                setToast({
+                    message: response.message || 'An error occurred.',
+                    type: 'error',
+                });
             }
         } catch (error) {
             console.error('Error changing profile icon:', error);
-            alert('An error occurred. Please try again.');
+            setToast({
+                message: 'An error occurred. Please try again.',
+                type: 'error',
+            });
         }
     };
 
