@@ -35,7 +35,7 @@ export default async function collaborativeFiltering(
     let userRatingsFromDataset;
 
     // Define number of rows in ratings table.
-    const totalNumberOfRatings = 32000000; // USE THIS FOR TESTRATINGS TABLE
+    const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
     //const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
 
     // Define size of subset of ratings to be used.
