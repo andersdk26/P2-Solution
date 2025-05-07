@@ -215,14 +215,17 @@ export default function ProfileSettings() {
 
     const handleEmailChange = async () => {
         if (!newEmail) {
-            alert('Please fill in the field');
+            setToast({ message: 'Please fill in the field', type: 'error' });
             return;
         }
 
         // Validate email format (it makes it so that the users email has to include @ and .)
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(newEmail)) {
-            alert('Please enter a valid email address.');
+            setToast({
+                message: 'Please enter a valid email address.',
+                type: 'error',
+            });
             return;
         }
 
@@ -233,16 +236,25 @@ export default function ProfileSettings() {
             const response = await changeEmail(userId, newEmail);
 
             if (response.status === 200) {
-                alert('Email updated successfully!');
+                setToast({
+                    message: 'Email updated successfully!',
+                    type: 'success',
+                });
                 setUserEmail(newEmail);
                 setIsEditing(null);
                 setNewEmail('');
             } else {
-                alert(response.message);
+                setToast({
+                    message: response.message || 'An error occurred.',
+                    type: 'error',
+                });
             }
         } catch (error) {
-            console.error('Error changing username:', error);
-            alert('An error occurred. Please try again.');
+            console.error('Error changing email:', error);
+            setToast({
+                message: 'An error occurred. Please try again.',
+                type: 'error',
+            });
         }
     };
 
