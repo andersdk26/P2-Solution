@@ -7,7 +7,6 @@ import getUsername from '@/actions/logIn/username';
 import getUserID from '@/actions/logIn/userID';
 import getUserEmail from '@/actions/logIn/userEmail';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import './ProfileSettings.css';
 import changePassword from '@/actions/profileSettings/changePassword';
 import changeUsername from '@/actions/profileSettings/changeUsername';
 import changeEmail from '@/actions/profileSettings/changeEmail';
@@ -18,15 +17,29 @@ import ProfileToast from '@/components/toast/profileToast';
 
 export default function ProfileSettings() {
     const redirect = useRedirect(); // Custom hook for redirection
+
+    // current user info
     const [username, setUsername] = useState('Username');
     const [id, setUserID] = useState('User ID#');
     const [email, setUserEmail] = useState('Email');
+    const [currentPassword, setCurrentPassword] = useState('');
+
+    // when you wish to edit your current info
     const [isEditing, setIsEditing] = useState<string | null>(null);
+
+    // changing of user info
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newEmail, setNewEmail] = useState('');
-    const [currentPassword, setCurrentPassword] = useState('');
+
+    //
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+
+    // pop-up for selected icons
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    // select new icon
     const [selectedIcon, setSelectedIcon] = useState(
         '/img/profileSettingIcons/cornpop.png'
     ); // Default icon
@@ -36,6 +49,7 @@ export default function ProfileSettings() {
         type: 'success' | 'error';
     } | null>(null);
 
+    // possible icon images
     const icons = [
         '/img/profileSettingIcons/cornpop.png',
         '/img/profileSettingIcons/cuteButterPopcorn.png',
@@ -53,42 +67,38 @@ export default function ProfileSettings() {
 
     useEffect(() => {
         const fetchUsername = async (): Promise<void> => {
-            setUsername(await getUsername(verifyUser()));
+            setUsername(await getUsername(verifyUser())); // finds username
         };
         fetchUsername();
     }, []);
 
     useEffect(() => {
         const fetchUserID = async (): Promise<void> => {
-            setUserID(String(await getUserID(verifyUser())));
+            setUserID(String(await getUserID(verifyUser()))); // finds userID, makes number to string
         };
         fetchUserID();
     }, []);
 
     useEffect(() => {
         const fetchUserEmail = async (): Promise<void> => {
-            setUserEmail(String(await getUserEmail(verifyUser())));
+            setUserEmail(String(await getUserEmail(verifyUser()))); // finds user email, makes number to string
         };
         fetchUserEmail();
     }, []);
 
     useEffect(() => {
-        // const fetchSeenMovies = async () => {
-        //     setSeenMovies(await getSeenMovies(await verifyUser()));
-        // };
-        // fetchSeenMovies();
         // Define an async function to fetch the user's profile icon
         const fetchProfileIcon = async (): Promise<void> => {
-            const userId = await verifyUser(); // this calls a function to verify the user and get their ID
+            const userId = await verifyUser(); // calls a function to verify the user and get their ID
             // if the user ID is valid (greater than 0), fetch their profile icon
             if (userId > 0) {
-                const icon = await getProfileIcon(userId); // here we call another function to get the actual icon URL from the database
+                const icon = await getProfileIcon(userId); // function to get the actual icon URL from the database
 
-                setProfileIcon(icon); // then we update the profileIcon state with the fetched icon
+                setProfileIcon(icon); // update the profileIcon state with the fetched icon
             }
         };
 
-        fetchProfileIcon(); //we call the call the fetchProfileIcon function
+        fetchProfileIcon(); // call the fetchProfileIcon function
     }, []);
 
     // Set selectedIcon to profileIcon when the component mounts
@@ -104,7 +114,7 @@ export default function ProfileSettings() {
             return;
         }
 
-        const userId = parseInt(id);
+        const userId = parseInt(id); // makes userId from string to int
 
         try {
             const response = await changeProfileIcon(userId, selectedIcon);
@@ -130,7 +140,9 @@ export default function ProfileSettings() {
 
     const handleUsernameChange = async () => {
         if (!newUsername) {
+            // if no username has been written
             setToast({ message: 'Please fill in the field', type: 'error' });
+
             return;
         }
 
@@ -143,7 +155,7 @@ export default function ProfileSettings() {
             return;
         }
 
-        // Check if the new username already exists
+        // Checks if the new username already exists
         const userId = parseInt(id);
 
         try {
@@ -154,9 +166,10 @@ export default function ProfileSettings() {
                     message: 'Username updated successfully!',
                     type: 'success',
                 });
-                setUsername(newUsername);
-                setIsEditing(null);
-                setNewUsername('');
+                // if the status is successful, then
+                setUsername(newUsername); // sets new username
+                setIsEditing(null); // closes the editing mode
+                setNewUsername(''); //sets the field to blank
             } else {
                 setToast({
                     message: response.message || 'An error occurred.',
@@ -172,9 +185,8 @@ export default function ProfileSettings() {
         }
     };
 
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
+        // if nothing in any of the fields
         if (!currentPassword || !newPassword || !confirmPassword) {
             setToast({ message: 'Please fill all the fields.', type: 'error' });
             return;
@@ -189,7 +201,7 @@ export default function ProfileSettings() {
             return;
         }
 
-        const userId = parseInt(id);
+        const userId = parseInt(id); // makes userId from string to int
 
         try {
             const response = await changePassword(
@@ -199,11 +211,14 @@ export default function ProfileSettings() {
             );
 
             if (response.status === 200) {
+                // if status is successful, then
                 setToast({
                     message: 'Password updated successfully!',
                     type: 'success',
                 });
-                setIsEditing(null);
+                setIsEditing(null); // closes the editing mode
+
+                // set the input fields to blanks
                 setCurrentPassword('');
                 setNewPassword('');
                 setConfirmPassword('');
@@ -331,6 +346,7 @@ export default function ProfileSettings() {
                                             onClick={() =>
                                                 setSelectedIcon(icon)
                                             }
+
                                         />
                                     ))}
                                 </div>
@@ -410,6 +426,7 @@ export default function ProfileSettings() {
                             <button // "Change Password" button
                                 className="mb-3 mr-26 underline text-blue-800 cursor-pointer select-none"
                                 onClick={() =>
+
                                     setIsEditing(
                                         isEditing === 'password'
                                             ? null
@@ -496,6 +513,7 @@ export default function ProfileSettings() {
                             <button
                                 className="mb-0 mr-33 underline text-blue-800 cursor-pointer select-none"
                                 onClick={() =>
+
                                     setIsEditing(
                                         isEditing === 'email' ? null : 'email'
                                     )

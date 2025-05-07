@@ -4,17 +4,19 @@ import { groupRequestsTable, groupsTable } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { AddUserToGroup } from './adminGroupActions';
 
+// request type, the requester and the received group. and row id in the db
 export type request = {
     userId: number;
     groupId: number;
     id: number;
 };
 
+// create a row in the requests table of the user and the group
 export async function requestToJoinGroup(
     userId: number,
     groupId: number
 ): Promise<void> {
-    // Check if user has already requested to join the group.
+    // Check if user has already requested to join the group, then select nothing.
     const verify = await db
         .select()
         .from(groupRequestsTable)
@@ -25,7 +27,7 @@ export async function requestToJoinGroup(
             )
         );
 
-    // check if user is admin
+    // check if user is admin, select nothing
     const checkAdmin = await db
         .select()
         .from(groupsTable)
@@ -37,6 +39,7 @@ export async function requestToJoinGroup(
     }
 }
 
+// find the groups with the admin id and return them as a request type array
 export async function getGroupRequests(adminId: number): Promise<request[]> {
     // Fetch all group IDs that are owned by the admin.
     const groupsOwnedByAdmin = await db
@@ -65,6 +68,7 @@ export async function getGroupRequests(adminId: number): Promise<request[]> {
     return requests;
 }
 
+// add the user to the group and remove the request from db table
 export async function acceptGroupRequest(
     userId: number,
     groupId: number
@@ -78,7 +82,7 @@ export async function acceptGroupRequest(
     // Call function to add member to group.
     AddUserToGroup(groupId, existingMembers[0].members, userId);
 
-    // Delete request from db.
+    // Delete request row from db.
     await db
         .delete(groupRequestsTable)
         .where(
@@ -89,6 +93,7 @@ export async function acceptGroupRequest(
         );
 }
 
+// delete the request row for that user and group id
 export async function rejectGroupRequest(
     userId: number,
     groupId: number

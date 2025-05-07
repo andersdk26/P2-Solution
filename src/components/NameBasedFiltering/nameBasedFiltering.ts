@@ -1,7 +1,7 @@
 'use server';
 
 import { getMovieById, movie } from '@/actions/movie/movie';
-import { moviesTable, testRatings } from '@/db/schema';
+import { moviesTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 import levenshtein from 'fast-levenshtein';
@@ -12,12 +12,12 @@ export default async function nameBasedFiltering(
     // Fetch the target user's ratings.
     const targetUserRatings = await db
         .select({
-            userId: testRatings.userId,
-            movieId: testRatings.movieId,
-            movieRating: testRatings.rating,
+            userId: ratingsTable.userId,
+            movieId: ratingsTable.movieId,
+            movieRating: ratingsTable.rating,
         })
-        .from(testRatings)
-        .where(eq(testRatings.userId, targetUserId));
+        .from(ratingsTable)
+        .where(eq(ratingsTable.userId, targetUserId));
 
     console.log('Got target user ratings.');
     console.log(targetUserRatings);
@@ -38,8 +38,8 @@ export default async function nameBasedFiltering(
             for (const word of words) {
                 // removes 2 letter words and some three letter words that aren't helpful
                 if (
-                    word.length > 2 ||
-                    [
+                    word.length > 2 &&
+                    ![
                         'and',
                         'the',
                         'for',
