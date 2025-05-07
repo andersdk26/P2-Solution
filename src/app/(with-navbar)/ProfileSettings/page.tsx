@@ -180,6 +180,15 @@ export default function ProfileSettings() {
             return;
         }
 
+        // Validate password so that it has a minimum number charectors (6)
+        if (newPassword.length < 6) {
+            setToast({
+                message: 'Password cannot be under 6 characters.',
+                type: 'error',
+            });
+            return;
+        }
+
         const userId = parseInt(id);
 
         try {
@@ -463,6 +472,11 @@ export default function ProfileSettings() {
                                     <button // Submit button
                                         onClick={handlePasswordChange}
                                         className="basicBtn"
+                                        disabled={
+                                            !newPassword ||
+                                            !confirmPassword ||
+                                            passwordError
+                                        } // Disable button if fields are invalid
                                     >
                                         Submit
                                     </button>
