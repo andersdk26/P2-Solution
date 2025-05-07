@@ -176,7 +176,7 @@ export default function ProfileSettings() {
     const [passwordError, setPasswordError] = useState(false);
     const handlePasswordChange = async () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert('Please fill all the fields.');
+            setToast({ message: 'Please fill all the fields.', type: 'error' });
             return;
         }
 
@@ -190,17 +190,26 @@ export default function ProfileSettings() {
             );
 
             if (response.status === 200) {
-                alert('Password updated successfully!');
+                setToast({
+                    message: 'Password updated successfully!',
+                    type: 'success',
+                });
                 setIsEditing(null);
                 setCurrentPassword('');
                 setNewPassword('');
                 setConfirmPassword('');
             } else {
-                alert(response.message);
+                setToast({
+                    message: response.message || 'An error occurred.',
+                    type: 'error',
+                });
             }
         } catch (error) {
             console.error('Error changing password:', error);
-            alert('An error occurred. Please try again.');
+            setToast({
+                message: 'An error occurred. Please try again.',
+                type: 'error',
+            });
         }
     };
 
