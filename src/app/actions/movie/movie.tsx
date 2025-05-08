@@ -97,23 +97,23 @@ function splitQuery(searchQuery: string): string {
     const terms = searchQuery.split(' ');
 
     // Add each term to a string, followed by an asterisk to label it as a prefix
-    // MySQL
-    for (const term of terms) {
-        if (term.length > 0) {
-            if (mysqlStopwords.includes(term)) {
-                result = `${result} ${term}*`;
-                continue;
-            }
-            result = `${result} +${term}*`;
-        }
-    }
-
-    // // SQLite
+    // // MySQL
     // for (const term of terms) {
     //     if (term.length > 0) {
-    //         result = `${result} ${term}*`;
+    //         if (mysqlStopwords.includes(term)) {
+    //             result = `${result} ${term}*`;
+    //             continue;
+    //         }
+    //         result = `${result} +${term}*`;
     //     }
     // }
+
+    // SQLite
+    for (const term of terms) {
+        if (term.length > 0) {
+            result = `${result} ${term}*`;
+        }
+    }
 
     // Return the trimmed string as new search query.
     return result.trim();
