@@ -64,12 +64,6 @@ export default async function hybridAlgorithm(
                 result.push(contentBasedFilteringResults[conI]);
                 conI++;
             }
-
-            if (result.length === 0) {
-                throw new Error(
-                    `Error combining movie recommendations. Col: ${collaborativeFilteringResults.length} Con: ${contentBasedFilteringResults.length}`
-                );
-            }
         }
     }
 
