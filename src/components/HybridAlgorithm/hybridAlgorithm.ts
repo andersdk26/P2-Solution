@@ -8,11 +8,10 @@ export default async function hybridAlgorithm(
     type: string
 ): Promise<movie[]> {
     // Get collaborative filtering results.
-    // const collaborativeFilteringResults = await collaborativeFiltering(
-    //     targetId,
-    //     type
-    // );
-    const collaborativeFilteringResults: movie[] = [];
+    const collaborativeFilteringResults = await collaborativeFiltering(
+        targetId,
+        type
+    );
 
     // Get content-based filtering results.
     const contentBasedFilteringResults = await contentBasedFiltering(
