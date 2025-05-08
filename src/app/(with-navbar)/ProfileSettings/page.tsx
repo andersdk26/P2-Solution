@@ -13,7 +13,7 @@ import changeEmail from '@/actions/profileSettings/changeEmail';
 import changeProfileIcon from '@/actions/profileSettings/changeProfilePic';
 import getProfileIcon from '@/actions/logIn/userProfileIcon';
 import useRedirect from '@/components/redirect';
-import ProfileToast from '@/components/toast/profileToast';
+import ProfileToast from '@/components/toast/toast';
 
 export default function ProfileSettings() {
     const redirect = useRedirect(); // Custom hook for redirection
@@ -346,7 +346,6 @@ export default function ProfileSettings() {
                                             onClick={() =>
                                                 setSelectedIcon(icon)
                                             }
-
                                         />
                                     ))}
                                 </div>
@@ -426,7 +425,6 @@ export default function ProfileSettings() {
                             <button // "Change Password" button
                                 className="mb-3 mr-26 underline text-blue-800 cursor-pointer select-none"
                                 onClick={() =>
-
                                     setIsEditing(
                                         isEditing === 'password'
                                             ? null
@@ -513,7 +511,6 @@ export default function ProfileSettings() {
                             <button
                                 className="mb-0 mr-33 underline text-blue-800 cursor-pointer select-none"
                                 onClick={() =>
-
                                     setIsEditing(
                                         isEditing === 'email' ? null : 'email'
                                     )

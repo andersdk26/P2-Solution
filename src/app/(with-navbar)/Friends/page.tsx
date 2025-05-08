@@ -12,6 +12,7 @@ import getUserById from '@/actions/friends/getUserById';
 import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
 import LoadingPage from '@/components/loading';
+import FriendToast from '@/components/toast/toast';
 
 export default function Friends(): JSX.Element {
     // Pop up for unfriending someone - when zero, the pop-up is closed
@@ -43,6 +44,12 @@ export default function Friends(): JSX.Element {
     // loading page - is true when loading, when not, becomes false
     const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
     const [isLoadingRequest, setIsLoadingRequest] = useState(true);
+
+    // toast message - shows when friend request is accepted, declined or removed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
 
     // fetching of your own userId to show the user
     useEffect(() => {
@@ -172,6 +179,13 @@ export default function Friends(): JSX.Element {
 
     return (
         <>
+            {toast && (
+                <FriendToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* entire page section */}
             <section className="p-8">
                 <section className="ml-100 mr-100 h-1/2 w-1/2 p-1 rounded-sm bg-[#9fa3d1]">
@@ -245,9 +259,6 @@ export default function Friends(): JSX.Element {
                                     RemoveFriend(
                                         await verifyUser(),
                                         unfriendOpen
-                                    );
-                                    alert(
-                                        `${unfriendName} has been removed from your friends!`
                                     );
 
                                     getFriendsList(); // updates friendlist
