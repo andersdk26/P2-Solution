@@ -1,6 +1,6 @@
 'use server';
 
-import { getMovieById } from '@/actions/movie/movie';
+import { getMovieById } from '../app/actions/movie/movie';
 import { groupsTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
@@ -46,7 +46,7 @@ export default async function getGroupSimilarityScore(
     return totalSimilarityScore / count;
 }
 
-async function getAllGenreScore(userId: number): Promise<number[]> {
+export async function getAllGenreScore(userId: number): Promise<number[]> {
     // Define map for storing genre scores.
     const genreScores = new Map<string, averageRating>();
 
@@ -127,6 +127,10 @@ async function getAllGenreScore(userId: number): Promise<number[]> {
 
     // Get array of genre scores.
     for (const genre of genreScores) {
+        if (genre[1].timesRated === 0) {
+            genreScoreArray.push(0);
+            continue;
+        }
         genreScoreArray.push(
             (genre[1].runningTotal / genre[1].timesRated) *
                 (genre[1].timesRated / totalMoviesRated)
@@ -170,3 +174,4 @@ function cosineSimilarity(userA: number[], userB: number[]): number {
     // Return the cosine similarity of the two users.
     return dotProduct / (magnitudeA * magnitudeB);
 }
+
