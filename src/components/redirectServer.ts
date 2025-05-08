@@ -9,11 +9,10 @@ export default function redirectServer(path: string): void {
     // Remove leading slashes
     if (path) {
         path = path.replace(/^\/+/, '');
+    } else {
     }
 
     // Redirect including PATH variable
     // Does not add redirection to history
-    console.log(rootPath + path);
-
-    redirect(`${rootPath + path}/`);
+    redirect(rootPath + path);
 }
