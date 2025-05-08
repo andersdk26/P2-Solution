@@ -9,7 +9,6 @@ import {
 } from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
-import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
 import LoadingPage from '@/components/loading';
 import FriendToast from '@/components/toast/toast';
@@ -142,6 +141,16 @@ export default function Friends(): JSX.Element {
         updateFriendRequestList();
     }, [FriendRequests]);
 
+    // useEffect to show the toast message when the component mounts
+    // It checks localStorage for a stored message and displays it if found.
+    useEffect(() => {
+        const storedToast = localStorage.getItem('toastMessage');
+        if (storedToast) {
+            setToast(JSON.parse(storedToast)); // Display the toast
+            localStorage.removeItem('toastMessage'); // Clear the stored message
+        }
+    }, []);
+
     useEffect(() => {
         const updateFriendList = async (): Promise<void> => {
             if (!FriendsList.length) {
@@ -260,10 +269,18 @@ export default function Friends(): JSX.Element {
                                         await verifyUser(),
                                         unfriendOpen
                                     );
-
                                     getFriendsList(); // updates friendlist
                                     setUnfriendOpen(0); // closes pop-up
                                     location.reload(); // reloads page
+
+                                    // Store the toast message in localStorage
+                                    localStorage.setItem(
+                                        'toastMessage',
+                                        JSON.stringify({
+                                            message: `You have unfriended ${unfriendName}`,
+                                            type: 'success',
+                                        })
+                                    );
                                 }}
                             >
                                 Remove {unfriendName}

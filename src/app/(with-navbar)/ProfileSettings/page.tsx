@@ -44,6 +44,8 @@ export default function ProfileSettings() {
         '/img/profileSettingIcons/cornpop.png'
     ); // Default icon
     const [profileIcon, setProfileIcon] = useState<string>('/loadingIcon.gif');
+
+    // Toast message for success/error and is used to show a toast message when an action is performed (like changing username, password, etc.)
     const [toast, setToast] = useState<{
         message: string;
         type: 'success' | 'error';

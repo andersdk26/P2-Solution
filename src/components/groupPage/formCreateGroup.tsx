@@ -6,6 +6,8 @@ import { FetchGroupId } from '@/actions/groups/fetchGroupId';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { GroupCreateDb } from '@/actions/groups/groupCreateDb';
 
+import GroupToast from '@/components/toast/toast';
+
 export function FormCreateGroup(): JSX.Element {
     // state for search research
     const [searchResult, setSearchResult] = useState<user[]>([]);
@@ -22,10 +24,19 @@ export function FormCreateGroup(): JSX.Element {
     const [ErrorMessage, setErrorMessage] = useState('');
     const [ErrorExplain, setErrorExplain] = useState('');
 
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     // Function for handling selection of users.
     const handleSelectUser = async (user: user): Promise<void> => {
         if (user.userId === (await verifyUser())) {
-            alert('You are already in the group');
+            setToast({
+                message: 'You are already in the group',
+                type: 'error',
+            });
             return;
         }
         setSelectedUsers((prevSelectedUsers) => {
@@ -147,6 +158,14 @@ export function FormCreateGroup(): JSX.Element {
 
     return (
         <>
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* Flex container for the content*/}
             <section className="grid grid-cols-2 mb-8">
                 {/* submit form , left side */}
