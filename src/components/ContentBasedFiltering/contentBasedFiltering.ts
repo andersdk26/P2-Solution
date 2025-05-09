@@ -221,7 +221,7 @@ export default async function contentBasedFiltering(
     const recommendedMovies = await getMoviesById(
         sortedMovies.map(([id]) => id)
     );
-    console.log('Fetched all recommended movies');
+    console.log('Fetched all recommended movies.');
 
     // Sort recommended movies after fetching from db, since the returned array is based on movie order in the dataset.
     recommendedMovies.sort(
