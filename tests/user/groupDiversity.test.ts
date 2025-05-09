@@ -1,6 +1,6 @@
 import getGroupSimilarityScore from '../../src/components/GroupDiversity';
 import { getAllGenreScore } from '../../src/components/GroupDiversity';
-// test cosineSimilarity when testing algorithms
+// Test cosineSimilarity when testing algorithms
 
 const SECONDS = 1000;
 jest.setTimeout(70 * SECONDS);
