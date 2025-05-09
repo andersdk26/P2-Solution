@@ -3,7 +3,7 @@ import { JSX, useState } from 'react';
 import { searchUserById, user } from './friends';
 import { SendFriendRequest } from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import { GetFriends } from '@/actions/friends/friendsList';
+import GroupToast from '@/components/toast/toast';
 
 // input: takes a user and a conditional function as input
 function FriendRequest({
@@ -13,37 +13,65 @@ function FriendRequest({
     user: user;
     conditionalFunction: (boolean: boolean) => void; // figure out the actual typing required for functions
 }): JSX.Element {
-    //returns the pop-up to send friend request
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
+    const handleSendFriendRequest = async () => {
+        if ((await verifyUser()) === user.userId) {
+            setToast({
+                message: 'You cannot send friend requests to yourself!',
+                type: 'error',
+            });
+        } else {
+            const status = await SendFriendRequest(
+                await verifyUser(),
+                user.userId
+            );
+
+            if (status === -1) {
+                setToast({
+                    message: 'You are already friends with this user!',
+                    type: 'error',
+                });
+            } else if (status === 0) {
+                setToast({
+                    message:
+                        'One of you already has a pending friend request from the other!',
+                    type: 'error',
+                });
+            } else {
+                setToast({
+                    message: `Friend request sent to ${user.userName}!`,
+                    type: 'success',
+                });
+            }
+        }
+
+        // Delay closing the modal to allow the toast to appear
+        setTimeout(() => {
+            conditionalFunction(false);
+        }, 3000); // Adjust the delay as needed
+    };
 
     return (
-        <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-74">
+        <div className="border-[#282F72] bg-[#9fa3d1] border-2 border-solid rounded-2xl mx-124 py-4 fixed w-100 h-40 text-center align-center justify-center top-74">
             Send <b>{user.userName}</b> a friend request?
             <br />
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* send request button */}
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
-                onClick={async () => {
-                    if ((await verifyUser()) === user.userId) {
-                        alert('You can not send friend requests to yourself!');
-                    } else {
-                        const status = await SendFriendRequest(
-                            await verifyUser(),
-                            user.userId
-                        );
-
-                        if (status === -1) {
-                            alert('You are already friends with this user!');
-                        } else if (status === 0) {
-                            alert(
-                                'One of you already has a pending friend request from the other!'
-                            );
-                        } else {
-                            alert(`Friend request sent to ${user.userName}!`);
-                        }
-                    }
-
-                    conditionalFunction(false);
-                }}
+                onClick={handleSendFriendRequest}
             >
                 Add friend
             </button>

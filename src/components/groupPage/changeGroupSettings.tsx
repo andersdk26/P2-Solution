@@ -5,6 +5,8 @@ import {
     ChangeDbGroupSettings,
 } from '@/actions/groups/adminGroupActions';
 import { JSX, use, useState } from 'react';
+import GroupToast from '@/components/toast/toast';
+import badWord from '@/actions/logIn/badWord.json';
 
 type changeSettingsProps = {
     groupId: number;
@@ -28,18 +30,30 @@ export function ChangeGroupSettings({
         `${NewEmoji}|${NewBackground}|${NewText}`
     );
 
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     const handleChangeSettingsSubmit = async () => {
         const newSettingsArray = [NewEmoji, NewBackground, NewText];
 
         // make into strings to compare if they are equal. if so, no changes has been made and return
         if (JSON.stringify(newSettingsArray) === JSON.stringify(settings)) {
-            alert('No changes has been made');
+            setToast({
+                message: 'No changes has been made',
+                type: 'error',
+            });
             return;
         }
 
         // validate input
         if (NewBackground === NewText) {
-            alert('Background color and Text color cannot be the same');
+            setToast({
+                message: 'Background color and Text color cannot be the same',
+                type: 'error',
+            });
             return;
         }
 
@@ -52,31 +66,58 @@ export function ChangeGroupSettings({
     };
 
     const handleChangeGroupNameSubmit = async () => {
-        // compare if they are equal. if so, no changes has been made and return
-        if (NewGroupName === groupName) {
-            alert('No changes has been made');
+        // Check for inappropriate language
+        const containsBadWord = (name: string): boolean => {
+            const lowerCaseName = name.toLowerCase();
+            return badWord.some((word) =>
+                lowerCaseName.includes(word.toLowerCase())
+            );
+        };
+
+        if (containsBadWord(NewGroupName)) {
+            setToast({
+                message: 'Groupname contains inappropriate language',
+                type: 'error',
+            });
             return;
         }
 
-        // validate input
+        // Compare if they are equal. If so, no changes have been made and return
+        if (NewGroupName === groupName) {
+            setToast({
+                message: 'No changes have been made',
+                type: 'error',
+            });
+            return;
+        }
+
+        // Validate input
         const isValidCharacter = (text: string): boolean => {
             const validCharacterRegex: RegExp = /^[a-zA-Z0-9]*$/;
             return validCharacterRegex.test(text);
         };
         if (isValidCharacter(NewGroupName) === false) {
-            alert('Only numbers and characters allowed');
+            setToast({
+                message: 'Only numbers and characters allowed',
+                type: 'error',
+            });
             return;
         }
 
-        //length validation
+        // Length validation
         if (NewGroupName.length < 2) {
-            alert('Too short groupname. 2-16 characters');
+            setToast({
+                message: 'Too short groupname. 2-16 characters',
+                type: 'error',
+            });
             return;
         }
 
-        //length validation
         if (NewGroupName.length > 16) {
-            alert('Too long groupname. 2-16 characters');
+            setToast({
+                message: 'Too long groupname. 2-16 characters',
+                type: 'error',
+            });
             return;
         }
 
@@ -88,6 +129,14 @@ export function ChangeGroupSettings({
 
     return (
         <>
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             <p>Change Group name</p>
             <input
                 className="bg-white text-black rounded-full p-1 px-4 w-60"

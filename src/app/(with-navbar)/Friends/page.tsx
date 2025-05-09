@@ -9,9 +9,9 @@ import {
 } from '@/actions/friends/friendRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import getUserById from '@/actions/friends/getUserById';
-import getUserID from '@/actions/logIn/userID';
 import { GetFriends } from '@/actions/friends/friendsList';
 import LoadingPage from '@/components/loading';
+import FriendToast from '@/components/toast/toast';
 
 export default function Friends(): JSX.Element {
     // Pop up for unfriending someone - when zero, the pop-up is closed
@@ -43,6 +43,12 @@ export default function Friends(): JSX.Element {
     // loading page - is true when loading, when not, becomes false
     const [isLoadingFriendsList, setIsLoadingFriendsList] = useState(true);
     const [isLoadingRequest, setIsLoadingRequest] = useState(true);
+
+    // toast message - shows when friend request is accepted, declined or removed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
 
     // fetching of your own userId to show the user
     useEffect(() => {
@@ -109,6 +115,10 @@ export default function Friends(): JSX.Element {
                                 // calls the function that update the friends list and friend request list
                                 getFriendRequests();
                                 getFriendsList();
+                                setToast({
+                                    message: `You are now friends with ${await getUserById(request.from)}`,
+                                    type: 'success',
+                                });
                             }}
                         >
                             Accept
@@ -122,6 +132,10 @@ export default function Friends(): JSX.Element {
                                     await verifyUser()
                                 );
                                 getFriendRequests(); // calls the function that updates the friends list
+                                setToast({
+                                    message: `You have declined the friend request from ${await getUserById(request.from)}`,
+                                    type: 'success',
+                                });
                             }}
                         >
                             Decline
@@ -134,6 +148,16 @@ export default function Friends(): JSX.Element {
         };
         updateFriendRequestList();
     }, [FriendRequests]);
+
+    // useEffect to show the toast message when the component mounts
+    // It checks localStorage for a stored message and displays it if found.
+    useEffect(() => {
+        const storedToast = localStorage.getItem('toastMessage');
+        if (storedToast) {
+            setToast(JSON.parse(storedToast)); // Display the toast
+            localStorage.removeItem('toastMessage'); // Clear the stored message
+        }
+    }, []);
 
     useEffect(() => {
         const updateFriendList = async (): Promise<void> => {
@@ -172,6 +196,13 @@ export default function Friends(): JSX.Element {
 
     return (
         <>
+            {toast && (
+                <FriendToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* entire page section */}
             <section className="p-8">
                 <section className="ml-100 mr-100 h-1/2 w-1/2 p-1 rounded-sm bg-[#9fa3d1]">
@@ -246,13 +277,18 @@ export default function Friends(): JSX.Element {
                                         await verifyUser(),
                                         unfriendOpen
                                     );
-                                    alert(
-                                        `${unfriendName} has been removed from your friends!`
-                                    );
-
                                     getFriendsList(); // updates friendlist
                                     setUnfriendOpen(0); // closes pop-up
                                     location.reload(); // reloads page
+
+                                    // Store the toast message in localStorage
+                                    localStorage.setItem(
+                                        'toastMessage',
+                                        JSON.stringify({
+                                            message: `You have unfriended ${unfriendName}`,
+                                            type: 'success',
+                                        })
+                                    );
                                 }}
                             >
                                 Remove {unfriendName}

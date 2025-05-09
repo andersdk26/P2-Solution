@@ -21,6 +21,7 @@ import {
 } from '@/actions/groups/groupRequests';
 import getUserById from '@/actions/friends/getUserById';
 import LoadingPage from '@/components/loading';
+import GroupToast from '@/components/toast/toast';
 
 export default function GroupSettings(): JSX.Element {
     // array for the groups current user is admin of
@@ -44,6 +45,12 @@ export default function GroupSettings(): JSX.Element {
     const [isLoadingRegular, setIsLoadingRegular] = useState(true);
     const [isLoadingRequest, setIsLoadingRequest] = useState(true);
     const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
+
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
 
     // get the groups user is admin of
     const getAdminGroups = async (): Promise<void> => {
@@ -112,7 +119,10 @@ export default function GroupSettings(): JSX.Element {
                                 // calls the functions that updates the array of requests, and the admin groups
                                 getGroupRequestsA();
                                 getAdminGroups();
-                                alert(`You accepted the request`);
+                                setToast({
+                                    message: `You accepted the request`,
+                                    type: 'error',
+                                });
                             }}
                         >
                             Accept
@@ -126,7 +136,10 @@ export default function GroupSettings(): JSX.Element {
                                     request.groupId
                                 );
                                 getGroupRequestsA(); // calls the functions that update the array of requests
-                                alert('You declined the request');
+                                setToast({
+                                    message: 'You declined the request',
+                                    type: 'error',
+                                });
                             }}
                         >
                             Decline
@@ -154,6 +167,14 @@ export default function GroupSettings(): JSX.Element {
 
     return (
         <>
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             <div>
                 <h1>Groups</h1>
                 <section>

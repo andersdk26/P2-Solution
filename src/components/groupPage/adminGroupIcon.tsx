@@ -14,6 +14,7 @@ import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations'
 import useRedirect from '../redirect';
 import { redirect } from 'next/navigation';
 import LoadingPage from '../loading';
+import GroupToast from '@/components/toast/toast';
 
 export default function AdminGroupIcon({
     groupId,
@@ -56,6 +57,13 @@ export default function AdminGroupIcon({
     const membersId = groupMembers.split('|');
     // get how many members in the group by counting length of array
     const memberCount = membersId.length;
+
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     // then get username for each of the members
     useEffect(() => {
         const getMemberUsernames = async (): Promise<void> => {
@@ -79,16 +87,23 @@ export default function AdminGroupIcon({
 
     const handleAddUserToGroup = async (addedUser: user) => {
         if (groupMembers.includes(addedUser.userId.toString())) {
-            alert(`${addedUser.userName} is already in the group`);
+            setToast({
+                message: `${addedUser.userName} is already in the group`,
+                type: 'error',
+            });
             return;
         }
         if (memberCount >= 8) {
-            alert('Cannot add more than 8 members');
+            setToast({
+                message: 'Cannot add more than 8 members',
+                type: 'error',
+            });
             return;
         }
         await AddUserToGroup(groupId, groupMembers, addedUser.userId);
-        // notify that there has been a success
-        alert(`${addedUser.userName} has been added to your group!`);
+        // show message
+        alert(`${addedUser.userName} has been added to the group!`);
+
         // close the pop up for the add friend
         setAddMembersOpen(false);
         // reload page
@@ -139,6 +154,14 @@ export default function AdminGroupIcon({
 
     return (
         <>
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* The div for the entire box, onclick: open the about group */}
             <div
                 // style inline because tailwind doesnt like dynamic colorchanges
