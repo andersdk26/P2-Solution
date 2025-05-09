@@ -115,6 +115,10 @@ export default function Friends(): JSX.Element {
                                 // calls the function that update the friends list and friend request list
                                 getFriendRequests();
                                 getFriendsList();
+                                setToast({
+                                    message: `You are now friends with ${await getUserById(request.from)}`,
+                                    type: 'success',
+                                });
                             }}
                         >
                             Accept
@@ -128,6 +132,10 @@ export default function Friends(): JSX.Element {
                                     await verifyUser()
                                 );
                                 getFriendRequests(); // calls the function that updates the friends list
+                                setToast({
+                                    message: `You have declined the friend request from ${await getUserById(request.from)}`,
+                                    type: 'success',
+                                });
                             }}
                         >
                             Decline
