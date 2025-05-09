@@ -5,6 +5,7 @@ import { group } from './group';
 import { FetchGroupId } from '@/actions/groups/fetchGroupId';
 import verifyUser from '@/actions/logIn/authenticateUser';
 import { GroupCreateDb } from '@/actions/groups/groupCreateDb';
+import badWord from '@/actions/logIn/badWord.json';
 
 import GroupToast from '@/components/toast/toast';
 
@@ -106,6 +107,22 @@ export function FormCreateGroup(): JSX.Element {
             setErrorBool(true);
             setErrorMessage('Too long Groupname!');
             setErrorExplain('Between 2 and 16');
+            return;
+        }
+
+        // Check for inappropriate language
+        const containsBadWord = (name: string): boolean => {
+            const lowerCaseName = name.toLowerCase();
+            return badWord.some((word) =>
+                lowerCaseName.includes(word.toLowerCase())
+            );
+        };
+
+        if (containsBadWord(GroupName)) {
+            setToast({
+                message: 'Groupname contains inappropriate language',
+                type: 'error',
+            });
             return;
         }
 

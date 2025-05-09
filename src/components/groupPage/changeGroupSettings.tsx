@@ -6,6 +6,7 @@ import {
 } from '@/actions/groups/adminGroupActions';
 import { JSX, use, useState } from 'react';
 import GroupToast from '@/components/toast/toast';
+import badWord from '@/actions/logIn/badWord.json';
 
 type changeSettingsProps = {
     groupId: number;
@@ -65,16 +66,32 @@ export function ChangeGroupSettings({
     };
 
     const handleChangeGroupNameSubmit = async () => {
-        // compare if they are equal. if so, no changes has been made and return
-        if (NewGroupName === groupName) {
+        // Check for inappropriate language
+        const containsBadWord = (name: string): boolean => {
+            const lowerCaseName = name.toLowerCase();
+            return badWord.some((word) =>
+                lowerCaseName.includes(word.toLowerCase())
+            );
+        };
+
+        if (containsBadWord(NewGroupName)) {
             setToast({
-                message: 'No changes has been made',
+                message: 'Groupname contains inappropriate language',
                 type: 'error',
             });
             return;
         }
 
-        // validate input
+        // Compare if they are equal. If so, no changes have been made and return
+        if (NewGroupName === groupName) {
+            setToast({
+                message: 'No changes have been made',
+                type: 'error',
+            });
+            return;
+        }
+
+        // Validate input
         const isValidCharacter = (text: string): boolean => {
             const validCharacterRegex: RegExp = /^[a-zA-Z0-9]*$/;
             return validCharacterRegex.test(text);
@@ -87,7 +104,7 @@ export function ChangeGroupSettings({
             return;
         }
 
-        //length validation
+        // Length validation
         if (NewGroupName.length < 2) {
             setToast({
                 message: 'Too short groupname. 2-16 characters',
@@ -96,7 +113,6 @@ export function ChangeGroupSettings({
             return;
         }
 
-        //length validation
         if (NewGroupName.length > 16) {
             setToast({
                 message: 'Too long groupname. 2-16 characters',
