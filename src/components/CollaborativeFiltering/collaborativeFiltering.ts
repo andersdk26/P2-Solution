@@ -1,10 +1,11 @@
 'use server';
 
-import { getMovieById, movie } from '@/actions/movie/movie';
+import { getMovieById, getMoviesById, movie } from '@/actions/movie/movie';
 import { ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
+import cosineSimilarity from '../cosineSimilarity/cosineSimilarity';
 
 type rating = {
     movieId: number;
@@ -126,7 +127,6 @@ export default async function collaborativeFiltering(
             rating: row.movieRating,
         });
     }
-
     console.log('Other user ratings have been mapped.');
 
     // Convert the map to an array of users instead for easier operations later on.
@@ -136,8 +136,7 @@ export default async function collaborativeFiltering(
         userId,
         ratings,
     }));
-
-    console.log('Map has been converted to array.');
+    console.log('Map of other user ratings has been converted to array.');
 
     // Create a new map for the target users ratings: (movieId, rating).
     const targetRatingMap = new Map<number, number>();
@@ -146,6 +145,7 @@ export default async function collaborativeFiltering(
     for (const rating of targetUserRatings!) {
         targetRatingMap.set(rating.movieId, rating.movieRating);
     }
+    console.log('Target user ratings have been mapped.');
 
     // Create an array for storing the similarity between the target user and some user from the array otherUserRatings.
     const similarityScores: similarity[] = [];
@@ -192,8 +192,7 @@ export default async function collaborativeFiltering(
         );
         return [];
     }
-
-    console.log('Similar users have been found.');
+    console.log(`${similarityScores.length} similar users have been found.`);
 
     // Create a sorted array of the similar users.
     let mostSimilarUsers = similarityScores.sort(
@@ -259,67 +258,23 @@ export default async function collaborativeFiltering(
         }
     }
 
+    // Convert map of rated movies to array.
     const moviesRatedBySimilarUsersArray = Array.from(
         moviesRatedBySimilarUsersMap
     );
 
     // Now sort the array of rated movies by their rating.
     moviesRatedBySimilarUsersArray.sort((a, b) => b[1] - a[1]);
-
     console.log('Movie array has been sorted.');
 
     // Get the top 30 movies based on similar users ratings.
     const recommendedMovies = moviesRatedBySimilarUsersArray.slice(0, 30);
 
-    const arrayOfRecommendedMovies: movie[] = [];
-
-    for (const recommendedMovie of recommendedMovies) {
-        const result = await getMovieById(recommendedMovie[0]);
-        if (result) {
-            arrayOfRecommendedMovies.push(result);
-        }
-    }
-    // ################################
-    // Fetch movie details using getMovieById.
-    // const movie = await getMovieById(movieId);
-    // ################################
-
-    console.log(recommendedMovies);
+    // Fetch the top 30 movies from the database.
+    const arrayOfRecommendedMovies = await getMoviesById(
+        recommendedMovies.map(([id]) => id)
+    );
 
     // Return the sorted array of recommended movies.
     return arrayOfRecommendedMovies;
-}
-
-function cosineSimilarity(userA: number[], userB: number[]): number {
-    // Find dot product between the common ratings of user A and B.
-    let dotProduct = 0;
-
-    for (let i = 0; i < userA.length; i++) {
-        dotProduct += userA[i] * userB[i];
-    }
-
-    // Find the magnitude (Euclidean norm) of user A (square root of A transpose A).
-    let magnitudeA = 0;
-
-    // A transpose A.
-    for (let i = 0; i < userA.length; i++) {
-        magnitudeA += userA[i] * userA[i];
-    }
-
-    // Get the square root.
-    magnitudeA = Math.sqrt(magnitudeA);
-
-    // Find the magnitude (Euclidean norm) of user B (square root of B transpose B).
-    let magnitudeB = 0;
-
-    // B transpose B.
-    for (let i = 0; i < userB.length; i++) {
-        magnitudeB += userB[i] * userB[i];
-    }
-
-    // Get the square root.
-    magnitudeB = Math.sqrt(magnitudeB);
-
-    // Return the cosine similarity of the two users.
-    return dotProduct / (magnitudeA * magnitudeB);
 }

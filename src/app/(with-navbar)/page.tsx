@@ -104,12 +104,12 @@ export default function Home(): JSX.Element {
                     <div className="midTopPannel h-1/2">
                         {/* Title and description of carousel*/}
                         <h1 className="text-center select-none h-1/2">
-                            🎥Daily Recommendations🎥
+                            🎥Personal Recommendations🎥
                         </h1>
                         <p className="border-solid  text-center text-[#282f72] select-none ">
-                            This is your recommendations for the day
-                            <br></br>You receive new ones every day!<br></br>
-                            Click on a movie to rate it
+                            These are your personal recommendations based on
+                            your rated movies. If you see a movie you have
+                            already watched, you can click on it to rate it.
                         </p>
                     </div>
 
