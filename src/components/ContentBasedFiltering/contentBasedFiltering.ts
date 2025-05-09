@@ -1,6 +1,10 @@
 'use server';
 
-import { getMovieById, movie } from '@/actions/movie/movie';
+import {
+    getMovieById,
+    getMoviesById,
+    movie,
+} from '../../app/actions/movie/movie';
 import { moviesTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
@@ -46,47 +50,14 @@ export default async function contentBasedFiltering(
     // Find the total number of movies rated by the target user.
     const totalMoviesRated = targetUserRatings!.length;
 
+    // Create and populate map of movie IDs and user ratings.
+    const movieRatings = new Map<number, number>();
+    for (const movieRating of targetUserRatings!) {
+        movieRatings.set(movieRating.movieId, movieRating.movieRating);
+    }
+
     // Initialise genre score map.
     const averageGenreRating = new Map<string, averageRating>();
-
-    // Iterate through each rating made by the target user.
-    for (const rating of targetUserRatings!) {
-        // Fetch the movie in question.
-        const movie = await getMovieById(rating.movieId);
-
-        // Check that the movie exists.
-        if (movie !== null) {
-            // Get genres of the movie.
-            const genres = movie.movieGenres;
-
-            // If movie has no genres, continue to the next rating/movie.
-            if (genres === '(no genres listed)') {
-                continue;
-            }
-
-            // Split string into single genres.
-            const genreArray = genres.split('|');
-
-            // Iterate through each genre.
-            for (const genre of genreArray) {
-                // If the genre score map does not contain an entry for the specified genre, initialise it.
-                if (!averageGenreRating.has(genre)) {
-                    averageGenreRating.set(genre, {
-                        runningTotal: 0,
-                        timesRated: 0,
-                    });
-                }
-
-                // Update the score for the current genre.
-                averageGenreRating.set(genre, {
-                    runningTotal:
-                        averageGenreRating.get(genre)!.runningTotal +
-                        rating.movieRating,
-                    timesRated: averageGenreRating.get(genre)!.timesRated + 1,
-                });
-            }
-        }
-    }
 
     // Initialise word score map.
     const averageWordRating = new Map<string, averageRating>();
@@ -94,39 +65,68 @@ export default async function contentBasedFiltering(
     // List of words to ignore/not rate.
     const ignoreWords = ['the', 'and', 'a', 'an', 'or', 'of', '', 'aka', 'ii'];
 
-    // Iterate through each rating made by the target user.
-    for (const rating of targetUserRatings!) {
-        // Fetch the movie in question.
-        const movie = await getMovieById(rating.movieId);
+    // Fetch all movies rated by the user.
+    const ratedMovies = await getMoviesById(
+        targetUserRatings!.map((movie) => movie.movieId)
+    );
 
-        // Check that the movie exists.
-        if (movie !== null) {
-            // Split title into words and remove special characters and numbers.
-            let title = movie.movieTitle.toLowerCase();
-            title = title.replace(/[^a-z ]+/g, '');
-            const titleWords = title.split(' ');
+    // For each movie of rated movies.
+    for (const ratedMovie of ratedMovies) {
+        // Split title into words and remove special characters and numbers.
+        let title = ratedMovie.movieTitle.toLowerCase();
+        title = title.replace(/[^a-z ]+/g, '');
+        const titleWords = title.split(' ');
 
-            // Iterate through each word.
-            for (const word of titleWords) {
-                // Skip words from ignore list.
-                if (!ignoreWords.includes(word)) {
-                    // If the word score map does not contain an entry for the specified genre, initialise it.
-                    if (!averageWordRating.has(word)) {
-                        averageWordRating.set(word, {
-                            runningTotal: 0,
-                            timesRated: 0,
-                        });
-                    }
-
-                    // Update the score for the current genre.
+        // Iterate through each word.
+        for (const word of titleWords) {
+            // Skip words from ignore list.
+            if (!ignoreWords.includes(word)) {
+                // If the word score map does not contain an entry for the specified genre, initialise it.
+                if (!averageWordRating.has(word)) {
                     averageWordRating.set(word, {
-                        runningTotal:
-                            averageWordRating.get(word)!.runningTotal +
-                            rating.movieRating,
-                        timesRated: averageWordRating.get(word)!.timesRated + 1,
+                        runningTotal: 0,
+                        timesRated: 0,
                     });
                 }
+
+                // Update the score for the current genre.
+                averageWordRating.set(word, {
+                    runningTotal:
+                        averageWordRating.get(word)!.runningTotal +
+                        movieRatings.get(ratedMovie.movieId)!,
+                    timesRated: averageWordRating.get(word)!.timesRated + 1,
+                });
             }
+        }
+
+        // Get genres of the movie.
+        const genres = ratedMovie.movieGenres;
+
+        // If movie has no genres, continue to the next rating/movie.
+        if (genres === '(no genres listed)') {
+            continue;
+        }
+
+        // Split string into single genres.
+        const genreArray = genres.split('|');
+
+        // Iterate through each genre.
+        for (const genre of genreArray) {
+            // If the genre score map does not contain an entry for the specified genre, initialise it.
+            if (!averageGenreRating.has(genre)) {
+                averageGenreRating.set(genre, {
+                    runningTotal: 0,
+                    timesRated: 0,
+                });
+            }
+
+            // Update the score for the current genre.
+            averageGenreRating.set(genre, {
+                runningTotal:
+                    averageGenreRating.get(genre)!.runningTotal +
+                    movieRatings.get(ratedMovie.movieId)!,
+                timesRated: averageGenreRating.get(genre)!.timesRated + 1,
+            });
         }
     }
 
@@ -215,28 +215,18 @@ export default async function contentBasedFiltering(
     const sortedMovies = scoredMovieIds
         .sort((a, b) => b[1] - a[1])
         .slice(0, 30);
-
     console.log('Sorted movies by score and got top 30.');
 
     // Create array for storing recommended movies.
-    const recommendedMovies: movie[] = [];
-
-    // Iterate through all movies in the sorted array.
-    for (const movie of sortedMovies) {
-        // Fetch movie from database.
-        const m = await getMovieById(movie[0]);
-
-        // If the movie exists, add it to the recommended movies array.
-        if (m !== null) {
-            console.log();
-            console.log(m.movieTitle);
-            console.log(m.movieGenres);
-            console.log(movie[1]);
-            recommendedMovies.push(m);
-        }
-    }
-
+    const recommendedMovies = await getMoviesById(
+        sortedMovies.map(([id]) => id)
+    );
     console.log('Fetched all recommended movies');
+
+    // Sort recommended movies after fetching from db, since the returned array is based on movie order in the dataset.
+    recommendedMovies.sort(
+        (a, b) => movieScoreMap.get(b.movieId)! - movieScoreMap.get(a.movieId)!
+    );
 
     // Return recommended movies.
     return recommendedMovies;

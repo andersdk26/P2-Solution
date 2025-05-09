@@ -2,7 +2,7 @@
 
 import { moviesTable } from '@/db/schema';
 import { db } from 'db';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 
 // the movie type
 export type movie = {
@@ -36,6 +36,21 @@ export async function getMovieById(id: number): Promise<movie | null> {
     }
 
     return result[0];
+}
+
+export async function getMoviesById(ids: number[]): Promise<movie[]> {
+    if (ids.length === 0) return [];
+
+    const result = await db
+        .select({
+            movieId: moviesTable.id,
+            movieTitle: moviesTable.title,
+            movieGenres: moviesTable.genres,
+        })
+        .from(moviesTable)
+        .where(inArray(moviesTable.id, ids));
+
+    return result;
 }
 
 // searches for string and if that is in the title.
