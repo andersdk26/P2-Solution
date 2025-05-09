@@ -4,7 +4,7 @@ import {
     ChangeDbGroupName,
     ChangeDbGroupSettings,
 } from '@/actions/groups/adminGroupActions';
-import { JSX, use, useState } from 'react';
+import { JSX, use, useEffect, useState } from 'react';
 import GroupToast from '@/components/toast/toast';
 import badWord from '@/actions/logIn/badWord.json';
 
@@ -59,10 +59,14 @@ export function ChangeGroupSettings({
 
         console.log(NewSettings);
         await ChangeDbGroupSettings(groupId, NewSettings);
-        alert(
-            `Settings have been changes to: ${NewEmoji}, ${NewBackground}, and ${NewText}`
-        );
-        location.reload();
+        setToast({
+            message: `Settings have been changes to: ${NewEmoji}, ${NewBackground}, and ${NewText}`,
+            type: 'success',
+        });
+
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
     };
 
     const handleChangeGroupNameSubmit = async () => {
@@ -123,8 +127,14 @@ export function ChangeGroupSettings({
 
         console.log(NewGroupName);
         await ChangeDbGroupName(groupId, NewGroupName);
-        alert(`Groupname has been changed to ${NewGroupName}`);
-        location.reload();
+        setToast({
+            message: `Groupname has been changed to ${NewGroupName}`,
+            type: 'success',
+        });
+
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
     };
 
     return (
