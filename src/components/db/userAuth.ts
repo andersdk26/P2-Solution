@@ -1,6 +1,6 @@
 import { db } from 'db';
 import { usersTable } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 import argon2 from 'argon2';
 import defaultResponse from '@/components/defaultResponse';
 import { randomInt } from 'crypto';
@@ -71,7 +71,10 @@ export async function register_user({
             .select({ id: usersTable.id })
             .from(usersTable)
             .where(
-                eq(usersTable.username, username) || eq(usersTable.email, email)
+                or(
+                    eq(usersTable.username, username),
+                    eq(usersTable.email, email)
+                )
             );
 
         if (userExists.length > 0) {
