@@ -53,7 +53,7 @@ function FriendRequest({
         // Delay closing the modal to allow the toast to appear
         setTimeout(() => {
             conditionalFunction(false);
-        }, 3000); // Adjust the delay as needed
+        }, 3000);
     };
 
     return (

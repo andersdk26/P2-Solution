@@ -101,13 +101,20 @@ export default function AdminGroupIcon({
             return;
         }
         await AddUserToGroup(groupId, groupMembers, addedUser.userId);
-        // show message
-        alert(`${addedUser.userName} has been added to the group!`);
+        // Store the toast message in localStorage
+
+        setToast({
+            message: `${addedUser.userName} has been added to the group`,
+            type: 'success',
+        });
 
         // close the pop up for the add friend
         setAddMembersOpen(false);
+
         // reload page
-        location.reload();
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
     };
 
     // map remove friend
@@ -132,10 +139,14 @@ export default function AdminGroupIcon({
                                             groupMembers,
                                             groupId
                                         );
-                                        alert(
-                                            `${await getUserById(parseInt(id))} has been removed from the group`
-                                        );
-                                        location.reload();
+                                        setToast({
+                                            message: `${await getUserById(parseInt(id))} has been removed from the group`,
+                                            type: 'success',
+                                        });
+
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1500);
                                     }}
                                 >
                                     ❌

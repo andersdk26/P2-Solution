@@ -85,6 +85,21 @@ export async function register_user({
         return { status: 409, message: 'User already exists' };
     }
 
+    // Check if the email exists
+    try {
+        const userExists = await db
+            .select({ id: usersTable.id })
+            .from(usersTable)
+            .where(eq(usersTable.email, email) || eq(usersTable.email, email));
+
+        if (userExists.length > 0) {
+            throw new Error('Duplicate user');
+        }
+    } catch (error) {
+        console.error('Email already exists:', error);
+        return { status: 409, message: 'Email already exists' };
+    }
+
     // Generate a unique user ID
     try {
         let i = 0;
