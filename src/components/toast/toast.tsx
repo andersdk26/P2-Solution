@@ -5,16 +5,19 @@
 
 import React, { useEffect } from 'react';
 
+// Define the props for the Toast component
 interface ToastProps {
-    message: string;
-    type: 'success' | 'error';
-    onClose: () => void;
+    message: string; // The message to display in the toast
+    type: 'success' | 'error'; // The type of toast, determines styling
+    onClose: () => void; // Callback function to close the toast
 }
 
+// Toast component definition
 const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
+    // Automatically close the toast after 10 seconds
     useEffect(() => {
-        const timer = window.setTimeout(onClose, 10000);
-        return (): void => window.clearTimeout(timer);
+        const timer = window.setTimeout(onClose, 10000); // Set a timer to call onClose
+        return (): void => window.clearTimeout(timer); // Cleanup the timer on unmount
     }, [onClose]);
 
     // Base styling for the toast container
@@ -24,20 +27,22 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
     // Styles based on success or error variant
     const variantStyles =
         type === 'success'
-            ? 'text-green-800 bg-green-100 dark:bg-green-800 dark:text-green-200'
-            : 'text-red-800 bg-red-100 dark:bg-red-800 dark:text-red-200';
+            ? 'text-green-800 bg-green-100 dark:bg-green-800 dark:text-green-200' // Success styling
+            : 'text-red-800 bg-red-100 dark:bg-red-800 dark:text-red-200'; // Error styling
 
     // Icon container styling
     const iconContainerStyles = `inline-flex items-center justify-center shrink-0 w-8 h-8 rounded-lg ${
         type === 'success'
-            ? 'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200'
-            : 'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200'
+            ? 'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200' // Success icon styling
+            : 'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200' // Error icon styling
     }`;
 
     return (
         <div className={`${baseStyles} ${variantStyles}`} role="alert">
+            {/* Icon container */}
             <div className={iconContainerStyles}>
                 {type === 'success' ? (
+                    // Success icon (checkmark picture)
                     <svg
                         className="w-5 h-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -51,6 +56,7 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
                         />
                     </svg>
                 ) : (
+                    // Error icon (cross picture)
                     <svg
                         className="w-5 h-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -66,14 +72,17 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
                 )}
             </div>
 
+            {/* Message container */}
             <div className="ml-3 text-sm font-normal">{message}</div>
 
+            {/* Close button */}
             <button
                 type="button"
                 className="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-700"
-                onClick={onClose}
-                aria-label="Close"
+                onClick={onClose} // Calls the onClose function when clicked
+                aria-label="Close" // Accessibility label for the button
             >
+                {/* Close icon */}
                 <svg
                     className="w-3 h-3"
                     xmlns="http://www.w3.org/2000/svg"
