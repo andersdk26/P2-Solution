@@ -82,23 +82,23 @@ export async function register_user({
         }
     } catch (error) {
         console.error('User already exists:', error);
-        return { status: 409, message: 'User already exists' };
+        return { status: 409, message: 'Username or Email already exists' };
     }
 
     // Check if the email exists
-    try {
-        const userExists = await db
-            .select({ id: usersTable.id })
-            .from(usersTable)
-            .where(eq(usersTable.email, email) || eq(usersTable.email, email));
+    // try {
+    //     const userExists = await db
+    //         .select({ id: usersTable.id })
+    //         .from(usersTable)
+    //         .where(eq(usersTable.email, email) || eq(usersTable.email, email));
 
-        if (userExists.length > 0) {
-            throw new Error('Duplicate user');
-        }
-    } catch (error) {
-        console.error('Email already exists:', error);
-        return { status: 409, message: 'Email already exists' };
-    }
+    //     if (userExists.length > 0) {
+    //         throw new Error('Duplicate user');
+    //     }
+    // } catch (error) {
+    //     console.error('Email already exists:', error);
+    //     return { status: 409, message: 'Email already exists' };
+    // }
 
     // Generate a unique user ID
     try {
