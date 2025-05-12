@@ -1,6 +1,6 @@
 import { db } from 'db';
 import { usersTable } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 import argon2 from 'argon2';
 import defaultResponse from '@/components/defaultResponse';
 import { randomInt } from 'crypto';
@@ -71,7 +71,10 @@ export async function register_user({
             .select({ id: usersTable.id })
             .from(usersTable)
             .where(
-                eq(usersTable.username, username) || eq(usersTable.email, email)
+                or(
+                    eq(usersTable.username, username),
+                    eq(usersTable.email, email)
+                )
             );
 
         if (userExists.length > 0) {
@@ -80,6 +83,21 @@ export async function register_user({
     } catch (error) {
         console.error('User already exists:', error);
         return { status: 409, message: 'User already exists' };
+    }
+
+    // Check if the email exists
+    try {
+        const userExists = await db
+            .select({ id: usersTable.id })
+            .from(usersTable)
+            .where(eq(usersTable.email, email) || eq(usersTable.email, email));
+
+        if (userExists.length > 0) {
+            throw new Error('Duplicate user');
+        }
+    } catch (error) {
+        console.error('Email already exists:', error);
+        return { status: 409, message: 'Email already exists' };
     }
 
     // Generate a unique user ID

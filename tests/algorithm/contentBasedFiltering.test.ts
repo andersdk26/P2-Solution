@@ -23,7 +23,7 @@ test('Recommendations change after new user rating', async () => {
         333333,
         'individual'
     );
-    db.insert(ratingsTable).values({
+    await db.insert(ratingsTable).values({
         userId: 333333,
         movieId: 59315,
         rating: 5,

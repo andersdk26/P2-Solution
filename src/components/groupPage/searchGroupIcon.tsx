@@ -5,6 +5,7 @@ import { getGroupById, group } from './group';
 import getUserById from '@/actions/friends/getUserById';
 import { requestToJoinGroup } from '@/actions/groups/groupRequests';
 import verifyUser from '@/actions/logIn/authenticateUser';
+import GroupToast from '@/components/toast/toast';
 
 interface GroupRequestProps {
     group?: group;
@@ -16,6 +17,12 @@ function GroupRequest({
     group,
     conditionalFunction,
 }: GroupRequestProps): JSX.Element {
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     if (!group) {
         return <p>Loading...</p>;
     }
@@ -24,20 +31,34 @@ function GroupRequest({
         <div className="border-[#282F72] text-[#282F72] bg-[#babdde] border-2 border-solid rounded-2xl mx-124 py-4 fixed  w-100 h-40 text-center align-center justify-center top-84">
             Ask to join <b>{group.groupName}</b>?
             <br />
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* send request button */}
             <button
                 className="bg-green-500 text-black m-4 p-2 rounded-sm bottom-4 cursor-pointer ml-0 hover:brightness-80"
                 onClick={async () => {
                     // if user is the admin, then dont send a request
                     if ((await verifyUser()) === group.groupAdmin) {
-                        alert('You own the group');
-                        conditionalFunction(false);
+                        setToast({
+                            message: 'You own the group',
+                            type: 'error',
+                        });
+                        setTimeout(() => conditionalFunction(false), 3000); // Delay to show the toast
                         return;
                     }
                     // otherwise, send request
                     await requestToJoinGroup(await verifyUser(), group.groupId);
-                    alert('Request sent');
-                    conditionalFunction(false);
+                    setToast({
+                        message: 'Request sent successfully!',
+                        type: 'success',
+                    });
+                    setTimeout(() => conditionalFunction(false), 3000); // Delay to show the toast
                 }}
             >
                 Join
