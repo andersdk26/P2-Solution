@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db/index';
-import { groupsTable } from '@/db/schema';
+import { groupRequestsTable, groupsTable } from '@/db/schema';
 import { and, eq, like, not } from 'drizzle-orm';
 
 // Add user to group
@@ -31,6 +31,7 @@ export async function AddUserToGroup(
 // delete row for that groupid
 export async function DeleteGroup(groupId: number): Promise<void> {
     await db.delete(groupsTable).where(eq(groupsTable.groupId, groupId));
+    await db.delete(groupRequestsTable).where(eq(groupsTable.groupId, groupId));
 }
 
 // change the string for settings

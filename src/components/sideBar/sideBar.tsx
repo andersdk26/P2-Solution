@@ -10,7 +10,7 @@ import {
     checkWatchlistStatus,
 } from '@/actions/movie/watchlist';
 import verifyUser from '@/actions/logIn/authenticateUser';
-import AddingWatchlistToast from '@/components/toast/addingWatchlistToast';
+import AddingWatchlistToast from '@/components/toast/toast';
 import RatingPopcorn from '../coldStarSurvey/rateMovies/ratingPopcorn';
 import { getImdbId } from '@/actions/movie/movieImageUrl';
 

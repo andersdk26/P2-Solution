@@ -5,6 +5,7 @@ import { groupsTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 import { averageRating } from './ContentBasedFiltering/contentBasedFiltering';
+import cosineSimilarity from './cosineSimilarity/cosineSimilarity';
 
 export default async function getGroupSimilarityScore(
     groupId: number
@@ -174,4 +175,3 @@ function cosineSimilarity(userA: number[], userB: number[]): number {
     // Return the cosine similarity of the two users.
     return dotProduct / (magnitudeA * magnitudeB);
 }
-

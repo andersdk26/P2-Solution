@@ -2,6 +2,7 @@
 import { JSX } from 'react';
 import { useState } from 'react';
 import { FormCreateGroup } from './formCreateGroup';
+import GroupToast from '@/components/toast/toast';
 
 interface CreateGroupIconProps {
     adminGroupNumber: number;
@@ -12,14 +13,31 @@ export default function CreateGroupIcon({
 }: CreateGroupIconProps): JSX.Element {
     const [isAboutGroupOpen, setAboutGroupOpen] = useState(false);
 
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
+
     return (
         <>
+            {/* Toast message */}
+            {toast && (
+                <GroupToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* The div for the entire box, onclick: open the create group pop-up */}
             <div
                 className={`size-60 border-2 border-solid border-[#282F72] bg-[#9fa3d1] hover:brightness-80 text-[#282f72] inline-block rounded-3xl m-4 text-center align-top items-center content-center justify-center cursor-pointer `}
                 onClick={() => {
                     if (adminGroupNumber > 4) {
-                        alert('You cannot create more groups');
+                        setToast({
+                            message: 'You cannot create more groups',
+                            type: 'error',
+                        });
                         return;
                     }
                     setAboutGroupOpen(true);
