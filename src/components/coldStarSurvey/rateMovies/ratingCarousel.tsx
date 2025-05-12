@@ -24,18 +24,23 @@ export default function RatingCarousel(): JSX.Element {
         setIsLoading(false);
     }, []);
 
+    // Set hasMounted to false to avoid updating local storage on initial render.
     const hasMounted = useRef(false);
 
+    // Each time a movie is removed from the selected movie array.
     useEffect(() => {
         if (hasMounted.current) {
+            // Update local storage.
             localStorage.setItem(
                 'selectedMovies',
                 JSON.stringify(selectedMovies)
             );
         } else {
+            // When use effect is called on initial render, set set hasMounted to true.
             hasMounted.current = true;
         }
     }, [selectedMovies]);
+
     const removeMovie = async (movieId: number): Promise<void> => {
         setSelectedMovies((prev) =>
             prev.filter((movie) => movie.movieId !== movieId)
