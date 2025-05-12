@@ -46,16 +46,22 @@ export default async function hybridAlgorithm(
         }
     } else if (type === 'individual') {
         // Add movies to the array if the array does not already contain it.
+        let colI = 0;
+        let conI = 0;
         while (result.length < 30) {
             if (
-                !result.includes(collaborativeFilteringResults[result.length])
+                collaborativeFilteringResults.length > colI &&
+                !result.includes(collaborativeFilteringResults[colI])
             ) {
-                result.push(collaborativeFilteringResults[result.length]);
+                result.push(collaborativeFilteringResults[colI]);
+                colI++;
             }
             if (
-                !result.includes(collaborativeFilteringResults[result.length])
+                contentBasedFilteringResults.length > conI &&
+                !result.includes(contentBasedFilteringResults[conI])
             ) {
-                result.push(contentBasedFilteringResults[result.length]);
+                result.push(contentBasedFilteringResults[conI]);
+                conI++;
             }
         }
     }

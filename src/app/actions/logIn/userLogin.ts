@@ -91,7 +91,7 @@ export async function setCookie(data: string): Promise<boolean> {
     // Set the token cookie
     cookieStore.set('token', data, {
         secure: true,
-        httpOnly: true,
+        // httpOnly: true,
         maxAge: 60 * 60 * 24 * 1, // 1 days (seconds * minutes * hours * day)
         path: process.env.NEXT_PUBLIC_URL_PATH || '/',
     });
