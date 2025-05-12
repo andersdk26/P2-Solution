@@ -1,5 +1,6 @@
 import { JSX, useState } from 'react';
 import badWord from '@/actions/logIn/badWord.json'; // Importing the bad word list
+import SignUpToast from '@/components/toast/toast';
 
 interface SignUpFormProps {
     onSignUp: (formData: {
@@ -29,6 +30,12 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
             lowerCaseUsername.includes(word.toLowerCase())
         );
     };
+
+    // Toast message for success/error and is used to show a toast message when an action is performed
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+    } | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -75,7 +82,11 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
 
         if (usernameError) {
             // Prevent submission if the username contains a bad word
-            alert('Please choose a different username.');
+            setToast({
+                message: 'Please choose a different username.',
+                type: 'error',
+            });
+
             return;
         }
 
@@ -93,6 +104,14 @@ export default function SignUpForm({ onSignUp }: SignUpFormProps): JSX.Element {
             onSubmit={handleSubmit}
             className="bg-white p-6 rounded-lg shadow-md w-80"
         >
+            {/* Toast message */}
+            {toast && (
+                <SignUpToast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
             {/* Name Input */}
             <div className="mb-4">
                 <label
