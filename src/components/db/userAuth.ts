@@ -82,7 +82,7 @@ export async function register_user({
         }
     } catch (error) {
         console.error('User already exists:', error);
-        return { status: 409, message: 'User already exists' };
+        return { status: 409, message: 'Username or Email already exists' };
     }
 
     // Generate a unique user ID

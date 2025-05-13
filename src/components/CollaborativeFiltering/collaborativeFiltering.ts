@@ -3,7 +3,7 @@
 import { getMoviesById, movie } from '@/actions/movie/movie';
 import { ratingsTable } from '@/db/schema';
 import { db } from 'db';
-import { eq, ne, notInArray } from 'drizzle-orm';
+import { and, eq, gt, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
 import cosineSimilarity from '../cosineSimilarity/cosineSimilarity';
 
@@ -31,13 +31,16 @@ export default async function collaborativeFiltering(
         return [];
     }
 
+    const starttime = Date.now();
+    let logTime = starttime;
+
     // Declare variables used for storing movie ratings.
     let targetUserRatings; // User or group's ratings
     let userRatingsFromDataset; // Other user's rating from the dataset
 
     // Define number of rows in ratings table.
-    const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
-    //const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
+    // const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
+    const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
 
     // Define size of subset of ratings to be used.
     const subsetSampleSize = 2000000;
@@ -48,7 +51,7 @@ export default async function collaborativeFiltering(
     );
 
     // Check whether the input ID represents a group or an individual.
-    if (type === 'individual') {
+    if (type === `individual`) {
         // Fetch all ratings from the table ratingsTable that have only been made by the target user.
         targetUserRatings = await db
             .select({
@@ -59,7 +62,10 @@ export default async function collaborativeFiltering(
             .from(ratingsTable)
             .where(eq(ratingsTable.userId, targetId));
 
-        console.log('Target user ratings have been fetched.');
+        console.log(
+            `Target user ratings have been fetched.(${Date.now() - logTime}ms)`
+        );
+        logTime = Date.now();
 
         // Abort recommendation algorithm if user has not rated enough movies.
         if (targetUserRatings.length < 15) {
@@ -75,12 +81,19 @@ export default async function collaborativeFiltering(
                 movieRating: ratingsTable.rating,
             })
             .from(ratingsTable)
-            .where(ne(ratingsTable.userId, targetId))
-            .offset(rowOffset)
+            .where(
+                and(
+                    gt(ratingsTable.id, rowOffset),
+                    ne(ratingsTable.userId, targetId)
+                )
+            )
             .limit(subsetSampleSize);
 
-        console.log('Other user ratings have been fetched.');
-    } else if (type === 'group') {
+        console.log(
+            `${userRatingsFromDataset.length} Other user ratings have been fetched.(${Date.now() - logTime}ms)`
+        );
+        logTime = Date.now();
+    } else if (type === `group`) {
         // Get average group ratings.
         targetUserRatings = await groupAggregation(targetId);
 
@@ -91,7 +104,7 @@ export default async function collaborativeFiltering(
         }
 
         // Convert member IDs to an array of numbers.
-        const memberIdStrings = targetUserRatings[0].memberIds.split('|');
+        const memberIdStrings = targetUserRatings[0].memberIds.split(`|`);
         const memberIdNumbers = memberIdStrings.map((id) => parseInt(id, 10));
 
         // Fetch all user ratings from the table ratingsTable, except those from the target user.
@@ -102,11 +115,18 @@ export default async function collaborativeFiltering(
                 movieRating: ratingsTable.rating,
             })
             .from(ratingsTable)
-            .where(notInArray(ratingsTable.userId, memberIdNumbers))
-            .limit(subsetSampleSize)
-            .offset(rowOffset);
+            .where(
+                and(
+                    gt(ratingsTable.id, rowOffset),
+                    notInArray(ratingsTable.userId, memberIdNumbers)
+                )
+            )
+            .limit(subsetSampleSize);
 
-        console.log('Other user ratings have been fetched.');
+        console.log(
+            `${userRatingsFromDataset.length} Other user ratings have been fetched.(${Date.now() - logTime}ms)`
+        );
+        logTime = Date.now();
     }
 
     // Create a map for all the other users and their ratings: (userId, { rating(movieId, rating) }).
@@ -120,14 +140,17 @@ export default async function collaborativeFiltering(
             otherUserRatingsMap.set(row.userId, []);
         }
 
-        // Check if an entry for the user ID exists (TypeScript gets angry if you don't: Object is possibly 'undefined'.).
+        // Check if an entry for the user ID exists (TypeScript gets angry if you don`t: Object is possibly `undefined`.).
         otherUserRatingsMap.get(row.userId)?.push({
             // If the entry does exist, add the movie ID and rating to the rating array for the specified user ID.
             movieId: row.movieId,
             rating: row.movieRating,
         });
     }
-    console.log('Other user ratings have been mapped.');
+    console.log(
+        `Other user ratings have been mapped.(${Date.now() - logTime}ms)`
+    );
+    logTime = Date.now();
 
     // Convert the map to an array of users instead for easier operations later on.
     const otherUserRatings: user[] = Array.from(
@@ -136,7 +159,10 @@ export default async function collaborativeFiltering(
         userId,
         ratings,
     }));
-    console.log('Map of other user ratings has been converted to array.');
+    console.log(
+        `Map of other user ratings has been converted to array.(${Date.now() - logTime}ms)`
+    );
+    logTime = Date.now();
 
     // Create a new map for the target users ratings: (movieId, rating).
     const targetRatingMap = new Map<number, number>();
@@ -145,7 +171,10 @@ export default async function collaborativeFiltering(
     for (const rating of targetUserRatings!) {
         targetRatingMap.set(rating.movieId, rating.movieRating);
     }
-    console.log('Target user ratings have been mapped.');
+    console.log(
+        `Target user ratings have been mapped.(${Date.now() - logTime}ms)`
+    );
+    logTime = Date.now();
 
     // Create an array for storing the similarity between the target user and some user from the array otherUserRatings.
     const similarityScores: similarity[] = [];
@@ -155,26 +184,26 @@ export default async function collaborativeFiltering(
         // Define array for movies that the target user and the "other user" currently being checked has in common.
         const commonMovies: number[] = [];
 
-        // Create two arrays for storing the target user and the "other user's" ratings for a movie that they have in common.
+        // Create two arrays for storing the target user and the "other user`s" ratings for a movie that they have in common.
         const targetUserRatings: number[] = [];
         const otherUserRatings: number[] = [];
 
         // For every rating of the current "other user".
         for (const rating of otherUser.ratings) {
-            // Check if the target user's map contains the key (movie ID) of the current rating being checked. In other words, check if the they have both rated a movie.
+            // Check if the target user`s map contains the key (movie ID) of the current rating being checked. In other words, check if the they have both rated a movie.
             if (targetRatingMap.has(rating.movieId)) {
                 // If they have, then add that movie ID to their common movies.
                 commonMovies.push(rating.movieId);
 
                 // And then add their respective ratings to the rating arrays.
-                // Note: targetRatingMap does contain a rating for the movie in question, but TypeScript gets angry if it is not explicitly stated that the key (movie ID) actually holds a value (a rating) (Argument of type 'number | undefined' is not assignable to parameter of type 'number'.), hence the exclamation mark.
+                // Note: targetRatingMap does contain a rating for the movie in question, but TypeScript gets angry if it is not explicitly stated that the key (movie ID) actually holds a value (a rating) (Argument of type `number | undefined` is not assignable to parameter of type `number`.), hence the exclamation mark.
                 targetUserRatings.push(targetRatingMap.get(rating.movieId)!);
                 otherUserRatings.push(rating.rating);
             }
         }
 
         // Now, if the target user and the "other user" has at least 10 movies in common.
-        if (commonMovies.length >= 6) {
+        if (commonMovies.length >= 12) {
             // Calculate a similarity between the two.
             const similarity = cosineSimilarity(
                 targetUserRatings,
@@ -192,7 +221,10 @@ export default async function collaborativeFiltering(
         );
         return [];
     }
-    console.log(`${similarityScores.length} similar users have been found.`);
+    console.log(
+        `${similarityScores.length} similar users have been found.(${Date.now() - logTime}ms)`
+    );
+    logTime = Date.now();
 
     // Create a sorted array of the similar users.
     let mostSimilarUsers = similarityScores.sort(
@@ -210,7 +242,7 @@ export default async function collaborativeFiltering(
 
     // Iterate through all similar users.
     for (const user of mostSimilarUsers) {
-        // Get the user's ID.
+        // Get the user`s ID.
         const userId = user.userId;
 
         // For every rating made by the user in question.
@@ -240,7 +272,10 @@ export default async function collaborativeFiltering(
         }
     }
 
-    console.log('Movie scores have been calculated.');
+    console.log(
+        `Movie scores have been calculated.(${Date.now() - logTime}ms)`
+    );
+    logTime = Date.now();
 
     // Create array for storing all movies rated by the similar users.
     // const moviesRatedBySimilarUsers: movieWithRating[] = [];
@@ -265,7 +300,9 @@ export default async function collaborativeFiltering(
 
     // Now sort the array of rated movies by their rating.
     moviesRatedBySimilarUsersArray.sort((a, b) => b[1] - a[1]);
-    console.log('Movie array has been sorted.');
+    console.log(`Movie array has been sorted.(${Date.now() - logTime}ms)`);
+    logTime = Date.now();
+    console.log(`Total time: ${Date.now() - starttime}ms`);
 
     // Get the top 30 movies based on similar users ratings.
     const recommendedMovies = moviesRatedBySimilarUsersArray.slice(0, 30);

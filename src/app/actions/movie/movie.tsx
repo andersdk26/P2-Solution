@@ -70,8 +70,8 @@ export async function searchForMovie(
     }
 
     // Define sql query using Full-Text Search. Limited to 10 results.
-    //     // MySQL
-    //     const sql = `SELECT id, title, genres
+    // // MySQL
+    // const sql = `SELECT id, title, genres
     // FROM movies
     // WHERE MATCH(title) AGAINST ('${splitQuery(searchQuery)}' IN BOOLEAN MODE)
     // ORDER BY
@@ -79,6 +79,7 @@ export async function searchForMovie(
     // LIMIT ${amount}`;
     // SQLite
     const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
+    console.log(sql);
 
     // Fetch results.
     // // MySQL
