@@ -12,7 +12,6 @@ import {
 import { ChangeGroupSettings } from './changeGroupSettings';
 import goToGroupRecommendations from '@/actions/groups/goToGroupRecommendations';
 import useRedirect from '../redirect';
-import { redirect } from 'next/navigation';
 import LoadingPage from '../loading';
 import GroupToast from '@/components/toast/toast';
 
@@ -38,6 +37,8 @@ export default function AdminGroupIcon({
     const [AdminUsername, setAdminUsername] = useState('');
     // search result
     const [searchResult, setSearchResult] = useState<user[]>([]);
+
+    const redirect = useRedirect(); // Custom hook for redirection
 
     // Keeps track of members in group object
     const [MembersListObject, setMembersListObject] = useState([

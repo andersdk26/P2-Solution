@@ -2,7 +2,7 @@
 
 import { JSX, useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { getMovieById, movie } from '@/actions/movie/movie';
+import { movie } from '@/actions/movie/movie';
 import MovieImage from '@/components/movie/MovieImage';
 import MovieTitle from '@/components/movie/MovieTitle';
 import RatingPopcorn from './ratingPopcorn';
@@ -36,6 +36,7 @@ export default function RatingCarousel(): JSX.Element {
             hasMounted.current = true;
         }
     }, [selectedMovies]);
+    
     const removeMovie = async (movieId: number): Promise<void> => {
         setSelectedMovies((prev) =>
             prev.filter((movie) => movie.movieId !== movieId)
@@ -77,9 +78,6 @@ export default function RatingCarousel(): JSX.Element {
 
                     <button
                         onClick={() => {
-                            // ratedMovies.delete(
-                            //     selectedMovies[imageIndex]?.movieId
-                            // );
                             removeMovie(selectedMovies[imageIndex]?.movieId);
                             handleNext();
                         }}
@@ -87,13 +85,6 @@ export default function RatingCarousel(): JSX.Element {
                     >
                         Remove movie
                     </button>
-                    {/* <MovieImage movieId={movieId[imageIndex]?.movieId} />
-
-                   <h4 className="w-[294px] mt-3">
-                      <MovieTitle movieId={movieId[imageIndex]?.movieId} />
-                   </h4>
-
-                   <RatingPopcorn movieId={movieId[imageIndex]?.movieId} /> */}
                 </div>
             </div>
 

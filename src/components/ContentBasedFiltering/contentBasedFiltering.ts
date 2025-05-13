@@ -1,10 +1,6 @@
 'use server';
 
-import {
-    getMovieById,
-    getMoviesById,
-    movie,
-} from '../../app/actions/movie/movie';
+import { getMoviesById, movie } from '../../app/actions/movie/movie';
 import { moviesTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
@@ -41,7 +37,7 @@ export default async function contentBasedFiltering(
         targetUserRatings = await groupAggregation(targetId);
 
         // Abort recommendation algorithm if the group has not rated enough movies.
-        if (targetUserRatings.length < 10) {
+        if (targetUserRatings.length < 15) {
             console.log('Target group has not rated enough movies.');
             return [];
         }

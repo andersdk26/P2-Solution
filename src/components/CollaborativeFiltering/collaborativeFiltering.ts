@@ -1,6 +1,6 @@
 'use server';
 
-import { getMovieById, getMoviesById, movie } from '@/actions/movie/movie';
+import { getMoviesById, movie } from '@/actions/movie/movie';
 import { ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne, notInArray } from 'drizzle-orm';
@@ -32,15 +32,15 @@ export default async function collaborativeFiltering(
     }
 
     // Declare variables used for storing movie ratings.
-    let targetUserRatings;
-    let userRatingsFromDataset;
+    let targetUserRatings; // User or group's ratings
+    let userRatingsFromDataset; // Other user's rating from the dataset
 
     // Define number of rows in ratings table.
     const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
     //const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
 
     // Define size of subset of ratings to be used.
-    const subsetSampleSize = 10000000;
+    const subsetSampleSize = 2000000;
 
     // Define random offset.
     const rowOffset = Math.floor(
@@ -62,7 +62,7 @@ export default async function collaborativeFiltering(
         console.log('Target user ratings have been fetched.');
 
         // Abort recommendation algorithm if user has not rated enough movies.
-        if (targetUserRatings.length < 10) {
+        if (targetUserRatings.length < 15) {
             console.log('Target user has not rated enough movies.');
             return [];
         }
@@ -85,7 +85,7 @@ export default async function collaborativeFiltering(
         targetUserRatings = await groupAggregation(targetId);
 
         // Abort recommendation algorithm if the group has not rated enough movies.
-        if (targetUserRatings.length < 10) {
+        if (targetUserRatings.length < 15) {
             console.log('Target group has not rated enough movies.');
             return [];
         }
@@ -188,7 +188,7 @@ export default async function collaborativeFiltering(
     if (similarityScores.length < 10) {
         // If not enough similar users were found, return an empty array.
         console.log(
-            `Not enough similar users found. Only ${similarityScores.length} weere found while 10 are needed.`
+            `Not enough similar users found. Only ${similarityScores.length} were found while 10 are needed.`
         );
         return [];
     }

@@ -113,26 +113,3 @@ export function DisplayPopularMovies(
         </section>
     );
 }
-
-function movieImage(m: movie, handleSelectMovie: (m: movie) => void) {
-    <section key={m.movieId} className="relative group w-[160px] h-[240px]">
-        <MovieImage
-            movieId={m.movieId}
-            fill={true}
-            alt={`${m.movieTitle} poster`}
-            blur="blur"
-            className="rounded-2xl transition-all shadow-lg group-hover:brightness-50"
-            title={`${m.movieTitle}`}
-        />
-
-        <Image
-            src="/remove.png"
-            alt={'Remove button'}
-            width={32}
-            height={32}
-            className="absolute opacity-0 left-[124px] bottom-[204px] group-hover:opacity-100 group-hover:cursor-pointer transition-all duration-300 z-3 rounded-full"
-            title={`${m.movieTitle}`}
-            onClick={() => handleSelectMovie(m)}
-        />
-    </section>;
-}

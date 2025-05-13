@@ -36,7 +36,7 @@ export default async function hybridAlgorithm(
         let i = 0;
         let j = 0;
 
-        // Evenly interleave the two movie arrays based on group similarity.
+        // Evenly intertwine the two movie arrays based on group similarity.
         for (let n = 0; n < 30; n++) {
             if ((i + j) * numberOfCollaborativeRecommendations < j * 30) {
                 result.push(collaborativeFilteringResults[i++]);
