@@ -5,7 +5,6 @@ import { groupsTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq } from 'drizzle-orm';
 import { averageRating } from './ContentBasedFiltering/contentBasedFiltering';
-import cosineSimilarity from './cosineSimilarity/cosineSimilarity';
 
 export default async function getGroupSimilarityScore(
     groupId: number
