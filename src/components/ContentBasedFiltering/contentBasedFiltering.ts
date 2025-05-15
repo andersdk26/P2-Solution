@@ -77,7 +77,7 @@ export default async function contentBasedFiltering(
         for (const word of titleWords) {
             // Skip words from ignore list.
             if (!ignoreWords.includes(word)) {
-                // If the word score map does not contain an entry for the specified genre, initialise it.
+                // If the word score map does not contain an entry for the specified word, initialise it.
                 if (!averageWordRating.has(word)) {
                     averageWordRating.set(word, {
                         runningTotal: 0,
@@ -85,7 +85,7 @@ export default async function contentBasedFiltering(
                     });
                 }
 
-                // Update the score for the current genre.
+                // Update the score for the current word.
                 averageWordRating.set(word, {
                     runningTotal:
                         averageWordRating.get(word)!.runningTotal +
