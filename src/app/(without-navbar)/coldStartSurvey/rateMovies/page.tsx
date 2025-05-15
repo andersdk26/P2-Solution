@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
                 onClick={() => {
                     // removes the movies stored during cold start survey
                     localStorage.removeItem('selectedMovies');
-                    redirect('/#');
+                    redirect('//');
                 }}
                 className="bg-[#282F72] hover:bg-[#424ebd] cursor-pointer text-[#dcdee7] font-bold py-2 px-4 rounded-sm mr-10 right-0 absolute"
             >
