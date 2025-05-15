@@ -80,8 +80,16 @@ export const usersTable = mysqlTable('users', {
 
 export const friendsTable = mysqlTable('friends', {
     id: int('id').primaryKey().autoincrement(),
-    userIdA: int('userIdA').notNull(),
-    userIdB: int('userIdB').notNull(),
+    userIdA: int('userIdA', {
+        unsigned: true,
+    })
+        .notNull()
+        .references(() => usersTable.id), // foreign key to users table
+    userIdB: int('userIdB', {
+        unsigned: true,
+    })
+        .notNull()
+        .references(() => usersTable.id), // foreign key to users table
     status: int('status').notNull(),
 });
 
@@ -105,9 +113,15 @@ export type SelectWatchlist = typeof watchlistTable.$inferSelect;
 
 // *** Groups ***
 export const groupsTable = mysqlTable('groups', {
-    groupId: int('groupId').primaryKey(),
+    groupId: int('groupId', {
+        unsigned: true,
+    }).primaryKey(),
     groupName: varchar('groupName', { length: 16 }).notNull(),
-    adminId: int('adminId').notNull(),
+    adminId: int('adminId', {
+        unsigned: true,
+    })
+        .notNull()
+        .references(() => usersTable.id), // foreign key to users table
     members: varchar('members', { length: 100 }).notNull(),
     settings: varchar('settings', { length: 100 }).notNull(),
 });
@@ -144,8 +158,16 @@ export type SelectGroupMembers = typeof groupMembersTable.$inferSelect;
 
 export const groupRequestsTable = mysqlTable('group_requests', {
     id: int('id').primaryKey().autoincrement(),
-    userId: int('userId').notNull(),
-    groupId: int('groupId').notNull(),
+    userId: int('userId', {
+        unsigned: true,
+    })
+        .notNull()
+        .references(() => usersTable.id), // foreign key to users table
+    groupId: int('groupId', {
+        unsigned: true,
+    })
+        .notNull()
+        .references(() => groupsTable.groupId), // foreign key to groups table
 });
 
 export type InsertGroupRequestsTable = typeof groupRequestsTable.$inferInsert;
