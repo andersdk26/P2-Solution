@@ -1,7 +1,7 @@
 'use server';
 
-import { getMoviesById, movie } from '@/actions/movie/movie';
-import { ratingsTable } from '@/db/schema';
+import { getMoviesById, movie } from '../../app/actions/movie/movie';
+import { ratingsTable } from '../../db/schema';
 import { db } from 'db';
 import { and, eq, gt, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
@@ -39,11 +39,11 @@ export default async function collaborativeFiltering(
     let userRatingsFromDataset; // Other user's rating from the dataset
 
     // Define number of rows in ratings table.
-    // const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
-    const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
+    const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
+    // const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
 
     // Define size of subset of ratings to be used.
-    const subsetSampleSize = 2000000;
+    const subsetSampleSize = 50000;
 
     // Define random offset.
     const rowOffset = Math.floor(
