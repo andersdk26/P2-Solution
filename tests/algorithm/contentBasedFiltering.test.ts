@@ -32,13 +32,15 @@ test('Recommendations change after new user rating', async () => {
         333333,
         'individual'
     );
-    db.delete(ratingsTable).where(
-        and(
-            eq(ratingsTable.userId, 333333),
-            eq(ratingsTable.movieId, 59315),
-            eq(ratingsTable.rating, 5)
-        )
-    );
+    await db
+        .delete(ratingsTable)
+        .where(
+            and(
+                eq(ratingsTable.userId, 333333),
+                eq(ratingsTable.movieId, 59315),
+                eq(ratingsTable.rating, 5)
+            )
+        );
 
     expect(recommendationsBefore).not.toBe(recommendationsAfter);
 }, 40000);
