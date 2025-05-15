@@ -45,7 +45,7 @@ export default function NavBar(): JSX.Element {
                             alt={'Jamfest Logo'}
                             width={100}
                             height={100}
-                            onClick={() => redirect('/#')}
+                            onClick={() => redirect('//')}
                             title="Home page"
                         />
                     </div>
@@ -101,7 +101,7 @@ export default function NavBar(): JSX.Element {
                         <li className="p-2 text-xl centerMyDivPlease">
                             <button
                                 className="basicBtn"
-                                onClick={() => redirect('/#')}
+                                onClick={() => redirect('//')}
                                 title="Home"
                             >
                                 Home
