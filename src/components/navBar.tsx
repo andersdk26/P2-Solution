@@ -55,7 +55,10 @@ export default function NavBar(): JSX.Element {
                     className="flex-col items-center justify-center z-auto overflow-visible w-110"
                 >
                     {/* search bar input form */}
-                    <form className="w-full justify-start mx-auto py-4 text-black overflow-visible">
+                    <form
+                        className="w-full justify-start mx-auto py-4 text-black overflow-visible"
+                        onSubmit={(e) => e.preventDefault()} // Prevent form submission
+                    >
                         <input
                             type="search"
                             id="coldStartMovieSearch"
