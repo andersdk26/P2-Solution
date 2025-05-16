@@ -27,17 +27,16 @@ export async function login_check({
 
     // Check if the user exists
     if (result.length === 0) {
-        console.log('User not found');
+        console.error('User not found');
         return { status: 404, message: 'User not found' };
     }
 
     // Verify the password
     if (!(await argon2.verify(result[0].password, password))) {
-        console.log('Incorrect password');
+        console.error('Incorrect password');
         return { status: 401, message: 'Incorrect password' };
     }
 
-    console.log('Login successful');
     return { status: 200, object: { id: result[0].id } };
 }
 

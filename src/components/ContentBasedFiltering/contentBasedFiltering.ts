@@ -31,14 +31,13 @@ export default async function contentBasedFiltering(
             .where(eq(ratingsTable.userId, targetId));
 
         console.log('Got target user ratings.');
-        console.log(targetUserRatings);
     } else if (type === 'group') {
         // Fetch the target users' average ratings.
         targetUserRatings = await groupAggregation(targetId);
 
         // Abort recommendation algorithm if the group has not rated enough movies.
         if (targetUserRatings.length < 15) {
-            console.log('Target group has not rated enough movies.');
+            console.error('Target group has not rated enough movies.');
             return [];
         }
     }
@@ -140,9 +139,6 @@ export default async function contentBasedFiltering(
     for (const word of averageWordRating) {
         wordScoreMap.set(word[0], word[1].runningTotal / word[1].timesRated);
     }
-
-    console.log(wordScoreMap);
-    console.log(genreScoreMap);
 
     // Fetch all movies from the database.
     const movies = await db
