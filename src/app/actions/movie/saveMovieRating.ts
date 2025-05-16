@@ -24,10 +24,6 @@ export default async function saveMovieRatings(
         );
 
     if (doesRatingAlreadyExist[0] !== undefined) {
-        console.log(
-            'Deleting the following rating: ',
-            doesRatingAlreadyExist[0]
-        );
         await db
             .delete(ratingsTable)
             .where(eq(ratingsTable.id, doesRatingAlreadyExist[0].id));
@@ -47,13 +43,6 @@ export default async function saveMovieRatings(
         if (result.length === 0) {
             // result[0].affectedRows !== 1
             throw new Error('No rating saved.');
-        } else {
-            console.log(
-                'Added the following rating: ',
-                userId,
-                movieId,
-                rating
-            );
         }
     } catch (error) {
         console.error('Error saving user rating: ', error);

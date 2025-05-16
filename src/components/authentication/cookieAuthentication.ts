@@ -78,7 +78,6 @@ export async function verifyToken(token: string): Promise<number> {
 
                 // Extract the userId field from the decoded object
                 const decodedObject = JSON.parse(decoded.object);
-                console.log(decodedObject);
                 const userId = parseInt(decodedObject.userId);
 
                 // Validate that userId is a valid number
@@ -96,7 +95,6 @@ export async function verifyToken(token: string): Promise<number> {
 
     const newToken = generateToken((await userId).toString());
     setCookie(await newToken);
-    console.log(`USERID: ${userId}`);
 
     return await userId;
 }
