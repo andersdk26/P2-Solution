@@ -79,7 +79,6 @@ export async function searchForMovie(
     // LIMIT ${amount}`;
     // SQLite
     const sql = `SELECT id, title, genres FROM movies_fts WHERE title MATCH "${splitQuery(searchQuery)}" LIMIT ${amount}`;
-    console.log(sql);
 
     // Fetch results.
     // // MySQL
