@@ -42,7 +42,7 @@ test('Create duplicate user "test"', async () => {
         })
     ).toStrictEqual({
         status: 409,
-        message: 'User already exists',
+        message: 'Username or Email already exists',
     });
 });
 
@@ -56,7 +56,7 @@ test('Create duplicate user "dont.delete@test.com"', async () => {
         })
     ).toStrictEqual({
         status: 409,
-        message: 'User already exists',
+        message: 'Username or Email already exists',
     });
 });
 
