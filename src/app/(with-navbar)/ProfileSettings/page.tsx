@@ -132,11 +132,11 @@ export default function ProfileSettings() {
                 });
             }
         } catch (error) {
-            console.error('Error changing profile icon:', error);
             setToast({
                 message: 'An error occurred. Please try again.',
                 type: 'error',
             });
+            throw new Error(`Error changing profile icon:${error}`);
         }
     };
 
@@ -179,11 +179,11 @@ export default function ProfileSettings() {
                 });
             }
         } catch (error) {
-            console.error('Error changing username:', error);
             setToast({
                 message: 'An error occurred. Please try again.',
                 type: 'error',
             });
+            throw new Error(`Error changing username:${error}`);
         }
     };
 
@@ -231,11 +231,11 @@ export default function ProfileSettings() {
                 });
             }
         } catch (error) {
-            console.error('Error changing password:', error);
             setToast({
                 message: 'An error occurred. Please try again.',
                 type: 'error',
             });
+            throw new Error(`Error changing password:${error}`);
         }
     };
 
@@ -276,11 +276,11 @@ export default function ProfileSettings() {
                 });
             }
         } catch (error) {
-            console.error('Error changing email:', error);
             setToast({
                 message: 'An error occurred. Please try again.',
                 type: 'error',
             });
+            throw new Error(`Error changing email:${error}`);
         }
     };
 
