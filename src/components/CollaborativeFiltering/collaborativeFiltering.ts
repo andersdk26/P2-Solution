@@ -278,18 +278,17 @@ export default async function collaborativeFiltering(
     logTime = Date.now();
 
     // Create array for storing all movies rated by the similar users.
-    // const moviesRatedBySimilarUsers: movieWithRating[] = [];
     const moviesRatedBySimilarUsersMap = new Map<number, number>();
 
     // Iterate through all entries of the movieRatingsMap.
-    for (const [
-        movieId,
-        { movieScore, timesRated },
-    ] of movieRatingsMap.entries()) {
+    for (const scoredEntry of movieRatingsMap.entries()) {
         // If movie is not NULL and the target user has not rated the movie.
-        if (!targetRatingMap.has(movieId)) {
+        if (!targetRatingMap.has(scoredEntry[0])) {
             // Add the movie to the array of rated movies by similar users.
-            moviesRatedBySimilarUsersMap.set(movieId, movieScore / timesRated);
+            moviesRatedBySimilarUsersMap.set(
+                scoredEntry[0],
+                scoredEntry[1].movieScore / scoredEntry[1].timesRated
+            );
         }
     }
 
