@@ -31,7 +31,7 @@ const eslintConfig = [
             '@typescript-eslint': tsPlugin, // Adds TypeScript specific rules
         },
         rules: {
-            'no-console': 'off', // Allows the use of console.log()
+            'no-console': 'warn', // Allows the use of console.log()
             'no-path-concat': 'error', // Disallows string concatenation with __dirname and __filename
             'no-useless-return': 'warn', // Warns about redundant return statements
             'no-useless-concat': 'warn', // Warns about unnecessary string concatenation
