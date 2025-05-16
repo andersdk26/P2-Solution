@@ -69,7 +69,7 @@ export default async function collaborativeFiltering(
 
         // Abort recommendation algorithm if user has not rated enough movies.
         if (targetUserRatings.length < 15) {
-            console.log('Target user has not rated enough movies.');
+            console.error('Target user has not rated enough movies.');
             return [];
         }
 
@@ -99,7 +99,7 @@ export default async function collaborativeFiltering(
 
         // Abort recommendation algorithm if the group has not rated enough movies.
         if (targetUserRatings.length < 15) {
-            console.log('Target group has not rated enough movies.');
+            console.error('Target group has not rated enough movies.');
             return [];
         }
 
@@ -216,7 +216,7 @@ export default async function collaborativeFiltering(
 
     if (similarityScores.length < 10) {
         // If not enough similar users were found, return an empty array.
-        console.log(
+        console.error(
             `Not enough similar users found. Only ${similarityScores.length} were found while 10 are needed.`
         );
         return [];

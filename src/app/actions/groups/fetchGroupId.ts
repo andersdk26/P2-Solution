@@ -15,7 +15,6 @@ export async function FetchGroupId(): Promise<number> {
 
     // Check if the user was registered
     if ((await response).status !== 200) {
-        console.log((await response).message);
         return -1;
     }
 

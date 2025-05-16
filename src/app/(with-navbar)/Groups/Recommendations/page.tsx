@@ -34,7 +34,6 @@ export default function Home(): JSX.Element {
 
         const gi = localStorage.getItem('groupId') || ''; // gets the group id from local storage
         setGroupId(parseInt(gi));
-        console.log(gi, gn);
     }, []);
 
     useEffect(() => {
@@ -43,7 +42,6 @@ export default function Home(): JSX.Element {
             // if the program runs, set loading to true
             setIsLoading(true);
             setRecommendedMovies(await hybridAlgorithm(groupId, 'group'));
-            console.log(recommendedMovies);
             // once done, set loading to false
             setIsLoading(false);
         };

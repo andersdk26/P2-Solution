@@ -1,8 +1,8 @@
 'use server';
 
-import { friendsTable, usersTable } from '@/db/schema';
+import { usersTable } from '@/db/schema';
 import { db } from 'db';
-import { or, like, and, eq } from 'drizzle-orm';
+import { or, like } from 'drizzle-orm';
 
 export type user = {
     userId: number;

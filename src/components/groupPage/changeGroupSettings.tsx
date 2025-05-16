@@ -57,7 +57,6 @@ export function ChangeGroupSettings({
             return;
         }
 
-        console.log(NewSettings);
         await ChangeDbGroupSettings(groupId, NewSettings);
         setToast({
             message: `Settings have been changes to: ${NewEmoji}, ${NewBackground}, and ${NewText}`,
@@ -125,7 +124,6 @@ export function ChangeGroupSettings({
             return;
         }
 
-        console.log(NewGroupName);
         await ChangeDbGroupName(groupId, NewGroupName);
         setToast({
             message: `Groupname has been changed to ${NewGroupName}`,

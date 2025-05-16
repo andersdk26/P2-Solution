@@ -12,7 +12,6 @@ export default async function getMovieTitle(movieId: number): Promise<string> {
         .where(eq(moviesTable.id, movieId));
 
     if (!result || !result.length) {
-        console.log("couldn't find title :(");
         return '';
     }
 

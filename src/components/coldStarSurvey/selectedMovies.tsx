@@ -74,8 +74,6 @@ export function DisplayPopularMovies(
         };
 
         fetchAllMovies();
-
-        console.log(popularMovies);
     }, []);
 
     if (isLoading) return <LoadingPage />;
