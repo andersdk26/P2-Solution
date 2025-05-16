@@ -1,7 +1,7 @@
 'use server';
 
-import { getMovieById, getMoviesById, movie } from '@/actions/movie/movie';
-import { ratingsTable } from '@/db/schema';
+import { getMoviesById, movie } from '../../app/actions/movie/movie';
+import { ratingsTable } from '../../db/schema';
 import { db } from 'db';
 import { and, eq, gt, ne, notInArray } from 'drizzle-orm';
 import groupAggregation from '../GroupAggregation/groupAggregation';
@@ -35,15 +35,15 @@ export default async function collaborativeFiltering(
     let logTime = starttime;
 
     // Declare variables used for storing movie ratings.
-    let targetUserRatings;
-    let userRatingsFromDataset;
+    let targetUserRatings; // User or group's ratings
+    let userRatingsFromDataset; // Other user's rating from the dataset
 
     // Define number of rows in ratings table.
-    // const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
-    const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
+    const totalNumberOfRatings = 50000; // USE THIS FOR TESTRATINGS TABLE
+    // const totalNumberOfRatings = 32000063; // USE THIS FOR THE FULL DATASET
 
     // Define size of subset of ratings to be used.
-    const subsetSampleSize = 2000000;
+    const subsetSampleSize = 50000;
 
     // Define random offset.
     const rowOffset = Math.floor(
@@ -68,8 +68,8 @@ export default async function collaborativeFiltering(
         logTime = Date.now();
 
         // Abort recommendation algorithm if user has not rated enough movies.
-        if (targetUserRatings.length < 10) {
-            console.log(`Target user has not rated enough movies.`);
+        if (targetUserRatings.length < 15) {
+            console.log('Target user has not rated enough movies.');
             return [];
         }
 
@@ -98,8 +98,8 @@ export default async function collaborativeFiltering(
         targetUserRatings = await groupAggregation(targetId);
 
         // Abort recommendation algorithm if the group has not rated enough movies.
-        if (targetUserRatings.length < 10) {
-            console.log(`Target group has not rated enough movies.`);
+        if (targetUserRatings.length < 15) {
+            console.log('Target group has not rated enough movies.');
             return [];
         }
 
@@ -217,7 +217,7 @@ export default async function collaborativeFiltering(
     if (similarityScores.length < 10) {
         // If not enough similar users were found, return an empty array.
         console.log(
-            `Not enough similar users found. Only ${similarityScores.length} weere found while 10 are needed.`
+            `Not enough similar users found. Only ${similarityScores.length} were found while 10 are needed.`
         );
         return [];
     }
@@ -278,18 +278,17 @@ export default async function collaborativeFiltering(
     logTime = Date.now();
 
     // Create array for storing all movies rated by the similar users.
-    // const moviesRatedBySimilarUsers: movieWithRating[] = [];
     const moviesRatedBySimilarUsersMap = new Map<number, number>();
 
     // Iterate through all entries of the movieRatingsMap.
-    for (const [
-        movieId,
-        { movieScore, timesRated },
-    ] of movieRatingsMap.entries()) {
+    for (const scoredEntry of movieRatingsMap.entries()) {
         // If movie is not NULL and the target user has not rated the movie.
-        if (!targetRatingMap.has(movieId)) {
+        if (!targetRatingMap.has(scoredEntry[0])) {
             // Add the movie to the array of rated movies by similar users.
-            moviesRatedBySimilarUsersMap.set(movieId, movieScore / timesRated);
+            moviesRatedBySimilarUsersMap.set(
+                scoredEntry[0],
+                scoredEntry[1].movieScore / scoredEntry[1].timesRated
+            );
         }
     }
 

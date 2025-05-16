@@ -85,21 +85,6 @@ export async function register_user({
         return { status: 409, message: 'Username or Email already exists' };
     }
 
-    // Check if the email exists
-    // try {
-    //     const userExists = await db
-    //         .select({ id: usersTable.id })
-    //         .from(usersTable)
-    //         .where(eq(usersTable.email, email) || eq(usersTable.email, email));
-
-    //     if (userExists.length > 0) {
-    //         throw new Error('Duplicate user');
-    //     }
-    // } catch (error) {
-    //     console.error('Email already exists:', error);
-    //     return { status: 409, message: 'Email already exists' };
-    // }
-
     // Generate a unique user ID
     try {
         let i = 0;
@@ -136,15 +121,15 @@ export async function register_user({
                 password: passwordHash,
                 profileIcon,
             })
-            // .returning();
-            .execute();
+            .returning();
+        // .execute();
 
-        if (result[0].affectedRows !== 1) {
-            throw new Error('No user inserted');
-        }
-        // if (result.length === 0) {
+        // if (result[0].affectedRows !== 1) {
         //     throw new Error('No user inserted');
         // }
+        if (result.length === 0) {
+            throw new Error('No user inserted');
+        }
     } catch (error) {
         console.error('Error inserting user:', error);
         return { status: 500, message: 'Internal server error' };

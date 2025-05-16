@@ -1,10 +1,6 @@
 'use server';
 
-import {
-    getMovieById,
-    getMoviesById,
-    movie,
-} from '../../app/actions/movie/movie';
+import { getMoviesById, movie } from '../../app/actions/movie/movie';
 import { moviesTable, ratingsTable } from '@/db/schema';
 import { db } from 'db';
 import { eq, ne } from 'drizzle-orm';
@@ -41,7 +37,7 @@ export default async function contentBasedFiltering(
         targetUserRatings = await groupAggregation(targetId);
 
         // Abort recommendation algorithm if the group has not rated enough movies.
-        if (targetUserRatings.length < 10) {
+        if (targetUserRatings.length < 15) {
             console.log('Target group has not rated enough movies.');
             return [];
         }
@@ -81,7 +77,7 @@ export default async function contentBasedFiltering(
         for (const word of titleWords) {
             // Skip words from ignore list.
             if (!ignoreWords.includes(word)) {
-                // If the word score map does not contain an entry for the specified genre, initialise it.
+                // If the word score map does not contain an entry for the specified word, initialise it.
                 if (!averageWordRating.has(word)) {
                     averageWordRating.set(word, {
                         runningTotal: 0,
@@ -89,7 +85,7 @@ export default async function contentBasedFiltering(
                     });
                 }
 
-                // Update the score for the current genre.
+                // Update the score for the current word.
                 averageWordRating.set(word, {
                     runningTotal:
                         averageWordRating.get(word)!.runningTotal +

@@ -4,13 +4,14 @@ import userLogout from '@/actions/logIn/userLogout';
 import jwt from 'jsonwebtoken';
 import redirectServer from '../redirectServer';
 import { setCookie } from '@/actions/logIn/userLogin';
-import { decode } from 'punycode';
 
 export async function generateToken(userId: string): Promise<string> {
+    // encryption key jwt_secret
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined');
     }
 
+    // making an object from userId
     const object = JSON.stringify({ userId });
 
     // Create JWT token with HS512 algorithm
@@ -31,6 +32,7 @@ export async function generateToken(userId: string): Promise<string> {
                     return reject(new Error('JWT token is not defined'));
                 }
 
+                // if everything works, return token
                 resolve(token);
             }
         );
