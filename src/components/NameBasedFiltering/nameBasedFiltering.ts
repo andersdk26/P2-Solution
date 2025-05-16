@@ -20,7 +20,6 @@ export default async function nameBasedFiltering(
         .where(eq(ratingsTable.userId, targetUserId));
 
     console.log('Got target user ratings.');
-    console.log(targetUserRatings);
 
     // Initialise name score map.
     const nameScoreMap = new Map<string, number>();
@@ -60,8 +59,6 @@ export default async function nameBasedFiltering(
             }
         }
     }
-
-    console.log('Word frequency map:', wordFrequencyMap);
 
     // Fetch all movies from the database.
     const movies = await db
