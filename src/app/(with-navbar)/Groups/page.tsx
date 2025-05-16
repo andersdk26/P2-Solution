@@ -121,7 +121,7 @@ export default function GroupSettings(): JSX.Element {
                                 getAdminGroups();
                                 setToast({
                                     message: `You accepted the request`,
-                                    type: 'error',
+                                    type: 'success',
                                 });
                             }}
                         >
@@ -138,7 +138,7 @@ export default function GroupSettings(): JSX.Element {
                                 getGroupRequestsA(); // calls the functions that update the array of requests
                                 setToast({
                                     message: 'You declined the request',
-                                    type: 'error',
+                                    type: 'success',
                                 });
                             }}
                         >
